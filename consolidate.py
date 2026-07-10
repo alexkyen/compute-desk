@@ -9,7 +9,7 @@ scripts and element IDs never collide.
 
 import html, pathlib
 
-SRC = pathlib.Path("/mnt/user-data/outputs")
+SRC = pathlib.Path(__file__).resolve().parent
 OUT = SRC / "compute-desk.html"
 
 INSTRUMENTS = [
