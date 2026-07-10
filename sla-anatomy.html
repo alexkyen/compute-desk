@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SLA anatomy — what the nines actually pay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F7F3; --panel:#FDFDFB; --ink:#15201A; --ink-2:#4A574F; --ink-3:#8A968E;
+  --rule:#DDE2DB; --teal:#117758; --teal-dim:#DCEDE4; --amber:#D98F12; --amber-dim:#F6E9CE;
+  --oxide:#A63B26; --mono:"IBM Plex Mono",ui-monospace,monospace; --serif:"Newsreader",Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--paper)}
+body{font-family:var(--serif);color:var(--ink);line-height:1.6;padding:48px 20px 72px}
+.wrap{max-width:880px;margin:0 auto}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(34px,5.5vw,52px);line-height:1.05;margin:10px 0 14px;letter-spacing:-.01em}
+.dek{font-size:18px;color:var(--ink-2);max-width:62ch;margin-bottom:36px}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:24px 26px}
+.seggroup{display:flex;flex-wrap:wrap;gap:22px}
+.seg{min-width:180px}
+.seg .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+.seg .btns{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);background:transparent;border:1px solid var(--rule);border-radius:6px;padding:7px 12px;cursor:pointer}
+.seg button:hover{border-color:var(--teal);color:var(--teal)}
+.seg button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.seg button:focus-visible,input:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.allowed{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);margin-top:10px}
+.allowed b{color:var(--ink);font-weight:500}
+.sliders{margin-top:18px;padding-top:18px;border-top:1px solid var(--rule);display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px 34px}
+.sl label{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+.sl label b{font-weight:500;color:var(--ink);letter-spacing:0}
+input[type=range]{width:100%;accent-color:var(--teal);height:22px}
+.excl{margin-top:16px;padding-top:16px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:12.5px;color:var(--ink-2);display:flex;align-items:center;gap:10px;cursor:pointer}
+.excl input{accent-color:var(--oxide);width:16px;height:16px}
+.ticker{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));border:1px solid var(--rule);border-radius:10px;background:var(--panel);margin-top:16px;overflow:hidden}
+.tk{padding:16px 20px 14px;border-left:1px solid var(--rule)}
+.tk:first-child{border-left:none}
+.tk .l{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.tk .v{font-family:var(--mono);font-weight:500;font-size:26px;margin-top:4px;font-variant-numeric:tabular-nums}
+.tk .v em{font-style:normal;font-size:14px;color:var(--ink-3)}
+.tk .v.bad{color:var(--oxide)}
+.status{font-style:italic;font-size:17px;color:var(--ink-2);margin:20px 2px 0;min-height:3.2em}
+.notes{margin-top:52px;border-top:1px solid var(--rule);padding-top:30px}
+.notes h2{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;margin-bottom:18px}
+.notes p{max-width:66ch;margin-bottom:14px;color:var(--ink-2)}
+.notes p strong{color:var(--ink);font-weight:500}
+.ask{font-family:var(--mono);font-size:13px;background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:13px 16px;margin:18px 0;color:var(--ink);max-width:72ch}
+.ask b{font-weight:500;letter-spacing:.08em;font-size:10px;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:4px}
+.foot{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:44px;letter-spacing:.03em}
+@media(max-width:560px){.tk{padding:12px 14px}.tk .v{font-size:20px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Compute desk · instrument 04</p>
+  <h1>SLA anatomy</h1>
+  <p class="dek">A service-level agreement is an insurance contract, so read it like one: what counts as a claim, over what window it's measured, and what's excluded. The nines on the cover page are marketing; the value lives in three clauses. Stage a month's worth of failures below and see what the paper actually pays.</p>
+
+  <div class="card">
+    <div class="seggroup">
+      <div class="seg"><p class="lbl">Uptime commitment</p><div class="btns" id="cb"></div></div>
+      <div class="seg"><p class="lbl">"Unavailable" means</p><div class="btns" id="db"></div></div>
+      <div class="seg"><p class="lbl">Measurement window</p><div class="btns" id="wb"></div></div>
+    </div>
+    <p class="allowed" id="al"></p>
+    <div class="sliders">
+      <div class="sl"><label>Platform outage this month <b id="pv">0.0 h</b></label><input type="range" id="ps" min="0" max="24" step="0.5" value="0"></div>
+      <div class="sl"><label>Node-level failures <b id="nv">5,000 GPU-h</b></label><input type="range" id="ns" min="0" max="20000" step="250" value="5000"></div>
+      <div class="sl"><label>Fleet under contract <b id="fv">512 GPUs</b></label><input type="range" id="fs" min="128" max="4096" step="128" value="512"></div>
+      <div class="sl"><label>True cost per lost GPU-h <b id="mv">3.0× rate</b></label><input type="range" id="msl" min="1" max="10" step="0.5" value="3"></div>
+    </div>
+    <label class="excl"><input type="checkbox" id="ex"> provider invokes exclusions (maintenance window / force majeure)</label>
+  </div>
+
+  <div class="ticker">
+    <div class="tk"><p class="l">Measured uptime</p><p class="v" id="c1">—</p></div>
+    <div class="tk"><p class="l">Credits recovered</p><p class="v" id="c2">—</p></div>
+    <div class="tk"><p class="l">True cost of failures</p><p class="v" id="c3">—</p></div>
+    <div class="tk"><p class="l">Recovery ratio</p><p class="v" id="c4">—</p></div>
+  </div>
+  <p class="status" id="st"></p>
+
+  <div class="notes">
+    <h2>Reading the paper like a buyer</h2>
+    <p><strong>The definition clause is worth more than the nines.</strong> Most SLAs define "unavailable" at the platform or region level: the API is down, everything is down. But the dominant failure mode of a GPU fleet is chronic and node-level — a GPU falls off the bus, HBM throws errors, a NIC flaps — and under a platform-level definition, none of it registers on the availability metric. Meta's Llama 3 team reported 419 unexpected interruptions in 54 days of training on 16,384 H100s, roughly one hardware failure every three hours, overwhelmingly at the node level. Under boilerplate SLA language, that entire experience measures as 100% uptime. Toggle the definition above and watch the same month of pain flip between zero credits and six figures.</p>
+    <p><strong>The measurement window is where the lawyers hid the value.</strong> A one-hour outage is a 99.86% month — a breach of a 99.9% monthly commitment — but a 99.989% year, no breach at all. Same incident, same headline nines, different clause, different payout. Annual measurement dilutes every incident by a factor of twelve; monthly measurement is the buyer's floor position.</p>
+    <p><strong>Credits are shaped to pay on the rare event and never on the chronic one.</strong> Play with the sliders and you'll notice something honest: for a total platform outage, tiered credits (10–100% of monthly fees) can look adequate, even generous, against the direct GPU-hour loss. That's by design — total outages are rare, capped at one month's fees, claims-gated, and often excluded, so they're cheap to insure. The chronic node-level failures that actually dominate the cost of running GPUs pay nothing. And credits are service credits against future bills, not cash — worth exactly zero if the relationship is ending, which is the moment you'd most want them.</p>
+    <p><strong>What actually protects a serious customer isn't the availability SLA at all</strong> — it's operational commitments: time-to-replace on a failed node, hot-spare pools held against your cluster, burn-in and acceptance testing before delivery, and termination rights on chronic breach. Those clauses cost the provider real money to honor, which is precisely why they signal fleet quality better than any number of nines on the cover page.</p>
+    <div class="ask"><b>Ask the supplier</b>Define "unavailable" for me — does it include a single node down, or degraded interconnect performance, or only full loss of the API? And what was your fleet's node-level annualized failure rate last quarter?</div>
+    <div class="ask"><b>Ask the supplier</b>Measured monthly or annually? Read me the exclusions list. And what's the claims process — automatic, or do I file with logs inside 30 days?</div>
+    <div class="ask"><b>Ask the supplier</b>Forget credits: what's your committed time-to-replace on a failed node, do you hold hot spares against my cluster, and do I get termination rights on chronic breach?</div>
+    <p>Model is illustrative: 730-hour month, $2.50/GPU-hr contract rate, credits computed as tier % of monthly fees, node failures spread evenly across the window. Tier schedules are representative of published cloud SLAs (10% / 25% / 100% escalation; 99.99% commitments add a 30–50% band). The true downstream cost of an outage — churn, breached customer SLAs, engineering time — is what the multiplier slider approximates, and it is almost always the biggest number on this page.</p>
+  </div>
+  <p class="foot">companion to instruments 01–03 · tier schedules representative of published cloud SLAs · Llama 3 failure data: Meta, "The Llama 3 Herd of Models" (2024) · compiled July 2026</p>
+</div>
+
+<script>
+var COMMITS=[
+ {label:"99.5%",v:0.995,tiers:[[0.995,10],[0.99,25],[0.95,100]]},
+ {label:"99.9%",v:0.999,tiers:[[0.999,10],[0.99,25],[0.95,100]]},
+ {label:"99.99%",v:0.9999,tiers:[[0.9999,10],[0.999,30],[0.99,50],[0.95,100]]}
+];
+var DEFS=[{id:"plat",label:"platform down"},{id:"inst",label:"instance-level"}];
+var WINS=[{id:"mo",label:"monthly",hrs:730},{id:"yr",label:"annual",hrs:8760}];
+var cSel=1,dSel=0,wSel=0;
+var platH=0,nodeGH=5000,fleet=512,mult=3,excl=false;
+var RATE=2.5,HM=730;
+function seg(el,items,sel,cb){
+  var h="";items.forEach(function(it,i){h+='<button class="'+(i===sel?"on":"")+'">'+it.label+"</button>"});
+  el.innerHTML=h;
+  el.querySelectorAll("button").forEach(function(b,i){b.addEventListener("click",function(){cb(i)})});
+}
+function rebuild(){
+  seg(document.getElementById("cb"),COMMITS,cSel,function(i){cSel=i;rebuild()});
+  seg(document.getElementById("db"),DEFS,dSel,function(i){dSel=i;rebuild()});
+  seg(document.getElementById("wb"),WINS,wSel,function(i){wSel=i;rebuild()});
+  render();
+}
+function money(x){
+  if(x>=1e6)return "$"+(x/1e6).toFixed(2)+"M";
+  if(x>=1e3)return "$"+Math.round(x/1e3)+"k";
+  return "$"+Math.round(x);
+}
+function allowedText(){
+  var c=COMMITS[cSel].v, w=WINS[wSel];
+  var mins=(1-c)*w.hrs*60;
+  var t=mins>=120?(mins/60).toFixed(1)+" hours":Math.round(mins)+" minutes";
+  return 'At '+COMMITS[cSel].label+' measured '+(wSel===0?"monthly":"annually")+', the provider is allowed <b>'+t+'</b> of downtime per '+(wSel===0?"month":"year")+' before anything pays.';
+}
+function render(){
+  var commit=COMMITS[cSel], win=WINS[wSel];
+  var spend=fleet*RATE*HM;
+  var weightedDown=platH+(dSel===1?nodeGH/fleet:0);
+  var uptime=1-weightedDown/win.hrs;
+  var tier=0;
+  if(!excl){
+    commit.tiers.forEach(function(t){if(uptime<t[0])tier=t[1]});
+  }
+  var credit=spend*tier/100;
+  var loss=(platH*fleet+nodeGH)*RATE*mult;
+  var ratio=loss>0?credit/loss:(credit>0?Infinity:0);
+  document.getElementById("al").innerHTML=allowedText();
+  document.getElementById("pv").textContent=platH.toFixed(1)+" h";
+  document.getElementById("nv").textContent=nodeGH.toLocaleString()+" GPU-h";
+  document.getElementById("fv").textContent=fleet.toLocaleString()+" GPUs";
+  document.getElementById("mv").textContent=mult.toFixed(1)+"× rate";
+  var up9=uptime*100;
+  document.getElementById("c1").innerHTML=(up9>=99.9995?"100":up9.toFixed(up9>=99.99?3:2))+"<em>%</em>";
+  document.getElementById("c2").textContent=money(credit)+(tier>0?" ("+tier+"%)":"");
+  document.getElementById("c3").textContent=money(loss);
+  var c4=document.getElementById("c4");
+  if(loss===0&&credit===0){c4.textContent="—";c4.className="v"}
+  else if(ratio===Infinity){c4.textContent="∞";c4.className="v"}
+  else{c4.textContent=Math.round(ratio*100)+"%";c4.className="v"+(ratio<0.25?" bad":"")}
+  var msg;
+  if(excl){
+    msg="The exclusions clause fired — the incident was classified as scheduled maintenance or force majeure, so measured downtime is forgiven and credits are $0. Every SLA has this clause; the only questions are how wide it's drawn and who decides.";
+  }else if(dSel===0&&nodeGH>0&&platH===0){
+    msg=nodeGH.toLocaleString()+" GPU-hours of node failures — the failure mode that actually dominates GPU fleets — never touched the availability metric, because \"unavailable\" means the platform, not your nodes. Measured uptime: perfect. Credits: $0. The definition clause just ate your claim.";
+  }else if(dSel===0&&platH>0&&tier===0){
+    msg="The outage happened, but "+(wSel===1?"annual measurement diluted it below the breach threshold — the same incident breaches a monthly window. ":"it stayed inside the allowed downtime budget. ")+"No tier triggered, no credit owed. The nines held; you still ate "+money(loss)+".";
+  }else if(tier>0&&ratio>=1){
+    msg="On paper the credit covers the direct loss — tiered credits are shaped to look adequate exactly here, on the rare total outage, because it's capped at a month's fees, claims-gated, and infrequent. Now drag node-level failures up and platform outage to zero: the chronic mode pays nothing. And remember these are service credits against future bills, not cash.";
+  }else if(tier>0){
+    msg="A breach, a tier, a payout — and it still recovers only "+Math.round(ratio*100)+"% of what the month truly cost once churn, downstream SLAs, and engineering time are counted. Credits are a rebate, not insurance; the protection you actually want is operational — time-to-replace, hot spares, exit rights.";
+  }else{
+    msg="A clean month — nothing to claim. Use the sliders to stage a bad one: start with node-level failures alone, then flip the definition of \"unavailable\" and watch the same month change value by six figures.";
+  }
+  document.getElementById("st").textContent=msg;
+}
+document.getElementById("ps").addEventListener("input",function(){platH=+this.value;render()});
+document.getElementById("ns").addEventListener("input",function(){nodeGH=+this.value;render()});
+document.getElementById("fs").addEventListener("input",function(){fleet=+this.value;render()});
+document.getElementById("msl").addEventListener("input",function(){mult=+this.value;render()});
+document.getElementById("ex").addEventListener("change",function(){excl=this.checked;render()});
+rebuild();
+</script>
+</body>
+</html>

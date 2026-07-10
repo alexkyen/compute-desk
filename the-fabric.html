@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The fabric — what wiring does to a GPU-hour</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F7F3; --panel:#FDFDFB; --ink:#15201A; --ink-2:#4A574F; --ink-3:#8A968E;
+  --rule:#DDE2DB; --teal:#117758; --teal-dim:#DCEDE4; --amber:#D98F12; --amber-dim:#F6E9CE;
+  --oxide:#A63B26; --mono:"IBM Plex Mono",ui-monospace,monospace; --serif:"Newsreader",Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--paper)}
+body{font-family:var(--serif);color:var(--ink);line-height:1.6;padding:48px 20px 72px}
+.wrap{max-width:880px;margin:0 auto}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(34px,5.5vw,52px);line-height:1.05;margin:10px 0 14px;letter-spacing:-.01em}
+.dek{font-size:18px;color:var(--ink-2);max-width:62ch;margin-bottom:36px}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:24px 26px}
+.seggroup{display:flex;flex-wrap:wrap;gap:22px;margin-bottom:18px}
+.seg{min-width:200px}
+.seg .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+.seg .btns{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);background:transparent;border:1px solid var(--rule);border-radius:6px;padding:7px 12px;cursor:pointer}
+.seg button:hover{border-color:var(--teal);color:var(--teal)}
+.seg button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.seg button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+svg{display:block;width:100%;height:auto;user-select:none}
+.sizer{display:flex;align-items:center;gap:14px;margin-top:16px;padding-top:16px;border-top:1px solid var(--rule)}
+.sizer .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
+.sizer b{font-family:var(--mono);font-weight:500;color:var(--ink);font-size:13px;min-width:52px}
+input[type=range]{flex:1;accent-color:var(--teal);height:22px}
+input:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.ticker{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));border:1px solid var(--rule);border-radius:10px;background:var(--panel);margin-top:16px;overflow:hidden}
+.tk{padding:16px 20px 14px;border-left:1px solid var(--rule)}
+.tk:first-child{border-left:none}
+.tk .l{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.tk .v{font-family:var(--mono);font-weight:500;font-size:26px;margin-top:4px;font-variant-numeric:tabular-nums}
+.tk .v em{font-style:normal;font-size:14px;color:var(--ink-3)}
+.status{font-style:italic;font-size:17px;color:var(--ink-2);margin:20px 2px 0;min-height:3.2em}
+.notes{margin-top:52px;border-top:1px solid var(--rule);padding-top:30px}
+.notes h2{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;margin-bottom:18px}
+.notes p{max-width:66ch;margin-bottom:14px;color:var(--ink-2)}
+.notes p strong{color:var(--ink);font-weight:500}
+.ask{font-family:var(--mono);font-size:13px;background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:13px 16px;margin:18px 0;color:var(--ink);max-width:72ch}
+.ask b{font-weight:500;letter-spacing:.08em;font-size:10px;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:4px}
+.foot{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:44px;letter-spacing:.03em}
+@media(max-width:560px){.tk{padding:12px 14px}.tk .v{font-size:20px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Compute desk · instrument 03</p>
+  <h1>The fabric</h1>
+  <p class="dek">"1,024 H100s" is not a spec — it's a rumor until you know how they're wired. This is a 128-GPU cluster: four racks under four leaf switches under a spine. Choose the protocol, the oversubscription, and where the job lands, and watch the same silicon change price.</p>
+
+  <div class="card">
+    <div class="seggroup">
+      <div class="seg"><p class="lbl">Fabric protocol</p><div class="btns" id="fb"></div></div>
+      <div class="seg"><p class="lbl">Spine oversubscription</p><div class="btns" id="ob"></div></div>
+      <div class="seg"><p class="lbl">Job placement</p><div class="btns" id="sb"></div></div>
+    </div>
+    <svg id="topo" viewBox="0 0 840 320" role="img" aria-label="Cluster topology: two spine switches, four leaf switches, four racks of four nodes; link colors show where the selected job's traffic flows"></svg>
+    <div class="sizer">
+      <span class="lbl">Model in training</span>
+      <input type="range" id="ms" min="7" max="405" step="1" value="70" aria-label="Model size in billions of parameters">
+      <b id="mv">70B</b>
+    </div>
+  </div>
+
+  <div class="ticker">
+    <div class="tk"><p class="l">Bandwidth per GPU</p><p class="v" id="c1">—</p></div>
+    <div class="tk"><p class="l">All-reduce per step</p><p class="v" id="c2">—</p></div>
+    <div class="tk"><p class="l">Fabric factor</p><p class="v" id="c3">—</p></div>
+    <div class="tk"><p class="l">$2.50 sticker, effectively</p><p class="v" id="c4">—</p></div>
+  </div>
+  <p class="status" id="st"></p>
+
+  <div class="notes">
+    <h2>Reading the wiring like a buyer</h2>
+    <p><strong>The hierarchy is the whole story.</strong> Inside one node, GPUs talk over NVLink at hundreds of GB/s. The moment a job outgrows the node, traffic drops onto the network at NIC speed — 400 Gb/s (50 GB/s) per GPU in a standard H100 build — an order of magnitude slower. Training synchronizes gradients across every GPU each step (the all-reduce), so for any model too large for one node, the network is in the inner loop and its bandwidth prices the whole cluster.</p>
+    <p><strong>InfiniBand vs. RoCE is a protocol choice, not a speed choice.</strong> Both run the same wire rates; both carry RDMA. InfiniBand is lossless by construction (credit-based flow control, sub-microsecond switching) and historically delivers ~90%+ of line rate to NCCL collectives. RoCEv2 is RDMA over Ethernet made lossless with PFC and ECN — cheaper, multi-vendor, easier to operate at hyperscale, but its delivered efficiency depends heavily on tuning and congestion control. Well-engineered Ethernet fabrics (NVIDIA's own Spectrum-X, and the Ultra Ethernet effort) claim to close to within a few points of InfiniBand; untuned RoCE can fall far below. The buyer's conclusion: never accept line rate as an answer — demand measured NCCL bus bandwidth at your job size.</p>
+    <p><strong>Oversubscription is a quiet discount you pay, not receive.</strong> A 2:1 fabric has half as much uplink capacity out of each leaf as downlink under it — fine for inference microservices that rarely cross leaves, poisonous for training all-reduces that cross constantly. It's invisible on the price sheet and only appears in the topology diagram, which is precisely why you ask for the topology diagram. Corollary: placement is free money — a job packed inside one leaf never touches the spine, so a topology-aware scheduler recovers bandwidth that oversubscription took away.</p>
+    <p><strong>Rail-optimized designs</strong> take this further: each of a node's eight NICs connects to its own "rail" of switches, so same-rank GPUs across nodes are one hop apart — cheaper than a full fat-tree, excellent for collectives, weaker for arbitrary traffic. The point isn't to memorize designs; it's to know the failure modes each one buys.</p>
+    <div class="ask"><b>Ask the supplier</b>InfiniBand or Ethernet, which NIC generation, and what measured NCCL all-reduce bus bandwidth do you see at my job size — not line rate, measured?</div>
+    <div class="ask"><b>Ask the supplier</b>What's the oversubscription ratio, leaf to spine — and can your scheduler place my job within a single leaf or rail?</div>
+    <div class="ask"><b>Ask the supplier</b>Full fat-tree or rail-optimized? Show me the topology diagram, and tell me the blast radius when one spine switch fails.</div>
+    <p>This is the "performance factor" from the effective-cost equation given a body: two clusters with identical GPUs and identical sticker prices can differ 30%+ in delivered training throughput on wiring alone. Model here is illustrative — ring all-reduce, large-message regime, latency ignored, protocol efficiencies representative (IB ≈ 0.92, tuned RoCE ≈ 0.80 of line rate).</p>
+  </div>
+  <p class="foot">companion to instruments 01 (the supply book) and 02 (the silicon ladder) · protocol efficiencies representative, not benchmarked · compiled July 2026</p>
+</div>
+
+<script>
+var FABRICS=[{id:"ib",label:"InfiniBand 400G",eff:0.92},{id:"roce",label:"RoCE v2 400G",eff:0.80}];
+var OVERS=[{r:1,label:"1:1 full"},{r:2,label:"2:1"},{r:4,label:"4:1"}];
+var SPANS=[{id:"node",label:"one node · 8 GPUs",n:8},{id:"leaf",label:"one leaf · 32 GPUs",n:32},{id:"cluster",label:"cluster · 128 GPUs",n:128}];
+var fSel=0,oSel=0,sSel=2,params=70;
+var NIC=50, NVL=810, STICKER=2.5;
+function seg(el,items,sel,cb){
+  var h="";items.forEach(function(it,i){h+='<button class="'+(i===sel?"on":"")+'">'+it.label+"</button>"});
+  el.innerHTML=h;
+  el.querySelectorAll("button").forEach(function(b,i){b.addEventListener("click",function(){cb(i)})});
+}
+function rebuild(){
+  seg(document.getElementById("fb"),FABRICS,fSel,function(i){fSel=i;rebuild()});
+  seg(document.getElementById("ob"),OVERS,oSel,function(i){oSel=i;rebuild()});
+  seg(document.getElementById("sb"),SPANS,sSel,function(i){sSel=i;rebuild()});
+  render();
+}
+function drawTopo(mode,rho,cong){
+  var s='';
+  var IDLE="#DDE2DB", ACT="#117758", HOT="#D98F12", INKM="#8A968E";
+  var spineX=[300,540], leafX=[150,330,510,690];
+  var upW=(rho===1?4:rho===2?2:1);
+  var upActive=(mode==="cluster");
+  leafX.forEach(function(lx){
+    spineX.forEach(function(sx){
+      var col=upActive?(cong?HOT:ACT):IDLE;
+      s+='<line x1="'+(lx)+'" y1="120" x2="'+(sx)+'" y2="56" stroke="'+col+'" stroke-width="'+upW+'" stroke-linecap="round"/>';
+    });
+  });
+  leafX.forEach(function(lx,li){
+    var active=(mode==="cluster")||(mode==="leaf"&&li===0);
+    s+='<line x1="'+lx+'" y1="154" x2="'+lx+'" y2="212" stroke="'+(active?ACT:IDLE)+'" stroke-width="4" stroke-linecap="round"/>';
+  });
+  spineX.forEach(function(sx){
+    s+='<rect x="'+(sx-60)+'" y="22" width="120" height="34" rx="6" fill="#FDFDFB" stroke="'+(upActive?ACT:IDLE)+'" stroke-width="1.2"/>';
+    s+='<text x="'+sx+'" y="43" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#4A574F">spine</text>';
+  });
+  leafX.forEach(function(lx,li){
+    var active=(mode==="cluster")||(mode==="leaf"&&li===0)||(mode==="node"&&li===0);
+    s+='<rect x="'+(lx-55)+'" y="120" width="110" height="34" rx="6" fill="#FDFDFB" stroke="'+(active&&mode!=="node"?ACT:IDLE)+'" stroke-width="1.2"/>';
+    s+='<text x="'+lx+'" y="141" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#4A574F">leaf '+(li+1)+'</text>';
+    for(var n=0;n<4;n++){
+      var nx=lx-55+8+n*26;
+      var on=(mode==="cluster")||(mode==="leaf"&&li===0)||(mode==="node"&&li===0&&n===0);
+      s+='<rect x="'+nx+'" y="212" width="22" height="20" rx="4" fill="'+(on?"#DCEDE4":"#F6F7F3")+'" stroke="'+(on?ACT:IDLE)+'" stroke-width="1.2"/>';
+    }
+    s+='<text x="'+lx+'" y="252" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="'+INKM+'">rack '+(li+1)+' · 4 nodes × 8 GPUs</text>';
+  });
+  s+='<text x="64" y="43" text-anchor="start" font-family="IBM Plex Mono, monospace" font-size="10" fill="'+INKM+'">uplinks '+rho+':1</text>';
+  if(mode==="node"){
+    s+='<text x="150" y="286" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#117758">traffic stays on NVLink inside the node</text>';
+  }
+  s+='<text x="770" y="300" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="'+INKM+'">128 GPUs total</text>';
+  document.getElementById("topo").innerHTML=s;
+}
+function fmtT(t){
+  if(t<0.001)return (t*1e6).toFixed(0)+"<em> µs</em>";
+  if(t<1)return (t*1000).toFixed(0)+"<em> ms</em>";
+  return t.toFixed(1)+"<em> s</em>";
+}
+function render(){
+  var fab=FABRICS[fSel], rho=OVERS[oSel].r, span=SPANS[sSel];
+  var B, ideal=NIC*FABRICS[0].eff;
+  if(span.id==="node")B=NVL;
+  else if(span.id==="leaf")B=NIC*fab.eff;
+  else B=NIC*fab.eff/rho;
+  var P=2*params;
+  var t=2*P*(span.n-1)/(span.n*B);
+  var factor=Math.min(1,B/ideal);
+  var effCost=STICKER/factor;
+  var cong=(span.id==="cluster"&&rho>1);
+  drawTopo(span.id,rho,cong);
+  document.getElementById("mv").textContent=params+"B";
+  document.getElementById("c1").innerHTML=Math.round(B)+"<em> GB/s</em>";
+  document.getElementById("c2").innerHTML=fmtT(t);
+  document.getElementById("c3").textContent=Math.round(factor*100)+"%";
+  document.getElementById("c4").innerHTML="$"+effCost.toFixed(2)+"<em>/GPU-hr</em>";
+  var msg;
+  if(span.id==="node"){
+    msg="This job never touches the network — gradients ride NVLink at ~"+NVL+" GB/s inside the node. Protocol and oversubscription are moot until the model outgrows 8 GPUs; that's the cliff every scaling decision walks toward.";
+  }else if(span.id==="leaf"){
+    msg="Packed within one leaf, every GPU sees full NIC bandwidth — the spine's "+rho+":1 oversubscription is invisible from here. Topology-aware placement is free money: same cluster, no tax.";
+  }else if(rho===1){
+    msg="Cluster-wide on a full-bisection fabric: the only tax is protocol efficiency ("+Math.round(fab.eff*100)+"% of line rate for "+(fab.id==="ib"?"InfiniBand":"tuned RoCE")+"). This is the honest baseline suppliers should be measured against.";
+  }else{
+    msg="Cluster-wide across a "+rho+":1 spine: every byte crossing leaves shares uplinks, so effective bandwidth divides by "+rho+". Same GPUs, same sticker — but the $2.50 hour is really $"+effCost.toFixed(2)+". The discount was in the wiring, and you paid it.";
+  }
+  document.getElementById("st").textContent=msg;
+}
+document.getElementById("ms").addEventListener("input",function(){params=+this.value;render()});
+rebuild();
+</script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The supply book — a GPU capacity simulator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F7F3; --panel:#FDFDFB; --ink:#15201A; --ink-2:#4A574F; --ink-3:#8A968E;
+  --rule:#DDE2DB; --teal:#117758; --teal-dim:#DCEDE4; --amber:#D98F12; --amber-dim:#F6E9CE;
+  --oxide:#A63B26; --mono:"IBM Plex Mono",ui-monospace,monospace; --serif:"Newsreader",Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--paper)}
+body{font-family:var(--serif);color:var(--ink);line-height:1.6;padding:48px 20px 72px}
+.wrap{max-width:880px;margin:0 auto}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(34px,5.5vw,52px);line-height:1.05;margin:10px 0 14px;letter-spacing:-.01em}
+.dek{font-size:18px;color:var(--ink-2);max-width:60ch;margin-bottom:36px}
+.dek code{font-family:var(--mono);font-size:.85em;background:var(--teal-dim);color:var(--teal);padding:1px 6px;border-radius:3px}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:26px 26px 22px}
+.legend{display:flex;flex-wrap:wrap;gap:18px;font-family:var(--mono);font-size:11.5px;color:var(--ink-2);margin-bottom:14px}
+.legend span{display:flex;align-items:center;gap:7px}
+.sw{width:11px;height:11px;border-radius:2px;display:inline-block}
+svg{display:block;width:100%;height:auto;touch-action:none;cursor:ns-resize;user-select:none;-webkit-user-select:none}
+.controls{display:flex;flex-wrap:wrap;gap:22px;margin-top:22px;padding-top:20px;border-top:1px solid var(--rule)}
+.ctl{flex:1;min-width:230px}
+.ctl label{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+.ctl label b{font-weight:500;color:var(--ink);letter-spacing:0}
+input[type=range]{width:100%;accent-color:var(--teal);height:22px}
+.krow{display:flex;align-items:center;gap:14px;margin-top:18px}
+.krow .ctl{flex:1}
+button{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--teal);background:transparent;border:1px solid var(--teal);border-radius:6px;padding:8px 14px;cursor:pointer;white-space:nowrap;align-self:flex-end}
+button:hover{background:var(--teal-dim)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.ticker{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));border:1px solid var(--rule);border-radius:10px;background:var(--panel);margin-top:16px;overflow:hidden}
+.tk{padding:16px 20px 14px;border-left:1px solid var(--rule)}
+.tk:first-child{border-left:none}
+.tk .l{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.tk .v{font-family:var(--mono);font-weight:500;font-size:26px;margin-top:4px;font-variant-numeric:tabular-nums}
+.tk .v em{font-style:normal;font-size:14px;color:var(--ink-3)}
+.tk .v.bad{color:var(--oxide)}
+.status{font-style:italic;font-size:17px;color:var(--ink-2);margin:20px 2px 0;min-height:1.6em}
+.notes{margin-top:52px;border-top:1px solid var(--rule);padding-top:30px}
+.notes h2{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;color:var(--ink);margin-bottom:18px}
+.notes p{max-width:66ch;margin-bottom:14px;color:var(--ink-2)}
+.notes p strong{color:var(--ink);font-weight:500}
+.rule-box{font-family:var(--mono);font-size:14px;background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--teal);border-radius:0 8px 8px 0;padding:14px 18px;margin:22px 0;color:var(--ink)}
+.foot{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:44px;letter-spacing:.03em}
+@media (max-width:560px){.tk{padding:12px 14px}.tk .v{font-size:20px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Compute desk · instrument 01</p>
+  <h1>The supply book</h1>
+  <p class="dek">A serverless GPU platform buys capacity ahead of demand: cheap if committed, flexible if not. Drag the <code>K</code> line to size the committed layer against a year of demand, sorted from busiest hour to quietest, and watch the economics settle.</p>
+
+  <div class="card">
+    <div class="legend">
+      <span><span class="sw" style="background:var(--teal)"></span>committed, utilized</span>
+      <span><span class="sw" style="background:repeating-linear-gradient(45deg,#8FC7AF 0 2px,transparent 2px 5px)"></span>committed, idle</span>
+      <span><span class="sw" style="background:var(--amber)"></span>served on-demand</span>
+      <span><span class="sw" style="background:var(--oxide);height:3px;border-radius:1px"></span>demand curve</span>
+    </div>
+    <svg id="sim" viewBox="0 0 840 340" role="img" aria-label="Load-duration chart with a draggable committed-capacity line dividing utilized, idle, and on-demand regions"></svg>
+    <div class="controls">
+      <div class="ctl">
+        <label>Reserved discount <b id="dv">3.0× · $2.00/hr</b></label>
+        <input type="range" id="ds" min="1.5" max="6" step="0.1" value="3" aria-label="Reserved discount multiple">
+      </div>
+      <div class="ctl">
+        <label>Peak-to-average demand <b id="vv">4.0×</b></label>
+        <input type="range" id="vs" min="1.3" max="8" step="0.1" value="4" aria-label="Peak to average demand ratio">
+      </div>
+    </div>
+    <div class="krow">
+      <div class="ctl">
+        <label>Committed capacity K <b id="kv">100 GPUs</b></label>
+        <input type="range" id="ks" min="0" max="400" step="1" value="100" aria-label="Committed capacity in GPUs">
+      </div>
+      <button id="snapBtn" type="button">snap to optimal</button>
+    </div>
+  </div>
+
+  <div class="ticker">
+    <div class="tk"><p class="l">Blended cost</p><p class="v" id="c1">—</p></div>
+    <div class="tk"><p class="l">Vs all on-demand</p><p class="v" id="c2">—</p></div>
+    <div class="tk"><p class="l">Committed utilization</p><p class="v" id="c3">—</p></div>
+    <div class="tk"><p class="l">Served elastic</p><p class="v" id="c4">—</p></div>
+  </div>
+  <p class="status" id="st"></p>
+
+  <div class="notes">
+    <h2>How to read it</h2>
+    <p>The model: average demand is fixed at 100 GPUs; on-demand capacity costs $6.00 per GPU-hour; reserved capacity costs $6.00 divided by the discount multiple, but is paid for every hour whether used or not. Everything under the oxide curve is sellable demand; any committed capacity above the curve is paid-for silence.</p>
+    <div class="rule-box">commit a GPU ⇔ its expected utilization ≥ reserved ÷ on-demand price<br>at a 3× discount: breakeven = $2.00 / $6.00 = 33% of hours</div>
+    <p><strong>Feel the valley.</strong> Sweep K from zero to max and watch blended cost fall, bottom out at the dashed optimal line, and rise. Note how flat the bottom is — being 20% wrong on book size barely costs anything. Real capacity books die from counterparty and duration risk, not mis-sizing.</p>
+    <p><strong>Crank volatility.</strong> Hold the discount and raise peak-to-average. The optimal line dives and the amber elastic share swells: spikier demand means committing less, regardless of how good the discount is. When peak-to-average far exceeds the discount multiple, even the optimal book barely beats pure on-demand.</p>
+    <p><strong>Crank the discount.</strong> Hold volatility and raise the discount. Breakeven utilization is just one over the discount, so a deeper discount makes it rational to commit further into rarely-used layers. Every turn of discount negotiated changes how much of the demand curve the book can afford to own.</p>
+    <p>One honest limitation: this demand curve is known and static. The real job prices an uncertain curve growing several-fold a year, which pushes optimal behavior toward shorter durations and paid-for flexibility beyond what this picture shows.</p>
+  </div>
+  <p class="foot">newsvendor critical ratio · load-duration framing after Modal, “How to price serverless” (2026)</p>
+</div>
+
+<script>
+var d=6, delta=3, rho=4, K=100, AVG=100, N=180;
+function peak(){return AVG*rho}
+function D(h){return AVG*rho*Math.pow(1-h,rho-1)}
+function hOf(k){var p=peak();if(k>=p)return 0;if(k<=0)return 1;return 1-Math.pow(k/p,1/(rho-1))}
+function Kopt(){return AVG*rho*Math.pow(1-1/delta,rho-1)}
+function render(){
+  var p=peak(), r=d/delta, hK=hOf(K);
+  var S=K*hK+AVG*Math.pow(1-hK,rho);
+  var OD=Math.max(0,AVG-S);
+  var cost=r*K+d*OD, blended=cost/AVG;
+  var util=K>0?S/K:0, sav=1-cost/(d*AVG);
+  var ko=Kopt();
+  var Dmax=p*1.05, X0=56,X1=816,Y0=294,Y1=22;
+  function x(h){return X0+h*(X1-X0)}
+  function y(v){return Y0-(v/Dmax)*(Y0-Y1)}
+  var i,h;
+  var uP='M'+x(0).toFixed(1)+' '+y(Math.min(D(0),K)).toFixed(1);
+  for(i=1;i<=N;i++){h=i/N;uP+='L'+x(h).toFixed(1)+' '+y(Math.min(D(h),K)).toFixed(1)}
+  uP+='L'+X1+' '+Y0+'L'+X0+' '+Y0+'Z';
+  var iP='';
+  if(K>0&&hK<1){
+    iP='M'+x(hK).toFixed(1)+' '+y(K).toFixed(1)+'L'+X1+' '+y(K).toFixed(1);
+    for(i=N;i>=0;i--){h=i/N;if(h>=hK-0.002){iP+='L'+x(h).toFixed(1)+' '+y(Math.min(D(h),K)).toFixed(1)}}
+    iP+='Z';
+  }
+  var oP='';
+  if(hK>0){
+    oP='M'+x(0).toFixed(1)+' '+y(D(0)).toFixed(1);
+    for(i=1;i<=N;i++){h=i/N;if(h<=hK+0.002){oP+='L'+x(h).toFixed(1)+' '+y(Math.max(D(h),K)).toFixed(1)}}
+    oP+='L'+x(Math.min(hK,1)).toFixed(1)+' '+y(K).toFixed(1)+'L'+x(0).toFixed(1)+' '+y(Math.min(D(0),K)).toFixed(1)+'Z';
+  }
+  var cP='M'+x(0).toFixed(1)+' '+y(D(0)).toFixed(1);
+  for(i=1;i<=N;i++){h=i/N;cP+='L'+x(h).toFixed(1)+' '+y(D(h)).toFixed(1)}
+  function tick(v){return '<text x="48" y="'+(y(v)+4).toFixed(1)+'" text-anchor="end" font-size="11" font-family="IBM Plex Mono, monospace" fill="#8A968E">'+Math.round(v)+'</text>'}
+  var s='<defs><pattern id="hz" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#8FC7AF" stroke-width="1.6"/></pattern></defs>';
+  s+='<path d="'+uP+'" fill="#117758" fill-opacity="0.42"/>';
+  if(iP)s+='<path d="'+iP+'" fill="url(#hz)" fill-opacity="0.75"/>';
+  if(oP)s+='<path d="'+oP+'" fill="#D98F12" fill-opacity="0.38"/>';
+  s+='<path d="'+cP+'" fill="none" stroke="#A63B26" stroke-width="2.5" stroke-linecap="round"/>';
+  s+='<line x1="'+X0+'" y1="'+y(ko).toFixed(1)+'" x2="'+X1+'" y2="'+y(ko).toFixed(1)+'" stroke="#15201A" stroke-opacity="0.4" stroke-width="1" stroke-dasharray="4 5"/>';
+  s+='<text x="'+(X1-4)+'" y="'+(y(ko)-7).toFixed(1)+'" text-anchor="end" font-size="11" font-family="IBM Plex Mono, monospace" fill="#4A574F">optimal '+Math.round(ko)+'</text>';
+  s+='<line x1="'+X0+'" y1="'+y(K).toFixed(1)+'" x2="'+X1+'" y2="'+y(K).toFixed(1)+'" stroke="#15201A" stroke-width="1.6"/>';
+  s+='<circle cx="'+((X0+X1)/2)+'" cy="'+y(K).toFixed(1)+'" r="6" fill="#15201A"/>';
+  s+='<text x="'+((X0+X1)/2+12)+'" y="'+(y(K)-9).toFixed(1)+'" font-size="11" font-family="IBM Plex Mono, monospace" fill="#15201A">K = '+Math.round(K)+'</text>';
+  s+='<line x1="'+X0+'" y1="'+Y0+'" x2="'+X1+'" y2="'+Y0+'" stroke="#C7CEC6" stroke-width="1"/>';
+  s+='<line x1="'+X0+'" y1="'+Y1+'" x2="'+X0+'" y2="'+Y0+'" stroke="#C7CEC6" stroke-width="1"/>';
+  s+=tick(0)+tick(p/2)+tick(p);
+  s+='<text x="'+X0+'" y="316" font-size="11" font-family="IBM Plex Mono, monospace" fill="#8A968E">busiest hours</text>';
+  s+='<text x="'+X1+'" y="316" text-anchor="end" font-size="11" font-family="IBM Plex Mono, monospace" fill="#8A968E">quietest hours</text>';
+  s+='<text x="'+((X0+X1)/2)+'" y="316" text-anchor="middle" font-size="11" font-family="IBM Plex Mono, monospace" fill="#8A968E">share of the year, sorted</text>';
+  document.getElementById('sim').innerHTML=s;
+  document.getElementById('dv').textContent=delta.toFixed(1)+'× · $'+(d/delta).toFixed(2)+'/hr';
+  document.getElementById('vv').textContent=rho.toFixed(1)+'×';
+  document.getElementById('kv').textContent=Math.round(K)+' GPUs';
+  document.getElementById('c1').innerHTML='$'+blended.toFixed(2)+'<em>/GPU-hr</em>';
+  var savPct=Math.round(sav*100), c2El=document.getElementById('c2');
+  c2El.textContent=(savPct>0?'−'+savPct:savPct<0?'+'+Math.abs(savPct):'0')+'%';
+  c2El.className='v'+(savPct<0?' bad':'');
+  document.getElementById('c3').textContent=Math.round(util*100)+'%';
+  document.getElementById('c4').textContent=Math.round(OD/AVG*100)+'%';
+  var be=1/delta, m=hK, beT=Math.round(be*100), mT=Math.round(m*100), msg;
+  if(Math.abs(m-be)<0.02){msg='Near optimal — the marginal committed GPU runs '+mT+'% of hours, right at the '+beT+'% breakeven.'}
+  else if(m>be){msg='The marginal committed GPU runs '+mT+'% of hours, above the '+beT+'% breakeven — committing more still pays.'}
+  else{msg='Over-committed — the marginal GPU runs only '+mT+'% of hours against a '+beT+'% breakeven. The top of the book idles at a loss.'}
+  document.getElementById('st').textContent=msg;
+}
+document.getElementById('ds').addEventListener('input',function(){delta=+this.value;render()});
+document.getElementById('vs').addEventListener('input',function(){
+  rho=+this.value;
+  var ks=document.getElementById('ks');
+  ks.max=Math.round(peak());
+  if(K>peak()){K=Math.round(peak());ks.value=K}
+  render();
+});
+document.getElementById('ks').addEventListener('input',function(){K=+this.value;render()});
+document.getElementById('snapBtn').addEventListener('click',function(){
+  K=Math.round(Kopt());
+  document.getElementById('ks').value=K;
+  render();
+});
+var sim=document.getElementById('sim'), drag=false;
+function setK(e){
+  var rc=sim.getBoundingClientRect();
+  var vy=(e.clientY-rc.top)/rc.height*340;
+  var Dmax=peak()*1.05;
+  var k=(294-vy)/272*Dmax;
+  K=Math.max(0,Math.min(peak(),Math.round(k)));
+  document.getElementById('ks').value=K;
+  render();
+}
+sim.addEventListener('pointerdown',function(e){drag=true;sim.setPointerCapture(e.pointerId);setK(e)});
+sim.addEventListener('pointermove',function(e){if(drag)setK(e)});
+sim.addEventListener('pointerup',function(){drag=false});
+sim.addEventListener('pointercancel',function(){drag=false});
+document.getElementById('ks').max=Math.round(peak());
+render();
+</script>
+</body>
+</html>

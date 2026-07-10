@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The silicon ladder — NVIDIA generations, read from the buyer's chair</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F7F3; --panel:#FDFDFB; --ink:#15201A; --ink-2:#4A574F; --ink-3:#8A968E;
+  --rule:#DDE2DB; --teal:#117758; --teal-dim:#DCEDE4; --amber:#D98F12; --amber-dim:#F6E9CE;
+  --oxide:#A63B26; --mono:"IBM Plex Mono",ui-monospace,monospace; --serif:"Newsreader",Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--paper)}
+body{font-family:var(--serif);color:var(--ink);line-height:1.6;padding:48px 20px 72px}
+.wrap{max-width:880px;margin:0 auto}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(34px,5.5vw,52px);line-height:1.05;margin:10px 0 14px;letter-spacing:-.01em}
+.dek{font-size:18px;color:var(--ink-2);max-width:62ch;margin-bottom:36px}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:24px 26px}
+.metrics{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.metrics button{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--ink-2);background:transparent;border:1px solid var(--rule);border-radius:6px;padding:7px 12px;cursor:pointer}
+.metrics button:hover{border-color:var(--teal);color:var(--teal)}
+.metrics button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.metrics button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.caption{font-style:italic;font-size:15px;color:var(--ink-2);margin:12px 2px 20px;min-height:1.6em}
+.row{display:grid;grid-template-columns:118px 1fr 96px 62px;align-items:center;gap:12px;padding:9px 10px;border-radius:8px;cursor:pointer;border:1px solid transparent}
+.row:hover{background:var(--paper)}
+.row.sel{background:var(--teal-dim);border-color:var(--teal)}
+.row .g{font-family:var(--mono);font-size:13px;font-weight:500}
+.row .g em{display:block;font-style:normal;font-size:10px;color:var(--ink-3);letter-spacing:.06em}
+.track{height:14px;background:var(--paper);border-radius:3px;overflow:hidden}
+.fill{display:block;height:100%;border-radius:3px;background:var(--teal);width:0;transition:width .35s ease}
+.fill.amber{background:var(--amber)}
+.row .v{font-family:var(--mono);font-size:12.5px;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.row .d{font-family:var(--mono);font-size:11.5px;color:var(--oxide);text-align:right;font-variant-numeric:tabular-nums}
+.dossier{margin-top:22px;border-top:1px solid var(--rule);padding-top:20px}
+.dh{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px;margin-bottom:8px}
+.dh h2{font-family:var(--serif);font-style:italic;font-weight:400;font-size:26px}
+.badge{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--rule);border-radius:4px;padding:3px 8px;color:var(--ink-2)}
+.badge.hot{border-color:var(--oxide);color:var(--oxide)}
+.dossier p{max-width:68ch;color:var(--ink-2);margin-bottom:12px}
+.ask{font-family:var(--mono);font-size:13px;background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:13px 16px;margin-top:6px;color:var(--ink);max-width:72ch}
+.ask b{font-weight:500;letter-spacing:.08em;font-size:10px;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:4px}
+.notes{margin-top:52px;border-top:1px solid var(--rule);padding-top:30px}
+.notes h2{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;margin-bottom:18px}
+.notes p{max-width:66ch;margin-bottom:14px;color:var(--ink-2)}
+.notes p strong{color:var(--ink);font-weight:500}
+.foot{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:44px;letter-spacing:.03em}
+@media(max-width:600px){.row{grid-template-columns:86px 1fr 78px 48px;gap:8px}.row .v{font-size:11px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Compute desk · instrument 02</p>
+  <h1>The silicon ladder</h1>
+  <p class="dek">Five generations of NVIDIA datacenter silicon, read from the buyer's chair. Switch the metric to see where each generation actually moved; select a rung for what it means when you're the one signing the capacity contract.</p>
+
+  <div class="card">
+    <div class="metrics" id="mx" role="tablist" aria-label="Metric"></div>
+    <p class="caption" id="cap"></p>
+    <div id="rows"></div>
+    <div class="dossier">
+      <div class="dh" id="dh"></div>
+      <p id="dp1"></p>
+      <p id="dp2"></p>
+      <div class="ask"><b>Ask the supplier</b><span id="ask"></span></div>
+    </div>
+  </div>
+
+  <div class="notes">
+    <h2>Reading the spec sheet like a buyer</h2>
+    <p><strong>The comparability trap.</strong> Headline FLOPS include sparsity and shift numeric precision every generation — Hopper's marketed number is FP8, Blackwell's and Rubin's are FP4 — so cross-generation compute multiples partly measure the arithmetic getting narrower, not just the silicon getting faster. Memory capacity and bandwidth are the honest cross-generation rulers, which is convenient, because for inference they are usually the binding ones.</p>
+    <p><strong>The depreciation clock.</strong> The cadence is now annual — Blackwell 2024, Blackwell Ultra 2025, Rubin 2026, Rubin Ultra promised 2027 — and each launch resets the resale and renewal value of everything above it on this page. Historically, prices of the incumbent fall 40–50% over 12–18 months from supply expansion, then further when the successor ships in volume. Every multi-year commitment is short this clock.</p>
+    <p><strong>The constraint migrated.</strong> From B200 onward the practical scarcity isn't chips — it's watts and plumbing. Rack power densities that force liquid cooling mean the question "can you get GPUs?" quietly became "can your facility host them?", which is why datacenter readiness now belongs in supplier diligence alongside price.</p>
+    <p>† Rubin figures are pre-volume: bandwidth spec is 22 TB/s with early shipments reported nearer 20 as HBM4 suppliers chase NVIDIA's pin speeds, and rack power is not final. HBM4 supply gates the ramp; first allocation goes to hyperscalers and frontier labs.</p>
+  </div>
+  <p class="foot">sources: NVIDIA datasheets · GTC 2026 keynote (Mar 2026) · SemiAnalysis via TechPowerUp (Mar 2026) · compiled July 2026 · companion to instrument 01, the supply book</p>
+</div>
+
+<script>
+var GENS=[
+ {id:"H100",arch:"Hopper",year:"2022",mem:80,memT:"HBM3",bw:3.35,comp:4,prec:"FP8",pw:700,nvl:900,nvlG:"NVLink 4",dom:8,est:false,
+  t:"The unit of account",
+  p1:"The GPU the AI boom was built on, and the most liquid asset in the market: the deepest supply across every provider, the most published pricing, and the reference unit in which every other chip's value gets quoted. Most capacity paper in circulation is still H100 paper.",
+  p2:"Its price history is the market's core lesson: declines of 40–50% over 12–18 months were driven by supply expansion, not by successor announcements — new generations don't crash the incumbent's price; volume does.",
+  ask:"How old is the fleet, what fabric is it wired with, and how does my rate track a reference index as H100 market pricing keeps sliding?"},
+ {id:"H200",arch:"Hopper refresh",year:"2024",mem:141,memT:"HBM3e",bw:4.8,comp:4,prec:"FP8",pw:700,nvl:900,nvlG:"NVLink 4",dom:8,est:false,
+  t:"Same engine, twice the tank",
+  p1:"Identical Hopper compute — the entire upgrade is memory: 141 GB of HBM3e at 4.8 TB/s. That makes it a pure inference play: a 70B-parameter model fits in FP16 on a single GPU, with no sharding and no interconnect tax.",
+  p2:"The lesson for a buyer is that a generation's value can live entirely in HBM. Price-per-FLOP and price-per-GB rank the same chip very differently, so the right ranking depends on which resource your demand actually exhausts first.",
+  ask:"Is my demand compute-bound or memory-bound — and is the H200 premium over H100 smaller than the sharding cost it removes?"},
+ {id:"B200",arch:"Blackwell",year:"2024",mem:192,memT:"HBM3e",bw:8,comp:20,prec:"FP4",pw:1000,nvl:1800,nvlG:"NVLink 5",dom:72,est:false,
+  t:"The rack becomes the product",
+  p1:"A true architecture change: FP4 tensor cores, NVLink 5 at 1.8 TB/s, and a coherent domain that jumps from 8 GPUs to 72 in the GB200 NVL72 — from this point the natural unit of purchase is the rack, not the server.",
+  p2:"At 1,000 W per GPU it forces liquid cooling, which is the moment the industry's binding constraint migrated from chip supply to power and facility readiness. Two suppliers quoting the same B200 price can differ entirely in whether their buildings can actually run them.",
+  ask:"Is the facility genuinely NVL72-ready — power density, liquid cooling loops, delivered or merely planned?"},
+ {id:"B300",arch:"Blackwell Ultra",year:"2025",mem:288,memT:"HBM3e",bw:8,comp:30,prec:"FP4",pw:1400,nvl:1800,nvlG:"NVLink 5",dom:72,est:false,
+  t:"Proof of the annual cadence",
+  p1:"A mid-cycle bump — 288 GB of HBM3e and 1.4 kW — arriving just one year after B200. The chip matters less than the tempo it confirms: NVIDIA now ships a meaningful upgrade every single year.",
+  p2:"That cadence is the depreciation clock ticking inside every multi-year commitment. A 3-year reserved contract signed on any rung of this ladder will live through three launches; the discount has to be priced against that.",
+  ask:"What generation-swap, refresh, or early-exit rights can be written into a multi-year term — and what are they worth?"},
+ {id:"R200",arch:"Rubin",year:"H2 2026",mem:288,memT:"HBM4",bw:22,comp:50,prec:"FP4",pw:2300,nvl:3600,nvlG:"NVLink 6",dom:72,est:true,
+  t:"The depreciation event",
+  p1:"TSMC 3nm, 336 billion transistors, 288 GB of HBM4 at a 22 TB/s spec (early shipments reported nearer 20), NVLink 6, and a marketed 50 PFLOPS of FP4. The 10× inference-cost claims come from specific MoE benchmarks at long context; 2–3× is the sober expectation for dense models.",
+  p2:"HBM4 supply gates the ramp and first allocation goes to hyperscalers and frontier labs — scarcity premium at launch, then the usual price cascade rolling down every rung above this line. For the buyer, Rubin isn't (yet) something to procure; it's the event to hedge.",
+  ask:"Where do I sit in the allocation queue — and what does Rubin's ramp do to the renewal and resale value of every H100, H200, and B200 commitment on my book?"}
+];
+var METRICS=[
+ {k:"mem",label:"memory",unit:" GB",cap:"Sets what fits on one GPU — a 70B model in FP16 needs ~140 GB; anything that doesn't fit pays the sharding and interconnect tax.",fmt:function(g){return g.mem+" GB "+g.memT},val:function(g){return g.mem}},
+ {k:"bw",label:"bandwidth",unit:" TB/s",cap:"The inference bottleneck: generating tokens is mostly moving weights from HBM to compute, so bandwidth is the honest cross-generation ruler.",fmt:function(g){return g.bw+" TB/s"+(g.est?" †":"")},val:function(g){return g.bw}},
+ {k:"comp",label:"compute",unit:" PFLOPS",cap:"Headline FLOPS as NVIDIA markets them — sparsity included, and the precision narrows each generation (FP8 → FP4), so these multiples flatter the silicon.",fmt:function(g){return g.comp+" PF "+g.prec},val:function(g){return g.comp}},
+ {k:"pw",label:"power",unit:" W",cap:"The constraint that ate the industry: per-GPU wattage decides cooling, cooling decides which facilities qualify, and facilities are now the scarce input.",fmt:function(g){return (g.pw>=1000?(g.pw/1000).toFixed(1)+" kW":g.pw+" W")+(g.est?" †":"")},val:function(g){return g.pw}},
+ {k:"nvl",label:"nvlink",unit:" GB/s",cap:"GPU-to-GPU bandwidth — the all-reduce tax on training and on serving any model too large for one GPU. Same chip, different fabric, different effective price.",fmt:function(g){return (g.nvl/1000).toFixed(1)+" TB/s"},val:function(g){return g.nvl}},
+ {k:"dom",label:"domain",unit:" GPUs",cap:"How many GPUs share one coherent NVLink fabric — the 8 → 72 jump is why the unit of purchase became the rack, and why 'a thousand GPUs' says nothing without topology.",fmt:function(g){return g.dom+" GPUs · "+g.nvlG},val:function(g){return g.dom}}
+];
+var mSel=0, gSel=0;
+function buildMetrics(){
+  var h="";
+  METRICS.forEach(function(m,i){h+='<button role="tab" data-i="'+i+'" class="'+(i===mSel?"on":"")+'">'+m.label+"</button>"});
+  document.getElementById("mx").innerHTML=h;
+  document.querySelectorAll("#mx button").forEach(function(b){
+    b.addEventListener("click",function(){mSel=+this.dataset.i;buildMetrics();render()});
+  });
+}
+function buildRows(){
+  var h="";
+  GENS.forEach(function(g,i){
+    h+='<div class="row'+(i===gSel?" sel":"")+'" data-i="'+i+'" role="button" tabindex="0" aria-label="'+g.id+'">'
+      +'<span class="g">'+g.id+'<em>'+g.arch+" · "+g.year+"</em></span>"
+      +'<span class="track"><span class="fill" id="f'+i+'"></span></span>'
+      +'<span class="v" id="v'+i+'"></span><span class="d" id="d'+i+'"></span></div>';
+  });
+  document.getElementById("rows").innerHTML=h;
+  document.querySelectorAll(".row").forEach(function(r){
+    function pick(){gSel=+r.dataset.i;buildRows();render()}
+    r.addEventListener("click",pick);
+    r.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pick()}});
+  });
+}
+function render(){
+  var m=METRICS[mSel];
+  var max=Math.max.apply(null,GENS.map(m.val));
+  var base=m.val(GENS[0]);
+  document.getElementById("cap").textContent=m.cap;
+  GENS.forEach(function(g,i){
+    var f=document.getElementById("f"+i);
+    f.style.width=(m.val(g)/max*100).toFixed(1)+"%";
+    f.className="fill"+(m.k==="pw"?" amber":"");
+    document.getElementById("v"+i).textContent=m.fmt(g);
+    var mult=m.val(g)/base;
+    document.getElementById("d"+i).textContent=i===0?"—":"×"+(mult>=10?Math.round(mult):mult.toFixed(1));
+  });
+  var g=GENS[gSel];
+  document.getElementById("dh").innerHTML='<h2>'+g.t+'</h2>'
+    +'<span class="badge">'+g.id+" · "+g.arch+'</span>'
+    +'<span class="badge">'+g.year+'</span>'
+    +'<span class="badge'+(gSel===GENS.length-1?" hot":"")+'">'+g.nvlG+" · "+g.memT+'</span>';
+  document.getElementById("dp1").textContent=g.p1;
+  document.getElementById("dp2").textContent=g.p2;
+  document.getElementById("ask").textContent=g.ask;
+}
+buildMetrics();buildRows();render();
+</script>
+</body>
+</html>

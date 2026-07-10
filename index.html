@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The compute desk — a buyer's field manual for GPUs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F6F7F3;--panel:#FDFDFB;--ink:#15201A;--ink-2:#4A574F;--ink-3:#8A968E;
+--rule:#DDE2DB;--teal:#117758;--mono:"IBM Plex Mono",ui-monospace,monospace;--serif:"Newsreader",Georgia,serif;}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--paper);scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink);line-height:1.6}
+.nav{position:sticky;top:0;z-index:10;background:var(--paper);border-bottom:1px solid var(--rule);
+display:flex;gap:4px 22px;flex-wrap:wrap;justify-content:center;padding:12px 20px}
+.nav a{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+color:var(--ink-3);text-decoration:none;cursor:pointer}
+.nav a:hover,.nav a:focus-visible{color:var(--teal);outline:none}
+.nav a b{font-weight:500;color:var(--ink-2)}
+.cover{max-width:880px;margin:0 auto;padding:72px 20px 28px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(38px,6vw,58px);
+line-height:1.05;margin:10px 0 14px;letter-spacing:-.01em}
+.dek{font-size:18px;color:var(--ink-2);max-width:62ch}
+.toc{margin-top:34px;border-top:1px solid var(--rule)}
+.toc a{display:flex;gap:16px;align-items:baseline;padding:13px 2px;border-bottom:1px solid var(--rule);
+text-decoration:none;color:var(--ink);cursor:pointer}
+.toc a:focus-visible .t{color:var(--teal)}
+.toc a:hover .t{color:var(--teal)}
+.toc .n{font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.1em}
+.toc .t{font-family:var(--serif);font-style:italic;font-size:19px}
+.toc .d{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-left:auto;text-align:right}
+section{scroll-margin-top:56px;border-top:1px solid var(--rule)}
+section:first-of-type{border-top:none}
+iframe{display:block;width:100%;border:none;height:1200px}
+.colophon{max-width:880px;margin:0 auto;padding:34px 20px 60px;border-top:1px solid var(--rule);
+font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.03em;line-height:1.9}
+@media(max-width:560px){.toc .d{display:none}}
+</style>
+</head>
+<body>
+<nav class="nav"><a data-target="i01" role="link" tabindex="0"><b>01</b> The supply book</a><a data-target="i02" role="link" tabindex="0"><b>02</b> The silicon ladder</a><a data-target="i03" role="link" tabindex="0"><b>03</b> The fabric</a><a data-target="i04" role="link" tabindex="0"><b>04</b> SLA anatomy</a></nav><div class="cover"><p class="eyebrow">Compute desk</p><h1>A buyer&rsquo;s field manual for GPUs</h1><p class="dek">Four interactive instruments on the economics of GPU procurement: how much capacity to commit and at what duration, what each silicon generation is actually worth, what cluster wiring does to effective price, and what an SLA does and does not protect. Every instrument ends where a buyer should: with the questions to ask a supplier.</p><div class="toc"><a data-target="i01" role="link" tabindex="0"><span class="n">01</span><span class="t">The supply book</span><span class="d">how much capacity to commit</span></a><a data-target="i02" role="link" tabindex="0"><span class="n">02</span><span class="t">The silicon ladder</span><span class="d">what you are buying, and its clock</span></a><a data-target="i03" role="link" tabindex="0"><span class="n">03</span><span class="t">The fabric</span><span class="d">what the wiring does to the price</span></a><a data-target="i04" role="link" tabindex="0"><span class="n">04</span><span class="t">SLA anatomy</span><span class="d">what the paper actually protects</span></a></div></div><section id="i01"><iframe srcdoc="<!DOCTYPE html>
+<html lang=&quot;en&quot;>
+<head>
+<meta charset=&quot;utf-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;>
+<title>The supply book — a GPU capacity simulator</title>
+<link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;>
+<link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin>
+<link href=&quot;https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;display=swap&quot; rel=&quot;stylesheet&quot;>
+<style>
+:root{
+  --paper:#F6F7F3; --panel:#FDFDFB; --ink:#15201A; --ink-2:#4A574F; --ink-3:#8A968E;
+  --rule:#DDE2DB; --teal:#117758; --teal-dim:#DCEDE4; --amber:#D98F12; --amber-dim:#F6E9CE;
+  --oxide:#A63B26; --mono:&quot;IBM Plex Mono&quot;,ui-monospace,monospace; --serif:&quot;Newsreader&quot;,Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--paper)}
+body{font-family:var(--serif);color:var(--ink);line-height:1.6;padding:48px 20px 72px}
+.wrap{max-width:880px;margin:0 auto}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(34px,5.5vw,52px);line-height:1.05;margin:10px 0 14px;letter-spacing:-.01em}
+.dek{font-size:18px;color:var(--ink-2);max-width:60ch;margin-bottom:36px}
+.dek code{font-family:var(--mono);font-size:.85em;background:var(--teal-dim);color:var(--teal);padding:1px 6px;border-radius:3px}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:26px 26px 22px}
+.legend{display:flex;flex-wrap:wrap;gap:18px;font-family:var(--mono);font-size:11.5px;color:var(--ink-2);margin-bottom:14px}
+.legend span{display:flex;align-items:center;gap:7px}
+.sw{width:11px;height:11px;border-radius:2px;display:inline-block}
+svg{display:block;width:100%;height:auto;touch-action:none;cursor:ns-resize;user-select:none;-webkit-user-select:none}
+.controls{display:flex;flex-wrap:wrap;gap:22px;margin-top:22px;padding-top:20px;border-top:1px solid var(--rule)}
+.ctl{flex:1;min-width:230px}
+.ctl label{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+.ctl label b{font-weight:500;color:var(--ink);letter-spacing:0}
+input[type=range]{width:100%;accent-color:var(--teal);height:22px}
+.krow{display:flex;align-items:center;gap:14px;margin-top:18px}
+.krow .ctl{flex:1}
+button{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--teal);background:transparent;border:1px solid var(--teal);border-radius:6px;padding:8px 14px;cursor:pointer;white-space:nowrap;align-self:flex-end}
+button:hover{background:var(--teal-dim)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.ticker{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));border:1px solid var(--rule);border-radius:10px;background:var(--panel);margin-top:16px;overflow:hidden}
+.tk{padding:16px 20px 14px;border-left:1px solid var(--rule)}
+.tk:first-child{border-left:none}
+.tk .l{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.tk .v{font-family:var(--mono);font-weight:500;font-size:26px;margin-top:4px;font-variant-numeric:tabular-nums}
+.tk .v em{font-style:normal;font-size:14px;color:var(--ink-3)}
+.tk .v.bad{color:var(--oxide)}
+.status{font-style:italic;font-size:17px;color:var(--ink-2);margin:20px 2px 0;min-height:1.6em}
+.notes{margin-top:52px;border-top:1px solid var(--rule);padding-top:30px}
+.notes h2{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;color:var(--ink);margin-bottom:18px}
+.notes p{max-width:66ch;margin-bottom:14px;color:var(--ink-2)}
+.notes p strong{color:var(--ink);font-weight:500}
+.rule-box{font-family:var(--mono);font-size:14px;background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--teal);border-radius:0 8px 8px 0;padding:14px 18px;margin:22px 0;color:var(--ink)}
+.foot{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:44px;letter-spacing:.03em}
+@media (max-width:560px){.tk{padding:12px 14px}.tk .v{font-size:20px}}
+</style>
+</head>
+<body>
+<div class=&quot;wrap&quot;>
+  <p class=&quot;eyebrow&quot;>Compute desk · instrument 01</p>
+  <h1>The supply book</h1>
+  <p class=&quot;dek&quot;>A serverless GPU platform buys capacity ahead of demand: cheap if committed, flexible if not. Drag the <code>K</code> line to size the committed layer against a year of demand, sorted from busiest hour to quietest, and watch the economics settle.</p>
+
+  <div class=&quot;card&quot;>
+    <div class=&quot;legend&quot;>
+      <span><span class=&quot;sw&quot; style=&quot;background:var(--teal)&quot;></span>committed, utilized</span>
+      <span><span class=&quot;sw&quot; style=&quot;background:repeating-linear-gradient(45deg,#8FC7AF 0 2px,transparent 2px 5px)&quot;></span>committed, idle</span>
+      <span><span class=&quot;sw&quot; style=&quot;background:var(--amber)&quot;></span>served on-demand</span>
+      <span><span class=&quot;sw&quot; style=&quot;background:var(--oxide);height:3px;border-radius:1px&quot;></span>demand curve</span>
+    </div>
+    <svg id=&quot;sim&quot; viewBox=&quot;0 0 840 340&quot; role=&quot;img&quot; aria-label=&quot;Load-duration chart with a draggable committed-capacity line dividing utilized, idle, and on-demand regions&quot;></svg>
+    <div class=&quot;controls&quot;>
+      <div class=&quot;ctl&quot;>
+        <label>Reserved discount <b id=&quot;dv&quot;>3.0× · $2.00/hr</b></label>
+        <input type=&quot;range&quot; id=&quot;ds&quot; min=&quot;1.5&quot; max=&quot;6&quot; step=&quot;0.1&quot; value=&quot;3&quot; aria-label=&quot;Reserved discount multiple&quot;>
+      </div>
+      <div class=&quot;ctl&quot;>
+        <label>Peak-to-average demand <b id=&quot;vv&quot;>4.0×</b></label>
+        <input type=&quot;range&quot; id=&quot;vs&quot; min=&quot;1.3&quot; max=&quot;8&quot; step=&quot;0.1&quot; value=&quot;4&quot; aria-label=&quot;Peak to average demand ratio&quot;>
+      </div>
+    </div>
+    <div class=&quot;krow&quot;>
+      <div class=&quot;ctl&quot;>
+        <label>Committed capacity K <b id=&quot;kv&quot;>100 GPUs</b></label>
+        <input type=&quot;range&quot; id=&quot;ks&quot; min=&quot;0&quot; max=&quot;400&quot; step=&quot;1&quot; value=&quot;100&quot; aria-label=&quot;Committed capacity in GPUs&quot;>
+      </div>
+      <button id=&quot;snapBtn&quot; type=&quot;button&quot;>snap to optimal</button>
+    </div>
+  </div>
+
+  <div class=&quot;ticker&quot;>
+    <div class=&quot;tk&quot;><p class=&quot;l&quot;>Blended cost</p><p class=&quot;v&quot; id=&quot;c1&quot;>—</p></div>
+    <div class=&quot;tk&quot;><p class=&quot;l&quot;>Vs all on-demand</p><p class=&quot;v&quot; id=&quot;c2&quot;>—</p></div>
+    <div class=&quot;tk&quot;><p class=&quot;l&quot;>Committed utilization</p><p class=&quot;v&quot; id=&quot;c3&quot;>—</p></div>
+    <div class=&quot;tk&quot;><p class=&quot;l&quot;>Served elastic</p><p class=&quot;v&quot; id=&quot;c4&quot;>—</p></div>
+  </div>
+  <p class=&quot;status&quot; id=&quot;st&quot;></p>
+
+  <div class=&quot;notes&quot;>
+    <h2>How to read it</h2>
+    <p>The model: average demand is fixed at 100 GPUs; on-demand capacity costs $6.00 per GPU-hour; reserved capacity costs $6.00 divided by the discount multiple, but is paid for every hour whether used or not. Everything under the oxide curve is sellable demand; any committed capacity above the curve is paid-for silence.</p>
+    <div class=&quot;rule-box&quot;>commit a GPU ⇔ its expected utilization ≥ reserved ÷ on-demand price<br>at a 3× discount: breakeven = $2.00 / $6.00 = 33% of hours</div>
+    <p><strong>Feel the valley.</strong> Sweep K from zero to max and watch blended cost fall, bottom out at the dashed optimal line, and rise. Note how flat the bottom is — being 20% wrong on book size barely costs anything. Real capacity books die from counterparty and duration risk, not mis-sizing.</p>
+    <p><strong>Crank volatility.</strong> Hold the discount and raise peak-to-average. The optimal line dives and the amber elastic share swells: spikier demand means committing less, regardless of how good the discount is. When peak-to-average far exceeds the discount multiple, even the optimal book barely beats pure on-demand.</p>
+    <p><strong>Crank the discount.</strong> Hold volatility and raise the discount. Breakeven utilization is just one over the discount, so a deeper discount makes it rational to commit further into rarely-used layers. Every turn of discount negotiated changes how much of the demand curve the book can afford to own.</p>
+    <p>One honest limitation: this demand curve is known and static. The real job prices an uncertain curve growing several-fold a year, which pushes optimal behavior toward shorter durations and paid-for flexibility beyond what this picture shows.</p>
+  </div>
+  <p class=&quot;foot&quot;>newsvendor critical ratio · load-duration framing after Modal, “How to price serverless” (2026)</p>
+</div>
+
+<script>
+var d=6, delta=3, rho=4, K=100, AVG=100, N=180;
+function peak(){return AVG*rho}
+function D(h){return AVG*rho*Math.pow(1-h,rho-1)}
+function hOf(k){var p=peak();if(k>=p)return 0;if(k<=0)return 1;return 1-Math.pow(k/p,1/(rho-1))}
+function Kopt(){return AVG*rho*Math.pow(1-1/delta,rho-1)}
+function render(){
+  var p=peak(), r=d/delta, hK=hOf(K);
+  var S=K*hK+AVG*Math.pow(1-hK,rho);
+  var OD=Math.max(0,AVG-S);
+  var cost=r*K+d*OD, blended=cost/AVG;
+  var util=K>0?S/K:0, sav=1-cost/(d*AVG);
+  var ko=Kopt();
+  var Dmax=p*1.05, X0=56,X1=816,Y0=294,Y1=22;
+  function x(h){return X0+h*(X1-X0)}
+  function y(v){return Y0-(v/Dmax)*(Y0-Y1)}
+  var i,h;
+  var uP='M'+x(0).toFixed(1)+' '+y(Math.min(D(0),K)).toFixed(1);
+  for(i=1;i<=N;i++){h=i/N;uP+='L'+x(h).toFixed(1)+' '+y(Math.min(D(h),K)).toFixed(1)}
+  uP+='L'+X1+' '+Y0+'L'+X0+' '+Y0+'Z';
+  var iP='';
+  if(K>0&amp;&amp;hK<1){
+    iP='M'+x(hK).toFixed(1)+' '+y(K).toFixed(1)+'L'+X1+' '+y(K).toFixed(1);
+    for(i=N;i>=0;i--){h=i/N;if(h>=hK-0.002){iP+='L'+x(h).toFixed(1)+' '+y(Math.min(D(h),K)).toFixed(1)}}
+    iP+='Z';
+  }
+  var oP='';
+  if(hK>0){
+    oP='M'+x(0).toFixed(1)+' '+y(D(0)).toFixed(1);
+    for(i=1;i<=N;i++){h=i/N;if(h<=hK+0.002){oP+='L'+x(h).toFixed(1)+' '+y(Math.max(D(h),K)).toFixed(1)}}
+    oP+='L'+x(Math.min(hK,1)).toFixed(1)+' '+y(K).toFixed(1)+'L'+x(0).toFixed(1)+' '+y(Math.min(D(0),K)).toFixed(1)+'Z';
+  }
+  var cP='M'+x(0).toFixed(1)+' '+y(D(0)).toFixed(1);
+  for(i=1;i<=N;i++){h=i/N;cP+='L'+x(h).toFixed(1)+' '+y(D(h)).toFixed(1)}
+  function tick(v){return '<text x=&quot;48&quot; y=&quot;'+(y(v)+4).toFixed(1)+'&quot; text-anchor=&quot;end&quot; font-size=&quot;11&quot; font-family=&quot;IBM Plex Mono, monospace&quot; fill=&quot;#8A968E&quot;>'+Math.round(v)+'</text>'}
+  var s='<defs><pattern id=&quot;hz&quot; width=&quot;6&quot; height=&quot;6&quot; patternUnits=&quot;userSpaceOnUse&quot; patternTransform=&quot;rotate(45)&quot;><line x1=&quot;0&quot; y1=&quot;0&quot; x2=&quot;0&quot; y2=&quot;6&quot; stroke=&quot;#8FC7AF&quot; stroke-width=&quot;1.6&quot;/></pattern></defs>';
+  s+='<path d=&quot;'+uP+'&quot; fill=&quot;#117758&quot; fill-opacity=&quot;0.42&quot;/>';
+  if(iP)s+='<path d=&quot;'+iP+'&quot; fill=&quot;url(#hz)&quot; fill-opacity=&quot;0.75&quot;/>';
+  if(oP)s+='<path d=&quot;'+oP+'&quot; fill=&quot;#D98F12&quot; fill-opacity=&quot;0.38&quot;/>';
+  s+='<path d=&quot;'+cP+'&quot; fill=&quot;none&quot; stroke=&quot;#A63B26&quot; stroke-width=&quot;2.5&quot; stroke-linecap=&quot;round&quot;/>';
+  s+='<line x1=&quot;'+X0+'&quot; y1=&quot;'+y(ko).toFixed(1)+'&quot; x2=&quot;'+X1+'&quot; y2=&quot;'+y(ko).toFixed(1)+'&quot; stroke=&quot;#15201A&quot; stroke-opacity=&quot;0.4&quot; stroke-width=&quot;1&quot; stroke-dasharray=&quot;4 5&quot;/>';
+  s+='<text x=&quot;'+(X1-4)+'&quot; y=&quot;'+(y(ko)-7).toFixed(1)+'&quot; text-anchor=&quot;end&quot; font-size=&quot;11&quot; font-family=&quot;IBM Plex Mono, monospace&quot; fill=&quot;#4A574F&quot;>optimal '+Math.round(ko)+'</text>';
+  s+='<line x1=&quot;'+X0+'&quot; y1=&quot;'+y(K).toFixed(1)+'&quot; x2=&quot;'+X1+'&quot; y2=&quot;'+y(K).toFixed(1)+'&quot; stroke=&quot;#15201A&quot; stroke-width=&quot;1.6&quot;/>';
+  s+='<circle cx=&quot;'+((X0+X1)/2)+'&quot; cy=&quot;'+y(K).toFixed(1)+'&quot; r=&quot;6&quot; fill=&quot;#15201A&quot;/>';
+  s+='<text x=&quot;'+((X0+X1)/2+12)+'&quot; y=&quot;'+(y(K)-9).toFixed(1)+'&quot; font-size=&quot;11&quot; font-family=&quot;IBM Plex Mono, monospace&quot; fill=&quot;#15201A&quot;>K = '+Math.round(K)+'</text>';
+  s+='<line x1=&quot;'+X0+'&quot; y1=&quot;'+Y0+'&quot; x2=&quot;'+X1+'&quot; y2=&quot;'+Y0+'&quot; stroke=&quot;#C7CEC6&quot; stroke-width=&quot;1&quot;/>';
+  s+='<line x1=&quot;'+X0+'&quot; y1=&quot;'+Y1+'&quot; x2=&quot;'+X0+'&quot; y2=&quot;'+Y0+'&quot; stroke=&quot;#C7CEC6&quot; stroke-width=&quot;1&quot;/>';
+  s+=tick(0)+tick(p/2)+tick(p);
+  s+='<text x=&quot;'+X0+'&quot; y=&quot;316&quot; font-size=&quot;11&quot; font-family=&quot;IBM Plex Mono, monospace&quot; fill=&quot;#8A968E&quot;>busiest hours</text>';
+  s+='<text x=&quot;'+X1+'&quot; y=&quot;316&quot; text-anchor=&quot;end&quot; font-size=&quot;11&quot; font-family=&quot;IBM Plex Mono, monospace&quot; fill=&quot;#8A968E&quot;>quietest hours</text>';
+  s+='<text x=&quot;'+((X0+X1)/2)+'&quot; y=&quot;316&quot; text-anchor=&quot;middle&quot; font-size=&quot;11&quot; font-family=&quot;IBM Plex Mono, monospace&quot; fill=&quot;#8A968E&quot;>share of the year, sorted</text>';
+  document.getElementById('sim').innerHTML=s;
+  document.getElementById('dv').textContent=delta.toFixed(1)+'× · $'+(d/delta).toFixed(2)+'/hr';
+  document.getElementById('vv').textContent=rho.toFixed(1)+'×';
+  document.getElementById('kv').textContent=Math.round(K)+' GPUs';
+  document.getElementById('c1').innerHTML='$'+blended.toFixed(2)+'<em>/GPU-hr</em>';
+  var savPct=Math.round(sav*100), c2El=document.getElementById('c2');
+  c2El.textContent=(savPct>0?'−'+savPct:savPct<0?'+'+Math.abs(savPct):'0')+'%';
+  c2El.className='v'+(savPct<0?' bad':'');
+  document.getElementById('c3').textContent=Math.round(util*100)+'%';
+  document.getElementById('c4').textContent=Math.round(OD/AVG*100)+'%';
+  var be=1/delta, m=hK, beT=Math.round(be*100), mT=Math.round(m*100), msg;
+  if(Math.abs(m-be)<0.02){msg='Near optimal — the marginal committed GPU runs '+mT+'% of hours, right at the '+beT+'% breakeven.'}
+  else if(m>be){msg='The marginal committed GPU runs '+mT+'% of hours, above the '+beT+'% breakeven — committing more still pays.'}
+  else{msg='Over-committed — the marginal GPU runs only '+mT+'% of hours against a '+beT+'% breakeven. The top of the book idles at a loss.'}
+  document.getElementById('st').textContent=msg;
+}
+document.getElementById('ds').addEventListener('input',function(){delta=+this.value;render()});
+document.getElementById('vs').addEventListener('input',function(){
+  rho=+this.value;
+  var ks=document.getElementById('ks');
+  ks.max=Math.round(peak());
+  if(K>peak()){K=Math.round(peak());ks.value=K}
+  render();
+});
+document.getElementById('ks').addEventListener('input',function(){K=+this.value;render()});
+document.getElementById('snapBtn').addEventListener('click',function(){
+  K=Math.round(Kopt());
+  document.getElementById('ks').value=K;
+  render();
+});
+var sim=document.getElementById('sim'), drag=false;
+function setK(e){
+  var rc=sim.getBoundingClientRect();
+  var vy=(e.clientY-rc.top)/rc.height*340;
+  var Dmax=peak()*1.05;
+  var k=(294-vy)/272*Dmax;
+  K=Math.max(0,Math.min(peak(),Math.round(k)));
+  document.getElementById('ks').value=K;
+  render();
+}
+sim.addEventListener('pointerdown',function(e){drag=true;sim.setPointerCapture(e.pointerId);setK(e)});
+sim.addEventListener('pointermove',function(e){if(drag)setK(e)});
+sim.addEventListener('pointerup',function(){drag=false});
+sim.addEventListener('pointercancel',function(){drag=false});
+document.getElementById('ks').max=Math.round(peak());
+render();
+</script>
+</body>
+</html>
+" title="The supply book" scrolling="no"></iframe></section><section id="i02"><iframe srcdoc="<!DOCTYPE html>
+<html lang=&quot;en&quot;>
+<head>
+<meta charset=&quot;utf-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;>
+<title>The silicon ladder — NVIDIA generations, read from the buyer's chair</title>
+<link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;>
+<link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin>
+<link href=&quot;https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;display=swap&quot; rel=&quot;stylesheet&quot;>
+<style>
+:root{
+  --paper:#F6F7F3; --panel:#FDFDFB; --ink:#15201A; --ink-2:#4A574F; --ink-3:#8A968E;
+  --rule:#DDE2DB; --teal:#117758; --teal-dim:#DCEDE4; --amber:#D98F12; --amber-dim:#F6E9CE;
+  --oxide:#A63B26; --mono:&quot;IBM Plex Mono&quot;,ui-monospace,monospace; --serif:&quot;Newsreader&quot;,Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--paper)}
+body{font-family:var(--serif);color:var(--ink);line-height:1.6;padding:48px 20px 72px}
+.wrap{max-width:880px;margin:0 auto}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(34px,5.5vw,52px);line-height:1.05;margin:10px 0 14px;letter-spacing:-.01em}
+.dek{font-size:18px;color:var(--ink-2);max-width:62ch;margin-bottom:36px}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:24px 26px}
+.metrics{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.metrics button{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--ink-2);background:transparent;border:1px solid var(--rule);border-radius:6px;padding:7px 12px;cursor:pointer}
+.metrics button:hover{border-color:var(--teal);color:var(--teal)}
+.metrics button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.metrics button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.caption{font-style:italic;font-size:15px;color:var(--ink-2);margin:12px 2px 20px;min-height:1.6em}
+.row{display:grid;grid-template-columns:118px 1fr 96px 62px;align-items:center;gap:12px;padding:9px 10px;border-radius:8px;cursor:pointer;border:1px solid transparent}
+.row:hover{background:var(--paper)}
+.row.sel{background:var(--teal-dim);border-color:var(--teal)}
+.row .g{font-family:var(--mono);font-size:13px;font-weight:500}
+.row .g em{display:block;font-style:normal;font-size:10px;color:var(--ink-3);letter-spacing:.06em}
+.track{height:14px;background:var(--paper);border-radius:3px;overflow:hidden}
+.fill{display:block;height:100%;border-radius:3px;background:var(--teal);width:0;transition:width .35s ease}
+.fill.amber{background:var(--amber)}
+.row .v{font-family:var(--mono);font-size:12.5px;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.row .d{font-family:var(--mono);font-size:11.5px;color:var(--oxide);text-align:right;font-variant-numeric:tabular-nums}
+.dossier{margin-top:22px;border-top:1px solid var(--rule);padding-top:20px}
+.dh{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px;margin-bottom:8px}
+.dh h2{font-family:var(--serif);font-style:italic;font-weight:400;font-size:26px}
+.badge{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--rule);border-radius:4px;padding:3px 8px;color:var(--ink-2)}
+.badge.hot{border-color:var(--oxide);color:var(--oxide)}
+.dossier p{max-width:68ch;color:var(--ink-2);margin-bottom:12px}
+.ask{font-family:var(--mono);font-size:13px;background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:13px 16px;margin-top:6px;color:var(--ink);max-width:72ch}
+.ask b{font-weight:500;letter-spacing:.08em;font-size:10px;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:4px}
+.notes{margin-top:52px;border-top:1px solid var(--rule);padding-top:30px}
+.notes h2{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;margin-bottom:18px}
+.notes p{max-width:66ch;margin-bottom:14px;color:var(--ink-2)}
+.notes p strong{color:var(--ink);font-weight:500}
+.foot{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:44px;letter-spacing:.03em}
+@media(max-width:600px){.row{grid-template-columns:86px 1fr 78px 48px;gap:8px}.row .v{font-size:11px}}
+</style>
+</head>
+<body>
+<div class=&quot;wrap&quot;>
+  <p class=&quot;eyebrow&quot;>Compute desk · instrument 02</p>
+  <h1>The silicon ladder</h1>
+  <p class=&quot;dek&quot;>Five generations of NVIDIA datacenter silicon, read from the buyer's chair. Switch the metric to see where each generation actually moved; select a rung for what it means when you're the one signing the capacity contract.</p>
+
+  <div class=&quot;card&quot;>
+    <div class=&quot;metrics&quot; id=&quot;mx&quot; role=&quot;tablist&quot; aria-label=&quot;Metric&quot;></div>
+    <p class=&quot;caption&quot; id=&quot;cap&quot;></p>
+    <div id=&quot;rows&quot;></div>
+    <div class=&quot;dossier&quot;>
+      <div class=&quot;dh&quot; id=&quot;dh&quot;></div>
+      <p id=&quot;dp1&quot;></p>
+      <p id=&quot;dp2&quot;></p>
+      <div class=&quot;ask&quot;><b>Ask the supplier</b><span id=&quot;ask&quot;></span></div>
+    </div>
+  </div>
+
+  <div class=&quot;notes&quot;>
+    <h2>Reading the spec sheet like a buyer</h2>
+    <p><strong>The comparability trap.</strong> Headline FLOPS include sparsity and shift numeric precision every generation — Hopper's marketed number is FP8, Blackwell's and Rubin's are FP4 — so cross-generation compute multiples partly measure the arithmetic getting narrower, not just the silicon getting faster. Memory capacity and bandwidth are the honest cross-generation rulers, which is convenient, because for inference they are usually the binding ones.</p>
+    <p><strong>The depreciation clock.</strong> The cadence is now annual — Blackwell 2024, Blackwell Ultra 2025, Rubin 2026, Rubin Ultra promised 2027 — and each launch resets the resale and renewal value of everything above it on this page. Historically, prices of the incumbent fall 40–50% over 12–18 months from supply expansion, then further when the successor ships in volume. Every multi-year commitment is short this clock.</p>
+    <p><strong>The constraint migrated.</strong> From B200 onward the practical scarcity isn't chips — it's watts and plumbing. Rack power densities that force liquid cooling mean the question &quot;can you get GPUs?&quot; quietly became &quot;can your facility host them?&quot;, which is why datacenter readiness now belongs in supplier diligence alongside price.</p>
+    <p>† Rubin figures are pre-volume: bandwidth spec is 22 TB/s with early shipments reported nearer 20 as HBM4 suppliers chase NVIDIA's pin speeds, and rack power is not final. HBM4 supply gates the ramp; first allocation goes to hyperscalers and frontier labs.</p>
+  </div>
+  <p class=&quot;foot&quot;>sources: NVIDIA datasheets · GTC 2026 keynote (Mar 2026) · SemiAnalysis via TechPowerUp (Mar 2026) · compiled July 2026 · companion to instrument 01, the supply book</p>
+</div>
+
+<script>
+var GENS=[
+ {id:&quot;H100&quot;,arch:&quot;Hopper&quot;,year:&quot;2022&quot;,mem:80,memT:&quot;HBM3&quot;,bw:3.35,comp:4,prec:&quot;FP8&quot;,pw:700,nvl:900,nvlG:&quot;NVLink 4&quot;,dom:8,est:false,
+  t:&quot;The unit of account&quot;,
+  p1:&quot;The GPU the AI boom was built on, and the most liquid asset in the market: the deepest supply across every provider, the most published pricing, and the reference unit in which every other chip's value gets quoted. Most capacity paper in circulation is still H100 paper.&quot;,
+  p2:&quot;Its price history is the market's core lesson: declines of 40–50% over 12–18 months were driven by supply expansion, not by successor announcements — new generations don't crash the incumbent's price; volume does.&quot;,
+  ask:&quot;How old is the fleet, what fabric is it wired with, and how does my rate track a reference index as H100 market pricing keeps sliding?&quot;},
+ {id:&quot;H200&quot;,arch:&quot;Hopper refresh&quot;,year:&quot;2024&quot;,mem:141,memT:&quot;HBM3e&quot;,bw:4.8,comp:4,prec:&quot;FP8&quot;,pw:700,nvl:900,nvlG:&quot;NVLink 4&quot;,dom:8,est:false,
+  t:&quot;Same engine, twice the tank&quot;,
+  p1:&quot;Identical Hopper compute — the entire upgrade is memory: 141 GB of HBM3e at 4.8 TB/s. That makes it a pure inference play: a 70B-parameter model fits in FP16 on a single GPU, with no sharding and no interconnect tax.&quot;,
+  p2:&quot;The lesson for a buyer is that a generation's value can live entirely in HBM. Price-per-FLOP and price-per-GB rank the same chip very differently, so the right ranking depends on which resource your demand actually exhausts first.&quot;,
+  ask:&quot;Is my demand compute-bound or memory-bound — and is the H200 premium over H100 smaller than the sharding cost it removes?&quot;},
+ {id:&quot;B200&quot;,arch:&quot;Blackwell&quot;,year:&quot;2024&quot;,mem:192,memT:&quot;HBM3e&quot;,bw:8,comp:20,prec:&quot;FP4&quot;,pw:1000,nvl:1800,nvlG:&quot;NVLink 5&quot;,dom:72,est:false,
+  t:&quot;The rack becomes the product&quot;,
+  p1:&quot;A true architecture change: FP4 tensor cores, NVLink 5 at 1.8 TB/s, and a coherent domain that jumps from 8 GPUs to 72 in the GB200 NVL72 — from this point the natural unit of purchase is the rack, not the server.&quot;,
+  p2:&quot;At 1,000 W per GPU it forces liquid cooling, which is the moment the industry's binding constraint migrated from chip supply to power and facility readiness. Two suppliers quoting the same B200 price can differ entirely in whether their buildings can actually run them.&quot;,
+  ask:&quot;Is the facility genuinely NVL72-ready — power density, liquid cooling loops, delivered or merely planned?&quot;},
+ {id:&quot;B300&quot;,arch:&quot;Blackwell Ultra&quot;,year:&quot;2025&quot;,mem:288,memT:&quot;HBM3e&quot;,bw:8,comp:30,prec:&quot;FP4&quot;,pw:1400,nvl:1800,nvlG:&quot;NVLink 5&quot;,dom:72,est:false,
+  t:&quot;Proof of the annual cadence&quot;,
+  p1:&quot;A mid-cycle bump — 288 GB of HBM3e and 1.4 kW — arriving just one year after B200. The chip matters less than the tempo it confirms: NVIDIA now ships a meaningful upgrade every single year.&quot;,
+  p2:&quot;That cadence is the depreciation clock ticking inside every multi-year commitment. A 3-year reserved contract signed on any rung of this ladder will live through three launches; the discount has to be priced against that.&quot;,
+  ask:&quot;What generation-swap, refresh, or early-exit rights can be written into a multi-year term — and what are they worth?&quot;},
+ {id:&quot;R200&quot;,arch:&quot;Rubin&quot;,year:&quot;H2 2026&quot;,mem:288,memT:&quot;HBM4&quot;,bw:22,comp:50,prec:&quot;FP4&quot;,pw:2300,nvl:3600,nvlG:&quot;NVLink 6&quot;,dom:72,est:true,
+  t:&quot;The depreciation event&quot;,
+  p1:&quot;TSMC 3nm, 336 billion transistors, 288 GB of HBM4 at a 22 TB/s spec (early shipments reported nearer 20), NVLink 6, and a marketed 50 PFLOPS of FP4. The 10× inference-cost claims come from specific MoE benchmarks at long context; 2–3× is the sober expectation for dense models.&quot;,
+  p2:&quot;HBM4 supply gates the ramp and first allocation goes to hyperscalers and frontier labs — scarcity premium at launch, then the usual price cascade rolling down every rung above this line. For the buyer, Rubin isn't (yet) something to procure; it's the event to hedge.&quot;,
+  ask:&quot;Where do I sit in the allocation queue — and what does Rubin's ramp do to the renewal and resale value of every H100, H200, and B200 commitment on my book?&quot;}
+];
+var METRICS=[
+ {k:&quot;mem&quot;,label:&quot;memory&quot;,unit:&quot; GB&quot;,cap:&quot;Sets what fits on one GPU — a 70B model in FP16 needs ~140 GB; anything that doesn't fit pays the sharding and interconnect tax.&quot;,fmt:function(g){return g.mem+&quot; GB &quot;+g.memT},val:function(g){return g.mem}},
+ {k:&quot;bw&quot;,label:&quot;bandwidth&quot;,unit:&quot; TB/s&quot;,cap:&quot;The inference bottleneck: generating tokens is mostly moving weights from HBM to compute, so bandwidth is the honest cross-generation ruler.&quot;,fmt:function(g){return g.bw+&quot; TB/s&quot;+(g.est?&quot; †&quot;:&quot;&quot;)},val:function(g){return g.bw}},
+ {k:&quot;comp&quot;,label:&quot;compute&quot;,unit:&quot; PFLOPS&quot;,cap:&quot;Headline FLOPS as NVIDIA markets them — sparsity included, and the precision narrows each generation (FP8 → FP4), so these multiples flatter the silicon.&quot;,fmt:function(g){return g.comp+&quot; PF &quot;+g.prec},val:function(g){return g.comp}},
+ {k:&quot;pw&quot;,label:&quot;power&quot;,unit:&quot; W&quot;,cap:&quot;The constraint that ate the industry: per-GPU wattage decides cooling, cooling decides which facilities qualify, and facilities are now the scarce input.&quot;,fmt:function(g){return (g.pw>=1000?(g.pw/1000).toFixed(1)+&quot; kW&quot;:g.pw+&quot; W&quot;)+(g.est?&quot; †&quot;:&quot;&quot;)},val:function(g){return g.pw}},
+ {k:&quot;nvl&quot;,label:&quot;nvlink&quot;,unit:&quot; GB/s&quot;,cap:&quot;GPU-to-GPU bandwidth — the all-reduce tax on training and on serving any model too large for one GPU. Same chip, different fabric, different effective price.&quot;,fmt:function(g){return (g.nvl/1000).toFixed(1)+&quot; TB/s&quot;},val:function(g){return g.nvl}},
+ {k:&quot;dom&quot;,label:&quot;domain&quot;,unit:&quot; GPUs&quot;,cap:&quot;How many GPUs share one coherent NVLink fabric — the 8 → 72 jump is why the unit of purchase became the rack, and why 'a thousand GPUs' says nothing without topology.&quot;,fmt:function(g){return g.dom+&quot; GPUs · &quot;+g.nvlG},val:function(g){return g.dom}}
+];
+var mSel=0, gSel=0;
+function buildMetrics(){
+  var h=&quot;&quot;;
+  METRICS.forEach(function(m,i){h+='<button role=&quot;tab&quot; data-i=&quot;'+i+'&quot; class=&quot;'+(i===mSel?&quot;on&quot;:&quot;&quot;)+'&quot;>'+m.label+&quot;</button>&quot;});
+  document.getElementById(&quot;mx&quot;).innerHTML=h;
+  document.querySelectorAll(&quot;#mx button&quot;).forEach(function(b){
+    b.addEventListener(&quot;click&quot;,function(){mSel=+this.dataset.i;buildMetrics();render()});
+  });
+}
+function buildRows(){
+  var h=&quot;&quot;;
+  GENS.forEach(function(g,i){
+    h+='<div class=&quot;row'+(i===gSel?&quot; sel&quot;:&quot;&quot;)+'&quot; data-i=&quot;'+i+'&quot; role=&quot;button&quot; tabindex=&quot;0&quot; aria-label=&quot;'+g.id+'&quot;>'
+      +'<span class=&quot;g&quot;>'+g.id+'<em>'+g.arch+&quot; · &quot;+g.year+&quot;</em></span>&quot;
+      +'<span class=&quot;track&quot;><span class=&quot;fill&quot; id=&quot;f'+i+'&quot;></span></span>'
+      +'<span class=&quot;v&quot; id=&quot;v'+i+'&quot;></span><span class=&quot;d&quot; id=&quot;d'+i+'&quot;></span></div>';
+  });
+  document.getElementById(&quot;rows&quot;).innerHTML=h;
+  document.querySelectorAll(&quot;.row&quot;).forEach(function(r){
+    function pick(){gSel=+r.dataset.i;buildRows();render()}
+    r.addEventListener(&quot;click&quot;,pick);
+    r.addEventListener(&quot;keydown&quot;,function(e){if(e.key===&quot;Enter&quot;||e.key===&quot; &quot;){e.preventDefault();pick()}});
+  });
+}
+function render(){
+  var m=METRICS[mSel];
+  var max=Math.max.apply(null,GENS.map(m.val));
+  var base=m.val(GENS[0]);
+  document.getElementById(&quot;cap&quot;).textContent=m.cap;
+  GENS.forEach(function(g,i){
+    var f=document.getElementById(&quot;f&quot;+i);
+    f.style.width=(m.val(g)/max*100).toFixed(1)+&quot;%&quot;;
+    f.className=&quot;fill&quot;+(m.k===&quot;pw&quot;?&quot; amber&quot;:&quot;&quot;);
+    document.getElementById(&quot;v&quot;+i).textContent=m.fmt(g);
+    var mult=m.val(g)/base;
+    document.getElementById(&quot;d&quot;+i).textContent=i===0?&quot;—&quot;:&quot;×&quot;+(mult>=10?Math.round(mult):mult.toFixed(1));
+  });
+  var g=GENS[gSel];
+  document.getElementById(&quot;dh&quot;).innerHTML='<h2>'+g.t+'</h2>'
+    +'<span class=&quot;badge&quot;>'+g.id+&quot; · &quot;+g.arch+'</span>'
+    +'<span class=&quot;badge&quot;>'+g.year+'</span>'
+    +'<span class=&quot;badge'+(gSel===GENS.length-1?&quot; hot&quot;:&quot;&quot;)+'&quot;>'+g.nvlG+&quot; · &quot;+g.memT+'</span>';
+  document.getElementById(&quot;dp1&quot;).textContent=g.p1;
+  document.getElementById(&quot;dp2&quot;).textContent=g.p2;
+  document.getElementById(&quot;ask&quot;).textContent=g.ask;
+}
+buildMetrics();buildRows();render();
+</script>
+</body>
+</html>
+" title="The silicon ladder" scrolling="no"></iframe></section><section id="i03"><iframe srcdoc="<!DOCTYPE html>
+<html lang=&quot;en&quot;>
+<head>
+<meta charset=&quot;utf-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;>
+<title>The fabric — what wiring does to a GPU-hour</title>
+<link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;>
+<link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin>
+<link href=&quot;https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;display=swap&quot; rel=&quot;stylesheet&quot;>
+<style>
+:root{
+  --paper:#F6F7F3; --panel:#FDFDFB; --ink:#15201A; --ink-2:#4A574F; --ink-3:#8A968E;
+  --rule:#DDE2DB; --teal:#117758; --teal-dim:#DCEDE4; --amber:#D98F12; --amber-dim:#F6E9CE;
+  --oxide:#A63B26; --mono:&quot;IBM Plex Mono&quot;,ui-monospace,monospace; --serif:&quot;Newsreader&quot;,Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--paper)}
+body{font-family:var(--serif);color:var(--ink);line-height:1.6;padding:48px 20px 72px}
+.wrap{max-width:880px;margin:0 auto}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(34px,5.5vw,52px);line-height:1.05;margin:10px 0 14px;letter-spacing:-.01em}
+.dek{font-size:18px;color:var(--ink-2);max-width:62ch;margin-bottom:36px}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:24px 26px}
+.seggroup{display:flex;flex-wrap:wrap;gap:22px;margin-bottom:18px}
+.seg{min-width:200px}
+.seg .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+.seg .btns{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);background:transparent;border:1px solid var(--rule);border-radius:6px;padding:7px 12px;cursor:pointer}
+.seg button:hover{border-color:var(--teal);color:var(--teal)}
+.seg button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.seg button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+svg{display:block;width:100%;height:auto;user-select:none}
+.sizer{display:flex;align-items:center;gap:14px;margin-top:16px;padding-top:16px;border-top:1px solid var(--rule)}
+.sizer .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
+.sizer b{font-family:var(--mono);font-weight:500;color:var(--ink);font-size:13px;min-width:52px}
+input[type=range]{flex:1;accent-color:var(--teal);height:22px}
+input:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.ticker{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));border:1px solid var(--rule);border-radius:10px;background:var(--panel);margin-top:16px;overflow:hidden}
+.tk{padding:16px 20px 14px;border-left:1px solid var(--rule)}
+.tk:first-child{border-left:none}
+.tk .l{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.tk .v{font-family:var(--mono);font-weight:500;font-size:26px;margin-top:4px;font-variant-numeric:tabular-nums}
+.tk .v em{font-style:normal;font-size:14px;color:var(--ink-3)}
+.status{font-style:italic;font-size:17px;color:var(--ink-2);margin:20px 2px 0;min-height:3.2em}
+.notes{margin-top:52px;border-top:1px solid var(--rule);padding-top:30px}
+.notes h2{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;margin-bottom:18px}
+.notes p{max-width:66ch;margin-bottom:14px;color:var(--ink-2)}
+.notes p strong{color:var(--ink);font-weight:500}
+.ask{font-family:var(--mono);font-size:13px;background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:13px 16px;margin:18px 0;color:var(--ink);max-width:72ch}
+.ask b{font-weight:500;letter-spacing:.08em;font-size:10px;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:4px}
+.foot{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:44px;letter-spacing:.03em}
+@media(max-width:560px){.tk{padding:12px 14px}.tk .v{font-size:20px}}
+</style>
+</head>
+<body>
+<div class=&quot;wrap&quot;>
+  <p class=&quot;eyebrow&quot;>Compute desk · instrument 03</p>
+  <h1>The fabric</h1>
+  <p class=&quot;dek&quot;>&quot;1,024 H100s&quot; is not a spec — it's a rumor until you know how they're wired. This is a 128-GPU cluster: four racks under four leaf switches under a spine. Choose the protocol, the oversubscription, and where the job lands, and watch the same silicon change price.</p>
+
+  <div class=&quot;card&quot;>
+    <div class=&quot;seggroup&quot;>
+      <div class=&quot;seg&quot;><p class=&quot;lbl&quot;>Fabric protocol</p><div class=&quot;btns&quot; id=&quot;fb&quot;></div></div>
+      <div class=&quot;seg&quot;><p class=&quot;lbl&quot;>Spine oversubscription</p><div class=&quot;btns&quot; id=&quot;ob&quot;></div></div>
+      <div class=&quot;seg&quot;><p class=&quot;lbl&quot;>Job placement</p><div class=&quot;btns&quot; id=&quot;sb&quot;></div></div>
+    </div>
+    <svg id=&quot;topo&quot; viewBox=&quot;0 0 840 320&quot; role=&quot;img&quot; aria-label=&quot;Cluster topology: two spine switches, four leaf switches, four racks of four nodes; link colors show where the selected job's traffic flows&quot;></svg>
+    <div class=&quot;sizer&quot;>
+      <span class=&quot;lbl&quot;>Model in training</span>
+      <input type=&quot;range&quot; id=&quot;ms&quot; min=&quot;7&quot; max=&quot;405&quot; step=&quot;1&quot; value=&quot;70&quot; aria-label=&quot;Model size in billions of parameters&quot;>
+      <b id=&quot;mv&quot;>70B</b>
+    </div>
+  </div>
+
+  <div class=&quot;ticker&quot;>
+    <div class=&quot;tk&quot;><p class=&quot;l&quot;>Bandwidth per GPU</p><p class=&quot;v&quot; id=&quot;c1&quot;>—</p></div>
+    <div class=&quot;tk&quot;><p class=&quot;l&quot;>All-reduce per step</p><p class=&quot;v&quot; id=&quot;c2&quot;>—</p></div>
+    <div class=&quot;tk&quot;><p class=&quot;l&quot;>Fabric factor</p><p class=&quot;v&quot; id=&quot;c3&quot;>—</p></div>
+    <div class=&quot;tk&quot;><p class=&quot;l&quot;>$2.50 sticker, effectively</p><p class=&quot;v&quot; id=&quot;c4&quot;>—</p></div>
+  </div>
+  <p class=&quot;status&quot; id=&quot;st&quot;></p>
+
+  <div class=&quot;notes&quot;>
+    <h2>Reading the wiring like a buyer</h2>
+    <p><strong>The hierarchy is the whole story.</strong> Inside one node, GPUs talk over NVLink at hundreds of GB/s. The moment a job outgrows the node, traffic drops onto the network at NIC speed — 400 Gb/s (50 GB/s) per GPU in a standard H100 build — an order of magnitude slower. Training synchronizes gradients across every GPU each step (the all-reduce), so for any model too large for one node, the network is in the inner loop and its bandwidth prices the whole cluster.</p>
+    <p><strong>InfiniBand vs. RoCE is a protocol choice, not a speed choice.</strong> Both run the same wire rates; both carry RDMA. InfiniBand is lossless by construction (credit-based flow control, sub-microsecond switching) and historically delivers ~90%+ of line rate to NCCL collectives. RoCEv2 is RDMA over Ethernet made lossless with PFC and ECN — cheaper, multi-vendor, easier to operate at hyperscale, but its delivered efficiency depends heavily on tuning and congestion control. Well-engineered Ethernet fabrics (NVIDIA's own Spectrum-X, and the Ultra Ethernet effort) claim to close to within a few points of InfiniBand; untuned RoCE can fall far below. The buyer's conclusion: never accept line rate as an answer — demand measured NCCL bus bandwidth at your job size.</p>
+    <p><strong>Oversubscription is a quiet discount you pay, not receive.</strong> A 2:1 fabric has half as much uplink capacity out of each leaf as downlink under it — fine for inference microservices that rarely cross leaves, poisonous for training all-reduces that cross constantly. It's invisible on the price sheet and only appears in the topology diagram, which is precisely why you ask for the topology diagram. Corollary: placement is free money — a job packed inside one leaf never touches the spine, so a topology-aware scheduler recovers bandwidth that oversubscription took away.</p>
+    <p><strong>Rail-optimized designs</strong> take this further: each of a node's eight NICs connects to its own &quot;rail&quot; of switches, so same-rank GPUs across nodes are one hop apart — cheaper than a full fat-tree, excellent for collectives, weaker for arbitrary traffic. The point isn't to memorize designs; it's to know the failure modes each one buys.</p>
+    <div class=&quot;ask&quot;><b>Ask the supplier</b>InfiniBand or Ethernet, which NIC generation, and what measured NCCL all-reduce bus bandwidth do you see at my job size — not line rate, measured?</div>
+    <div class=&quot;ask&quot;><b>Ask the supplier</b>What's the oversubscription ratio, leaf to spine — and can your scheduler place my job within a single leaf or rail?</div>
+    <div class=&quot;ask&quot;><b>Ask the supplier</b>Full fat-tree or rail-optimized? Show me the topology diagram, and tell me the blast radius when one spine switch fails.</div>
+    <p>This is the &quot;performance factor&quot; from the effective-cost equation given a body: two clusters with identical GPUs and identical sticker prices can differ 30%+ in delivered training throughput on wiring alone. Model here is illustrative — ring all-reduce, large-message regime, latency ignored, protocol efficiencies representative (IB ≈ 0.92, tuned RoCE ≈ 0.80 of line rate).</p>
+  </div>
+  <p class=&quot;foot&quot;>companion to instruments 01 (the supply book) and 02 (the silicon ladder) · protocol efficiencies representative, not benchmarked · compiled July 2026</p>
+</div>
+
+<script>
+var FABRICS=[{id:&quot;ib&quot;,label:&quot;InfiniBand 400G&quot;,eff:0.92},{id:&quot;roce&quot;,label:&quot;RoCE v2 400G&quot;,eff:0.80}];
+var OVERS=[{r:1,label:&quot;1:1 full&quot;},{r:2,label:&quot;2:1&quot;},{r:4,label:&quot;4:1&quot;}];
+var SPANS=[{id:&quot;node&quot;,label:&quot;one node · 8 GPUs&quot;,n:8},{id:&quot;leaf&quot;,label:&quot;one leaf · 32 GPUs&quot;,n:32},{id:&quot;cluster&quot;,label:&quot;cluster · 128 GPUs&quot;,n:128}];
+var fSel=0,oSel=0,sSel=2,params=70;
+var NIC=50, NVL=810, STICKER=2.5;
+function seg(el,items,sel,cb){
+  var h=&quot;&quot;;items.forEach(function(it,i){h+='<button class=&quot;'+(i===sel?&quot;on&quot;:&quot;&quot;)+'&quot;>'+it.label+&quot;</button>&quot;});
+  el.innerHTML=h;
+  el.querySelectorAll(&quot;button&quot;).forEach(function(b,i){b.addEventListener(&quot;click&quot;,function(){cb(i)})});
+}
+function rebuild(){
+  seg(document.getElementById(&quot;fb&quot;),FABRICS,fSel,function(i){fSel=i;rebuild()});
+  seg(document.getElementById(&quot;ob&quot;),OVERS,oSel,function(i){oSel=i;rebuild()});
+  seg(document.getElementById(&quot;sb&quot;),SPANS,sSel,function(i){sSel=i;rebuild()});
+  render();
+}
+function drawTopo(mode,rho,cong){
+  var s='';
+  var IDLE=&quot;#DDE2DB&quot;, ACT=&quot;#117758&quot;, HOT=&quot;#D98F12&quot;, INKM=&quot;#8A968E&quot;;
+  var spineX=[300,540], leafX=[150,330,510,690];
+  var upW=(rho===1?4:rho===2?2:1);
+  var upActive=(mode===&quot;cluster&quot;);
+  leafX.forEach(function(lx){
+    spineX.forEach(function(sx){
+      var col=upActive?(cong?HOT:ACT):IDLE;
+      s+='<line x1=&quot;'+(lx)+'&quot; y1=&quot;120&quot; x2=&quot;'+(sx)+'&quot; y2=&quot;56&quot; stroke=&quot;'+col+'&quot; stroke-width=&quot;'+upW+'&quot; stroke-linecap=&quot;round&quot;/>';
+    });
+  });
+  leafX.forEach(function(lx,li){
+    var active=(mode===&quot;cluster&quot;)||(mode===&quot;leaf&quot;&amp;&amp;li===0);
+    s+='<line x1=&quot;'+lx+'&quot; y1=&quot;154&quot; x2=&quot;'+lx+'&quot; y2=&quot;212&quot; stroke=&quot;'+(active?ACT:IDLE)+'&quot; stroke-width=&quot;4&quot; stroke-linecap=&quot;round&quot;/>';
+  });
+  spineX.forEach(function(sx){
+    s+='<rect x=&quot;'+(sx-60)+'&quot; y=&quot;22&quot; width=&quot;120&quot; height=&quot;34&quot; rx=&quot;6&quot; fill=&quot;#FDFDFB&quot; stroke=&quot;'+(upActive?ACT:IDLE)+'&quot; stroke-width=&quot;1.2&quot;/>';
+    s+='<text x=&quot;'+sx+'&quot; y=&quot;43&quot; text-anchor=&quot;middle&quot; font-family=&quot;IBM Plex Mono, monospace&quot; font-size=&quot;11&quot; fill=&quot;#4A574F&quot;>spine</text>';
+  });
+  leafX.forEach(function(lx,li){
+    var active=(mode===&quot;cluster&quot;)||(mode===&quot;leaf&quot;&amp;&amp;li===0)||(mode===&quot;node&quot;&amp;&amp;li===0);
+    s+='<rect x=&quot;'+(lx-55)+'&quot; y=&quot;120&quot; width=&quot;110&quot; height=&quot;34&quot; rx=&quot;6&quot; fill=&quot;#FDFDFB&quot; stroke=&quot;'+(active&amp;&amp;mode!==&quot;node&quot;?ACT:IDLE)+'&quot; stroke-width=&quot;1.2&quot;/>';
+    s+='<text x=&quot;'+lx+'&quot; y=&quot;141&quot; text-anchor=&quot;middle&quot; font-family=&quot;IBM Plex Mono, monospace&quot; font-size=&quot;11&quot; fill=&quot;#4A574F&quot;>leaf '+(li+1)+'</text>';
+    for(var n=0;n<4;n++){
+      var nx=lx-55+8+n*26;
+      var on=(mode===&quot;cluster&quot;)||(mode===&quot;leaf&quot;&amp;&amp;li===0)||(mode===&quot;node&quot;&amp;&amp;li===0&amp;&amp;n===0);
+      s+='<rect x=&quot;'+nx+'&quot; y=&quot;212&quot; width=&quot;22&quot; height=&quot;20&quot; rx=&quot;4&quot; fill=&quot;'+(on?&quot;#DCEDE4&quot;:&quot;#F6F7F3&quot;)+'&quot; stroke=&quot;'+(on?ACT:IDLE)+'&quot; stroke-width=&quot;1.2&quot;/>';
+    }
+    s+='<text x=&quot;'+lx+'&quot; y=&quot;252&quot; text-anchor=&quot;middle&quot; font-family=&quot;IBM Plex Mono, monospace&quot; font-size=&quot;10&quot; fill=&quot;'+INKM+'&quot;>rack '+(li+1)+' · 4 nodes × 8 GPUs</text>';
+  });
+  s+='<text x=&quot;64&quot; y=&quot;43&quot; text-anchor=&quot;start&quot; font-family=&quot;IBM Plex Mono, monospace&quot; font-size=&quot;10&quot; fill=&quot;'+INKM+'&quot;>uplinks '+rho+':1</text>';
+  if(mode===&quot;node&quot;){
+    s+='<text x=&quot;150&quot; y=&quot;286&quot; text-anchor=&quot;middle&quot; font-family=&quot;IBM Plex Mono, monospace&quot; font-size=&quot;10&quot; fill=&quot;#117758&quot;>traffic stays on NVLink inside the node</text>';
+  }
+  s+='<text x=&quot;770&quot; y=&quot;300&quot; text-anchor=&quot;end&quot; font-family=&quot;IBM Plex Mono, monospace&quot; font-size=&quot;10&quot; fill=&quot;'+INKM+'&quot;>128 GPUs total</text>';
+  document.getElementById(&quot;topo&quot;).innerHTML=s;
+}
+function fmtT(t){
+  if(t<0.001)return (t*1e6).toFixed(0)+&quot;<em> µs</em>&quot;;
+  if(t<1)return (t*1000).toFixed(0)+&quot;<em> ms</em>&quot;;
+  return t.toFixed(1)+&quot;<em> s</em>&quot;;
+}
+function render(){
+  var fab=FABRICS[fSel], rho=OVERS[oSel].r, span=SPANS[sSel];
+  var B, ideal=NIC*FABRICS[0].eff;
+  if(span.id===&quot;node&quot;)B=NVL;
+  else if(span.id===&quot;leaf&quot;)B=NIC*fab.eff;
+  else B=NIC*fab.eff/rho;
+  var P=2*params;
+  var t=2*P*(span.n-1)/(span.n*B);
+  var factor=Math.min(1,B/ideal);
+  var effCost=STICKER/factor;
+  var cong=(span.id===&quot;cluster&quot;&amp;&amp;rho>1);
+  drawTopo(span.id,rho,cong);
+  document.getElementById(&quot;mv&quot;).textContent=params+&quot;B&quot;;
+  document.getElementById(&quot;c1&quot;).innerHTML=Math.round(B)+&quot;<em> GB/s</em>&quot;;
+  document.getElementById(&quot;c2&quot;).innerHTML=fmtT(t);
+  document.getElementById(&quot;c3&quot;).textContent=Math.round(factor*100)+&quot;%&quot;;
+  document.getElementById(&quot;c4&quot;).innerHTML=&quot;$&quot;+effCost.toFixed(2)+&quot;<em>/GPU-hr</em>&quot;;
+  var msg;
+  if(span.id===&quot;node&quot;){
+    msg=&quot;This job never touches the network — gradients ride NVLink at ~&quot;+NVL+&quot; GB/s inside the node. Protocol and oversubscription are moot until the model outgrows 8 GPUs; that's the cliff every scaling decision walks toward.&quot;;
+  }else if(span.id===&quot;leaf&quot;){
+    msg=&quot;Packed within one leaf, every GPU sees full NIC bandwidth — the spine's &quot;+rho+&quot;:1 oversubscription is invisible from here. Topology-aware placement is free money: same cluster, no tax.&quot;;
+  }else if(rho===1){
+    msg=&quot;Cluster-wide on a full-bisection fabric: the only tax is protocol efficiency (&quot;+Math.round(fab.eff*100)+&quot;% of line rate for &quot;+(fab.id===&quot;ib&quot;?&quot;InfiniBand&quot;:&quot;tuned RoCE&quot;)+&quot;). This is the honest baseline suppliers should be measured against.&quot;;
+  }else{
+    msg=&quot;Cluster-wide across a &quot;+rho+&quot;:1 spine: every byte crossing leaves shares uplinks, so effective bandwidth divides by &quot;+rho+&quot;. Same GPUs, same sticker — but the $2.50 hour is really $&quot;+effCost.toFixed(2)+&quot;. The discount was in the wiring, and you paid it.&quot;;
+  }
+  document.getElementById(&quot;st&quot;).textContent=msg;
+}
+document.getElementById(&quot;ms&quot;).addEventListener(&quot;input&quot;,function(){params=+this.value;render()});
+rebuild();
+</script>
+</body>
+</html>
+" title="The fabric" scrolling="no"></iframe></section><section id="i04"><iframe srcdoc="<!DOCTYPE html>
+<html lang=&quot;en&quot;>
+<head>
+<meta charset=&quot;utf-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;>
+<title>SLA anatomy — what the nines actually pay</title>
+<link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;>
+<link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin>
+<link href=&quot;https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;display=swap&quot; rel=&quot;stylesheet&quot;>
+<style>
+:root{
+  --paper:#F6F7F3; --panel:#FDFDFB; --ink:#15201A; --ink-2:#4A574F; --ink-3:#8A968E;
+  --rule:#DDE2DB; --teal:#117758; --teal-dim:#DCEDE4; --amber:#D98F12; --amber-dim:#F6E9CE;
+  --oxide:#A63B26; --mono:&quot;IBM Plex Mono&quot;,ui-monospace,monospace; --serif:&quot;Newsreader&quot;,Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--paper)}
+body{font-family:var(--serif);color:var(--ink);line-height:1.6;padding:48px 20px 72px}
+.wrap{max-width:880px;margin:0 auto}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(34px,5.5vw,52px);line-height:1.05;margin:10px 0 14px;letter-spacing:-.01em}
+.dek{font-size:18px;color:var(--ink-2);max-width:62ch;margin-bottom:36px}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:24px 26px}
+.seggroup{display:flex;flex-wrap:wrap;gap:22px}
+.seg{min-width:180px}
+.seg .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+.seg .btns{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);background:transparent;border:1px solid var(--rule);border-radius:6px;padding:7px 12px;cursor:pointer}
+.seg button:hover{border-color:var(--teal);color:var(--teal)}
+.seg button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.seg button:focus-visible,input:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.allowed{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);margin-top:10px}
+.allowed b{color:var(--ink);font-weight:500}
+.sliders{margin-top:18px;padding-top:18px;border-top:1px solid var(--rule);display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px 34px}
+.sl label{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+.sl label b{font-weight:500;color:var(--ink);letter-spacing:0}
+input[type=range]{width:100%;accent-color:var(--teal);height:22px}
+.excl{margin-top:16px;padding-top:16px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:12.5px;color:var(--ink-2);display:flex;align-items:center;gap:10px;cursor:pointer}
+.excl input{accent-color:var(--oxide);width:16px;height:16px}
+.ticker{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));border:1px solid var(--rule);border-radius:10px;background:var(--panel);margin-top:16px;overflow:hidden}
+.tk{padding:16px 20px 14px;border-left:1px solid var(--rule)}
+.tk:first-child{border-left:none}
+.tk .l{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.tk .v{font-family:var(--mono);font-weight:500;font-size:26px;margin-top:4px;font-variant-numeric:tabular-nums}
+.tk .v em{font-style:normal;font-size:14px;color:var(--ink-3)}
+.tk .v.bad{color:var(--oxide)}
+.status{font-style:italic;font-size:17px;color:var(--ink-2);margin:20px 2px 0;min-height:3.2em}
+.notes{margin-top:52px;border-top:1px solid var(--rule);padding-top:30px}
+.notes h2{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;margin-bottom:18px}
+.notes p{max-width:66ch;margin-bottom:14px;color:var(--ink-2)}
+.notes p strong{color:var(--ink);font-weight:500}
+.ask{font-family:var(--mono);font-size:13px;background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:13px 16px;margin:18px 0;color:var(--ink);max-width:72ch}
+.ask b{font-weight:500;letter-spacing:.08em;font-size:10px;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:4px}
+.foot{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:44px;letter-spacing:.03em}
+@media(max-width:560px){.tk{padding:12px 14px}.tk .v{font-size:20px}}
+</style>
+</head>
+<body>
+<div class=&quot;wrap&quot;>
+  <p class=&quot;eyebrow&quot;>Compute desk · instrument 04</p>
+  <h1>SLA anatomy</h1>
+  <p class=&quot;dek&quot;>A service-level agreement is an insurance contract, so read it like one: what counts as a claim, over what window it's measured, and what's excluded. The nines on the cover page are marketing; the value lives in three clauses. Stage a month's worth of failures below and see what the paper actually pays.</p>
+
+  <div class=&quot;card&quot;>
+    <div class=&quot;seggroup&quot;>
+      <div class=&quot;seg&quot;><p class=&quot;lbl&quot;>Uptime commitment</p><div class=&quot;btns&quot; id=&quot;cb&quot;></div></div>
+      <div class=&quot;seg&quot;><p class=&quot;lbl&quot;>&quot;Unavailable&quot; means</p><div class=&quot;btns&quot; id=&quot;db&quot;></div></div>
+      <div class=&quot;seg&quot;><p class=&quot;lbl&quot;>Measurement window</p><div class=&quot;btns&quot; id=&quot;wb&quot;></div></div>
+    </div>
+    <p class=&quot;allowed&quot; id=&quot;al&quot;></p>
+    <div class=&quot;sliders&quot;>
+      <div class=&quot;sl&quot;><label>Platform outage this month <b id=&quot;pv&quot;>0.0 h</b></label><input type=&quot;range&quot; id=&quot;ps&quot; min=&quot;0&quot; max=&quot;24&quot; step=&quot;0.5&quot; value=&quot;0&quot;></div>
+      <div class=&quot;sl&quot;><label>Node-level failures <b id=&quot;nv&quot;>5,000 GPU-h</b></label><input type=&quot;range&quot; id=&quot;ns&quot; min=&quot;0&quot; max=&quot;20000&quot; step=&quot;250&quot; value=&quot;5000&quot;></div>
+      <div class=&quot;sl&quot;><label>Fleet under contract <b id=&quot;fv&quot;>512 GPUs</b></label><input type=&quot;range&quot; id=&quot;fs&quot; min=&quot;128&quot; max=&quot;4096&quot; step=&quot;128&quot; value=&quot;512&quot;></div>
+      <div class=&quot;sl&quot;><label>True cost per lost GPU-h <b id=&quot;mv&quot;>3.0× rate</b></label><input type=&quot;range&quot; id=&quot;msl&quot; min=&quot;1&quot; max=&quot;10&quot; step=&quot;0.5&quot; value=&quot;3&quot;></div>
+    </div>
+    <label class=&quot;excl&quot;><input type=&quot;checkbox&quot; id=&quot;ex&quot;> provider invokes exclusions (maintenance window / force majeure)</label>
+  </div>
+
+  <div class=&quot;ticker&quot;>
+    <div class=&quot;tk&quot;><p class=&quot;l&quot;>Measured uptime</p><p class=&quot;v&quot; id=&quot;c1&quot;>—</p></div>
+    <div class=&quot;tk&quot;><p class=&quot;l&quot;>Credits recovered</p><p class=&quot;v&quot; id=&quot;c2&quot;>—</p></div>
+    <div class=&quot;tk&quot;><p class=&quot;l&quot;>True cost of failures</p><p class=&quot;v&quot; id=&quot;c3&quot;>—</p></div>
+    <div class=&quot;tk&quot;><p class=&quot;l&quot;>Recovery ratio</p><p class=&quot;v&quot; id=&quot;c4&quot;>—</p></div>
+  </div>
+  <p class=&quot;status&quot; id=&quot;st&quot;></p>
+
+  <div class=&quot;notes&quot;>
+    <h2>Reading the paper like a buyer</h2>
+    <p><strong>The definition clause is worth more than the nines.</strong> Most SLAs define &quot;unavailable&quot; at the platform or region level: the API is down, everything is down. But the dominant failure mode of a GPU fleet is chronic and node-level — a GPU falls off the bus, HBM throws errors, a NIC flaps — and under a platform-level definition, none of it registers on the availability metric. Meta's Llama 3 team reported 419 unexpected interruptions in 54 days of training on 16,384 H100s, roughly one hardware failure every three hours, overwhelmingly at the node level. Under boilerplate SLA language, that entire experience measures as 100% uptime. Toggle the definition above and watch the same month of pain flip between zero credits and six figures.</p>
+    <p><strong>The measurement window is where the lawyers hid the value.</strong> A one-hour outage is a 99.86% month — a breach of a 99.9% monthly commitment — but a 99.989% year, no breach at all. Same incident, same headline nines, different clause, different payout. Annual measurement dilutes every incident by a factor of twelve; monthly measurement is the buyer's floor position.</p>
+    <p><strong>Credits are shaped to pay on the rare event and never on the chronic one.</strong> Play with the sliders and you'll notice something honest: for a total platform outage, tiered credits (10–100% of monthly fees) can look adequate, even generous, against the direct GPU-hour loss. That's by design — total outages are rare, capped at one month's fees, claims-gated, and often excluded, so they're cheap to insure. The chronic node-level failures that actually dominate the cost of running GPUs pay nothing. And credits are service credits against future bills, not cash — worth exactly zero if the relationship is ending, which is the moment you'd most want them.</p>
+    <p><strong>What actually protects a serious customer isn't the availability SLA at all</strong> — it's operational commitments: time-to-replace on a failed node, hot-spare pools held against your cluster, burn-in and acceptance testing before delivery, and termination rights on chronic breach. Those clauses cost the provider real money to honor, which is precisely why they signal fleet quality better than any number of nines on the cover page.</p>
+    <div class=&quot;ask&quot;><b>Ask the supplier</b>Define &quot;unavailable&quot; for me — does it include a single node down, or degraded interconnect performance, or only full loss of the API? And what was your fleet's node-level annualized failure rate last quarter?</div>
+    <div class=&quot;ask&quot;><b>Ask the supplier</b>Measured monthly or annually? Read me the exclusions list. And what's the claims process — automatic, or do I file with logs inside 30 days?</div>
+    <div class=&quot;ask&quot;><b>Ask the supplier</b>Forget credits: what's your committed time-to-replace on a failed node, do you hold hot spares against my cluster, and do I get termination rights on chronic breach?</div>
+    <p>Model is illustrative: 730-hour month, $2.50/GPU-hr contract rate, credits computed as tier % of monthly fees, node failures spread evenly across the window. Tier schedules are representative of published cloud SLAs (10% / 25% / 100% escalation; 99.99% commitments add a 30–50% band). The true downstream cost of an outage — churn, breached customer SLAs, engineering time — is what the multiplier slider approximates, and it is almost always the biggest number on this page.</p>
+  </div>
+  <p class=&quot;foot&quot;>companion to instruments 01–03 · tier schedules representative of published cloud SLAs · Llama 3 failure data: Meta, &quot;The Llama 3 Herd of Models&quot; (2024) · compiled July 2026</p>
+</div>
+
+<script>
+var COMMITS=[
+ {label:&quot;99.5%&quot;,v:0.995,tiers:[[0.995,10],[0.99,25],[0.95,100]]},
+ {label:&quot;99.9%&quot;,v:0.999,tiers:[[0.999,10],[0.99,25],[0.95,100]]},
+ {label:&quot;99.99%&quot;,v:0.9999,tiers:[[0.9999,10],[0.999,30],[0.99,50],[0.95,100]]}
+];
+var DEFS=[{id:&quot;plat&quot;,label:&quot;platform down&quot;},{id:&quot;inst&quot;,label:&quot;instance-level&quot;}];
+var WINS=[{id:&quot;mo&quot;,label:&quot;monthly&quot;,hrs:730},{id:&quot;yr&quot;,label:&quot;annual&quot;,hrs:8760}];
+var cSel=1,dSel=0,wSel=0;
+var platH=0,nodeGH=5000,fleet=512,mult=3,excl=false;
+var RATE=2.5,HM=730;
+function seg(el,items,sel,cb){
+  var h=&quot;&quot;;items.forEach(function(it,i){h+='<button class=&quot;'+(i===sel?&quot;on&quot;:&quot;&quot;)+'&quot;>'+it.label+&quot;</button>&quot;});
+  el.innerHTML=h;
+  el.querySelectorAll(&quot;button&quot;).forEach(function(b,i){b.addEventListener(&quot;click&quot;,function(){cb(i)})});
+}
+function rebuild(){
+  seg(document.getElementById(&quot;cb&quot;),COMMITS,cSel,function(i){cSel=i;rebuild()});
+  seg(document.getElementById(&quot;db&quot;),DEFS,dSel,function(i){dSel=i;rebuild()});
+  seg(document.getElementById(&quot;wb&quot;),WINS,wSel,function(i){wSel=i;rebuild()});
+  render();
+}
+function money(x){
+  if(x>=1e6)return &quot;$&quot;+(x/1e6).toFixed(2)+&quot;M&quot;;
+  if(x>=1e3)return &quot;$&quot;+Math.round(x/1e3)+&quot;k&quot;;
+  return &quot;$&quot;+Math.round(x);
+}
+function allowedText(){
+  var c=COMMITS[cSel].v, w=WINS[wSel];
+  var mins=(1-c)*w.hrs*60;
+  var t=mins>=120?(mins/60).toFixed(1)+&quot; hours&quot;:Math.round(mins)+&quot; minutes&quot;;
+  return 'At '+COMMITS[cSel].label+' measured '+(wSel===0?&quot;monthly&quot;:&quot;annually&quot;)+', the provider is allowed <b>'+t+'</b> of downtime per '+(wSel===0?&quot;month&quot;:&quot;year&quot;)+' before anything pays.';
+}
+function render(){
+  var commit=COMMITS[cSel], win=WINS[wSel];
+  var spend=fleet*RATE*HM;
+  var weightedDown=platH+(dSel===1?nodeGH/fleet:0);
+  var uptime=1-weightedDown/win.hrs;
+  var tier=0;
+  if(!excl){
+    commit.tiers.forEach(function(t){if(uptime<t[0])tier=t[1]});
+  }
+  var credit=spend*tier/100;
+  var loss=(platH*fleet+nodeGH)*RATE*mult;
+  var ratio=loss>0?credit/loss:(credit>0?Infinity:0);
+  document.getElementById(&quot;al&quot;).innerHTML=allowedText();
+  document.getElementById(&quot;pv&quot;).textContent=platH.toFixed(1)+&quot; h&quot;;
+  document.getElementById(&quot;nv&quot;).textContent=nodeGH.toLocaleString()+&quot; GPU-h&quot;;
+  document.getElementById(&quot;fv&quot;).textContent=fleet.toLocaleString()+&quot; GPUs&quot;;
+  document.getElementById(&quot;mv&quot;).textContent=mult.toFixed(1)+&quot;× rate&quot;;
+  var up9=uptime*100;
+  document.getElementById(&quot;c1&quot;).innerHTML=(up9>=99.9995?&quot;100&quot;:up9.toFixed(up9>=99.99?3:2))+&quot;<em>%</em>&quot;;
+  document.getElementById(&quot;c2&quot;).textContent=money(credit)+(tier>0?&quot; (&quot;+tier+&quot;%)&quot;:&quot;&quot;);
+  document.getElementById(&quot;c3&quot;).textContent=money(loss);
+  var c4=document.getElementById(&quot;c4&quot;);
+  if(loss===0&amp;&amp;credit===0){c4.textContent=&quot;—&quot;;c4.className=&quot;v&quot;}
+  else if(ratio===Infinity){c4.textContent=&quot;∞&quot;;c4.className=&quot;v&quot;}
+  else{c4.textContent=Math.round(ratio*100)+&quot;%&quot;;c4.className=&quot;v&quot;+(ratio<0.25?&quot; bad&quot;:&quot;&quot;)}
+  var msg;
+  if(excl){
+    msg=&quot;The exclusions clause fired — the incident was classified as scheduled maintenance or force majeure, so measured downtime is forgiven and credits are $0. Every SLA has this clause; the only questions are how wide it's drawn and who decides.&quot;;
+  }else if(dSel===0&amp;&amp;nodeGH>0&amp;&amp;platH===0){
+    msg=nodeGH.toLocaleString()+&quot; GPU-hours of node failures — the failure mode that actually dominates GPU fleets — never touched the availability metric, because \&quot;unavailable\&quot; means the platform, not your nodes. Measured uptime: perfect. Credits: $0. The definition clause just ate your claim.&quot;;
+  }else if(dSel===0&amp;&amp;platH>0&amp;&amp;tier===0){
+    msg=&quot;The outage happened, but &quot;+(wSel===1?&quot;annual measurement diluted it below the breach threshold — the same incident breaches a monthly window. &quot;:&quot;it stayed inside the allowed downtime budget. &quot;)+&quot;No tier triggered, no credit owed. The nines held; you still ate &quot;+money(loss)+&quot;.&quot;;
+  }else if(tier>0&amp;&amp;ratio>=1){
+    msg=&quot;On paper the credit covers the direct loss — tiered credits are shaped to look adequate exactly here, on the rare total outage, because it's capped at a month's fees, claims-gated, and infrequent. Now drag node-level failures up and platform outage to zero: the chronic mode pays nothing. And remember these are service credits against future bills, not cash.&quot;;
+  }else if(tier>0){
+    msg=&quot;A breach, a tier, a payout — and it still recovers only &quot;+Math.round(ratio*100)+&quot;% of what the month truly cost once churn, downstream SLAs, and engineering time are counted. Credits are a rebate, not insurance; the protection you actually want is operational — time-to-replace, hot spares, exit rights.&quot;;
+  }else{
+    msg=&quot;A clean month — nothing to claim. Use the sliders to stage a bad one: start with node-level failures alone, then flip the definition of \&quot;unavailable\&quot; and watch the same month change value by six figures.&quot;;
+  }
+  document.getElementById(&quot;st&quot;).textContent=msg;
+}
+document.getElementById(&quot;ps&quot;).addEventListener(&quot;input&quot;,function(){platH=+this.value;render()});
+document.getElementById(&quot;ns&quot;).addEventListener(&quot;input&quot;,function(){nodeGH=+this.value;render()});
+document.getElementById(&quot;fs&quot;).addEventListener(&quot;input&quot;,function(){fleet=+this.value;render()});
+document.getElementById(&quot;msl&quot;).addEventListener(&quot;input&quot;,function(){mult=+this.value;render()});
+document.getElementById(&quot;ex&quot;).addEventListener(&quot;change&quot;,function(){excl=this.checked;render()});
+rebuild();
+</script>
+</body>
+</html>
+" title="SLA anatomy" scrolling="no"></iframe></section><p class="colophon">the compute desk · four instruments, one document · load-duration &amp; newsvendor framing after Modal, &ldquo;How to price serverless&rdquo; · compiled July 2026</p><script>
+function fit(f){try{var d=f.contentDocument;if(!d||!d.documentElement)return;
+var h=d.documentElement.scrollHeight+2;
+var cur=parseFloat(f.style.height)||0;
+if(Math.abs(cur-h)>2){f.style.height=h+"px";}}catch(e){}}
+function fitAll(){document.querySelectorAll("iframe").forEach(fit)}
+document.querySelectorAll("iframe").forEach(function(f){
+  f.addEventListener("load",function(){fit(f)});
+});
+fitAll();
+setInterval(fitAll,250);
+window.addEventListener("resize",fitAll);
+function go(el){var t=document.getElementById(el.getAttribute("data-target"));
+if(t){t.scrollIntoView({behavior:"smooth",block:"start"});}}
+document.querySelectorAll("[data-target]").forEach(function(a){
+  a.addEventListener("click",function(){go(this)});
+  a.addEventListener("keydown",function(e){
+    if(e.key==="Enter"||e.key===" "){e.preventDefault();go(this);}
+  });
+});
+</script>
+</body>
+</html>
