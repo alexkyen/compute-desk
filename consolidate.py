@@ -16,7 +16,8 @@ INSTRUMENTS = [
     ("gpu-supply-book.html", "i01", "01", "The supply book"),
     ("silicon-ladder.html",  "i02", "02", "The silicon ladder"),
     ("the-fabric.html",      "i03", "03", "The fabric"),
-    ("sla-anatomy.html",     "i04", "04", "SLA anatomy"),
+    ("the-two-trees.html",  "i04", "04", "The two trees"),
+    ("sla-anatomy.html",     "i05", "05", "SLA anatomy"),
 ]
 
 HEAD = """<!DOCTYPE html>
@@ -101,13 +102,15 @@ def build():
         "i01": "how much capacity to commit",
         "i02": "what you are buying, and its clock",
         "i03": "what the wiring does to the price",
-        "i04": "what the paper actually protects",
+        "i04": "why rails are cheap, and what they cost",
+        "i05": "what the paper actually protects",
+        "i05": "why rails are cheap, and what they cost",
     }
 
     parts.append('<div class="cover">')
     parts.append('<p class="eyebrow">Compute desk</p>')
     parts.append("<h1>A buyer&rsquo;s field manual for GPUs</h1>")
-    parts.append('<p class="dek">Four interactive instruments on the economics of GPU procurement: '
+    parts.append('<p class="dek">Five interactive instruments on the economics of GPU procurement: '
                  "how much capacity to commit and at what duration, what each silicon generation is "
                  "actually worth, what cluster wiring does to effective price, and what an SLA "
                  "does and does not protect. Every instrument ends where a buyer should: with the "
@@ -125,7 +128,7 @@ def build():
         parts.append('<section id="%s"><iframe srcdoc="%s" title="%s" scrolling="no"></iframe></section>'
                      % (anchor, escaped, html.escape(title)))
 
-    parts.append('<p class="colophon">the compute desk · four instruments, one document · '
+    parts.append('<p class="colophon">the compute desk · five instruments, one document · '
                  "load-duration &amp; newsvendor framing after Modal, &ldquo;How to price serverless&rdquo; "
                  "· compiled July 2026</p>")
     parts.append(TAIL)

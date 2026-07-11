@@ -41,7 +41,7 @@ font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.03em;l
 </style>
 </head>
 <body>
-<nav class="nav"><a data-target="i01" role="link" tabindex="0"><b>01</b> The supply book</a><a data-target="i02" role="link" tabindex="0"><b>02</b> The silicon ladder</a><a data-target="i03" role="link" tabindex="0"><b>03</b> The fabric</a><a data-target="i04" role="link" tabindex="0"><b>04</b> SLA anatomy</a></nav><div class="cover"><p class="eyebrow">Compute desk</p><h1>A buyer&rsquo;s field manual for GPUs</h1><p class="dek">Four interactive instruments on the economics of GPU procurement: how much capacity to commit and at what duration, what each silicon generation is actually worth, what cluster wiring does to effective price, and what an SLA does and does not protect. Every instrument ends where a buyer should: with the questions to ask a supplier.</p><div class="toc"><a data-target="i01" role="link" tabindex="0"><span class="n">01</span><span class="t">The supply book</span><span class="d">how much capacity to commit</span></a><a data-target="i02" role="link" tabindex="0"><span class="n">02</span><span class="t">The silicon ladder</span><span class="d">what you are buying, and its clock</span></a><a data-target="i03" role="link" tabindex="0"><span class="n">03</span><span class="t">The fabric</span><span class="d">what the wiring does to the price</span></a><a data-target="i04" role="link" tabindex="0"><span class="n">04</span><span class="t">SLA anatomy</span><span class="d">what the paper actually protects</span></a></div></div><section id="i01"><iframe srcdoc="<!DOCTYPE html>
+<nav class="nav"><a data-target="i01" role="link" tabindex="0"><b>01</b> The supply book</a><a data-target="i02" role="link" tabindex="0"><b>02</b> The silicon ladder</a><a data-target="i03" role="link" tabindex="0"><b>03</b> The fabric</a><a data-target="i04" role="link" tabindex="0"><b>04</b> The two trees</a><a data-target="i05" role="link" tabindex="0"><b>05</b> SLA anatomy</a></nav><div class="cover"><p class="eyebrow">Compute desk</p><h1>A buyer&rsquo;s field manual for GPUs</h1><p class="dek">Five interactive instruments on the economics of GPU procurement: how much capacity to commit and at what duration, what each silicon generation is actually worth, what cluster wiring does to effective price, and what an SLA does and does not protect. Every instrument ends where a buyer should: with the questions to ask a supplier.</p><div class="toc"><a data-target="i01" role="link" tabindex="0"><span class="n">01</span><span class="t">The supply book</span><span class="d">how much capacity to commit</span></a><a data-target="i02" role="link" tabindex="0"><span class="n">02</span><span class="t">The silicon ladder</span><span class="d">what you are buying, and its clock</span></a><a data-target="i03" role="link" tabindex="0"><span class="n">03</span><span class="t">The fabric</span><span class="d">what the wiring does to the price</span></a><a data-target="i04" role="link" tabindex="0"><span class="n">04</span><span class="t">The two trees</span><span class="d">why rails are cheap, and what they cost</span></a><a data-target="i05" role="link" tabindex="0"><span class="n">05</span><span class="t">SLA anatomy</span><span class="d">why rails are cheap, and what they cost</span></a></div></div><section id="i01"><iframe srcdoc="<!DOCTYPE html>
 <html lang=&quot;en&quot;>
 <head>
 <meta charset=&quot;utf-8&quot;>
@@ -613,6 +613,212 @@ rebuild();
 <head>
 <meta charset=&quot;utf-8&quot;>
 <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;>
+<title>The two trees — fat-tree vs rail-optimized fabrics</title>
+<link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;>
+<link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin>
+<link href=&quot;https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;display=swap&quot; rel=&quot;stylesheet&quot;>
+<style>
+:root{
+  --paper:#F6F7F3; --panel:#FDFDFB; --ink:#15201A; --ink-2:#4A574F; --ink-3:#8A968E;
+  --rule:#DDE2DB; --teal:#117758; --teal-dim:#DCEDE4; --amber:#D98F12; --amber-dim:#F6E9CE;
+  --oxide:#A63B26; --mono:&quot;IBM Plex Mono&quot;,ui-monospace,monospace; --serif:&quot;Newsreader&quot;,Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--paper)}
+body{font-family:var(--serif);color:var(--ink);line-height:1.6;padding:48px 20px 72px}
+.wrap{max-width:880px;margin:0 auto}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(34px,5.5vw,52px);line-height:1.05;margin:10px 0 14px;letter-spacing:-.01em}
+.dek{font-size:18px;color:var(--ink-2);max-width:62ch;margin-bottom:36px}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:24px 26px}
+.seggroup{display:flex;flex-wrap:wrap;gap:22px;margin-bottom:14px}
+.seg{min-width:200px}
+.seg .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+.seg .btns{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);background:transparent;border:1px solid var(--rule);border-radius:6px;padding:7px 12px;cursor:pointer}
+.seg button:hover{border-color:var(--teal);color:var(--teal)}
+.seg button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.seg button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+svg{display:block;width:100%;height:auto;user-select:none}
+.lg{display:flex;flex-wrap:wrap;gap:16px;font-family:var(--mono);font-size:11.5px;color:var(--ink-2);margin-top:10px}
+.lg span{display:flex;align-items:center;gap:6px}
+.sw{width:14px;height:3px;border-radius:2px;display:inline-block}
+.ticker{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));border:1px solid var(--rule);border-radius:10px;background:var(--panel);margin-top:16px;overflow:hidden}
+.tk{padding:16px 20px 14px;border-left:1px solid var(--rule)}
+.tk:first-child{border-left:none}
+.tk .l{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.tk .v{font-family:var(--mono);font-weight:500;font-size:22px;margin-top:4px;font-variant-numeric:tabular-nums}
+.tk .v.bad{color:var(--oxide)}
+.status{font-style:italic;font-size:17px;color:var(--ink-2);margin:20px 2px 0;min-height:3.2em}
+.notes{margin-top:52px;border-top:1px solid var(--rule);padding-top:30px}
+.notes h2{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;margin-bottom:18px}
+.notes p{max-width:66ch;margin-bottom:14px;color:var(--ink-2)}
+.notes p strong{color:var(--ink);font-weight:500}
+.ask{font-family:var(--mono);font-size:13px;background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:13px 16px;margin:18px 0;color:var(--ink);max-width:72ch}
+.ask b{font-weight:500;letter-spacing:.08em;font-size:10px;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:4px}
+.foot{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:44px;letter-spacing:.03em}
+@media(max-width:560px){.tk{padding:12px 14px}.tk .v{font-size:17px}}
+</style>
+</head>
+<body>
+<div class=&quot;wrap&quot;>
+  <p class=&quot;eyebrow&quot;>Compute desk · instrument 04</p>
+  <h1>The two trees</h1>
+  <p class=&quot;dek&quot;>Instrument 03 priced the wiring; this one chooses its shape. The same GPUs can be wired as one fat tree — bandwidth preserved at every tier, any GPU to any GPU at full rate — or as eight skinny ones, each &quot;rail&quot; connecting the same-numbered GPU of every node. Rails cost a fraction as much and serve training traffic just as fast. The catch lives in the other two scenarios. Toggle and see.</p>
+
+  <div class=&quot;card&quot;>
+    <div class=&quot;seggroup&quot;>
+      <div class=&quot;seg&quot;><p class=&quot;lbl&quot;>Topology</p><div class=&quot;btns&quot; id=&quot;tb&quot;></div></div>
+      <div class=&quot;seg&quot;><p class=&quot;lbl&quot;>Scenario</p><div class=&quot;btns&quot; id=&quot;sb&quot;></div></div>
+    </div>
+    <svg id=&quot;net&quot; viewBox=&quot;0 0 840 430&quot; role=&quot;img&quot; aria-label=&quot;Cluster wiring diagram: four nodes of four GPUs under either a leaf-spine fat-tree or four rail switches, with traffic paths and failures highlighted per scenario&quot;></svg>
+    <div class=&quot;lg&quot;>
+      <span><span class=&quot;sw&quot; style=&quot;background:#117758&quot;></span>full rate</span>
+      <span><span class=&quot;sw&quot; style=&quot;background:#D98F12&quot;></span>detour / taxed</span>
+      <span><span class=&quot;sw&quot; style=&quot;background:#A63B26&quot;></span>failed</span>
+    </div>
+  </div>
+
+  <div class=&quot;ticker&quot;>
+    <div class=&quot;tk&quot;><p class=&quot;l&quot;>Switches @ 512 GPUs</p><p class=&quot;v&quot; id=&quot;c1&quot;>—</p></div>
+    <div class=&quot;tk&quot;><p class=&quot;l&quot;>Optical links</p><p class=&quot;v&quot; id=&quot;c2&quot;>—</p></div>
+    <div class=&quot;tk&quot;><p class=&quot;l&quot;>Any-to-any traffic</p><p class=&quot;v&quot; id=&quot;c3&quot;>—</p></div>
+    <div class=&quot;tk&quot;><p class=&quot;l&quot;>Blast radius</p><p class=&quot;v&quot; id=&quot;c4&quot;>—</p></div>
+  </div>
+  <p class=&quot;status&quot; id=&quot;st&quot;></p>
+
+  <div class=&quot;notes&quot;>
+    <h2>Reading the trees like a buyer</h2>
+    <p><strong>Training traffic has a shape, and rails are wired to it.</strong> When NCCL runs an all-reduce, it builds rank-aligned rings: GPU-3 of node 12 exchanges with GPU-3 of nodes 11 and 13, and any data that must cross ranks moves inside each node over NVLink, where bandwidth is ~18× cheaper. So the network only ever sees same-rank pairs — eight independent streams, one per rail. A rail fabric gives each of those streams its own dedicated switch, one hop, full rate, and simply deletes the spine tier the fat-tree needed to guarantee the same thing for everyone.</p>
+    <p><strong>The cost gap is countable.</strong> 512 GPUs with 64-port switches: a 1:1 fat-tree needs 16 leaves plus 16 spines and 1,024 optical links; rails need 8 switches and 512 links, with optics the dominant line item. Roughly 4× fewer switches and half the optics for identical delivered performance — <em>on collective-shaped traffic.</em></p>
+    <p><strong>What rails deleted is every path between different ranks on different nodes.</strong> Off-pattern traffic — mixture-of-experts all-to-all routing, embedding lookups, parameter-server flows, storage and data loading — must detour: hop the NVLink bridge inside the node to borrow a port on the right rail, then cross. The detour spends NVLink bandwidth the collectives also need, and turns first-class traffic into second-class. The fat-tree pays for generality; rails pay only for the pattern training uses, and everything off-pattern gets taxed.</p>
+    <p><strong>Failure modes are shaped by the wiring too.</strong> A fat-tree leaf death is deep but narrow — its nodes drop, the rest run. A spine death is shallow and wide — capacity dips, nothing disconnects. A rail death is the strange one: no node goes down, but every node loses the same port simultaneously, and since an all-reduce finishes only when its slowest ring does, one failed box can stall every multi-node job in the cluster at once.</p>
+    <div class=&quot;ask&quot;><b>Ask the supplier</b>Full fat-tree or rail-optimized — show me the topology diagram. And when one switch fails, what exactly keeps running: which nodes, which rails, which of my jobs?</div>
+    <div class=&quot;ask&quot;><b>Ask the supplier</b>If it's rails: is the scheduler rail-aware, what's the NCCL configuration, and what are your measured numbers for all-to-all — not just all-reduce — at my job size?</div>
+    <p>The toy cluster shows one rank ring and one cross-rank pair so the wiring stays readable; in reality all rings run concurrently and NCCL juggles them. Counts assume 64-port switches, one NIC per GPU, 1:1 within each tree. Structure of the argument is unchanged at real scale.</p>
+  </div>
+  <p class=&quot;foot&quot;>continues instrument 03, the fabric · counts illustrative at 512 GPUs, 64-port switches · compiled July 2026</p>
+</div>
+
+<script>
+var topo=&quot;fat&quot;, scen=&quot;coll&quot;;
+var NX=[50,240,430,620], NW=170;
+var TEAL=&quot;#117758&quot;, AMBER=&quot;#D98F12&quot;, OXIDE=&quot;#A63B26&quot;, IDLE=&quot;#DDE2DB&quot;;
+function gx(n,k){return NX[n]+31+k*38}
+function seg(el,items,cur,cb){
+  var h=&quot;&quot;;items.forEach(function(it){h+='<button class=&quot;'+(it.id===cur?&quot;on&quot;:&quot;&quot;)+'&quot;>'+it.label+&quot;</button>&quot;});
+  el.innerHTML=h;
+  var bs=el.querySelectorAll(&quot;button&quot;);
+  items.forEach(function(it,i){bs[i].addEventListener(&quot;click&quot;,function(){cb(it.id)})});
+}
+function rebuild(){
+  seg(document.getElementById(&quot;tb&quot;),[{id:&quot;fat&quot;,label:&quot;fat-tree&quot;},{id:&quot;rail&quot;,label:&quot;rail-optimized&quot;}],topo,function(v){topo=v;rebuild()});
+  seg(document.getElementById(&quot;sb&quot;),[{id:&quot;coll&quot;,label:&quot;collective all-reduce&quot;},{id:&quot;cross&quot;,label:&quot;cross-rank pair&quot;},{id:&quot;fail&quot;,label:&quot;a switch dies&quot;}],scen,function(v){scen=v;rebuild()});
+  render();
+}
+function line(x1,y1,x2,y2,col,w,dash,arrow){
+  return '<line x1=&quot;'+x1+'&quot; y1=&quot;'+y1+'&quot; x2=&quot;'+x2+'&quot; y2=&quot;'+y2+'&quot; stroke=&quot;'+col+'&quot; stroke-width=&quot;'+w+'&quot;'+(dash?' stroke-dasharray=&quot;4 3&quot;':'')+(arrow?' marker-end=&quot;url(#arrow)&quot;':'')+' stroke-linecap=&quot;round&quot;/>';
+}
+function box(x,y,w,h,label,state){
+  var stroke=state===&quot;dead&quot;?OXIDE:state===&quot;hot&quot;?TEAL:&quot;#C7CEC6&quot;;
+  var txt=state===&quot;dead&quot;?OXIDE:&quot;#4A574F&quot;;
+  var mark=state===&quot;dead&quot;?&quot; ✕&quot;:&quot;&quot;;
+  return '<rect x=&quot;'+x+'&quot; y=&quot;'+y+'&quot; width=&quot;'+w+'&quot; height=&quot;'+h+'&quot; rx=&quot;8&quot; fill=&quot;#FDFDFB&quot; stroke=&quot;'+stroke+'&quot; stroke-width=&quot;'+(state?&quot;1.4&quot;:&quot;0.8&quot;)+'&quot;/>'
+    +'<text x=&quot;'+(x+w/2)+'&quot; y=&quot;'+(y+h/2)+'&quot; text-anchor=&quot;middle&quot; dominant-baseline=&quot;central&quot; font-family=&quot;IBM Plex Mono, monospace&quot; font-size=&quot;12&quot; fill=&quot;'+txt+'&quot;>'+label+mark+'</text>';
+}
+function render(){
+  var s='<defs><marker id=&quot;arrow&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;8&quot; refY=&quot;5&quot; markerWidth=&quot;6&quot; markerHeight=&quot;6&quot; orient=&quot;auto-start-reverse&quot;><path d=&quot;M2 1L8 5L2 9&quot; fill=&quot;none&quot; stroke=&quot;context-stroke&quot; stroke-width=&quot;1.5&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/></marker></defs>';
+  var wires=&quot;&quot;, boxes=&quot;&quot;, n, k;
+  var railDead=(topo===&quot;rail&quot;&amp;&amp;scen===&quot;fail&quot;), leafDead=(topo===&quot;fat&quot;&amp;&amp;scen===&quot;fail&quot;);
+  if(topo===&quot;fat&quot;){
+    var LX=[155,535], SX=[255,435];
+    for(n=0;n<4;n++){var li=n<2?0:1;
+      for(k=0;k<4;k++){
+        var j=(n%2)*4+k, ax=LX[li]+75-49+j*14;
+        var col=IDLE, w=0.8, d=false;
+        if(scen===&quot;coll&quot;&amp;&amp;k===1){col=TEAL;w=2}
+        if(scen===&quot;cross&quot;&amp;&amp;((n===0&amp;&amp;k===1)||(n===3&amp;&amp;k===3))){col=TEAL;w=2}
+        if(leafDead&amp;&amp;li===0){col=OXIDE;w=1.2;d=true}
+        wires+=line(gx(n,k),304,ax,202,col,w,d,false);
+      }
+    }
+    for(var l=0;l<2;l++)for(var sp=0;sp<2;sp++){
+      var c2=IDLE,w2=0.8,d2=false;
+      if((scen===&quot;coll&quot;||scen===&quot;cross&quot;)&amp;&amp;sp===0){c2=TEAL;w2=2}
+      if(leafDead&amp;&amp;l===0){c2=OXIDE;w2=1.2;d2=true}
+      wires+=line(LX[l]+75,160,SX[sp]+75+(l===0?-22:22),90,c2,w2,d2,false);
+    }
+    boxes+=box(SX[0],48,150,42,&quot;spine 0&quot;,(scen===&quot;coll&quot;||scen===&quot;cross&quot;)?&quot;hot&quot;:&quot;&quot;);
+    boxes+=box(SX[1],48,150,42,&quot;spine 1&quot;,&quot;&quot;);
+    boxes+=box(LX[0],160,150,42,&quot;leaf L&quot;,leafDead?&quot;dead&quot;:(scen!==&quot;fail&quot;?&quot;hot&quot;:&quot;&quot;));
+    boxes+=box(LX[1],160,150,42,&quot;leaf R&quot;,leafDead?&quot;&quot;:(scen!==&quot;fail&quot;?&quot;hot&quot;:&quot;&quot;));
+  }else{
+    var RX=[65,245,425,605];
+    for(n=0;n<4;n++)for(k=0;k<4;k++){
+      var ax2=RX[k]+70-18+n*12;
+      var c3=IDLE,w3=0.8,d3=false;
+      if(scen===&quot;coll&quot;&amp;&amp;k===1){c3=TEAL;w3=2}
+      if(scen===&quot;cross&quot;&amp;&amp;k===3&amp;&amp;(n===0||n===3)){c3=AMBER;w3=2}
+      if(railDead&amp;&amp;k===1){c3=OXIDE;w3=1.2;d3=true}
+      wires+=line(gx(n,k),304,ax2,137,c3,w3,d3,false);
+    }
+    for(k=0;k<4;k++){
+      boxes+=box(RX[k],95,140,42,&quot;rail &quot;+k,railDead&amp;&amp;k===1?&quot;dead&quot;:(scen===&quot;coll&quot;&amp;&amp;k===1?&quot;hot&quot;:&quot;&quot;));
+    }
+  }
+  var nodes=&quot;&quot;;
+  for(n=0;n<4;n++){
+    nodes+='<rect x=&quot;'+NX[n]+'&quot; y=&quot;280&quot; width=&quot;'+NW+'&quot; height=&quot;104&quot; rx=&quot;8&quot; fill=&quot;#FDFDFB&quot; stroke=&quot;#C7CEC6&quot; stroke-width=&quot;0.8&quot;/>';
+    nodes+='<text x=&quot;'+(NX[n]+NW/2)+'&quot; y=&quot;294&quot; text-anchor=&quot;middle&quot; dominant-baseline=&quot;central&quot; font-family=&quot;IBM Plex Mono, monospace&quot; font-size=&quot;11&quot; fill=&quot;#8A968E&quot;>node '+n+'</text>';
+    for(k=0;k<4;k++){
+      var fill=&quot;#F6F7F3&quot;, stroke=&quot;#C7CEC6&quot;, tcol=&quot;#4A574F&quot;, sw=0.8;
+      if(scen===&quot;coll&quot;&amp;&amp;k===1){fill=&quot;#DCEDE4&quot;;stroke=TEAL;tcol=&quot;#085041&quot;}
+      if(scen===&quot;cross&quot;){
+        var hot=(n===0&amp;&amp;k===1)||(n===3&amp;&amp;k===3);
+        var bridge=(topo===&quot;rail&quot;&amp;&amp;n===0&amp;&amp;k===3);
+        if(hot){fill=topo===&quot;fat&quot;?&quot;#DCEDE4&quot;:&quot;#F6E9CE&quot;;stroke=topo===&quot;fat&quot;?TEAL:AMBER;tcol=topo===&quot;fat&quot;?&quot;#085041&quot;:&quot;#633806&quot;}
+        if(bridge){fill=&quot;#F6E9CE&quot;;stroke=AMBER;tcol=&quot;#633806&quot;}
+      }
+      if((railDead&amp;&amp;k===1)||(leafDead&amp;&amp;n<2)){stroke=OXIDE;sw=1.5}
+      nodes+='<rect x=&quot;'+(gx(n,k)-13)+'&quot; y=&quot;304&quot; width=&quot;26&quot; height=&quot;26&quot; rx=&quot;4&quot; fill=&quot;'+fill+'&quot; stroke=&quot;'+stroke+'&quot; stroke-width=&quot;'+sw+'&quot;/>';
+      nodes+='<text x=&quot;'+gx(n,k)+'&quot; y=&quot;317&quot; text-anchor=&quot;middle&quot; dominant-baseline=&quot;central&quot; font-family=&quot;IBM Plex Mono, monospace&quot; font-size=&quot;11&quot; fill=&quot;'+tcol+'&quot;>'+k+'</text>';
+    }
+    var nvHot=(topo===&quot;rail&quot;&amp;&amp;scen===&quot;cross&quot;&amp;&amp;n===0);
+    nodes+='<rect x=&quot;'+(NX[n]+14)+'&quot; y=&quot;340&quot; width=&quot;'+(NW-28)+'&quot; height=&quot;7&quot; rx=&quot;3.5&quot; fill=&quot;'+(nvHot?&quot;#F6E9CE&quot;:&quot;#EDEFE9&quot;)+'&quot; stroke=&quot;'+(nvHot?AMBER:&quot;#DDE2DB&quot;)+'&quot; stroke-width=&quot;0.8&quot;/>';
+    nodes+='<text x=&quot;'+(NX[n]+NW/2)+'&quot; y=&quot;362&quot; text-anchor=&quot;middle&quot; dominant-baseline=&quot;central&quot; font-family=&quot;IBM Plex Mono, monospace&quot; font-size=&quot;10&quot; fill=&quot;#8A968E&quot;>nvlink</text>';
+  }
+  if(topo===&quot;rail&quot;&amp;&amp;scen===&quot;cross&quot;){
+    wires+=line(gx(0,1),343,gx(0,3)-8,343,AMBER,2,false,true);
+  }
+  document.getElementById(&quot;net&quot;).innerHTML=s+wires+boxes+nodes;
+  var fat=topo===&quot;fat&quot;;
+  document.getElementById(&quot;c1&quot;).textContent=fat?&quot;32&quot;:&quot;8&quot;;
+  document.getElementById(&quot;c2&quot;).textContent=fat?&quot;1,024&quot;:&quot;512&quot;;
+  var c3el=document.getElementById(&quot;c3&quot;);
+  c3el.textContent=fat?&quot;full rate&quot;:&quot;nvlink detour&quot;;
+  c3el.className=&quot;v&quot;+(fat?&quot;&quot;:&quot; bad&quot;);
+  var c4el=document.getElementById(&quot;c4&quot;);
+  c4el.textContent=fat?&quot;nodes under 1 leaf&quot;:&quot;one rank, all nodes&quot;;
+  c4el.className=&quot;v&quot;+(fat?&quot;&quot;:&quot; bad&quot;);
+  var M={
+    &quot;fat coll&quot;:&quot;One rank ring shown (rank 1): same-rank GPUs climb to their leaf, cross one spine, come back down — full rate, paid for with an entire spine tier.&quot;,
+    &quot;rail coll&quot;:&quot;Rank-1 traffic never leaves rail 1: every rank ring is one hop on its own dedicated switch. Same delivered speed as the fat-tree — with no spine tier to buy.&quot;,
+    &quot;fat cross&quot;:&quot;GPU 1 on node 0 reaches GPU 3 on node 3 directly: leaf, spine, leaf, full rate. The fat-tree makes no assumptions about who talks to whom.&quot;,
+    &quot;rail cross&quot;:&quot;Rails don't interconnect. Traffic first hops the NVLink bridge inside node 0 to borrow a rail-3 port, then rides rail 3 across — a detour that spends NVLink bandwidth the collectives also need.&quot;,
+    &quot;fat fail&quot;:&quot;Leaf L dies: nodes 0 and 1 drop off; nodes 2 and 3 run untouched. Deep but narrow. A spine death is gentler still — capacity dips, nothing disconnects.&quot;,
+    &quot;rail fail&quot;:&quot;Rail 1 dies: every node loses its rank-1 port at the same instant. No node is down — but every multi-node job striped across rail 1 stalls. One box, cluster-wide bite.&quot;
+  };
+  document.getElementById(&quot;st&quot;).textContent=M[topo+&quot; &quot;+scen];
+}
+rebuild();
+</script>
+</body>
+</html>
+" title="The two trees" scrolling="no"></iframe></section><section id="i05"><iframe srcdoc="<!DOCTYPE html>
+<html lang=&quot;en&quot;>
+<head>
+<meta charset=&quot;utf-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;>
 <title>SLA anatomy — what the nines actually pay</title>
 <link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;>
 <link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin>
@@ -667,7 +873,7 @@ input[type=range]{width:100%;accent-color:var(--teal);height:22px}
 </head>
 <body>
 <div class=&quot;wrap&quot;>
-  <p class=&quot;eyebrow&quot;>Compute desk · instrument 04</p>
+  <p class=&quot;eyebrow&quot;>Compute desk · instrument 05</p>
   <h1>SLA anatomy</h1>
   <p class=&quot;dek&quot;>A service-level agreement is an insurance contract, so read it like one: what counts as a claim, over what window it's measured, and what's excluded. The nines on the cover page are marketing; the value lives in three clauses. Stage a month's worth of failures below and see what the paper actually pays.</p>
 
@@ -706,7 +912,7 @@ input[type=range]{width:100%;accent-color:var(--teal);height:22px}
     <div class=&quot;ask&quot;><b>Ask the supplier</b>Forget credits: what's your committed time-to-replace on a failed node, do you hold hot spares against my cluster, and do I get termination rights on chronic breach?</div>
     <p>Model is illustrative: 730-hour month, $2.50/GPU-hr contract rate, credits computed as tier % of monthly fees, node failures spread evenly across the window. Tier schedules are representative of published cloud SLAs (10% / 25% / 100% escalation; 99.99% commitments add a 30–50% band). The true downstream cost of an outage — churn, breached customer SLAs, engineering time — is what the multiplier slider approximates, and it is almost always the biggest number on this page.</p>
   </div>
-  <p class=&quot;foot&quot;>companion to instruments 01–03 · tier schedules representative of published cloud SLAs · Llama 3 failure data: Meta, &quot;The Llama 3 Herd of Models&quot; (2024) · compiled July 2026</p>
+  <p class=&quot;foot&quot;>companion to instruments 01–04 · tier schedules representative of published cloud SLAs · Llama 3 failure data: Meta, &quot;The Llama 3 Herd of Models&quot; (2024) · compiled July 2026</p>
 </div>
 
 <script>
@@ -792,7 +998,7 @@ rebuild();
 </script>
 </body>
 </html>
-" title="SLA anatomy" scrolling="no"></iframe></section><p class="colophon">the compute desk · four instruments, one document · load-duration &amp; newsvendor framing after Modal, &ldquo;How to price serverless&rdquo; · compiled July 2026</p><script>
+" title="SLA anatomy" scrolling="no"></iframe></section><p class="colophon">the compute desk · five instruments, one document · load-duration &amp; newsvendor framing after Modal, &ldquo;How to price serverless&rdquo; · compiled July 2026</p><script>
 function fit(f){try{var d=f.contentDocument;if(!d||!d.documentElement)return;
 var h=d.documentElement.scrollHeight+2;
 var cur=parseFloat(f.style.height)||0;
