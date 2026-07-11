@@ -2,7 +2,7 @@
 
 Five interactive instruments on the economics of GPU procurement, built as self-contained HTML.
 
-**Live:** https://YOURUSERNAME.github.io/compute-desk/
+**Live:** https://alexkyen.github.io/compute-desk/
 
 ## The instruments
 
