@@ -15,7 +15,7 @@ OUT = SRC / "compute-desk.html"
 INSTRUMENTS = [
     ("gpu-supply-book.html", "i01", "01", "The supply book"),
     ("silicon-ladder.html",  "i02", "02", "The silicon ladder"),
-    ("the-fabric.html",      "i03", "03", "The fabric"),
+    ("the-fabric.html",      "i03", "03", "The fabric tax"),
     ("the-two-trees.html",  "i04", "04", "The two trees"),
     ("sla-anatomy.html",     "i05", "05", "SLA anatomy"),
 ]
@@ -104,7 +104,6 @@ def build():
         "i03": "what the wiring does to the price",
         "i04": "why rails are cheap, and what they cost",
         "i05": "what the paper actually protects",
-        "i05": "why rails are cheap, and what they cost",
     }
 
     parts.append('<div class="cover">')

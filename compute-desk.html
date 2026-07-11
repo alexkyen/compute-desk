@@ -41,7 +41,7 @@ font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.03em;l
 </style>
 </head>
 <body>
-<nav class="nav"><a data-target="i01" role="link" tabindex="0"><b>01</b> The supply book</a><a data-target="i02" role="link" tabindex="0"><b>02</b> The silicon ladder</a><a data-target="i03" role="link" tabindex="0"><b>03</b> The fabric</a><a data-target="i04" role="link" tabindex="0"><b>04</b> The two trees</a><a data-target="i05" role="link" tabindex="0"><b>05</b> SLA anatomy</a></nav><div class="cover"><p class="eyebrow">Compute desk</p><h1>A buyer&rsquo;s field manual for GPUs</h1><p class="dek">Five interactive instruments on the economics of GPU procurement: how much capacity to commit and at what duration, what each silicon generation is actually worth, what cluster wiring does to effective price, and what an SLA does and does not protect. Every instrument ends where a buyer should: with the questions to ask a supplier.</p><div class="toc"><a data-target="i01" role="link" tabindex="0"><span class="n">01</span><span class="t">The supply book</span><span class="d">how much capacity to commit</span></a><a data-target="i02" role="link" tabindex="0"><span class="n">02</span><span class="t">The silicon ladder</span><span class="d">what you are buying, and its clock</span></a><a data-target="i03" role="link" tabindex="0"><span class="n">03</span><span class="t">The fabric</span><span class="d">what the wiring does to the price</span></a><a data-target="i04" role="link" tabindex="0"><span class="n">04</span><span class="t">The two trees</span><span class="d">why rails are cheap, and what they cost</span></a><a data-target="i05" role="link" tabindex="0"><span class="n">05</span><span class="t">SLA anatomy</span><span class="d">why rails are cheap, and what they cost</span></a></div></div><section id="i01"><iframe srcdoc="<!DOCTYPE html>
+<nav class="nav"><a data-target="i01" role="link" tabindex="0"><b>01</b> The supply book</a><a data-target="i02" role="link" tabindex="0"><b>02</b> The silicon ladder</a><a data-target="i03" role="link" tabindex="0"><b>03</b> The fabric tax</a><a data-target="i04" role="link" tabindex="0"><b>04</b> The two trees</a><a data-target="i05" role="link" tabindex="0"><b>05</b> SLA anatomy</a></nav><div class="cover"><p class="eyebrow">Compute desk</p><h1>A buyer&rsquo;s field manual for GPUs</h1><p class="dek">Five interactive instruments on the economics of GPU procurement: how much capacity to commit and at what duration, what each silicon generation is actually worth, what cluster wiring does to effective price, and what an SLA does and does not protect. Every instrument ends where a buyer should: with the questions to ask a supplier.</p><div class="toc"><a data-target="i01" role="link" tabindex="0"><span class="n">01</span><span class="t">The supply book</span><span class="d">how much capacity to commit</span></a><a data-target="i02" role="link" tabindex="0"><span class="n">02</span><span class="t">The silicon ladder</span><span class="d">what you are buying, and its clock</span></a><a data-target="i03" role="link" tabindex="0"><span class="n">03</span><span class="t">The fabric tax</span><span class="d">what the wiring does to the price</span></a><a data-target="i04" role="link" tabindex="0"><span class="n">04</span><span class="t">The two trees</span><span class="d">why rails are cheap, and what they cost</span></a><a data-target="i05" role="link" tabindex="0"><span class="n">05</span><span class="t">SLA anatomy</span><span class="d">what the paper actually protects</span></a></div></div><section id="i01"><iframe srcdoc="<!DOCTYPE html>
 <html lang=&quot;en&quot;>
 <head>
 <meta charset=&quot;utf-8&quot;>
@@ -423,7 +423,7 @@ buildMetrics();buildRows();render();
 <head>
 <meta charset=&quot;utf-8&quot;>
 <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;>
-<title>The fabric — what wiring does to a GPU-hour</title>
+<title>The fabric tax — what wiring does to a GPU-hour</title>
 <link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;>
 <link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin>
 <link href=&quot;https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;display=swap&quot; rel=&quot;stylesheet&quot;>
@@ -475,7 +475,7 @@ input:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 <body>
 <div class=&quot;wrap&quot;>
   <p class=&quot;eyebrow&quot;>Compute desk · instrument 03</p>
-  <h1>The fabric</h1>
+  <h1>The fabric tax</h1>
   <p class=&quot;dek&quot;>&quot;1,024 H100s&quot; is not a spec — it's a rumor until you know how they're wired. This is a 128-GPU cluster: four racks under four leaf switches under a spine. Choose the protocol, the oversubscription, and where the job lands, and watch the same silicon change price.</p>
 
   <div class=&quot;card&quot;>
@@ -608,7 +608,7 @@ rebuild();
 </script>
 </body>
 </html>
-" title="The fabric" scrolling="no"></iframe></section><section id="i04"><iframe srcdoc="<!DOCTYPE html>
+" title="The fabric tax" scrolling="no"></iframe></section><section id="i04"><iframe srcdoc="<!DOCTYPE html>
 <html lang=&quot;en&quot;>
 <head>
 <meta charset=&quot;utf-8&quot;>
@@ -697,7 +697,7 @@ svg{display:block;width:100%;height:auto;user-select:none}
     <div class=&quot;ask&quot;><b>Ask the supplier</b>If it's rails: is the scheduler rail-aware, what's the NCCL configuration, and what are your measured numbers for all-to-all — not just all-reduce — at my job size?</div>
     <p>The toy cluster shows one rank ring and one cross-rank pair so the wiring stays readable; in reality all rings run concurrently and NCCL juggles them. Counts assume 64-port switches, one NIC per GPU, 1:1 within each tree. Structure of the argument is unchanged at real scale.</p>
   </div>
-  <p class=&quot;foot&quot;>continues instrument 03, the fabric · counts illustrative at 512 GPUs, 64-port switches · compiled July 2026</p>
+  <p class=&quot;foot&quot;>continues instrument 03, the fabric tax · counts illustrative at 512 GPUs, 64-port switches · compiled July 2026</p>
 </div>
 
 <script>
