@@ -2,9 +2,10 @@
 """Consolidate the compute-desk instruments into the site's index.html.
 
 Usage: python3 consolidate.py
-Add a future instrument by appending one (filename, anchor, label, title,
-description) tuple to INSTRUMENTS and rerunning. Source files are embedded as
-isolated srcdoc iframes, so their scripts and element IDs never collide.
+Add or reorder instruments by editing the (filename, title, description) tuples
+in INSTRUMENTS — position in the list IS the instrument's number; anchors and
+labels are derived from it. Source files are embedded as isolated srcdoc
+iframes, so their scripts and element IDs never collide.
 
 The output IS index.html — GitHub Pages serves it at the repo root. The
 individual instrument files remain directly linkable alongside it.
@@ -16,12 +17,12 @@ SRC = pathlib.Path(__file__).resolve().parent
 OUT = SRC / "index.html"
 
 INSTRUMENTS = [
-    ("gpu-supply-book.html",   "i01", "01", "The supply book",    "how much capacity to commit"),
-    ("silicon-ladder.html",    "i02", "02", "The silicon ladder", "what you are buying, and its clock"),
-    ("the-fabric.html",        "i03", "03", "The fabric tax",     "what the wiring does to the price"),
-    ("the-two-trees.html",     "i04", "04", "The two trees",      "why rails are cheap, and what they cost"),
-    ("sla-anatomy.html",       "i05", "05", "SLA anatomy",        "what the paper actually protects"),
-    ("the-atlas-scatter.html", "i06", "06", "The atlas",          "the sellers, priced and plotted"),
+    ("the-atlas-scatter.html", "The atlas",          "the sellers, priced and plotted"),
+    ("gpu-supply-book.html",   "The supply book",    "how much capacity to commit"),
+    ("silicon-ladder.html",    "The silicon ladder", "what you are buying, and its clock"),
+    ("the-fabric.html",        "The fabric tax",     "what the wiring does to the price"),
+    ("the-two-trees.html",     "The two trees",      "why rails are cheap, and what they cost"),
+    ("sla-anatomy.html",       "SLA anatomy",        "what the paper actually protects"),
 ]
 
 NUMBER_WORDS = {3: "Three", 4: "Four", 5: "Five", 6: "Six", 7: "Seven",
@@ -100,10 +101,12 @@ document.querySelectorAll("[data-target]").forEach(function(a){
 def build():
     n = len(INSTRUMENTS)
     word = NUMBER_WORDS.get(n, str(n))
+    rows = [("i%02d" % i, "%02d" % i, title, desc, fname)
+            for i, (fname, title, desc) in enumerate(INSTRUMENTS, 1)]
     parts = [HEAD]
 
     parts.append('<nav class="nav">')
-    for _, anchor, num, title, _desc in INSTRUMENTS:
+    for anchor, num, title, _desc, _fname in rows:
         parts.append('<a data-target="%s" role="link" tabindex="0"><b>%s</b> %s</a>' % (anchor, num, html.escape(title)))
     parts.append("</nav>")
 
@@ -111,19 +114,20 @@ def build():
     parts.append('<p class="eyebrow">Compute desk</p>')
     parts.append("<h1>A buyer&rsquo;s field manual for GPUs</h1>")
     parts.append('<p class="dek">%s interactive instruments on the economics of GPU procurement: '
-                 "how much capacity to commit and at what duration, what each silicon generation is "
-                 "actually worth, what cluster wiring does to effective price, what an SLA "
-                 "does and does not protect, and where every seller&rsquo;s price actually prints. "
+                 "where every seller&rsquo;s price actually prints, how much capacity to commit "
+                 "and at what duration, what each silicon generation is "
+                 "actually worth, what cluster wiring does to effective price, and what an SLA "
+                 "does and does not protect. "
                  "Every instrument ends where a buyer should: with the "
                  "questions to ask a supplier.</p>" % word)
     parts.append('<div class="toc">')
-    for _, anchor, num, title, desc in INSTRUMENTS:
+    for anchor, num, title, desc, _fname in rows:
         parts.append('<a data-target="%s" role="link" tabindex="0"><span class="n">%s</span><span class="t">%s</span>'
                      '<span class="d">%s</span></a>'
                      % (anchor, num, html.escape(title), html.escape(desc)))
     parts.append("</div></div>")
 
-    for fname, anchor, num, title, _desc in INSTRUMENTS:
+    for anchor, _num, title, _desc, fname in rows:
         doc = (SRC / fname).read_text(encoding="utf-8")
         escaped = doc.replace("&", "&amp;").replace('"', "&quot;")
         parts.append('<section id="%s"><iframe srcdoc="%s" title="%s" scrolling="no"></iframe></section>'
