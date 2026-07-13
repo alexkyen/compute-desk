@@ -41,7 +41,7 @@ font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.03em;l
 </style>
 </head>
 <body>
-<nav class="nav"><a data-target="i01" role="link" tabindex="0"><b>01</b> The supply book</a><a data-target="i02" role="link" tabindex="0"><b>02</b> The silicon ladder</a><a data-target="i03" role="link" tabindex="0"><b>03</b> The fabric tax</a><a data-target="i04" role="link" tabindex="0"><b>04</b> The two trees</a><a data-target="i05" role="link" tabindex="0"><b>05</b> SLA anatomy</a></nav><div class="cover"><p class="eyebrow">Compute desk</p><h1>A buyer&rsquo;s field manual for GPUs</h1><p class="dek">Five interactive instruments on the economics of GPU procurement: how much capacity to commit and at what duration, what each silicon generation is actually worth, what cluster wiring does to effective price, and what an SLA does and does not protect. Every instrument ends where a buyer should: with the questions to ask a supplier.</p><div class="toc"><a data-target="i01" role="link" tabindex="0"><span class="n">01</span><span class="t">The supply book</span><span class="d">how much capacity to commit</span></a><a data-target="i02" role="link" tabindex="0"><span class="n">02</span><span class="t">The silicon ladder</span><span class="d">what you are buying, and its clock</span></a><a data-target="i03" role="link" tabindex="0"><span class="n">03</span><span class="t">The fabric tax</span><span class="d">what the wiring does to the price</span></a><a data-target="i04" role="link" tabindex="0"><span class="n">04</span><span class="t">The two trees</span><span class="d">why rails are cheap, and what they cost</span></a><a data-target="i05" role="link" tabindex="0"><span class="n">05</span><span class="t">SLA anatomy</span><span class="d">what the paper actually protects</span></a></div></div><section id="i01"><iframe srcdoc="<!DOCTYPE html>
+<nav class="nav"><a data-target="i01" role="link" tabindex="0"><b>01</b> The supply book</a><a data-target="i02" role="link" tabindex="0"><b>02</b> The silicon ladder</a><a data-target="i03" role="link" tabindex="0"><b>03</b> The fabric tax</a><a data-target="i04" role="link" tabindex="0"><b>04</b> The two trees</a><a data-target="i05" role="link" tabindex="0"><b>05</b> SLA anatomy</a><a data-target="i06" role="link" tabindex="0"><b>06</b> The atlas</a></nav><div class="cover"><p class="eyebrow">Compute desk</p><h1>A buyer&rsquo;s field manual for GPUs</h1><p class="dek">Six interactive instruments on the economics of GPU procurement: how much capacity to commit and at what duration, what each silicon generation is actually worth, what cluster wiring does to effective price, what an SLA does and does not protect, and where every seller&rsquo;s price actually prints. Every instrument ends where a buyer should: with the questions to ask a supplier.</p><div class="toc"><a data-target="i01" role="link" tabindex="0"><span class="n">01</span><span class="t">The supply book</span><span class="d">how much capacity to commit</span></a><a data-target="i02" role="link" tabindex="0"><span class="n">02</span><span class="t">The silicon ladder</span><span class="d">what you are buying, and its clock</span></a><a data-target="i03" role="link" tabindex="0"><span class="n">03</span><span class="t">The fabric tax</span><span class="d">what the wiring does to the price</span></a><a data-target="i04" role="link" tabindex="0"><span class="n">04</span><span class="t">The two trees</span><span class="d">why rails are cheap, and what they cost</span></a><a data-target="i05" role="link" tabindex="0"><span class="n">05</span><span class="t">SLA anatomy</span><span class="d">what the paper actually protects</span></a><a data-target="i06" role="link" tabindex="0"><span class="n">06</span><span class="t">The atlas</span><span class="d">the sellers, priced and plotted</span></a></div></div><section id="i01"><iframe srcdoc="<!DOCTYPE html>
 <html lang=&quot;en&quot;>
 <head>
 <meta charset=&quot;utf-8&quot;>
@@ -998,7 +998,525 @@ rebuild();
 </script>
 </body>
 </html>
-" title="SLA anatomy" scrolling="no"></iframe></section><p class="colophon">the compute desk · five instruments, one document · load-duration &amp; newsvendor framing after Modal, &ldquo;How to price serverless&rdquo; · compiled July 2026</p><script>
+" title="SLA anatomy" scrolling="no"></iframe></section><section id="i06"><iframe srcdoc="<!DOCTYPE html>
+<html lang=&quot;en&quot;>
+<head>
+<meta charset=&quot;utf-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;>
+<title>The atlas — scatter view — the GPU market as a field of prints</title>
+<link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;>
+<link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin>
+<link href=&quot;https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;display=swap&quot; rel=&quot;stylesheet&quot;>
+<style>
+:root{
+  --paper:#F6F7F3; --panel:#FDFDFB; --ink:#15201A; --ink-2:#4A574F; --ink-3:#8A968E;
+  --rule:#DDE2DB; --teal:#117758; --teal-dim:#DCEDE4; --amber:#D98F12; --amber-dim:#F6E9CE;
+  --oxide:#A63B26; --oxide-dim:#F3E2DC; --pale:#EFF3EC;
+  --mono:&quot;IBM Plex Mono&quot;,ui-monospace,monospace; --serif:&quot;Newsreader&quot;,Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--paper)}
+body{font-family:var(--serif);color:var(--ink);line-height:1.6;padding:48px 20px 72px}
+.wrap{max-width:1020px;margin:0 auto}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(34px,5.5vw,52px);line-height:1.05;margin:10px 0 14px;letter-spacing:-.01em}
+.dek{font-size:18px;color:var(--ink-2);max-width:66ch;margin-bottom:8px}
+.provenance{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:28px}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:22px 24px;margin-bottom:18px}
+.controls{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;margin-bottom:6px}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button,button.rst{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);background:transparent;border:1px solid var(--rule);border-radius:6px;padding:7px 12px;cursor:pointer}
+.seg button:hover,button.rst:hover{border-color:var(--teal);color:var(--teal)}
+.seg button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.hint{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);margin-left:auto}
+.sellers{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0 12px}
+.sellers button{font-family:var(--mono);font-size:10.5px;color:var(--ink-2);background:transparent;border:1px solid var(--rule);border-radius:6px;padding:4px 9px;cursor:pointer}
+.sellers button:hover{border-color:var(--teal);color:var(--teal)}
+.sellers button.on{color:#fff}
+.sellers button.on.hyp{background:var(--oxide);border-color:var(--oxide)}
+.sellers button.on.neo{background:var(--teal);border-color:var(--teal)}
+.sellers button.on.mkt{background:var(--amber);border-color:var(--amber)}
+.sellers button.hyp{border-left:3px solid var(--oxide)}
+.sellers button.neo{border-left:3px solid var(--teal)}
+.sellers button.mkt{border-left:3px solid var(--amber)}
+.cwrap{overflow-x:auto;border:1px solid var(--rule);border-radius:8px;background:var(--panel)}
+.cwrap svg{display:block;min-width:920px;width:100%;height:auto}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-family:var(--mono);font-size:10.5px;color:var(--ink-2);margin-top:12px;align-items:center}
+.legend svg{vertical-align:-3px;margin-right:4px}
+#tip{position:fixed;pointer-events:none;display:none;z-index:9;max-width:340px;background:var(--ink);color:#F2F5F0;font-family:var(--mono);font-size:11px;line-height:1.5;border-radius:6px;padding:8px 11px;box-shadow:0 3px 14px rgba(21,32,26,.25)}
+#tip b{color:#fff;font-weight:500}
+#tip em{font-style:normal;color:#B9C6BD;display:block;font-size:10.5px}
+.dossier{display:none}
+.dossier.open{display:block}
+.dh{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin-bottom:10px}
+.dh h2{font-family:var(--serif);font-style:italic;font-weight:400;font-size:26px}
+.badge{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--rule);border-radius:4px;padding:3px 8px;color:var(--ink-2)}
+.badge.hot{border-color:var(--oxide);color:var(--oxide)}
+.badge.good{border-color:var(--teal);color:var(--teal)}
+.drow{font-size:14.5px;color:var(--ink-2);margin-bottom:8px;max-width:78ch}
+.drow b{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:500;display:inline-block;min-width:86px}
+.flags{margin:10px 0 12px}
+.flag{font-size:13.5px;color:var(--ink-2);padding-left:14px;position:relative;max-width:78ch;margin-bottom:4px}
+.flag:before{content:&quot;·&quot;;position:absolute;left:2px;color:var(--oxide);font-weight:700}
+.ask{font-family:var(--mono);font-size:12.5px;background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:11px 14px;margin:12px 0;color:var(--ink);max-width:80ch}
+.ask b{font-weight:500;letter-spacing:.08em;font-size:9.5px;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:3px}
+details{max-width:78ch;margin-top:8px}
+summary{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);cursor:pointer}
+details p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
+.notes{margin-top:48px;border-top:1px solid var(--rule);padding-top:28px}
+.notes h2{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;margin-bottom:16px}
+.notes p{max-width:68ch;margin-bottom:13px;color:var(--ink-2)}
+.notes p strong{color:var(--ink);font-weight:500}
+.foot{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:40px;letter-spacing:.03em}
+</style>
+</head>
+<body>
+<div class=&quot;wrap&quot;>
+  <p class=&quot;eyebrow&quot;>Compute desk · the atlas · scatter view</p>
+  <h1>The atlas</h1>
+  <p class=&quot;dek&quot;>The same twelve sellers, eleven accelerators, and three channels as the matrix — plotted instead of tabled. Every public price is a point; every gated cell is an <span style=&quot;font-family:var(--mono);color:var(--ink-3)&quot;>×</span> along the top. The vertical axis is log-scale, so equal distances are equal ratios: the hyperscaler-to-marketplace gap reads as a constant band, not a squashed tail. Pick a seller to trace their curve across generations; hover anything for its provenance.</p>
+  <p class=&quot;provenance&quot;>compiled july 2026 from public rate cards, filings, and deal reporting · estimates marked · prices are perishable</p>
+
+  <div class=&quot;card&quot;>
+    <div class=&quot;controls&quot;>
+      <div class=&quot;seg&quot; id=&quot;ch&quot;></div>
+      <button class=&quot;rst&quot; id=&quot;rst&quot;>clear selection</button>
+      <span class=&quot;hint&quot;>click a point or a seller → trace + file · hover → source</span>
+    </div>
+    <div class=&quot;sellers&quot; id=&quot;sellers&quot;></div>
+    <div class=&quot;cwrap&quot;><svg id=&quot;sc&quot; viewBox=&quot;0 0 1000 600&quot; role=&quot;img&quot; aria-label=&quot;Scatter map of GPU rental prices: silicon generation across the horizontal axis, dollars per GPU hour on a log vertical axis, one point per seller, channel and print&quot;></svg></div>
+    <div class=&quot;legend&quot;>
+      <span><svg width=&quot;14&quot; height=&quot;12&quot;><circle cx=&quot;7&quot; cy=&quot;6&quot; r=&quot;5&quot; fill=&quot;#4A574F&quot;/></svg>on-demand list</span>
+      <span><svg width=&quot;14&quot; height=&quot;12&quot;><circle cx=&quot;7&quot; cy=&quot;6&quot; r=&quot;4.5&quot; fill=&quot;none&quot; stroke=&quot;#4A574F&quot; stroke-width=&quot;2&quot;/></svg>committed / deal print</span>
+      <span><svg width=&quot;14&quot; height=&quot;12&quot;><rect x=&quot;3&quot; y=&quot;2&quot; width=&quot;8&quot; height=&quot;8&quot; transform=&quot;rotate(45 7 6)&quot; fill=&quot;#4A574F&quot;/></svg>spot / interruptible</span>
+      <span style=&quot;color:var(--oxide)&quot;>■</span><span style=&quot;margin-left:-13px&quot;>hyperscaler</span>
+      <span style=&quot;color:var(--teal)&quot;>■</span><span style=&quot;margin-left:-13px&quot;>neocloud</span>
+      <span style=&quot;color:var(--amber)&quot;>■</span><span style=&quot;margin-left:-13px&quot;>marketplace</span>
+      <span style=&quot;font-family:var(--mono);color:var(--ink-3)&quot;>×</span><span style=&quot;margin-left:-13px&quot;>sold but gated — no public price</span>
+      <span>│ = published range</span>
+      <span>USD/GPU-hr, log scale</span>
+    </div>
+  </div>
+
+  <div class=&quot;card dossier&quot; id=&quot;dossier&quot;></div>
+
+  <div class=&quot;notes&quot;>
+    <h2>How to read the field</h2>
+    <p><strong>The log axis is the point of this view.</strong> On a linear axis, the difference between $1.50 and $3 disappears next to the difference between $10 and $12 — but to a buyer they are the same event: a 2× spread. Log scale makes ratios distances, so the three archetype bands sit at roughly constant heights across generations: marketplaces at the floor, neoclouds in a tight middle band, hyperscaler list floating 2–6× above it for identical silicon. The matrix tells you a number; this view tells you which band a number belongs to.</p>
+    <p><strong>The wall of ×.</strong> Points thin out and × marks thicken as you move right — that gradient is the market's defining fact in one glance. Hopper is a market; Blackwell is an allocation; the rack-scale rows and alt silicon are almost pure ×. In the matrix this reads as a region of italic <em>quote</em> cells; here it reads as the field literally emptying out.</p>
+    <p><strong>Tracing a seller</strong> draws their curve per channel across generations — solid through on-demand, dashed through committed, dotted through spot. The vertical gap between a seller's solid and dashed lines is their negotiation spread made visible: OCI's list-to-deal gap is a canyon, Nebius's is a step. A seller whose trace simply stops at H200 has nothing public beyond Hopper — which is itself a fact about how they sell.</p>
+    <p><strong>What this view is worse at.</strong> The matrix is the better lookup device — if you know the seller and the chip, the cell is faster than the field, and quote-cell nuance (&quot;on card&quot;, &quot;roadmap&quot;, &quot;pre-alloc&quot;) survives only in the × tooltips here. Ranges compress to midpoints with a whisker. Treat the two as companions: the field for shape and negotiation, the board for the actual number you put in a model.</p>
+    <p><strong>Provenance travels with every mark.</strong> Same grades as the matrix — <em>list</em>, <em>mkt</em>, <em>deal</em>, <em>est</em> — carried in each tooltip with its date. The shape of this field decays in months, the numbers in weeks.</p>
+  </div>
+  <p class=&quot;foot&quot;>sources: provider rate cards and docs · SEC filings and earnings (Q1–Q2 2026) · deal reporting · provider dossiers (Jul 2026) · companion to the matrix atlas, the sellers deck and the compute desk · IREN omitted: nothing to sell</p>
+</div>
+<div id=&quot;tip&quot;></div>
+
+<script>
+var PROV=[
+ {id:&quot;aws&quot;,ab:&quot;AWS&quot;,name:&quot;AWS&quot;,band:&quot;Hyperscalers&quot;,g:&quot;hyp&quot;,arch:&quot;hyperscaler&quot;},
+ {id:&quot;azr&quot;,ab:&quot;AZR&quot;,name:&quot;Microsoft Azure&quot;,band:&quot;Hyperscalers&quot;,g:&quot;hyp&quot;,arch:&quot;hyperscaler&quot;},
+ {id:&quot;gcp&quot;,ab:&quot;GCP&quot;,name:&quot;Google Cloud&quot;,band:&quot;Hyperscalers&quot;,g:&quot;hyp&quot;,arch:&quot;hyperscaler&quot;},
+ {id:&quot;oci&quot;,ab:&quot;OCI&quot;,name:&quot;Oracle (OCI)&quot;,band:&quot;Hyperscalers&quot;,g:&quot;hyp&quot;,arch:&quot;levered hyperscaler&quot;},
+ {id:&quot;crw&quot;,ab:&quot;CRW&quot;,name:&quot;CoreWeave&quot;,band:&quot;Neoclouds&quot;,g:&quot;neo&quot;,arch:&quot;public neocloud&quot;},
+ {id:&quot;neb&quot;,ab:&quot;NEB&quot;,name:&quot;Nebius&quot;,band:&quot;Neoclouds&quot;,g:&quot;neo&quot;,arch:&quot;public neocloud&quot;},
+ {id:&quot;lmb&quot;,ab:&quot;LMB&quot;,name:&quot;Lambda&quot;,band:&quot;Neoclouds&quot;,g:&quot;neo&quot;,arch:&quot;private neocloud&quot;},
+ {id:&quot;cru&quot;,ab:&quot;CRU&quot;,name:&quot;Crusoe&quot;,band:&quot;Neoclouds&quot;,g:&quot;neo&quot;,arch:&quot;energy-first builder&quot;},
+ {id:&quot;fld&quot;,ab:&quot;FLD&quot;,name:&quot;Fluidstack&quot;,band:&quot;Neoclouds&quot;,g:&quot;neo&quot;,arch:&quot;aggregator-utility&quot;},
+ {id:&quot;nsc&quot;,ab:&quot;NSC&quot;,name:&quot;Nscale&quot;,band:&quot;Neoclouds&quot;,g:&quot;neo&quot;,arch:&quot;sovereign wholesale&quot;},
+ {id:&quot;sfc&quot;,ab:&quot;SFC&quot;,name:&quot;SF Compute&quot;,band:&quot;Marketplaces&quot;,g:&quot;mkt&quot;,arch:&quot;cluster spot market&quot;},
+ {id:&quot;vst&quot;,ab:&quot;VST&quot;,name:&quot;Vast.ai&quot;,band:&quot;Marketplaces&quot;,g:&quot;mkt&quot;,arch:&quot;p2p marketplace&quot;}
+];
+var SKUS=[
+ {id:&quot;gb300&quot;,l:&quot;GB300 NVL72&quot;,s:&quot;Blackwell Ultra rack&quot;},
+ {id:&quot;gb200&quot;,l:&quot;GB200 NVL72&quot;,s:&quot;Blackwell rack&quot;},
+ {id:&quot;b300&quot;,l:&quot;B300&quot;,s:&quot;HGX 8-GPU&quot;},
+ {id:&quot;b200&quot;,l:&quot;B200&quot;,s:&quot;HGX 8-GPU&quot;},
+ {id:&quot;h200&quot;,l:&quot;H200&quot;,s:&quot;SXM 141GB&quot;},
+ {id:&quot;h100&quot;,l:&quot;H100&quot;,s:&quot;SXM 80GB&quot;},
+ {id:&quot;a100&quot;,l:&quot;A100&quot;,s:&quot;80GB class&quot;},
+ {id:&quot;l40s&quot;,l:&quot;L40S / RTX&quot;,s:&quot;inference class&quot;},
+ {id:&quot;mi&quot;,l:&quot;MI300X / 355X&quot;,s:&quot;AMD Instinct&quot;},
+ {id:&quot;tpu&quot;,l:&quot;TPU v6e / v7&quot;,s:&quot;Trillium / Ironwood&quot;},
+ {id:&quot;trn&quot;,l:&quot;Trainium 2/3&quot;,s:&quot;AWS custom&quot;}
+];
+// cell: v=display, n=numeric midpoint, s: p=priced q=gated n=not offered, t=tooltip
+function P(v,n,t){return{v:v,n:n,s:&quot;p&quot;,t:t}}
+function Q(v,t){return{v:v||&quot;quote&quot;,s:&quot;q&quot;,t:t}}
+var N={s:&quot;n&quot;};
+var D={
+ gb300:{aws:Q(&quot;quote&quot;,&quot;P6e-GB300 UltraServers GA Dec 2025 · price not public · list absent&quot;),azr:Q(&quot;quote&quot;,&quot;ND GB300 v7 · first 4,608-GPU cluster Oct 2025 · negotiated&quot;),gcp:Q(&quot;quote&quot;,&quot;A4X Max · committed deals dominate&quot;),oci:Q(&quot;quote&quot;,&quot;GB300 in deployment · queued allocation&quot;),crw:Q(&quot;quote&quot;,&quot;first GB300 NVL72 deploy Jul 2025 · contract-only&quot;),neb:Q(&quot;quote&quot;,&quot;GB300 Exemplar Cloud for training · by contact&quot;),lmb:Q(&quot;quote&quot;,&quot;single-tenant GB300 NVL72 clusters incl. hydrogen-powered ECL site · negotiated&quot;),cru:N,fld:Q(&quot;pre-alloc&quot;,&quot;frontier custom builds 100% pre-allocated to anchor (Anthropic)&quot;),nsc:Q(&quot;quote&quot;,&quot;building GB300/Rubin for Microsoft and OpenAI · wholesale&quot;),sfc:N,vst:N},
+ gb200:{aws:P(&quot;10.58&quot;,10.58,&quot;Capacity Block per-GPU · Dallas Local Zone only · AWS list · Jul 26&quot;),azr:Q(&quot;quote&quot;,&quot;ND GB200 v6 · oft-cited figure implies low-teens $/GPU-hr · low confidence&quot;),gcp:Q(&quot;quote&quot;,&quot;A4X · allocation-request via sales/DWS&quot;),oci:Q(&quot;quote&quot;,&quot;GB200 NVL72 racks · quote-only at cluster scale&quot;),crw:Q(&quot;quote&quot;,&quot;sold as 2-superchip instances · GPU pricing reserved for inference-platform customers&quot;),neb:Q(&quot;quote&quot;,&quot;GB200 NVL72 by contact · Nebius card · Jun 26&quot;),lmb:Q(&quot;quote&quot;,&quot;frontier tier negotiated&quot;),cru:Q(&quot;quote&quot;,&quot;sales-gated, limited availability&quot;),fld:Q(&quot;quote&quot;,&quot;bespoke clusters via partner DCs&quot;),nsc:Q(&quot;quote&quot;,&quot;wholesale only&quot;),sfc:N,vst:N},
+ b300:{aws:P(&quot;11.70&quot;,11.70,&quot;Capacity Block per-GPU · AWS list · Jul 26 · reprice due this month&quot;),azr:N,gcp:N,oci:N,crw:Q(&quot;quote&quot;,&quot;contract-model&quot;),neb:Q(&quot;on card&quot;,&quot;added to Nebius price list Jun 2026 · value not verified here&quot;),lmb:Q(&quot;quote&quot;,&quot;clusters&quot;),cru:N,fld:N,nsc:Q(&quot;quote&quot;,&quot;wholesale&quot;),sfc:Q(&quot;roadmap&quot;,&quot;listed on SFC roadmap for market trading · Q2 26&quot;),vst:N},
+ b200:{aws:P(&quot;10.30&quot;,10.30,&quot;Capacity Block per-GPU $10.30 · on-demand p6-b200 ~$14.24 · AWS list/mkt · Jul 26&quot;),azr:N,gcp:Q(&quot;quote&quot;,&quot;A4 · committed via sales/DWS&quot;),oci:Q(&quot;quote&quot;,&quot;B200.8 quote-only at cluster scale&quot;),crw:P(&quot;~6.50&quot;,6.50,&quot;contract-model access · estimate from dossier · 26&quot;),neb:P(&quot;3.95–7.15&quot;,5.55,&quot;committed $3.95 / on-demand $7.15 · Nebius rate card · Jun 26&quot;),lmb:P(&quot;6.69&quot;,6.69,&quot;on-demand list · firmed from ~$5 as Blackwell demand rose · Jul 26&quot;),cru:Q(&quot;quote&quot;,&quot;sales-gated&quot;),fld:Q(&quot;quote&quot;,&quot;aggregated availability varies&quot;),nsc:Q(&quot;quote&quot;,&quot;wholesale&quot;),sfc:N,vst:Q(&quot;rare&quot;,&quot;scarce on p2p supply · host-set&quot;)},
+ h200:{aws:P(&quot;4.98–6.22&quot;,5.60,&quot;Capacity Blocks p5e/p5en range · AWS list · Jul 26 (+15% reprice this year)&quot;),azr:Q(&quot;quote&quot;,&quot;ND H200 v5 previewed late 2025 · negotiated&quot;),gcp:Q(&quot;quote&quot;,&quot;A3 Ultra (3.2 Tb/s RDMA) · quota/DWS&quot;),oci:P(&quot;10.00&quot;,10.00,&quot;bare-metal list, same card as H100.8 · negotiated deals far below · OCI list · 26&quot;),crw:P(&quot;6.31&quot;,6.31,&quot;on-demand list · committed 15–60% below · CW card · 26&quot;),neb:P(&quot;2.45–4.50&quot;,3.48,&quot;committed $2.45 / on-demand $4.50 · Nebius rate card · Jun 26&quot;),lmb:Q(&quot;quote&quot;,&quot;H200 in clusters only&quot;),cru:P(&quot;4.29&quot;,4.29,&quot;on-demand list, per-minute billing · Crusoe · 26&quot;),fld:P(&quot;~2.30&quot;,2.30,&quot;aggregator index on-demand · marketed, cross-checked · 26&quot;),nsc:Q(&quot;quote&quot;,&quot;wholesale&quot;),sfc:Q(&quot;roadmap&quot;,&quot;H200 blocks on SFC roadmap&quot;),vst:Q(&quot;rare&quot;,&quot;thin p2p supply&quot;)},
+ h100:{aws:P(&quot;3.93–6.88&quot;,4.50,&quot;Capacity Block $3.93–4.33 · on-demand ~$6.88 post mid-2025 cuts · list/mkt · Jul 26&quot;),azr:P(&quot;6.98–12.29&quot;,9.60,&quot;NC H100 NVL $6.98 · ND96isr $12.29 (the training SKU) · list/mkt · May 26&quot;),gcp:P(&quot;~11.06&quot;,11.06,&quot;a3-highgpu on-demand us-central1 · spot escape hatch $2.25 · list · 26&quot;),oci:P(&quot;10.00&quot;,10.00,&quot;bare-metal list · negotiated superclusters $2.50–4.50 (deal-reported) · 26&quot;),crw:P(&quot;6.16&quot;,6.16,&quot;on-demand list · committed 15–60% below (~$2.5–5.2) · CW card · 26&quot;),neb:P(&quot;2.15–3.85&quot;,3.00,&quot;committed $2.15 / on-demand $3.85 · undercuts CW list ~40%, hyperscalers 60–80% · Jun 26&quot;),lmb:P(&quot;2.49–3.44&quot;,2.99,&quot;on-demand by config · 1-Click Clusters $3.99 (IB fabric premium) · list · 26&quot;),cru:P(&quot;3.90&quot;,3.90,&quot;on-demand list · reserved est. high-$2s for 1yr+ · Crusoe · 26&quot;),fld:P(&quot;~2.10&quot;,2.10,&quot;aggregator index on-demand · one of the market's true price floors · 26&quot;),nsc:P(&quot;low-$2s&quot;,2.25,&quot;multi-year negotiated enterprise · deal-reported · no self-serve · 26&quot;),sfc:P(&quot;1.49–1.68&quot;,1.58,&quot;cleared market average Feb–Mar 26 · zone dispersion $1.75–5.00 · SFC&quot;),vst:P(&quot;1.38–1.87&quot;,1.65,&quot;interruptible $1.38–1.65 · on-demand tier ~$1.87 · host-set · early 26&quot;)},
+ a100:{aws:P(&quot;1.48&quot;,1.48,&quot;Capacity Block per-GPU · AWS list · Jul 26&quot;),azr:P(&quot;~3.40&quot;,3.40,&quot;ND A100 v4 on-demand · estimate from list derivations · 26&quot;),gcp:P(&quot;3.28&quot;,3.28,&quot;a2-highgpu per-GPU on-demand · tracker print · Mar 26&quot;),oci:P(&quot;~4.00&quot;,4.00,&quot;BM.GPU A100 80G bare metal list · moderate confidence · 26&quot;),crw:P(&quot;~2.21&quot;,2.21,&quot;legacy fleet monetized down-market · historical card · 25&quot;),neb:N,lmb:P(&quot;1.99–2.79&quot;,2.39,&quot;on-demand list · 26&quot;),cru:Q(&quot;quote&quot;,&quot;offered; price via sales&quot;),fld:Q(&quot;quote&quot;,&quot;legacy aggregated fleets · varies&quot;),nsc:N,sfc:N,vst:P(&quot;0.6–1.0&quot;,0.80,&quot;host-set p2p range · est · 26&quot;)},
+ l40s:{aws:P(&quot;~1.86&quot;,1.86,&quot;G6e (L40S) 1-GPU on-demand · list · 26&quot;),azr:N,gcp:P(&quot;0.71&quot;,0.71,&quot;G2 (L4 — nearest class) on-demand · list · 26&quot;),oci:P(&quot;~3.74&quot;,3.74,&quot;BM L40S.4 list · moderate confidence · 26&quot;),crw:Q(&quot;quote&quot;,&quot;down-market inventory varies&quot;),neb:P(&quot;0.74–1.80&quot;,1.10,&quot;L40S from $0.74 · RTX PRO 6000 $0.95/$1.80 · Nebius card · Jun 26&quot;),lmb:N,cru:Q(&quot;quote&quot;,&quot;offered via sales&quot;),fld:P(&quot;~1.00&quot;,1.00,&quot;aggregated L40S · est · 26&quot;),nsc:N,sfc:N,vst:P(&quot;~0.67&quot;,0.67,&quot;host-set p2p · est · 26&quot;)},
+ mi:{aws:N,azr:Q(&quot;quote&quot;,&quot;ND MI300X v5 available · passed on MI325X (reported) · price via sales&quot;),gcp:N,oci:P(&quot;6.00–8.60&quot;,7.00,&quot;MI300X ~$6 list · MI355X ~$8.60 market-clustered flat (early-cycle premium) · 26&quot;),crw:N,neb:N,lmb:N,cru:P(&quot;~8.60&quot;,8.60,&quot;MI355X market-clustered flat pricing · only neocloud here with live AMD line · est · 26&quot;),fld:N,nsc:Q(&quot;quote&quot;,&quot;MI300X 8-way OAM nodes · wholesale&quot;),sfc:N,vst:N},
+ tpu:{aws:N,azr:N,gcp:Q(&quot;quote&quot;,&quot;Ironwood (v7) GA, committed deals dominate · anchor effective rate est. ~$1.60/TPU-hr · SemiAnalysis TCO: ~30% below GB200, ~41% below GB300&quot;),oci:N,crw:N,neb:N,lmb:N,cru:N,fld:Q(&quot;early&quot;,&quot;early external TPU access via Google partnership&quot;),nsc:N,sfc:N,vst:N},
+ trn:{aws:Q(&quot;quote&quot;,&quot;Trn2/Trn3 UltraServers · pitched 30–40% better price-perf vs GPUs · Neuron SDK maturity gates it to elite teams until mid-26 software drops&quot;),azr:N,gcp:N,oci:N,crw:N,neb:N,lmb:N,cru:N,fld:N,nsc:N,sfc:N,vst:N}
+};
+var DOS={
+ aws:{strip:[&quot;hyperscaler&quot;,&quot;AA-range credit&quot;,&quot;capex ~$200B 26&quot;,&quot;backlog $364B&quot;,&quot;fabric: EFA/SRD (no IB)&quot;],
+  fin:&quot;FCF compressed to ~$1.2B TTM against $147B capex; OpenAI ~$38B and the Anthropic/Rainier program anchor demand; Trainium ($20B run-rate, $225B commitments) is where the marginal dollar goes.&quot;,
+  buy:&quot;Self-serve Capacity Blocks (upfront-paid, repriced ~quarterly, 256-instance org cap ≈ 2,048 GPUs); Savings Plans 30–60%; EDP/PPA private pricing 1–5yr at scale; GPU spot pools shallow.&quot;,
+  flags:[&quot;List runs 2–3× neoclouds for identical silicon, and $0.09/GB egress punishes inference platforms specifically.&quot;,&quot;No InfiniBand anywhere — EFA works but demands NCCL tuning discipline at 10k+ GPU scale.&quot;,&quot;Queue position sits behind internal workloads and anchor labs; on-demand for frontier SKUs is unreliable by design.&quot;],
+  ask:&quot;At our spend, what does private pricing unlock — and what committed delivery, not best-effort, backs it?&quot;,
+  more:&quot;Telling detail from the dossier: OpenAI's AWS cluster runs GB300s with ConnectX-8 and OpenAI's own MRC protocol — not EFA — evidence that sophisticated tenants route around parts of the native stack. The Oct 20, 2025 us-east-1 outage (~15h DynamoDB DNS cascade) is the control-plane concentration counterpoint to the gold-standard compliance story. Pricing complexity itself is a tax: Capacity Blocks, ODCRs, Savings Plans, and private pricing interact enough to require a FinOps function.&quot;},
+ azr:{strip:[&quot;hyperscaler&quot;,&quot;fortress credit&quot;,&quot;RPO ~$400B&quot;,&quot;fabric: real InfiniBand&quot;,&quot;capex ~$35B+/qtr&quot;],
+  fin:&quot;The hyperscaler most transformed by one customer: ~27% of OpenAI plus ~$250B incremental Azure commitment post-restructuring; countered with the Anthropic three-way ($30B Azure commitment, up to 1GW). Structurally short — $60B+ committed to buying from neoclouds (Nscale, Lambda, CoreWeave, Nebius, IREN).&quot;,
+  buy:&quot;Enterprise-first: meaningful GPU allocation requires capacity reservations under EA/MACC, 1–3yr, minimum spends in the millions; reservations 30–60%; spot 70–82% off with 30-second eviction; burst beyond reservation genuinely hard.&quot;,
+  flags:[&quot;You are structurally junior to OpenAI and Copilot in the capacity queue.&quot;,&quot;Priciest list of the twelve; Maia weakness means Azure's costs track NVIDIA's pricing power more than AWS or GCP.&quot;,&quot;Microsoft is simultaneously CoreWeave's historic anchor (~62% of 2024 revenue), Nebius's anchor, and Lambda's anchor — its capacity partially IS the neocloud sector.&quot;],
+  ask:&quot;Given your own neocloud purchases, what committed delivery — not quota — will you contract to a platform our size?&quot;,
+  more:&quot;The differentiator is genuine: fleet-wide Quantum-2/X800 InfiniBand, fat-tree non-blocking, now extended by Fairwater AI-WAN superfactories — for the largest rented synchronous training clusters, the best fabric of the four hyperscalers. MACC dollars apply to Foundry model spend (Claude GA in Foundry since Jun 2026), which matters if part of your buy is tokens rather than raw GPUs. Oct 29, 2025 Front Door global outage (~8h) nine days after AWS's — a bad month for hyperscaler control planes.&quot;},
+ gcp:{strip:[&quot;hyperscaler&quot;,&quot;fortress credit&quot;,&quot;capex $175–185B 26&quot;,&quot;fabric: RoCE/Falcon + TPU OCS&quot;,&quot;TPU: 4.3M→10M chips&quot;],
+  fin:&quot;Fastest-growing of the three with sustained profitability; the strategic story is TPU externalization — Anthropic's expansion to ~1M TPUs (gigawatt-class, then 3.5GW via Broadcom for 2027) is the anchor validation; Gemini/DeepMind compete internally for the same silicon.&quot;,
+  buy:&quot;Self-serve to quota walls; serious volume via CUDs (~37–55%) plus sales-negotiated capacity reservations; Dynamic Workload Scheduler sits between spot and on-demand; TPU commitments typically 1–3yr pod-scale. Hungrier than AWS for AI logos.&quot;,
+  flags:[&quot;NVIDIA GPU scarcity and quota bureaucracy is the most-cited complaint — GCP is where you plan capacity, not find it.&quot;,&quot;Highest list prices of the market; the spot escape hatch ($2.25 H100) is the honest tier.&quot;,&quot;TPU lock-in is real: XLA/JAX porting tax; the ecosystem outside Google/Anthropic-class teams is thinner.&quot;],
+  ask:&quot;Quote GPU and TPU terms side by side for the same workload — and show me which one the account team is paid to sell.&quot;,
+  more:&quot;TPU economics are the story worth knowing cold: SemiAnalysis models externally-rented v7 TCO ~30% below GB200 and ~41% below GB300 per hour, with the anchor's effective rate estimated ~$1.60/TPU-hr. OCS (optical circuit switching) reroutes around failures automatically — a genuine reliability differentiator at pod scale (~99.999% fleet uptime claim for liquid-cooled systems). Eighth-gen TPUs split into Sunfish (training, Broadcom) and Zebrafish (inference, MediaTek) for late 2027.&quot;},
+ oci:{strip:[&quot;levered hyperscaler&quot;,&quot;BBB- / ~198bp CDS&quot;,&quot;RPO $638B · ~½ OpenAI&quot;,&quot;debt $153B record&quot;,&quot;fabric: RoCEv2 + Acceleron&quot;],
+  fin:&quot;The most financially aggressive hyperscaler: OCI infra revenue +93%, FY27 capex guided $70B (S&amp;P projects higher), negative FCF, $20B share sale planned, ~$50B debt+equity to raise in 2026. Landlord-financier of Stargate — Abilene is developed by Crusoe/Blue Owl, leased to Oracle, consumed by OpenAI.&quot;,
+  buy:&quot;Enterprise-sales above single nodes; supercluster reservations 1–3+yr; Universal Credits discount everything; historically the most price-flexible hyperscaler negotiator — real leverage on price, weak leverage on timing (you queue behind OpenAI, Meta, xAI).&quot;,
+  flags:[&quot;Concentration: if OpenAI's spending wobbles, a triple-digit-billion chunk of RPO is impaired.&quot;,&quot;Late-2025 reporting put gross margins on some GPU rentals in the mid-teens with losses on early Blackwell — a supplier subsidizing your rate has its own clock.&quot;,&quot;Delivery dates have slipped; capacity competes with anchors who outrank you.&quot;],
+  ask:&quot;How is our capacity segregated from anchor-committed builds, and what completion guarantees stand behind the delivery date?&quot;,
+  more:&quot;Two genuine differentiators cut through the credit noise: egress at ~$0.0085/GB after 10TB free — an order of magnitude below AWS/GCP/Azure, material for a serving platform — and the only hyperscaler three-part SLA (availability, manageability, performance) with financially-backed credits, still capped at service credits in practice. Bare metal is the default; OCI Dedicated Region runs the whole cloud air-gapped on-premises — the strongest sovereign/regulated posture of the twelve. Negotiated superclusters reportedly land $2.50–4.50/H100-hr.&quot;},
+ crw:{strip:[&quot;public neocloud&quot;,&quot;debt $24.9B · DDTLs A3→BB+&quot;,&quot;backlog $99.4B&quot;,&quot;ClusterMAX Platinum&quot;,&quot;fabric: IB rail-optimized&quot;],
+  fin:&quot;Q1 26: revenue $2.078B (+112%), adj EBITDA 56% margin, capex $7.7B; net interest $536M/quarter eats nearly half of EBITDA and adjusted operating margin collapsed to 1% as depreciation outruns the ramp; 10 clients at $1B+ (Meta $21B, OpenAI ~$22.4B cumulative, multi-year Anthropic); NVIDIA holds ~6–7% plus $2B more, a $6.3B backstop through 2032, and Exemplar status.&quot;,
+  buy:&quot;Committed take-or-pay 2–5yr with 15–25% prepayments is the product; on-demand is a rounding error; Q1 26 added Dedicated Inference runtimes and Flex/Spot plans aimed at inference consumption patterns; no egress fees.&quot;,
+  flags:[&quot;Largely sold out of 2026 capacity — 'allocating capacity we expect to come online in 2027'; prices rising.&quot;,&quot;The model requires continuous capital-markets access; mitigant: non-recourse, no maturities before 2029 beyond self-amortizing contract-backed debt.&quot;,&quot;Delivery record includes a Q3-25 miss on a third-party developer delay and the terminated $9B Core Scientific acquisition.&quot;],
+  ask:&quot;Which financing vehicle's collateral pool does our contract sit in — and what happens to our capacity in a restructuring?&quot;,
+  more:&quot;Why buyers pay the premium anyway: SemiAnalysis ClusterMAX rated CoreWeave the only Platinum GPU cloud in its first edition — the rating exists because SKU lists don't capture goodput, and Mission Control's preemptive node-swap automation plus MLPerf results are demonstrably ahead. For a committed cluster, that support model beats every hyperscaler ticket queue. The software layer (SUNK, Tensorizer, W&amp;B) is the real moat; capacity is reserved, not best-effort — which is precisely the product.&quot;},
+ neb:{strip:[&quot;public neocloud&quot;,&quot;backlog $46–50B&quot;,&quot;ARR $1.92B +54% QoQ&quot;,&quot;ClusterMAX Gold→top tier&quot;,&quot;fabric: IB / X800&quot;],
+  fin:&quot;Q1 26 revenue $399M (+684%); 2026 guide $3–3.4B revenue, $7–9B exit ARR, ~40% adj EBITDA margin; capex raised to $20–25B; anchored by Meta $27B (of which $15B is capacity Nebius may resell at its discretion — an unusually shrewd optionality clause) and up to $19.4B Microsoft; NVIDIA $2B investor.&quot;,
+  buy:&quot;Genuinely dual-track: credit-card self-serve through multi-node with live inventory, plus enterprise reserved 1–5yr with growing prepayments; commitment discounts to ~35%; cheapest clean rate card of the twelve.&quot;,
+  flags:[&quot;Concentration flipping fast: Microsoft + Meta will dominate revenue by 2027; the resell-the-option thesis is elegant until market prices fall.&quot;,&quot;Funding treadmill is explicit: $4.34B convertible, planned asset-backed loans, possible ATM — dilution is the plan.&quot;,&quot;Blackwell-and-newer top SKUs are sales-gated despite the transparent-pricing brand; US footprint younger than the EU base.&quot;],
+  ask:&quot;Walk me through delivery tranches by named site for our term — what is energized today versus planned?&quot;,
+  more:&quot;Ex-Yandex engineering shows: Soperator (open-source managed Slurm), managed K8s, WEKA filesystems, and an inference platform strengthened by three acquisitions — the most credible hyperscaler-style software org among the neoclouds, with a control surface closer to a hyperscaler's than Lambda's and far less bureaucracy. Finland-anchored EU data residency is a genuine asset for European serving. At $2.15 committed H100, Nebius undercuts CoreWeave list ~40% and hyperscalers 60–80% — the reference print for the whole neocloud band.&quot;},
+ lmb:{strip:[&quot;private neocloud&quot;,&quot;~25–40k GPUs&quot;,&quot;IPO H2 26 track&quot;,&quot;NVIDIA leaseback $1.5B&quot;,&quot;fabric: IB 1:1 rail-optimized&quot;],
+  fin:&quot;H1-25 gross margin ~50%, TTM loss ~$175M — less cash-incinerating than CoreWeave at far smaller scale; $5.9B primary valuation, ~$9B secondary; anchors are Microsoft (multibillion, incl. GB300 NVL72) and NVIDIA itself renting back 18,000 of its own GPUs — investor, supplier, and largest customer at once.&quot;,
+  buy:&quot;Uniquely two-speed: true zero-commitment self-serve at the bottom (minute billing, no egress), 1-Click Clusters 16–2,000+ GPUs with one-week minimums in the middle (invoice on approval, payment within 10 days or forfeiture), negotiated Private Cloud at the top. Lowest minimum spends of the twelve.&quot;,
+  flags:[&quot;On-demand availability droughts are documented — 'checking twice a week for six months' for 1× H100 — the self-serve tier is popular and shallow.&quot;,&quot;Scale ceiling: ~25k+ GPUs today against a 1M-GPU/3GW-by-2030 ambition financed by deals not yet done.&quot;,&quot;Pre-IPO convertible carries penalties if no IPO within a year — an incentive structure that can distort near-term commercial behavior; storage/platform layer is thin (bring your own data plane).&quot;],
+  ask:&quot;After the Microsoft and NVIDIA commitments, how much uncommitted capacity remains for multi-tenant buyers this year?&quot;,
+  more:&quot;The one-week cluster minimum (vs. months elsewhere) is a genuine structural differentiator for burst training — the scalpel, not the hospital. NVIDIA Exemplar validation benchmarked its H100 infrastructure within 5% of NVIDIA's published baselines: real third-party goodput evidence. Kansas City 24MW AI factory (10k+ Blackwell Ultra) online early 2026, with the entire initial deployment dedicated to a single customer — the indie brand inverting into an anchor-supply business before your eyes.&quot;},
+ cru:{strip:[&quot;energy-first builder&quot;,&quot;~$10B val · $30B talks&quot;,&quot;Abilene 2.1GW combined&quot;,&quot;ClusterMAX Gold&quot;,&quot;fabric: IB (Hopper-era)&quot;],
+  fin:&quot;Primarily a vertically-integrated datacenter developer that also runs a cloud: Abilene (1.2GW, OpenAI/Oracle) financed via $15B JV with Blue Owl, $9.6B JPMorgan debt, 15-yr lease; 900MW Microsoft campus adjacent (first building mid-2027); Meta ~1.6GW contracted; revenue $276M (2024) toward a projected ~$2B (2026) — the jump the valuation rests on.&quot;,
+  buy:&quot;Self-serve on-demand for H100/H200 with per-minute billing and spot/reserved tiers; everything frontier is enterprise-sales 1–3yr; the real large-buyer product is build-to-suit campuses with your power profile — nobody else here productizes physical placement (Edge Zones, Spark modular DCs).&quot;,
+  flags:[&quot;Split identity: your cloud account will always matter less than OpenAI/Microsoft/Meta campus deliveries.&quot;,&quot;Fresh execution wound: a Wyoming campus lost/paused in Jun 2026 after failing to secure anchors including Google — the first crack in the everything-gets-leased narrative.&quot;,&quot;Not on NVIDIA's first-wave Rubin cloud list; leverage lives at the project level with billions of construction debt and no clean disclosed profitability.&quot;],
+  ask:&quot;For Crusoe Cloud specifically: which sites, whose power, and what capacity is not already spoken for by anchor campuses?&quot;,
+  more:&quot;The structural pitch — energy 30–50% below traditional hyperscaler cost via stranded gas and owned generation, with energy ~60%+ of AI datacenter opex — is real at the developer layer; how much reaches your rate card depends entirely on negotiation. Only neocloud on this board with a live AMD line (MI300X/MI355X). The ESG story (45GW pipeline across wind, solar, flared gas, nuclear, hydro) is a procurement asset for sustainability-scored buyers, with the honest caveat that gas-turbine-first expansion cuts the other way for strict scorers.&quot;},
+ fld:{strip:[&quot;aggregator-utility&quot;,&quot;$18B valuation talks&quot;,&quot;Anthropic $50B build&quot;,&quot;Google-backstopped leases&quot;,&quot;fabric: IB/RoCE to 100GbE&quot;],
+  fin:&quot;Two businesses in one name: build-to-suit gigawatt campuses (Anthropic, TX/NY; ~$3.25B IG non-recourse project bond at River Bend with Google standing behind lease obligations) and the legacy aggregation engine pooling spare capacity from Tier 1–4 DCs globally. Valuation ran $7.5B → $18B talks in four months.&quot;,
+  buy:&quot;For standard consumers: instant, contract-free pay-as-you-go via one API — the fastest path to uncommitted, heavily discounted capacity; for anchors: multi-year bespoke take-or-pay. Spot runs 70–90% off list, frequently pushing H100-class below $1.50.&quot;,
+  flags:[&quot;Extreme heterogeneity is the biggest technical risk: 5–20% cross-node throughput jitter across aggregated Tier 2–4 facilities — poison for synchronous latency-critical serving.&quot;,&quot;Acute focus concentration: elite engineering is structurally bound to the anchor buildout's timeline; multi-tenant inventory is the leftover.&quot;,&quot;Strict data-residency guarantees require careful API filtering — no GovCloud-style silos.&quot;],
+  ask:&quot;How much capacity is genuinely uncommitted for multi-tenant sale over the next 12 months, and in which facilities?&quot;,
+  more:&quot;The two-speed availability is unique: frontier custom facilities 100% pre-allocated, while the aggregation network maintains excellent immediate on-demand and spot for multi-node H100/H200 without contracts or quota-gating. Best fit is asynchronous, fault-tolerant work that can exploit the spot lever aggressively through a single clean API; mistake if your pipeline needs uniform inter-node latency. The market's cleanest case study of lenders underwriting tenant credit instead of GPUs.&quot;},
+ nsc:{strip:[&quot;sovereign wholesale&quot;,&quot;$14.6B val · $3.7B raised&quot;,&quot;MSFT $10B+ · 66k Rubin&quot;,&quot;hydro at 4–5¢/kWh&quot;,&quot;fabric: IB + Blackwell RoCE&quot;],
+  fin:&quot;Arkon Energy spinout (2024) turned Europe's fastest-rising private AI hyperscaler story: $2B Series C (Mar 2026, NVIDIA/Dell/Citadel/Jane Street), Microsoft commitments including 66,000 Rubin GPUs into Sines, Portugal (€695M buildout) and Narvik, Norway for Microsoft/OpenAI workloads; IPO talks for late 2026 via GS/JPM.&quot;,
+  buy:&quot;Purely enterprise wholesale: sales-gated, quote-only, take-or-pay 1–3+yr backed by customer prepayments that unlock asset-backed financing; no self-serve at all. Negotiated H100-class multi-year contracts reportedly sit at competitive low-$2s — energy savings passed to long-term buyers.&quot;,
+  flags:[&quot;Immediate revenue trajectory completely dominated by Microsoft/OpenAI buildouts; independent buyers risk sitting secondary to Azure's capacity deficit.&quot;,&quot;Capital treadmill: $3.7B raised in under two years, scaling on debt and rapid-fire equity — macro-liquidity exposure.&quot;,&quot;Arctic-circle construction brings real execution risk (documented Narvik weather delays, early 2026).&quot;],
+  ask:&quot;You are building for the hyperscaler we also buy from — where does an independent platform sit in your allocation when Azure's deficit widens?&quot;,
+  more:&quot;The differentiated asset is power and sovereignty, not silicon: contracted Norwegian hydro at 4–5¢/kWh, UK/Norway/Portugal/Iceland footprint, growing US presence via an $865M WhiteFiber colocation deal — arguably the strongest hedge against EU data-privacy compliance actions on this board, though no FedRAMP. One of the few neoclouds with a real AMD footprint (MI300X 8-way OAM, 1.5TB pooled HBM3 per node). Best fit: multi-megawatt, multi-year EU-sovereign blocks; wrong tool for anyone needing a credit card and a console.&quot;},
+ sfc:{strip:[&quot;cluster spot market&quot;,&quot;owns zero GPUs&quot;,&quot;$100M+ under mgmt&quot;,&quot;$40M Series A @ $300M&quot;,&quot;fabric: h100i IB / h100v none&quot;],
+  fin:&quot;An order book, not a fleet: prices each block independently by size, duration, and zone; H100 cleared $1.49–1.68 average across Feb–Mar 2026 with zone dispersion from $1.75 (Richmond) to $5.00 (Yerba) — the dispersion is a live quality signal, not noise.&quot;,
+  buy:&quot;Pick size, duration, zone; pay the clearing price; hours-to-weeks blocks with no sales call. Forward blocks make it the closest thing this market has to a futures curve.&quot;,
+  flags:[&quot;You don't choose the underlying host — QoS rides on operators you can't diligence directly.&quot;,&quot;Platform-thin venture-stage counterparty; your real exposure is to whoever owns the metal.&quot;,&quot;Depth is H100-era today; H200/B300 are roadmap items, not inventory.&quot;],
+  ask:&quot;For this zone: who is the underlying operator, what is the measured NCCL, and what is the mid-block eviction and refund policy?&quot;,
+  more:&quot;Two node classes matter: h100i (Kubernetes, 3.2Tb/s InfiniBand) versus h100v (VMs, no IB) — the same lesson as the fabric instrument, priced live. Strategic value to a platform buyer is less the capacity than the price discovery: the cleared print is the floor that disciplines every reserved quote you negotiate, and the secondary wave of expiring A100/H100 reservations later in 2026 will trade through venues like this.&quot;},
+ vst:{strip:[&quot;p2p marketplace&quot;,&quot;120k+ devs · 14k paying&quot;,&quot;~38 employees&quot;,&quot;host-set pricing&quot;,&quot;fabric: none guaranteed&quot;],
+  fin:&quot;The absolute price floor: hosts from hobbyist rigs to Tier-3 colos set their own prices; H100 interruptible $1.38–1.65 with an on-demand tier near $1.87; 16× YoY paying-customer growth on a ~38-person team.&quot;,
+  buy:&quot;Self-serve per-machine bids on interruptible or on-demand tiers; Docker containers, no dedicated IPs; SOC 2 on the platform, not the hosts.&quot;,
+  flags:[&quot;Eviction risk and host-level variance make it non-production supply.&quot;,&quot;Heterogeneity defeats any uniform performance assumption; verify each host.&quot;,&quot;Blackwell-class supply is scarce to absent on p2p.&quot;],
+  ask:&quot;What share of listed H100 hosts are verified datacenter-grade with uptime history — and can we filter to only those?&quot;,
+  more:&quot;Its role in your file is dual: the floor print for the dispersion chart, and a demand-side comp — its 120k developers are precisely the prosumer pool a serverless platform converts when they outgrow babysitting marketplace instances. As supply, it's the tier below institutional; as a signal, it's where GPU abundance shows up first.&quot;}
+};
+var CH=[{id:&quot;od&quot;,l:&quot;on-demand&quot;},{id:&quot;sp&quot;,l:&quot;spot / interruptible&quot;},{id:&quot;co&quot;,l:&quot;committed / reserved&quot;}];
+var M={od:{},sp:{},co:{}};
+(function(){
+ function put(ch,sku,prov,cell){ M[ch][sku]=M[ch][sku]||{}; M[ch][sku][prov]=cell; }
+ var q=Q, p=P;
+ // --- H100 ---
+ put(&quot;od&quot;,&quot;h100&quot;,&quot;aws&quot;,p(&quot;6.88&quot;,6.88,&quot;on-demand normalized, post mid-2025 cuts · mkt · 26&quot;));
+ put(&quot;co&quot;,&quot;h100&quot;,&quot;aws&quot;,p(&quot;3.93–4.33&quot;,4.13,&quot;Capacity Blocks (upfront, short-term) · Savings Plans 30–60% off 1–3yr · list · Jul 26&quot;));
+ put(&quot;sp&quot;,&quot;h100&quot;,&quot;aws&quot;,q(&quot;thin&quot;,&quot;spot exists nominally 60–90% off; GPU pools shallow — not a real supply layer&quot;));
+ put(&quot;od&quot;,&quot;h100&quot;,&quot;azr&quot;,p(&quot;6.98–12.29&quot;,9.60,&quot;NC H100 NVL $6.98 · ND96isr $12.29 · list/mkt · May 26&quot;));
+ put(&quot;co&quot;,&quot;h100&quot;,&quot;azr&quot;,p(&quot;~8.0&quot;,8.0,&quot;1yr reservation ~-35% off ND · derived est · 26&quot;));
+ put(&quot;sp&quot;,&quot;h100&quot;,&quot;azr&quot;,p(&quot;2.2–3.7&quot;,2.95,&quot;70–82% off with 30-second eviction · est · 26&quot;));
+ put(&quot;od&quot;,&quot;h100&quot;,&quot;gcp&quot;,p(&quot;~11.06&quot;,11.06,&quot;a3-highgpu us-central1 · list · 26&quot;));
+ put(&quot;co&quot;,&quot;h100&quot;,&quot;gcp&quot;,p(&quot;5.0–7.0&quot;,6.0,&quot;CUD 37–55% off · derived est · 26&quot;));
+ put(&quot;sp&quot;,&quot;h100&quot;,&quot;gcp&quot;,p(&quot;2.25&quot;,2.25,&quot;preemptible A3 · list · 26&quot;));
+ put(&quot;od&quot;,&quot;h100&quot;,&quot;oci&quot;,p(&quot;10.00&quot;,10.00,&quot;bare-metal list · OCI · 26&quot;));
+ put(&quot;co&quot;,&quot;h100&quot;,&quot;oci&quot;,p(&quot;2.50–4.50&quot;,3.50,&quot;negotiated superclusters, deal-reported · mod confidence · H1 26&quot;));
+ put(&quot;sp&quot;,&quot;h100&quot;,&quot;oci&quot;,{s:&quot;n&quot;});
+ put(&quot;od&quot;,&quot;h100&quot;,&quot;crw&quot;,p(&quot;6.16&quot;,6.16,&quot;published list (unusual for its class) · 26&quot;));
+ put(&quot;co&quot;,&quot;h100&quot;,&quot;crw&quot;,p(&quot;2.5–5.2&quot;,3.85,&quot;15–60% below list for committed / 6mo+ terms · derived · 26&quot;));
+ put(&quot;sp&quot;,&quot;h100&quot;,&quot;crw&quot;,q(&quot;new&quot;,&quot;Spot + Flex Reservations launched Q1 26 · pricing not public&quot;));
+ put(&quot;od&quot;,&quot;h100&quot;,&quot;neb&quot;,p(&quot;3.85&quot;,3.85,&quot;Nebius rate card · Jun 26&quot;));
+ put(&quot;co&quot;,&quot;h100&quot;,&quot;neb&quot;,p(&quot;2.15&quot;,2.15,&quot;committed on card · undercuts CW list ~40%, hyperscalers 60–80% · Jun 26&quot;));
+ put(&quot;sp&quot;,&quot;h100&quot;,&quot;neb&quot;,q(&quot;avail&quot;,&quot;preemptible pricing available · number not published&quot;));
+ put(&quot;od&quot;,&quot;h100&quot;,&quot;lmb&quot;,p(&quot;2.49–3.44&quot;,2.99,&quot;by config · 1CC clusters $3.99 (IB premium) · list · 26&quot;));
+ put(&quot;co&quot;,&quot;h100&quot;,&quot;lmb&quot;,q(&quot;quote&quot;,&quot;Private Cloud 1–3yr negotiated&quot;));
+ put(&quot;sp&quot;,&quot;h100&quot;,&quot;lmb&quot;,{s:&quot;n&quot;});
+ put(&quot;od&quot;,&quot;h100&quot;,&quot;cru&quot;,p(&quot;3.90&quot;,3.90,&quot;list, per-minute billing · 26&quot;));
+ put(&quot;co&quot;,&quot;h100&quot;,&quot;cru&quot;,p(&quot;high-$2s&quot;,2.85,&quot;reserved 1yr+ · dossier estimate, low-mod confidence&quot;));
+ put(&quot;sp&quot;,&quot;h100&quot;,&quot;cru&quot;,q(&quot;avail&quot;,&quot;spot tier exists · price via console/sales&quot;));
+ put(&quot;od&quot;,&quot;h100&quot;,&quot;fld&quot;,p(&quot;~2.10&quot;,2.10,&quot;aggregator index · marketed, cross-checked · 26&quot;));
+ put(&quot;co&quot;,&quot;h100&quot;,&quot;fld&quot;,q(&quot;quote&quot;,&quot;enterprise bespoke take-or-pay&quot;));
+ put(&quot;sp&quot;,&quot;h100&quot;,&quot;fld&quot;,p(&quot;0.6–1.5&quot;,1.05,&quot;70–90% off list for fault-tolerant work · marketed · 26&quot;));
+ put(&quot;od&quot;,&quot;h100&quot;,&quot;nsc&quot;,{s:&quot;n&quot;});
+ put(&quot;co&quot;,&quot;h100&quot;,&quot;nsc&quot;,p(&quot;low-$2s&quot;,2.25,&quot;multi-year enterprise, deal-reported · 26&quot;));
+ put(&quot;sp&quot;,&quot;h100&quot;,&quot;nsc&quot;,{s:&quot;n&quot;});
+ put(&quot;od&quot;,&quot;h100&quot;,&quot;sfc&quot;,{s:&quot;n&quot;});
+ put(&quot;co&quot;,&quot;h100&quot;,&quot;sfc&quot;,q(&quot;forward&quot;,&quot;forward blocks trade at market · SFC&quot;));
+ put(&quot;sp&quot;,&quot;h100&quot;,&quot;sfc&quot;,p(&quot;1.49–1.68&quot;,1.58,&quot;cleared market avg Feb–Mar 26 · zones $1.75–5.00&quot;));
+ put(&quot;od&quot;,&quot;h100&quot;,&quot;vst&quot;,p(&quot;~1.87&quot;,1.87,&quot;on-demand tier, host-set · 26&quot;));
+ put(&quot;co&quot;,&quot;h100&quot;,&quot;vst&quot;,{s:&quot;n&quot;});
+ put(&quot;sp&quot;,&quot;h100&quot;,&quot;vst&quot;,p(&quot;1.38–1.65&quot;,1.50,&quot;interruptible, host-set · early 26&quot;));
+ // --- H200 ---
+ put(&quot;od&quot;,&quot;h200&quot;,&quot;aws&quot;,q(&quot;quote&quot;,&quot;p5e/p5en on-demand exists; CB is the practical channel&quot;));
+ put(&quot;co&quot;,&quot;h200&quot;,&quot;aws&quot;,p(&quot;4.98–6.22&quot;,5.60,&quot;Capacity Blocks · +15% reprice this year · list · Jul 26&quot;));
+ put(&quot;sp&quot;,&quot;h200&quot;,&quot;aws&quot;,q(&quot;thin&quot;,&quot;shallow pools&quot;));
+ put(&quot;od&quot;,&quot;h200&quot;,&quot;azr&quot;,q(&quot;quote&quot;,&quot;ND H200 v5 · negotiated&quot;)); put(&quot;co&quot;,&quot;h200&quot;,&quot;azr&quot;,q(&quot;quote&quot;,&quot;EA/MACC reservation&quot;)); put(&quot;sp&quot;,&quot;h200&quot;,&quot;azr&quot;,{s:&quot;n&quot;});
+ put(&quot;od&quot;,&quot;h200&quot;,&quot;gcp&quot;,q(&quot;quote&quot;,&quot;A3 Ultra · quota/DWS&quot;)); put(&quot;co&quot;,&quot;h200&quot;,&quot;gcp&quot;,q(&quot;quote&quot;,&quot;CUD via sales&quot;)); put(&quot;sp&quot;,&quot;h200&quot;,&quot;gcp&quot;,q(&quot;avail&quot;,&quot;DWS flex-start between spot and OD&quot;));
+ put(&quot;od&quot;,&quot;h200&quot;,&quot;oci&quot;,p(&quot;10.00&quot;,10.00,&quot;same list card as H100.8 · 26&quot;)); put(&quot;co&quot;,&quot;h200&quot;,&quot;oci&quot;,q(&quot;quote&quot;,&quot;negotiated well below list&quot;)); put(&quot;sp&quot;,&quot;h200&quot;,&quot;oci&quot;,{s:&quot;n&quot;});
+ put(&quot;od&quot;,&quot;h200&quot;,&quot;crw&quot;,p(&quot;6.31&quot;,6.31,&quot;list · 26&quot;)); put(&quot;co&quot;,&quot;h200&quot;,&quot;crw&quot;,p(&quot;2.5–5.4&quot;,3.95,&quot;15–60% below · derived · 26&quot;)); put(&quot;sp&quot;,&quot;h200&quot;,&quot;crw&quot;,q(&quot;new&quot;,&quot;Flex/Spot Q1 26&quot;));
+ put(&quot;od&quot;,&quot;h200&quot;,&quot;neb&quot;,p(&quot;4.50&quot;,4.50,&quot;rate card · Jun 26&quot;)); put(&quot;co&quot;,&quot;h200&quot;,&quot;neb&quot;,p(&quot;2.45&quot;,2.45,&quot;committed on card · Jun 26&quot;)); put(&quot;sp&quot;,&quot;h200&quot;,&quot;neb&quot;,q(&quot;avail&quot;,&quot;preemptible available&quot;));
+ put(&quot;od&quot;,&quot;h200&quot;,&quot;lmb&quot;,q(&quot;quote&quot;,&quot;clusters only&quot;)); put(&quot;co&quot;,&quot;h200&quot;,&quot;lmb&quot;,q(&quot;quote&quot;,&quot;negotiated&quot;)); put(&quot;sp&quot;,&quot;h200&quot;,&quot;lmb&quot;,{s:&quot;n&quot;});
+ put(&quot;od&quot;,&quot;h200&quot;,&quot;cru&quot;,p(&quot;4.29&quot;,4.29,&quot;list · 26&quot;)); put(&quot;co&quot;,&quot;h200&quot;,&quot;cru&quot;,q(&quot;quote&quot;,&quot;reserved negotiated&quot;)); put(&quot;sp&quot;,&quot;h200&quot;,&quot;cru&quot;,q(&quot;avail&quot;,&quot;spot tier&quot;));
+ put(&quot;od&quot;,&quot;h200&quot;,&quot;fld&quot;,p(&quot;~2.30&quot;,2.30,&quot;aggregator index · 26&quot;)); put(&quot;co&quot;,&quot;h200&quot;,&quot;fld&quot;,q(&quot;quote&quot;,&quot;bespoke&quot;)); put(&quot;sp&quot;,&quot;h200&quot;,&quot;fld&quot;,p(&quot;~0.7–1.6&quot;,1.15,&quot;70–90% off · marketed&quot;));
+ put(&quot;od&quot;,&quot;h200&quot;,&quot;nsc&quot;,{s:&quot;n&quot;}); put(&quot;co&quot;,&quot;h200&quot;,&quot;nsc&quot;,q(&quot;quote&quot;,&quot;wholesale&quot;)); put(&quot;sp&quot;,&quot;h200&quot;,&quot;nsc&quot;,{s:&quot;n&quot;});
+ put(&quot;od&quot;,&quot;h200&quot;,&quot;sfc&quot;,{s:&quot;n&quot;}); put(&quot;co&quot;,&quot;h200&quot;,&quot;sfc&quot;,q(&quot;roadmap&quot;,&quot;H200 blocks on roadmap&quot;)); put(&quot;sp&quot;,&quot;h200&quot;,&quot;sfc&quot;,q(&quot;roadmap&quot;,&quot;roadmap&quot;));
+ put(&quot;od&quot;,&quot;h200&quot;,&quot;vst&quot;,q(&quot;rare&quot;,&quot;thin p2p supply&quot;)); put(&quot;co&quot;,&quot;h200&quot;,&quot;vst&quot;,{s:&quot;n&quot;}); put(&quot;sp&quot;,&quot;h200&quot;,&quot;vst&quot;,q(&quot;rare&quot;,&quot;thin&quot;));
+ // --- B200 ---
+ put(&quot;od&quot;,&quot;b200&quot;,&quot;aws&quot;,p(&quot;~14.24&quot;,14.24,&quot;p6-b200 on-demand list · mkt · May 26&quot;));
+ put(&quot;co&quot;,&quot;b200&quot;,&quot;aws&quot;,p(&quot;10.30&quot;,10.30,&quot;Capacity Block · list · Jul 26&quot;));
+ put(&quot;sp&quot;,&quot;b200&quot;,&quot;aws&quot;,{s:&quot;n&quot;});
+ put(&quot;od&quot;,&quot;b200&quot;,&quot;azr&quot;,{s:&quot;n&quot;}); put(&quot;co&quot;,&quot;b200&quot;,&quot;azr&quot;,{s:&quot;n&quot;}); put(&quot;sp&quot;,&quot;b200&quot;,&quot;azr&quot;,{s:&quot;n&quot;});
+ put(&quot;od&quot;,&quot;b200&quot;,&quot;gcp&quot;,q(&quot;quote&quot;,&quot;A4 · sales/DWS&quot;)); put(&quot;co&quot;,&quot;b200&quot;,&quot;gcp&quot;,q(&quot;quote&quot;,&quot;committed dominates&quot;)); put(&quot;sp&quot;,&quot;b200&quot;,&quot;gcp&quot;,q(&quot;avail&quot;,&quot;DWS&quot;));
+ put(&quot;od&quot;,&quot;b200&quot;,&quot;oci&quot;,q(&quot;quote&quot;,&quot;B200.8 quote-only&quot;)); put(&quot;co&quot;,&quot;b200&quot;,&quot;oci&quot;,q(&quot;quote&quot;,&quot;queued allocation&quot;)); put(&quot;sp&quot;,&quot;b200&quot;,&quot;oci&quot;,{s:&quot;n&quot;});
+ put(&quot;od&quot;,&quot;b200&quot;,&quot;crw&quot;,q(&quot;quote&quot;,&quot;contract-model&quot;)); put(&quot;co&quot;,&quot;b200&quot;,&quot;crw&quot;,p(&quot;~6.50&quot;,6.50,&quot;contract access · dossier est · 26&quot;)); put(&quot;sp&quot;,&quot;b200&quot;,&quot;crw&quot;,q(&quot;new&quot;,&quot;Flex/Spot Q1 26&quot;));
+ put(&quot;od&quot;,&quot;b200&quot;,&quot;neb&quot;,p(&quot;7.15&quot;,7.15,&quot;rate card · Jun 26&quot;)); put(&quot;co&quot;,&quot;b200&quot;,&quot;neb&quot;,p(&quot;3.95&quot;,3.95,&quot;committed on card · Jun 26&quot;)); put(&quot;sp&quot;,&quot;b200&quot;,&quot;neb&quot;,q(&quot;avail&quot;,&quot;preemptible&quot;));
+ put(&quot;od&quot;,&quot;b200&quot;,&quot;lmb&quot;,p(&quot;6.69&quot;,6.69,&quot;list, firmed from ~$5 as Blackwell demand rose · Jul 26&quot;)); put(&quot;co&quot;,&quot;b200&quot;,&quot;lmb&quot;,q(&quot;quote&quot;,&quot;1CC/Private Cloud&quot;)); put(&quot;sp&quot;,&quot;b200&quot;,&quot;lmb&quot;,{s:&quot;n&quot;});
+ put(&quot;od&quot;,&quot;b200&quot;,&quot;cru&quot;,q(&quot;quote&quot;,&quot;sales-gated&quot;)); put(&quot;co&quot;,&quot;b200&quot;,&quot;cru&quot;,q(&quot;quote&quot;,&quot;sales-gated&quot;)); put(&quot;sp&quot;,&quot;b200&quot;,&quot;cru&quot;,{s:&quot;n&quot;});
+ put(&quot;od&quot;,&quot;b200&quot;,&quot;fld&quot;,q(&quot;quote&quot;,&quot;varies by facility&quot;)); put(&quot;co&quot;,&quot;b200&quot;,&quot;fld&quot;,q(&quot;quote&quot;,&quot;bespoke&quot;)); put(&quot;sp&quot;,&quot;b200&quot;,&quot;fld&quot;,q(&quot;rare&quot;,&quot;limited&quot;));
+ put(&quot;od&quot;,&quot;b200&quot;,&quot;nsc&quot;,{s:&quot;n&quot;}); put(&quot;co&quot;,&quot;b200&quot;,&quot;nsc&quot;,q(&quot;quote&quot;,&quot;wholesale&quot;)); put(&quot;sp&quot;,&quot;b200&quot;,&quot;nsc&quot;,{s:&quot;n&quot;});
+ put(&quot;od&quot;,&quot;b200&quot;,&quot;sfc&quot;,{s:&quot;n&quot;}); put(&quot;co&quot;,&quot;b200&quot;,&quot;sfc&quot;,{s:&quot;n&quot;}); put(&quot;sp&quot;,&quot;b200&quot;,&quot;sfc&quot;,{s:&quot;n&quot;});
+ put(&quot;od&quot;,&quot;b200&quot;,&quot;vst&quot;,q(&quot;rare&quot;,&quot;scarce p2p&quot;)); put(&quot;co&quot;,&quot;b200&quot;,&quot;vst&quot;,{s:&quot;n&quot;}); put(&quot;sp&quot;,&quot;b200&quot;,&quot;vst&quot;,q(&quot;rare&quot;,&quot;scarce&quot;));
+ // --- B300 ---
+ put(&quot;od&quot;,&quot;b300&quot;,&quot;aws&quot;,q(&quot;quote&quot;,&quot;p6-b300 on-demand ~$14+ · CB is the channel&quot;));
+ put(&quot;co&quot;,&quot;b300&quot;,&quot;aws&quot;,p(&quot;11.70&quot;,11.70,&quot;Capacity Block · list · Jul 26 · reprice due this month&quot;));
+ put(&quot;sp&quot;,&quot;b300&quot;,&quot;aws&quot;,{s:&quot;n&quot;});
+ [&quot;azr&quot;,&quot;gcp&quot;,&quot;oci&quot;,&quot;cru&quot;,&quot;vst&quot;].forEach(function(x){put(&quot;od&quot;,&quot;b300&quot;,x,{s:&quot;n&quot;});put(&quot;co&quot;,&quot;b300&quot;,x,{s:&quot;n&quot;});put(&quot;sp&quot;,&quot;b300&quot;,x,{s:&quot;n&quot;});});
+ put(&quot;od&quot;,&quot;b300&quot;,&quot;crw&quot;,q(&quot;quote&quot;,&quot;contract&quot;)); put(&quot;co&quot;,&quot;b300&quot;,&quot;crw&quot;,q(&quot;quote&quot;,&quot;contract&quot;)); put(&quot;sp&quot;,&quot;b300&quot;,&quot;crw&quot;,{s:&quot;n&quot;});
+ put(&quot;od&quot;,&quot;b300&quot;,&quot;neb&quot;,q(&quot;on card&quot;,&quot;added to price list Jun 26 · value not verified here&quot;)); put(&quot;co&quot;,&quot;b300&quot;,&quot;neb&quot;,q(&quot;on card&quot;,&quot;Jun 26 card&quot;)); put(&quot;sp&quot;,&quot;b300&quot;,&quot;neb&quot;,{s:&quot;n&quot;});
+ put(&quot;od&quot;,&quot;b300&quot;,&quot;lmb&quot;,q(&quot;quote&quot;,&quot;clusters&quot;)); put(&quot;co&quot;,&quot;b300&quot;,&quot;lmb&quot;,q(&quot;quote&quot;,&quot;negotiated&quot;)); put(&quot;sp&quot;,&quot;b300&quot;,&quot;lmb&quot;,{s:&quot;n&quot;});
+ put(&quot;od&quot;,&quot;b300&quot;,&quot;fld&quot;,{s:&quot;n&quot;}); put(&quot;co&quot;,&quot;b300&quot;,&quot;fld&quot;,q(&quot;quote&quot;,&quot;bespoke&quot;)); put(&quot;sp&quot;,&quot;b300&quot;,&quot;fld&quot;,{s:&quot;n&quot;});
+ put(&quot;od&quot;,&quot;b300&quot;,&quot;nsc&quot;,{s:&quot;n&quot;}); put(&quot;co&quot;,&quot;b300&quot;,&quot;nsc&quot;,q(&quot;quote&quot;,&quot;wholesale&quot;)); put(&quot;sp&quot;,&quot;b300&quot;,&quot;nsc&quot;,{s:&quot;n&quot;});
+ put(&quot;od&quot;,&quot;b300&quot;,&quot;sfc&quot;,{s:&quot;n&quot;}); put(&quot;co&quot;,&quot;b300&quot;,&quot;sfc&quot;,q(&quot;roadmap&quot;,&quot;B300 on SFC roadmap Q2 26&quot;)); put(&quot;sp&quot;,&quot;b300&quot;,&quot;sfc&quot;,q(&quot;roadmap&quot;,&quot;roadmap&quot;));
+ // --- GB200 / GB300 (rack rows: nearly all gated) ---
+ SKUS.filter(function(s){return s.id===&quot;gb200&quot;||s.id===&quot;gb300&quot;}).forEach(function(s){
+   PROV.forEach(function(pr){
+     var base=D[s.id][pr.id]||{s:&quot;n&quot;};
+     put(&quot;od&quot;,s.id,pr.id, base.s===&quot;p&quot;&amp;&amp;s.id===&quot;gb200&quot;&amp;&amp;pr.id===&quot;aws&quot;?q(&quot;quote&quot;,&quot;OD via sales; CB is the channel&quot;):base);
+     put(&quot;co&quot;,s.id,pr.id, base);
+     put(&quot;sp&quot;,s.id,pr.id, base.s===&quot;n&quot;?{s:&quot;n&quot;}:q(&quot;—&quot;,&quot;no spot tier for rack-scale frontier&quot;));
+   });
+ });
+ // GB200 AWS committed = the CB print
+ put(&quot;co&quot;,&quot;gb200&quot;,&quot;aws&quot;,p(&quot;10.58&quot;,10.58,&quot;Capacity Block per-GPU · Dallas LZ only · list · Jul 26&quot;));
+ // --- A100, L40S, MI, TPU, TRN: use D table for OD; committed/spot mostly derived or gated ---
+ [&quot;a100&quot;,&quot;l40s&quot;,&quot;mi&quot;,&quot;tpu&quot;,&quot;trn&quot;].forEach(function(sk){
+   PROV.forEach(function(pr){
+     var base=D[sk][pr.id]||{s:&quot;n&quot;};
+     put(&quot;od&quot;,sk,pr.id,base);
+     put(&quot;co&quot;,sk,pr.id, base.s===&quot;p&quot;?q(&quot;quote&quot;,&quot;commitment discounts apply; negotiated&quot;):(base.s===&quot;q&quot;?base:{s:&quot;n&quot;}));
+     put(&quot;sp&quot;,sk,pr.id, {s:&quot;n&quot;});
+   });
+ });
+ // A100 spot exceptions
+ put(&quot;sp&quot;,&quot;a100&quot;,&quot;gcp&quot;,p(&quot;~1.15&quot;,1.15,&quot;preemptible a2 · est · 26&quot;));
+ put(&quot;sp&quot;,&quot;a100&quot;,&quot;vst&quot;,p(&quot;0.4–0.8&quot;,0.60,&quot;interruptible host-set · est&quot;));
+ put(&quot;sp&quot;,&quot;a100&quot;,&quot;fld&quot;,p(&quot;~0.5–0.9&quot;,0.70,&quot;aggregated spot · est&quot;));
+ put(&quot;sp&quot;,&quot;l40s&quot;,&quot;vst&quot;,p(&quot;~0.45&quot;,0.45,&quot;interruptible host-set · est&quot;));
+ // TPU committed
+ put(&quot;co&quot;,&quot;tpu&quot;,&quot;gcp&quot;,Q(&quot;quote&quot;,&quot;1–3yr pod-scale commitments · anchor effective ~$1.60/TPU-hr est&quot;));
+ put(&quot;co&quot;,&quot;trn&quot;,&quot;aws&quot;,Q(&quot;quote&quot;,&quot;Savings-Plan style commitments · pitched 30–40% better price-perf&quot;));
+})();
+
+/* ===================== scatter rendering ===================== */
+var COLS=[&quot;l40s&quot;,&quot;a100&quot;,&quot;h100&quot;,&quot;h200&quot;,&quot;b200&quot;,&quot;b300&quot;,&quot;gb200&quot;,&quot;gb300&quot;,&quot;mi&quot;,&quot;tpu&quot;,&quot;trn&quot;];
+var SKUMAP={};SKUS.forEach(function(s){SKUMAP[s.id]=s});
+var PMAP={};PROV.forEach(function(p,i){PMAP[p.id]=p;p.i=i});
+var GCOL={hyp:&quot;#A63B26&quot;,neo:&quot;#117758&quot;,mkt:&quot;#D98F12&quot;};
+var CHNAME={od:&quot;on-demand&quot;,co:&quot;committed / reserved&quot;,sp:&quot;spot / interruptible&quot;};
+
+// flatten priced points + gated cells
+var PTS=[];
+Object.keys(M).forEach(function(ch){
+ COLS.forEach(function(sku,ci){
+   var row=M[ch][sku]||{};
+   PROV.forEach(function(pr){
+     var c=row[pr.id];
+     if(c&amp;&amp;c.s===&quot;p&quot;&amp;&amp;isFinite(c.n)){
+       var m=(c.v||&quot;&quot;).replace(/~/g,&quot;&quot;).match(/(\d+(?:\.\d+)?)\s*–\s*(\d+(?:\.\d+)?)/);
+       PTS.push({ch:ch,sku:sku,ci:ci,prov:pr.id,n:c.n,v:c.v,t:c.t||&quot;&quot;,lo:m?+m[1]:null,hi:m?+m[2]:null});
+     }
+   });
+ });
+});
+function gatedFor(sku,chans){
+ // sellers with a gated cell and no priced cell in the active channels
+ var out=[];
+ PROV.forEach(function(pr){
+   var priced=false,notes=[];
+   chans.forEach(function(ch){
+     var c=(M[ch][sku]||{})[pr.id];
+     if(c&amp;&amp;c.s===&quot;p&quot;)priced=true;
+     if(c&amp;&amp;c.s===&quot;q&quot;)notes.push({ch:ch,v:c.v||&quot;quote&quot;,t:c.t||&quot;sold, price gated&quot;});
+   });
+   if(!priced&amp;&amp;notes.length)out.push({prov:pr.id,notes:notes});
+ });
+ return out;
+}
+
+// geometry
+var W=1000,H=600,X0=52,X1=986,YT=96,YB=520,MINV=0.38,MAXV=17;
+var colW=(X1-X0)/COLS.length;
+function cx(ci,provIdx){return X0+colW*ci+colW/2+(provIdx/(PROV.length-1)-0.5)*(colW-26)}
+function yy(v){return YB-(Math.log(Math.max(v,MINV)/MINV)/Math.log(MAXV/MINV))*(YB-YT)}
+
+var chSel=&quot;all&quot;, sel=null;
+function activeChans(){return chSel===&quot;all&quot;?[&quot;od&quot;,&quot;co&quot;,&quot;sp&quot;]:[chSel]}
+
+function seg(){
+ var el=document.getElementById(&quot;ch&quot;),h=&quot;&quot;;
+ var opts=[{id:&quot;all&quot;,l:&quot;all channels&quot;}].concat(CH);
+ opts.forEach(function(c){h+='<button data-c=&quot;'+c.id+'&quot; class=&quot;'+(c.id===chSel?&quot;on&quot;:&quot;&quot;)+'&quot;>'+c.l+&quot;</button>&quot;});
+ el.innerHTML=h;
+ el.querySelectorAll(&quot;button&quot;).forEach(function(b){b.addEventListener(&quot;click&quot;,function(){chSel=this.dataset.c;render()})});
+}
+function sellerChips(){
+ var el=document.getElementById(&quot;sellers&quot;),h=&quot;&quot;;
+ PROV.forEach(function(p){h+='<button data-p=&quot;'+p.id+'&quot; class=&quot;'+p.g+(p.id===sel?&quot; on&quot;:&quot;&quot;)+'&quot; title=&quot;'+p.name+' — click to trace + open file&quot;>'+p.ab+&quot;</button>&quot;});
+ el.innerHTML=h;
+ el.querySelectorAll(&quot;button&quot;).forEach(function(b){b.addEventListener(&quot;click&quot;,function(){
+   sel=this.dataset.p===sel?null:this.dataset.p;render();renderDossier();
+ })});
+}
+function shapeFor(pt,col,dim){
+ var op=dim?0.13:1, x=cx(pt.ci,PMAP[pt.prov].i), y=yy(pt.n), s=&quot;&quot;;
+ var attrs=' data-i=&quot;'+pt.idx+'&quot; style=&quot;cursor:pointer&quot; opacity=&quot;'+op+'&quot;';
+ if(pt.lo!==null&amp;&amp;pt.hi!==null&amp;&amp;pt.hi>pt.lo){
+   s+='<line x1=&quot;'+x+'&quot; y1=&quot;'+yy(pt.lo)+'&quot; x2=&quot;'+x+'&quot; y2=&quot;'+yy(pt.hi)+'&quot; stroke=&quot;'+col+'&quot; stroke-width=&quot;1.4&quot; opacity=&quot;'+(dim?0.08:0.45)+'&quot;/>';
+ }
+ if(pt.ch===&quot;od&quot;) s+='<circle cx=&quot;'+x+'&quot; cy=&quot;'+y+'&quot; r=&quot;5&quot; fill=&quot;'+col+'&quot;'+attrs+'/>';
+ else if(pt.ch===&quot;co&quot;) s+='<circle cx=&quot;'+x+'&quot; cy=&quot;'+y+'&quot; r=&quot;4.6&quot; fill=&quot;var(--panel)&quot; stroke=&quot;'+col+'&quot; stroke-width=&quot;2&quot;'+attrs+'/>';
+ else s+='<rect x=&quot;'+(x-3.6)+'&quot; y=&quot;'+(y-3.6)+'&quot; width=&quot;7.2&quot; height=&quot;7.2&quot; transform=&quot;rotate(45 '+x+' '+y+')&quot; fill=&quot;'+col+'&quot;'+attrs+'/>';
+ return s;
+}
+function render(){
+ seg();sellerChips();
+ var chans=activeChans();
+ var vis=PTS.filter(function(pt){return chans.indexOf(pt.ch)>=0});
+ vis.forEach(function(pt,i){pt.idx=PTS.indexOf(pt)});
+ var s=&quot;&quot;;
+ // gridlines
+ [0.5,1,2,4,8,16].forEach(function(v){
+   var y=yy(v);
+   s+='<line x1=&quot;'+X0+'&quot; y1=&quot;'+y+'&quot; x2=&quot;'+X1+'&quot; y2=&quot;'+y+'&quot; stroke=&quot;#E7EBE4&quot; stroke-width=&quot;1&quot;/>';
+   s+='<text x=&quot;'+(X0-8)+'&quot; y=&quot;'+(y+3.5)+'&quot; text-anchor=&quot;end&quot; font-family=&quot;IBM Plex Mono,monospace&quot; font-size=&quot;10&quot; fill=&quot;#8A968E&quot;>$'+v+'</text>';
+ });
+ // column separators + labels + group divider
+ COLS.forEach(function(sku,ci){
+   var xL=X0+colW*ci, xm=xL+colW/2, sk=SKUMAP[sku];
+   if(ci>0)s+='<line x1=&quot;'+xL+'&quot; y1=&quot;'+(YT-64)+'&quot; x2=&quot;'+xL+'&quot; y2=&quot;'+(YB+8)+'&quot; stroke=&quot;'+(sku===&quot;mi&quot;?&quot;#C7CEC6&quot;:&quot;#EDF0EA&quot;)+'&quot; stroke-width=&quot;1&quot;'+(sku===&quot;mi&quot;?' stroke-dasharray=&quot;3 3&quot;':'')+'/>';
+   s+='<text x=&quot;'+xm+'&quot; y=&quot;'+(YB+28)+'&quot; text-anchor=&quot;middle&quot; font-family=&quot;IBM Plex Mono,monospace&quot; font-size=&quot;10.5&quot; font-weight=&quot;500&quot; fill=&quot;#15201A&quot;>'+sk.l+'</text>';
+   s+='<text x=&quot;'+xm+'&quot; y=&quot;'+(YB+42)+'&quot; text-anchor=&quot;middle&quot; font-family=&quot;IBM Plex Mono,monospace&quot; font-size=&quot;8.5&quot; fill=&quot;#8A968E&quot;>'+sk.s+'</text>';
+ });
+ s+='<text x=&quot;'+(X0+colW*8+((X1-(X0+colW*8))/2))+'&quot; y=&quot;'+(YB+60)+'&quot; text-anchor=&quot;middle&quot; font-family=&quot;IBM Plex Mono,monospace&quot; font-size=&quot;8.5&quot; letter-spacing=&quot;2&quot; fill=&quot;#8A968E&quot;>ALT SILICON</text>';
+ s+='<text x=&quot;'+(X0+(colW*8)/2)+'&quot; y=&quot;'+(YB+60)+'&quot; text-anchor=&quot;middle&quot; font-family=&quot;IBM Plex Mono,monospace&quot; font-size=&quot;8.5&quot; letter-spacing=&quot;2&quot; fill=&quot;#8A968E&quot;>NVIDIA, OLDEST → NEWEST</text>';
+ // gated band
+ s+='<text x=&quot;'+(X0-8)+'&quot; y=&quot;'+(YT-46)+'&quot; text-anchor=&quot;end&quot; font-family=&quot;IBM Plex Mono,monospace&quot; font-size=&quot;9&quot; fill=&quot;#8A968E&quot;>gated</text>';
+ s+='<line x1=&quot;'+X0+'&quot; y1=&quot;'+(YT-14)+'&quot; x2=&quot;'+X1+'&quot; y2=&quot;'+(YT-14)+'&quot; stroke=&quot;#DDE2DB&quot; stroke-width=&quot;1&quot;/>';
+ COLS.forEach(function(sku,ci){
+   var g=gatedFor(sku,chans), xm=X0+colW*ci+colW/2;
+   g.forEach(function(gd,k){
+     var col=k%6,rowi=Math.floor(k/6);
+     var gx=xm-(Math.min(g.length,6)-1)*5.5+col*11, gy=YT-52+rowi*13;
+     var dim=sel&amp;&amp;gd.prov!==sel;
+     s+='<text x=&quot;'+gx+'&quot; y=&quot;'+gy+'&quot; text-anchor=&quot;middle&quot; font-family=&quot;IBM Plex Mono,monospace&quot; font-size=&quot;10&quot; fill=&quot;'+GCOL[PMAP[gd.prov].g]+'&quot; opacity=&quot;'+(dim?0.13:0.75)+'&quot; style=&quot;cursor:pointer&quot; data-g=&quot;'+sku+':'+gd.prov+'&quot;>×</text>';
+   });
+ });
+ // selected seller connectors, per channel
+ if(sel){
+   chans.forEach(function(ch){
+     var line=vis.filter(function(pt){return pt.prov===sel&amp;&amp;pt.ch===ch}).sort(function(a,b){return a.ci-b.ci});
+     if(line.length>1){
+       var d=line.map(function(pt,i){return(i?&quot;L&quot;:&quot;M&quot;)+cx(pt.ci,PMAP[sel].i)+&quot; &quot;+yy(pt.n)}).join(&quot; &quot;);
+       var dash=ch===&quot;co&quot;?' stroke-dasharray=&quot;5 4&quot;':(ch===&quot;sp&quot;?' stroke-dasharray=&quot;1.5 4&quot;':'');
+       s+='<path d=&quot;'+d+'&quot; fill=&quot;none&quot; stroke=&quot;'+GCOL[PMAP[sel].g]+'&quot; stroke-width=&quot;1.4&quot; opacity=&quot;0.55&quot;'+dash+'/>';
+     }
+   });
+ }
+ // points: dimmed first, selected on top
+ vis.filter(function(pt){return sel&amp;&amp;pt.prov!==sel}).forEach(function(pt){s+=shapeFor(pt,GCOL[PMAP[pt.prov].g],true)});
+ vis.filter(function(pt){return !sel||pt.prov===sel}).forEach(function(pt){s+=shapeFor(pt,GCOL[PMAP[pt.prov].g],false)});
+ document.getElementById(&quot;sc&quot;).innerHTML=s;
+}
+
+/* tooltip + interaction */
+var tip=document.getElementById(&quot;tip&quot;);
+var svg=document.getElementById(&quot;sc&quot;);
+function showTip(ev,html){
+ tip.innerHTML=html;tip.style.display=&quot;block&quot;;
+ var x=ev.clientX+14,y=ev.clientY+12;
+ var r=tip.getBoundingClientRect();
+ if(x+r.width>window.innerWidth-8)x=ev.clientX-r.width-12;
+ if(y+r.height>window.innerHeight-8)y=ev.clientY-r.height-12;
+ tip.style.left=x+&quot;px&quot;;tip.style.top=y+&quot;px&quot;;
+}
+svg.addEventListener(&quot;mousemove&quot;,function(ev){
+ var t=ev.target;
+ if(t.dataset&amp;&amp;t.dataset.i!==undefined){
+   var pt=PTS[+t.dataset.i],pr=PMAP[pt.prov];
+   showTip(ev,&quot;<b>&quot;+pr.name+&quot; · &quot;+SKUMAP[pt.sku].l+&quot;</b><em>&quot;+CHNAME[pt.ch]+&quot; · $&quot;+pt.v+&quot;/GPU-hr</em><em>&quot;+pt.t+&quot;</em>&quot;);
+ }else if(t.dataset&amp;&amp;t.dataset.g){
+   var parts=t.dataset.g.split(&quot;:&quot;),g=gatedFor(parts[0],activeChans()).filter(function(x){return x.prov===parts[1]})[0];
+   if(g){var pr2=PMAP[parts[1]];
+     var body=g.notes.map(function(nn){return&quot;<em>&quot;+CHNAME[nn.ch]+&quot; · &quot;+nn.v+&quot; — &quot;+nn.t+&quot;</em>&quot;}).join(&quot;&quot;);
+     showTip(ev,&quot;<b>&quot;+pr2.name+&quot; · &quot;+SKUMAP[parts[0]].l+&quot;</b>&quot;+body);
+   }
+ }else tip.style.display=&quot;none&quot;;
+});
+svg.addEventListener(&quot;mouseleave&quot;,function(){tip.style.display=&quot;none&quot;});
+svg.addEventListener(&quot;click&quot;,function(ev){
+ var t=ev.target,p=null;
+ if(t.dataset&amp;&amp;t.dataset.i!==undefined)p=PTS[+t.dataset.i].prov;
+ else if(t.dataset&amp;&amp;t.dataset.g)p=t.dataset.g.split(&quot;:&quot;)[1];
+ if(p){sel=p===sel?null:p;render();renderDossier();}
+});
+
+function renderDossier(){
+ var el=document.getElementById(&quot;dossier&quot;);
+ if(!sel){el.className=&quot;card dossier&quot;;el.innerHTML=&quot;&quot;;return}
+ var p=PMAP[sel], d=DOS[sel];
+ var h='<div class=&quot;dh&quot;><h2>'+p.name+'</h2><span class=&quot;badge&quot;>'+p.arch+'</span></div><div style=&quot;display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px&quot;>';
+ d.strip.forEach(function(b,i){h+='<span class=&quot;badge'+(i===1?&quot; hot&quot;:&quot;&quot;)+'&quot;>'+b+'</span>'});
+ h+='</div>';
+ h+='<p class=&quot;drow&quot;><b>the money</b>'+d.fin+'</p>';
+ h+='<p class=&quot;drow&quot;><b>how you buy</b>'+d.buy+'</p>';
+ h+='<div class=&quot;flags&quot;>';d.flags.forEach(function(f){h+='<p class=&quot;flag&quot;>'+f+'</p>'});h+='</div>';
+ h+='<div class=&quot;ask&quot;><b>ask them</b>'+d.ask+'</div>';
+ h+='<details><summary>go deeper</summary><p>'+d.more+'</p></details>';
+ el.className=&quot;card dossier open&quot;;el.innerHTML=h;
+}
+document.getElementById(&quot;rst&quot;).addEventListener(&quot;click&quot;,function(){sel=null;render();renderDossier()});
+render();
+</script>
+</body>
+</html>
+" title="The atlas" scrolling="no"></iframe></section><p class="colophon">the compute desk · six instruments, one document · load-duration &amp; newsvendor framing after Modal, &ldquo;How to price serverless&rdquo; · compiled July 2026</p><script>
 function fit(f){try{var d=f.contentDocument;if(!d||!d.documentElement)return;
 var h=d.documentElement.scrollHeight+2;
 var cur=parseFloat(f.style.height)||0;

@@ -1,6 +1,6 @@
 # The Compute Desk
 
-Five interactive instruments on the economics of GPU procurement, built as self-contained HTML.
+Six interactive instruments on the economics of GPU procurement, built as self-contained HTML.
 
 **Live:** https://alexkyen.github.io/compute-desk/
 
@@ -11,24 +11,27 @@ Five interactive instruments on the economics of GPU procurement, built as self-
 3. **The fabric tax** — what cluster wiring does to effective price. Interactive topology across InfiniBand/RoCE, oversubscription, and job placement, showing how identical GPUs price differently on interconnect alone.
 4. **The two trees** — fabric topology as a design choice. Fat-tree vs rail-optimized, interactive across three scenarios: why rails serve training collectives at a fraction of the switch and optics cost, what off-pattern traffic pays in NVLink detours, and how a single rail failure stalls every multi-node job at once.
 5. **SLA anatomy** — an SLA as an insurance contract. A calculator over the definition of "unavailable," the measurement window, and credit tiers, showing why credits rarely cover real losses and what operational clauses matter instead.
+6. **The atlas** — the market itself: twelve sellers, eleven accelerators, three ways to buy, every public price plotted on a log scale with gated allocations shown as absence. Compiled July 2026 from public rate cards, filings, and deal reporting.
 
 Each instrument ends with the questions a buyer should ask a supplier.
 
 ## Build
 
-The five instruments are standalone HTML files. `consolidate.py` embeds them as isolated
-`srcdoc` iframes into a single deliverable (`compute-desk.html` / `index.html`), so their
-scripts and element IDs never collide. To rebuild after editing an instrument, or to add a
-new one:
+The instruments are standalone HTML files, individually viewable. `consolidate.py`
+embeds them as isolated `srcdoc` iframes directly into `index.html` — the page GitHub
+Pages serves — so their scripts and element IDs never collide. To rebuild after editing
+an instrument, or to add a new one:
 
 ```bash
 python3 consolidate.py
-cp compute-desk.html index.html
 ```
 
-Add a new instrument by appending one line to the `INSTRUMENTS` list in `consolidate.py`.
+Add a new instrument by appending one `(filename, anchor, label, title, description)`
+tuple to the `INSTRUMENTS` list in `consolidate.py`, then rerun. `index.html` is
+generated — edit the instruments or the script, never the output.
 
 ## Notes
 
 Framing after Modal, "How to price serverless" (2026). Hardware figures compiled July 2026;
-Rubin-generation specs are pre-volume and marked accordingly in the silicon ladder.
+Rubin-generation specs are pre-volume and marked accordingly in the silicon ladder. Atlas
+prices are perishable; estimates and deal-reported figures are marked in their tooltips.
