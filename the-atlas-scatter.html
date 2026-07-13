@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The atlas — scatter view — the GPU market as a field of prints</title>
+<title>The atlas — the GPU market as a field of prints</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
@@ -72,9 +72,9 @@ details p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
 </head>
 <body>
 <div class="wrap">
-  <p class="eyebrow">Compute desk · the atlas · scatter view</p>
+  <p class="eyebrow">Compute desk · the atlas</p>
   <h1>The atlas</h1>
-  <p class="dek">The same twelve sellers, eleven accelerators, and three channels as the matrix — plotted instead of tabled. Every public price is a point; every gated cell is an <span style="font-family:var(--mono);color:var(--ink-3)">×</span> along the top. The vertical axis is log-scale, so equal distances are equal ratios: the hyperscaler-to-marketplace gap reads as a constant band, not a squashed tail. Pick a seller to trace their curve across generations; hover anything for its provenance.</p>
+  <p class="dek">Twelve sellers, eleven accelerators, and three channels on one field. Every public price is a point; every offering sold without a public price is an <span style="font-family:var(--mono);color:var(--ink-3)">×</span> along the top. The vertical axis is log-scale, so equal distances are equal ratios: the hyperscaler-to-marketplace gap reads as a constant band, not a squashed tail. Pick a seller to trace their curve across generations; hover anything for its provenance.</p>
   <p class="provenance">compiled july 2026 from public rate cards, filings, and deal reporting · estimates marked · prices are perishable</p>
 
   <div class="card">
@@ -102,13 +102,13 @@ details p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
 
   <div class="notes">
     <h2>How to read the field</h2>
-    <p><strong>The log axis is the point of this view.</strong> On a linear axis, the difference between $1.50 and $3 disappears next to the difference between $10 and $12 — but to a buyer they are the same event: a 2× spread. Log scale makes ratios distances, so the three archetype bands sit at roughly constant heights across generations: marketplaces at the floor, neoclouds in a tight middle band, hyperscaler list floating 2–6× above it for identical silicon. The matrix tells you a number; this view tells you which band a number belongs to.</p>
-    <p><strong>The wall of ×.</strong> Points thin out and × marks thicken as you move right — that gradient is the market's defining fact in one glance. Hopper is a market; Blackwell is an allocation; the rack-scale rows and alt silicon are almost pure ×. In the matrix this reads as a region of italic <em>quote</em> cells; here it reads as the field literally emptying out.</p>
+    <p><strong>The log axis is the point of this view.</strong> On a linear axis, the difference between $1.50 and $3 disappears next to the difference between $10 and $12 — but to a buyer they are the same event: a 2× spread. Log scale makes ratios distances, so the three archetype bands sit at roughly constant heights across generations: marketplaces at the floor, neoclouds in a tight middle band, hyperscaler list floating 2–6× above it for identical silicon. The useful question is rarely what a price is — it's which band it belongs to.</p>
+    <p><strong>The wall of ×.</strong> Points thin out and × marks thicken as you move right — that gradient is the market's defining fact in one glance. Hopper is a market; Blackwell is an allocation; the rack-scale rows and alt silicon are almost pure ×. The emptying field is itself the datum: the newer the silicon, the more of the market moves behind closed doors.</p>
     <p><strong>Tracing a seller</strong> draws their curve per channel across generations — solid through on-demand, dashed through committed, dotted through spot. The vertical gap between a seller's solid and dashed lines is their negotiation spread made visible: OCI's list-to-deal gap is a canyon, Nebius's is a step. A seller whose trace simply stops at H200 has nothing public beyond Hopper — which is itself a fact about how they sell.</p>
-    <p><strong>What this view is worse at.</strong> The matrix is the better lookup device — if you know the seller and the chip, the cell is faster than the field, and quote-cell nuance ("on card", "roadmap", "pre-alloc") survives only in the × tooltips here. Ranges compress to midpoints with a whisker. Treat the two as companions: the field for shape and negotiation, the board for the actual number you put in a model.</p>
-    <p><strong>Provenance travels with every mark.</strong> Same grades as the matrix — <em>list</em>, <em>mkt</em>, <em>deal</em>, <em>est</em> — carried in each tooltip with its date. The shape of this field decays in months, the numbers in weeks.</p>
+    <p><strong>What the field compresses.</strong> Published ranges collapse to a midpoint with a whisker, and the nuance behind a gated offering ("on card", "roadmap", "pre-alloc") survives only in the × tooltips. The field is built for shape and negotiation; when you need the exact number to put in a model, follow the tooltip to its source.</p>
+    <p><strong>Provenance travels with every mark.</strong> Each carries a grade — <em>list</em>, <em>mkt</em>, <em>deal</em>, <em>est</em> — in its tooltip with its date. The shape of this field decays in months, the numbers in weeks.</p>
   </div>
-  <p class="foot">sources: provider rate cards and docs · SEC filings and earnings (Q1–Q2 2026) · deal reporting · provider dossiers (Jul 2026) · part of the compute desk · companion to the matrix atlas and the sellers deck · IREN omitted: nothing to sell</p>
+  <p class="foot">sources: provider rate cards and docs · SEC filings and earnings (Q1–Q2 2026) · deal reporting · provider dossiers (Jul 2026) · part of the compute desk</p>
 </div>
 <div id="tip"></div>
 
