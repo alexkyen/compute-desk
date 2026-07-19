@@ -56,6 +56,13 @@ svg{display:block;width:100%;height:auto;user-select:none}
 .nav-here{color:var(--ink-3);margin:0 auto}
 .nav-bot{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 22px;margin-top:30px;padding-top:14px;border-top:1px solid var(--rule)}
 .nav-bot .nav-next{margin-left:auto}
+.stepper{display:inline-flex;gap:6px}
+.stepper .st{display:inline-flex;align-items:center;justify-content:center;width:26px;height:24px;border:1px solid var(--rule);border-radius:6px;position:relative;text-decoration:none}
+.stepper a.st{color:var(--ink-2)}
+.stepper a.st:hover,.stepper a.st:focus-visible{border-color:var(--teal);color:var(--teal)}
+.stepper span.st{color:#C2CAC3;cursor:default}
+.stepper a.st::after{content:attr(data-t);position:absolute;top:calc(100% + 7px);right:0;background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:3px 8px;font-size:10.5px;letter-spacing:.06em;color:var(--ink-2);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;z-index:12}
+.stepper a.st:hover::after,.stepper a.st:focus-visible::after{opacity:1}
 </style>
 </head>
 <body>
@@ -63,8 +70,10 @@ svg{display:block;width:100%;height:auto;user-select:none}
   <div class="nav-in">
     <a href="index.html">The compute desk</a>
     <span class="nav-here">05 / 06 — The two trees</span>
-    <a class="nav-prev" href="the-fabric.html">← The fabric tax</a>
-    <a class="nav-next" href="sla-anatomy.html">SLA anatomy →</a>
+    <span class="stepper">
+      <a class="st" href="the-fabric.html" data-t="The fabric tax" aria-label="Previous: The fabric tax">←</a>
+      <a class="st" href="sla-anatomy.html" data-t="SLA anatomy" aria-label="Next: SLA anatomy">→</a>
+    </span>
   </div>
 </nav>
 <div class="wrap">

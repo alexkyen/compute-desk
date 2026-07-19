@@ -76,6 +76,13 @@ details p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
 .nav-here{color:var(--ink-3);margin:0 auto}
 .nav-bot{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 22px;margin-top:30px;padding-top:14px;border-top:1px solid var(--rule)}
 .nav-bot .nav-next{margin-left:auto}
+.stepper{display:inline-flex;gap:6px}
+.stepper .st{display:inline-flex;align-items:center;justify-content:center;width:26px;height:24px;border:1px solid var(--rule);border-radius:6px;position:relative;text-decoration:none}
+.stepper a.st{color:var(--ink-2)}
+.stepper a.st:hover,.stepper a.st:focus-visible{border-color:var(--teal);color:var(--teal)}
+.stepper span.st{color:#C2CAC3;cursor:default}
+.stepper a.st::after{content:attr(data-t);position:absolute;top:calc(100% + 7px);right:0;background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:3px 8px;font-size:10.5px;letter-spacing:.06em;color:var(--ink-2);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;z-index:12}
+.stepper a.st:hover::after,.stepper a.st:focus-visible::after{opacity:1}
 /* additive — phase 3 (new rules only) */
 .srcblock{margin-top:26px}
 .srcblock ul{list-style:none;margin-top:10px}
@@ -89,7 +96,10 @@ details p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
   <div class="nav-in">
     <a href="index.html">The compute desk</a>
     <span class="nav-here">01 / 06 — The atlas</span>
-    <a class="nav-next" href="gpu-supply-book.html">The supply book →</a>
+    <span class="stepper">
+      <span class="st dis" aria-hidden="true">←</span>
+      <a class="st" href="gpu-supply-book.html" data-t="The supply book" aria-label="Next: The supply book">→</a>
+    </span>
   </div>
 </nav>
 <div class="wrap">
