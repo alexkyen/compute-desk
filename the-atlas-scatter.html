@@ -77,26 +77,6 @@ details p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
 .nav-bot{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 22px;margin-top:30px;padding-top:14px;border-top:1px solid var(--rule)}
 .nav-bot .nav-next{margin-left:auto}
 /* additive — phase 3 (new rules only) */
-.presets{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 8px}
-.presets button{font-family:var(--mono);font-size:10.5px;color:var(--ink-2);background:transparent;border:1px solid var(--rule);border-radius:6px;padding:4px 9px;cursor:pointer}
-.presets button:hover{border-color:var(--teal);color:var(--teal)}
-.presets button.on{background:var(--teal);border-color:var(--teal);color:#fff}
-.pcap{font-family:var(--mono);font-size:10.5px;color:var(--ink-2);margin:0 0 10px;min-height:1.5em}
-.plink{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--teal);text-decoration:none;white-space:nowrap;cursor:pointer}
-.plink:hover{text-decoration:underline;text-underline-offset:2px}
-.side{float:right;clear:right;width:200px;margin:2px -232px 10px 20px;padding-left:10px;border-left:1px solid var(--rule);font-family:var(--mono);font-size:10.5px;line-height:1.55;color:var(--ink-3)}
-@media(max-width:880px){.side{float:none;display:block;width:auto;margin:10px 0 0}}
-.stat{font-family:var(--mono);margin:20px 0 22px}
-.stat .fig{font-size:26px;font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1.15}
-.stat .lbl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-top:3px}
-.ask.rule{border-left-color:var(--teal)}
-.ask.rule b{color:var(--teal)}
-.ask.trap{border-left-color:var(--oxide)}
-.ask.trap b{color:var(--oxide)}
-.gl{text-decoration:underline dotted;text-decoration-color:var(--ink-3);text-underline-offset:3px;cursor:help}
-#tpop{position:fixed;display:none;z-index:11;max-width:300px;background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:10px 12px;box-shadow:0 3px 14px rgba(21,32,26,.12)}
-#tpop .tl{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
-#tpop .td{font-size:13px;line-height:1.5;color:var(--ink-2)}
 .srcblock{margin-top:26px}
 .srcblock ul{list-style:none;margin-top:10px}
 .srcblock li{font-family:var(--mono);font-size:11px;color:var(--ink-3);line-height:1.7;margin-bottom:3px}
@@ -125,12 +105,6 @@ details p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
       <span class="hint">click a point or a seller → trace + file · hover → source</span>
     </div>
     <div class="sellers" id="sellers"></div>
-    <div class="presets" id="presets">
-      <button data-ps="1">01 the premium</button>
-      <button data-ps="2">02 the tight middle</button>
-      <button data-ps="3">03 the floor</button>
-    </div>
-    <p class="pcap" id="pcap"></p>
     <div class="cwrap"><svg id="sc" viewBox="0 0 1000 600" role="img" aria-label="Scatter map of GPU rental prices: silicon generation across the horizontal axis, dollars per GPU hour on a log vertical axis, one point per seller, channel and print"></svg></div>
     <div class="legend">
       <span><svg width="14" height="12"><circle cx="7" cy="6" r="5" fill="#4A574F"/></svg>on-demand list</span>
@@ -149,16 +123,12 @@ details p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
 
   <div class="notes">
     <h2>How to read the field</h2>
-    <p><strong>The log axis is the point of this view.</strong> On a linear axis, the difference between $1.50 and $3 disappears next to the difference between $10 and $12 — but to a buyer they are the same event: a 2× spread. Log scale makes ratios distances, so the three archetype bands sit at roughly constant heights across generations: marketplaces at the floor, neoclouds in a tight middle band, hyperscaler list floating 2–6× above it for identical silicon. The useful question is rarely what a price is — it's which band it belongs to. <a class="plink" href="#" data-ps="1">see it on the chart · 01 ↑</a><span class="side">log scale: equal distances are equal ratios — a 2× gap reads the same at $2 as at $10.</span></p>
-    <div class="stat"><p class="fig">2–6×</p><p class="lbl">hyperscaler list over the market floor, same silicon</p></div>
+    <p><strong>The log axis is the point of this view.</strong> On a linear axis, the difference between $1.50 and $3 disappears next to the difference between $10 and $12 — but to a buyer they are the same event: a 2× spread. Log scale makes ratios distances, so the three archetype bands sit at roughly constant heights across generations: marketplaces at the floor, neoclouds in a tight middle band, hyperscaler list floating 2–6× above it for identical silicon. The useful question is rarely what a price is — it's which band it belongs to.</p>
     <p><strong>The wall of ×.</strong> Points thin out and × marks thicken as you move right — that gradient is the market's defining fact in one glance. Hopper is a market; Blackwell is an allocation; the rack-scale rows and alt silicon are almost pure ×. The emptying field is itself the datum: the newer the silicon, the more of the market moves behind closed doors.</p>
-    <p><strong>Tracing a seller</strong> draws their curve per channel across generations — solid through on-demand, dashed through committed, dotted through spot. The vertical gap between a seller's solid and dashed lines is their negotiation spread made visible: OCI's list-to-deal gap is a canyon, Nebius's is a step. A seller whose trace simply stops at H200 has nothing public beyond Hopper — which is itself a fact about how they sell. <a class="plink" href="#" data-ps="2">see it on the chart · 02 ↑</a><span class="side">grades: list · mkt · deal · est — every print carries one; defined under sources &amp; method below.</span></p>
+    <p><strong>Tracing a seller</strong> draws their curve per channel across generations — solid through on-demand, dashed through committed, dotted through spot. The vertical gap between a seller's solid and dashed lines is their negotiation spread made visible: OCI's list-to-deal gap is a canyon, Nebius's is a step. A seller whose trace simply stops at H200 has nothing public beyond Hopper — which is itself a fact about how they sell.</p>
     <p><strong>What the field compresses.</strong> Published ranges collapse to a midpoint with a whisker, and the nuance behind a gated offering ("on card", "roadmap", "pre-alloc") survives only in the × tooltips. The field is built for shape and negotiation; when you need the exact number to put in a model, follow the tooltip to its source.</p>
-    <div class="stat"><p class="fig">$1.58 → $11.06</p><p class="lbl">one H100 hour, two sellers, July 2026</p></div>
-    <p><strong>Provenance travels with every mark.</strong> Each carries a grade — <em>list</em>, <em>mkt</em>, <em>deal</em>, <em>est</em> — in its tooltip with its date. The shape of this field decays in months, the numbers in weeks. <a class="plink" href="#" data-ps="3">see it on the chart · 03 ↑</a></p>
+    <p><strong>Provenance travels with every mark.</strong> Each carries a grade — <em>list</em>, <em>mkt</em>, <em>deal</em>, <em>est</em> — in its tooltip with its date. The shape of this field decays in months, the numbers in weeks.</p>
   </div>
-  <div class="ask trap"><b>the trap</b>A quote without a channel is not a price. On-demand, committed, and spot for the same SKU can differ 3×; pin the channel before comparing sellers.</div>
-  <div class="ask rule"><b>rule of thumb</b>Read the band before the number: marketplaces at the floor, neoclouds in the middle, hyperscaler list 2–6× above.</div>
   <details class="srcblock">
     <summary>sources &amp; method</summary>
     <ul id="srclist"></ul>
@@ -470,14 +440,14 @@ function seg(){
  var opts=[{id:"all",l:"all channels"}].concat(CH);
  opts.forEach(function(c){h+='<button data-c="'+c.id+'" class="'+(c.id===chSel?"on":"")+'">'+c.l+"</button>"});
  el.innerHTML=h;
- el.querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){clearPreset();chSel=this.dataset.c;render()})});
+ el.querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){chSel=this.dataset.c;render()})});
 }
 function sellerChips(){
  var el=document.getElementById("sellers"),h="";
  PROV.forEach(function(p){h+='<button data-p="'+p.id+'" class="'+p.g+(p.id===sel?" on":"")+'" title="'+p.name+' — click to trace + open file">'+p.ab+"</button>"});
  el.innerHTML=h;
  el.querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){
-   clearPreset();sel=this.dataset.p===sel?null:this.dataset.p;render();renderDossier();
+   sel=this.dataset.p===sel?null:this.dataset.p;render();renderDossier();
  })});
 }
 function shapeFor(pt,col,dim){
@@ -520,7 +490,7 @@ function render(){
    g.forEach(function(gd,k){
      var col=k%6,rowi=Math.floor(k/6);
      var gx=xm-(Math.min(g.length,6)-1)*5.5+col*11, gy=YT-52+rowi*13;
-     var dim=dimP(gd.prov);
+     var dim=sel&&gd.prov!==sel;
      s+='<text x="'+gx+'" y="'+gy+'" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="'+GCOL[PMAP[gd.prov].g]+'" opacity="'+(dim?0.13:0.75)+'" style="cursor:pointer" data-g="'+sku+':'+gd.prov+'">×</text>';
    });
  });
@@ -536,8 +506,8 @@ function render(){
    });
  }
  // points: dimmed first, selected on top
- vis.filter(function(pt){return dimP(pt.prov)}).forEach(function(pt){s+=shapeFor(pt,GCOL[PMAP[pt.prov].g],true)});
- vis.filter(function(pt){return !dimP(pt.prov)}).forEach(function(pt){s+=shapeFor(pt,GCOL[PMAP[pt.prov].g],false)});
+ vis.filter(function(pt){return sel&&pt.prov!==sel}).forEach(function(pt){s+=shapeFor(pt,GCOL[PMAP[pt.prov].g],true)});
+ vis.filter(function(pt){return !sel||pt.prov===sel}).forEach(function(pt){s+=shapeFor(pt,GCOL[PMAP[pt.prov].g],false)});
  document.getElementById("sc").innerHTML=s;
 }
 
@@ -571,7 +541,7 @@ svg.addEventListener("click",function(ev){
  var t=ev.target,p=null;
  if(t.dataset&&t.dataset.i!==undefined)p=PTS[+t.dataset.i].prov;
  else if(t.dataset&&t.dataset.g)p=t.dataset.g.split(":")[1];
- if(p){clearPreset();sel=p===sel?null:p;render();renderDossier();}
+ if(p){sel=p===sel?null:p;render();renderDossier();}
 });
 
 function renderDossier(){
@@ -587,9 +557,8 @@ function renderDossier(){
  h+='<div class="ask"><b>ask them</b>'+d.ask+'</div>';
  h+='<details><summary>go deeper</summary><p>'+d.more+'</p></details>';
  el.className="card dossier open";el.innerHTML=h;
- wrapTerms(el);
 }
-document.getElementById("rst").addEventListener("click",function(){clearPreset();sel=null;render();renderDossier()});
+document.getElementById("rst").addEventListener("click",function(){sel=null;render();renderDossier()});
 render();
 
 /* ===================== additive — phase 3 ===================== */
@@ -603,112 +572,6 @@ function renderSources(){
  document.getElementById("srclist").innerHTML=h;
 }
 renderSources();
-
-/* preset plates */
-var PRESETS={
- 1:{groups:["hyp","mkt"],ch:"od",cap:"hyperscaler list runs 2–6× the market floor for identical silicon"},
- 2:{groups:["neo"],ch:"co",cap:"neocloud committed rates cluster in a narrow band — where negotiated deals actually land"},
- 3:{groups:["mkt"],ch:"sp",cap:"marketplace prints are clearing prices, not discounts — dated for a reason"}
-};
-var preset=null;
-function dimP(provId){
- if(sel)return provId!==sel;
- if(preset)return PRESETS[preset].groups.indexOf(PMAP[provId].g)<0;
- return false;
-}
-function syncPresetUI(){
- document.querySelectorAll("#presets button").forEach(function(b){b.className=+b.dataset.ps===preset?"on":""});
- document.getElementById("pcap").textContent=preset?PRESETS[preset].cap:"";
-}
-function applyPreset(n){
- preset=n;chSel=PRESETS[n].ch;
- if(sel){sel=null;renderDossier();}
- render();syncPresetUI();
-}
-function clearPreset(){if(preset!==null){preset=null;syncPresetUI();}}
-document.querySelectorAll("#presets button").forEach(function(b){
- b.addEventListener("click",function(){
-   var n=+this.dataset.ps;
-   if(preset===n){clearPreset();render();}
-   else applyPreset(n);
- });
-});
-document.querySelectorAll(".plink").forEach(function(a){
- a.addEventListener("click",function(ev){
-   ev.preventDefault();
-   applyPreset(+this.dataset.ps);
-   document.querySelector(".cwrap").scrollIntoView({behavior:"smooth",block:"center"});
- });
-});
-
-/* term layer — terms that literally appear in this page's dossier prose */
-var TERMS={
- "take-or-pay":"commit to fixed volume at a fixed rate for the term and pay whether you use it or not.",
- "data residency / sovereignty commitment":"a contractual, not marketing, guarantee of where data and compute physically sit and which jurisdiction governs."
-};
-var TERM_PATTERNS=[
- {re:/take-or-pay/g,k:"take-or-pay"},
- {re:/data[- ]residency/g,k:"data residency / sovereignty commitment"}
-];
-function wrapTerms(root){
- if(!root)return;
- var walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null,false);
- var nodes=[];
- while(walker.nextNode()){
-   var nd=walker.currentNode,el=nd.parentNode,skip=false;
-   while(el&&el!==root){
-     if(el.nodeType===1&&(el.tagName==="A"||el.tagName==="B"||el.tagName==="STRONG"||el.tagName==="SUMMARY"||
-        el.classList.contains("gl")||el.classList.contains("side")||el.classList.contains("plink")||
-        el.classList.contains("badge")||el.classList.contains("dict"))){skip=true;break}
-     el=el.parentNode;
-   }
-   if(!skip)nodes.push(nd);
- }
- nodes.forEach(function(nd){
-   var txt=nd.nodeValue,any=false;
-   TERM_PATTERNS.forEach(function(tp){tp.re.lastIndex=0;if(tp.re.test(txt))any=true});
-   if(!any)return;
-   var frag=document.createDocumentFragment(),rest=txt;
-   while(rest){
-     var bi=-1,best=null,bp=null;
-     TERM_PATTERNS.forEach(function(tp){
-       tp.re.lastIndex=0;var m=tp.re.exec(rest);
-       if(m&&(bi<0||m.index<bi)){bi=m.index;best=m[0];bp=tp}
-     });
-     if(bi<0){frag.appendChild(document.createTextNode(rest));break}
-     if(bi>0)frag.appendChild(document.createTextNode(rest.slice(0,bi)));
-     var sp=document.createElement("span");sp.className="gl";sp.setAttribute("data-term",bp.k);sp.textContent=best;
-     frag.appendChild(sp);
-     rest=rest.slice(bi+best.length);
-   }
-   nd.parentNode.replaceChild(frag,nd);
- });
-}
-var tpop=document.createElement("div");tpop.id="tpop";document.body.appendChild(tpop);
-var tpopFor=null;
-function showTermPop(sp){
- var k=sp.getAttribute("data-term");
- if(!TERMS[k])return;
- tpop.innerHTML='<p class="tl"></p><p class="td"></p>';
- tpop.querySelector(".tl").textContent=k;
- tpop.querySelector(".td").textContent=TERMS[k];
- tpop.style.display="block";tpopFor=sp;
- var r=sp.getBoundingClientRect(),pr=tpop.getBoundingClientRect();
- var x=r.left,y=r.bottom+8;
- if(x+pr.width>window.innerWidth-10)x=window.innerWidth-pr.width-10;
- if(x<10)x=10;
- if(y+pr.height>window.innerHeight-10)y=r.top-pr.height-8;
- tpop.style.left=x+"px";tpop.style.top=y+"px";
-}
-function hideTermPop(){tpop.style.display="none";tpopFor=null}
-document.addEventListener("mouseover",function(ev){var sp=ev.target.closest?ev.target.closest(".gl"):null;if(sp)showTermPop(sp)});
-document.addEventListener("mouseout",function(ev){if(ev.target.closest&&ev.target.closest(".gl"))hideTermPop()});
-document.addEventListener("click",function(ev){
- var sp=ev.target.closest?ev.target.closest(".gl"):null;
- if(sp){showTermPop(sp);return}
- if(!tpop.contains(ev.target))hideTermPop();
-});
-document.addEventListener("keydown",function(ev){if(ev.key==="Escape")hideTermPop()});
 </script>
 </body>
 </html>
