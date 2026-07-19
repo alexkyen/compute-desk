@@ -76,6 +76,32 @@ details p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
 .nav-here{color:var(--ink-3);margin:0 auto}
 .nav-bot{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 22px;margin-top:30px;padding-top:14px;border-top:1px solid var(--rule)}
 .nav-bot .nav-next{margin-left:auto}
+/* additive — phase 3 (new rules only) */
+.presets{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 8px}
+.presets button{font-family:var(--mono);font-size:10.5px;color:var(--ink-2);background:transparent;border:1px solid var(--rule);border-radius:6px;padding:4px 9px;cursor:pointer}
+.presets button:hover{border-color:var(--teal);color:var(--teal)}
+.presets button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.pcap{font-family:var(--mono);font-size:10.5px;color:var(--ink-2);margin:0 0 10px;min-height:1.5em}
+.plink{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--teal);text-decoration:none;white-space:nowrap;cursor:pointer}
+.plink:hover{text-decoration:underline;text-underline-offset:2px}
+.side{float:right;clear:right;width:200px;margin:2px -232px 10px 20px;padding-left:10px;border-left:1px solid var(--rule);font-family:var(--mono);font-size:10.5px;line-height:1.55;color:var(--ink-3)}
+@media(max-width:880px){.side{float:none;display:block;width:auto;margin:10px 0 0}}
+.stat{font-family:var(--mono);margin:20px 0 22px}
+.stat .fig{font-size:26px;font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1.15}
+.stat .lbl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-top:3px}
+.ask.rule{border-left-color:var(--teal)}
+.ask.rule b{color:var(--teal)}
+.ask.trap{border-left-color:var(--oxide)}
+.ask.trap b{color:var(--oxide)}
+.gl{text-decoration:underline dotted;text-decoration-color:var(--ink-3);text-underline-offset:3px;cursor:help}
+#tpop{position:fixed;display:none;z-index:11;max-width:300px;background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:10px 12px;box-shadow:0 3px 14px rgba(21,32,26,.12)}
+#tpop .tl{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+#tpop .td{font-size:13px;line-height:1.5;color:var(--ink-2)}
+.srcblock{margin-top:26px}
+.srcblock ul{list-style:none;margin-top:10px}
+.srcblock li{font-family:var(--mono);font-size:11px;color:var(--ink-3);line-height:1.7;margin-bottom:3px}
+.srcblock li b{color:var(--ink-2);font-weight:500}
+.srcblock a{color:var(--teal);text-decoration:underline;text-underline-offset:2px}
 </style>
 </head>
 <body>
@@ -99,6 +125,12 @@ details p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
       <span class="hint">click a point or a seller → trace + file · hover → source</span>
     </div>
     <div class="sellers" id="sellers"></div>
+    <div class="presets" id="presets">
+      <button data-ps="1">01 the premium</button>
+      <button data-ps="2">02 the tight middle</button>
+      <button data-ps="3">03 the floor</button>
+    </div>
+    <p class="pcap" id="pcap"></p>
     <div class="cwrap"><svg id="sc" viewBox="0 0 1000 600" role="img" aria-label="Scatter map of GPU rental prices: silicon generation across the horizontal axis, dollars per GPU hour on a log vertical axis, one point per seller, channel and print"></svg></div>
     <div class="legend">
       <span><svg width="14" height="12"><circle cx="7" cy="6" r="5" fill="#4A574F"/></svg>on-demand list</span>
@@ -117,13 +149,21 @@ details p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
 
   <div class="notes">
     <h2>How to read the field</h2>
-    <p><strong>The log axis is the point of this view.</strong> On a linear axis, the difference between $1.50 and $3 disappears next to the difference between $10 and $12 — but to a buyer they are the same event: a 2× spread. Log scale makes ratios distances, so the three archetype bands sit at roughly constant heights across generations: marketplaces at the floor, neoclouds in a tight middle band, hyperscaler list floating 2–6× above it for identical silicon. The useful question is rarely what a price is — it's which band it belongs to.</p>
+    <p><strong>The log axis is the point of this view.</strong> On a linear axis, the difference between $1.50 and $3 disappears next to the difference between $10 and $12 — but to a buyer they are the same event: a 2× spread. Log scale makes ratios distances, so the three archetype bands sit at roughly constant heights across generations: marketplaces at the floor, neoclouds in a tight middle band, hyperscaler list floating 2–6× above it for identical silicon. The useful question is rarely what a price is — it's which band it belongs to. <a class="plink" href="#" data-ps="1">see it on the chart · 01 ↑</a><span class="side">log scale: equal distances are equal ratios — a 2× gap reads the same at $2 as at $10.</span></p>
+    <div class="stat"><p class="fig">2–6×</p><p class="lbl">hyperscaler list over the market floor, same silicon</p></div>
     <p><strong>The wall of ×.</strong> Points thin out and × marks thicken as you move right — that gradient is the market's defining fact in one glance. Hopper is a market; Blackwell is an allocation; the rack-scale rows and alt silicon are almost pure ×. The emptying field is itself the datum: the newer the silicon, the more of the market moves behind closed doors.</p>
-    <p><strong>Tracing a seller</strong> draws their curve per channel across generations — solid through on-demand, dashed through committed, dotted through spot. The vertical gap between a seller's solid and dashed lines is their negotiation spread made visible: OCI's list-to-deal gap is a canyon, Nebius's is a step. A seller whose trace simply stops at H200 has nothing public beyond Hopper — which is itself a fact about how they sell.</p>
+    <p><strong>Tracing a seller</strong> draws their curve per channel across generations — solid through on-demand, dashed through committed, dotted through spot. The vertical gap between a seller's solid and dashed lines is their negotiation spread made visible: OCI's list-to-deal gap is a canyon, Nebius's is a step. A seller whose trace simply stops at H200 has nothing public beyond Hopper — which is itself a fact about how they sell. <a class="plink" href="#" data-ps="2">see it on the chart · 02 ↑</a><span class="side">grades: list · mkt · deal · est — every print carries one; defined under sources &amp; method below.</span></p>
     <p><strong>What the field compresses.</strong> Published ranges collapse to a midpoint with a whisker, and the nuance behind a gated offering ("on card", "roadmap", "pre-alloc") survives only in the × tooltips. The field is built for shape and negotiation; when you need the exact number to put in a model, follow the tooltip to its source.</p>
-    <p><strong>Provenance travels with every mark.</strong> Each carries a grade — <em>list</em>, <em>mkt</em>, <em>deal</em>, <em>est</em> — in its tooltip with its date. The shape of this field decays in months, the numbers in weeks.</p>
+    <div class="stat"><p class="fig">$1.58 → $11.06</p><p class="lbl">one H100 hour, two sellers, July 2026</p></div>
+    <p><strong>Provenance travels with every mark.</strong> Each carries a grade — <em>list</em>, <em>mkt</em>, <em>deal</em>, <em>est</em> — in its tooltip with its date. The shape of this field decays in months, the numbers in weeks. <a class="plink" href="#" data-ps="3">see it on the chart · 03 ↑</a></p>
   </div>
-  <p class="foot">sources: provider rate cards and docs · SEC filings and earnings (Q1–Q2 2026) · deal reporting · provider dossiers (Jul 2026) · part of the compute desk</p>
+  <div class="ask trap"><b>the trap</b>A quote without a channel is not a price. On-demand, committed, and spot for the same SKU can differ 3×; pin the channel before comparing sellers.</div>
+  <div class="ask rule"><b>rule of thumb</b>Read the band before the number: marketplaces at the floor, neoclouds in the middle, hyperscaler list 2–6× above.</div>
+  <details class="srcblock">
+    <summary>sources &amp; method</summary>
+    <ul id="srclist"></ul>
+  </details>
+  <p class="foot">sources: the “sources &amp; method” list above — every print carries a src ID · part of the compute desk</p>
   <nav class="nav-bot" aria-label="Manual navigation">
     <a class="nav-next" href="gpu-supply-book.html">The supply book →</a>
   </nav>
@@ -131,6 +171,24 @@ details p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
 <div id="tip"></div>
 
 <script>
+// sources: one entry per distinct source; url omitted = method entry (no citable page — by design)
+var SOURCES=[
+ {id:"S1",label:"AWS EC2 Capacity Blocks pricing",url:"https://aws.amazon.com/ec2/capacityblocks/pricing/",note:"Jul 2026"},
+ {id:"S2",label:"AWS EC2 on-demand pricing",url:"https://aws.amazon.com/ec2/pricing/on-demand/",note:"Jul 2026"},
+ {id:"S3",label:"Microsoft Azure Linux VM pricing",url:"https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/",note:"NC/ND series · May 2026 prints"},
+ {id:"S4",label:"Google Cloud accelerator pricing",url:"https://cloud.google.com/products/compute/pricing",note:"accelerator-optimized · 2026"},
+ {id:"S5",label:"Oracle Cloud price list",url:"https://www.oracle.com/cloud/price-list/",note:"BM.GPU shapes · 2026"},
+ {id:"S6",label:"CoreWeave pricing",url:"https://www.coreweave.com/pricing",note:"per-instance card · 2026"},
+ {id:"S7",label:"Nebius rate card",url:"https://nebius.com/prices",note:"Jun 2026"},
+ {id:"S8",label:"Lambda pricing",url:"https://lambda.ai/pricing",note:"Jul 2026"},
+ {id:"S9",label:"Crusoe Cloud pricing",url:"https://crusoe.ai/cloud/pricing",note:"2026"},
+ {id:"S10",label:"Fluidstack — no public rate card; prints are the aggregator's marketed index rates, cross-checked against deal reporting"},
+ {id:"S11",label:"SF Compute market prices",url:"https://sfcompute.com/prices",note:"live cleared prices · prints Feb–Mar 2026"},
+ {id:"S12",label:"Vast.ai marketplace pricing",url:"https://vast.ai/pricing",note:"live · host-set"},
+ {id:"S13",label:"SemiAnalysis, ClusterMAX GPU cloud rating",url:"https://www.clustermax.ai/",note:"v1.0 Mar 2025 → v2.1 Apr 2026"},
+ {id:"deal",label:"deal-reported: compiled from Q1–Q2 2026 earnings calls, filings, and press coverage; triangulated across sources, not from a single citable page"},
+ {id:"est",label:"estimate: derived by the desk from adjacent public prints; method over link by design"}
+];
 var PROV=[
  {id:"aws",ab:"AWS",name:"AWS",band:"Hyperscalers",g:"hyp",arch:"hyperscaler"},
  {id:"azr",ab:"AZR",name:"Microsoft Azure",band:"Hyperscalers",g:"hyp",arch:"hyperscaler"},
@@ -159,21 +217,21 @@ var SKUS=[
  {id:"trn",l:"Trainium 2/3",s:"AWS custom"}
 ];
 // cell: v=display, n=numeric midpoint, s: p=priced q=gated n=not offered, t=tooltip
-function P(v,n,t){return{v:v,n:n,s:"p",t:t}}
-function Q(v,t){return{v:v||"quote",s:"q",t:t}}
+function P(v,n,t,src){return{v:v,n:n,s:"p",t:t,src:src}}
+function Q(v,t,src){return{v:v||"quote",s:"q",t:t,src:src}}
 var N={s:"n"};
 var D={
- gb300:{aws:Q("quote","P6e-GB300 UltraServers GA Dec 2025 · price not public · list absent"),azr:Q("quote","ND GB300 v7 · first 4,608-GPU cluster Oct 2025 · negotiated"),gcp:Q("quote","A4X Max · committed deals dominate"),oci:Q("quote","GB300 in deployment · queued allocation"),crw:Q("quote","first GB300 NVL72 deploy Jul 2025 · contract-only"),neb:Q("quote","GB300 Exemplar Cloud for training · by contact"),lmb:Q("quote","single-tenant GB300 NVL72 clusters incl. hydrogen-powered ECL site · negotiated"),cru:N,fld:Q("pre-alloc","frontier custom builds 100% pre-allocated to anchor (Anthropic)"),nsc:Q("quote","building GB300/Rubin for Microsoft and OpenAI · wholesale"),sfc:N,vst:N},
- gb200:{aws:P("10.58",10.58,"Capacity Block per-GPU · Dallas Local Zone only · AWS list · Jul 26"),azr:Q("quote","ND GB200 v6 · oft-cited figure implies low-teens $/GPU-hr · low confidence"),gcp:Q("quote","A4X · allocation-request via sales/DWS"),oci:Q("quote","GB200 NVL72 racks · quote-only at cluster scale"),crw:Q("quote","sold as 2-superchip instances · GPU pricing reserved for inference-platform customers"),neb:Q("quote","GB200 NVL72 by contact · Nebius card · Jun 26"),lmb:Q("quote","frontier tier negotiated"),cru:Q("quote","sales-gated, limited availability"),fld:Q("quote","bespoke clusters via partner DCs"),nsc:Q("quote","wholesale only"),sfc:N,vst:N},
- b300:{aws:P("11.70",11.70,"Capacity Block per-GPU · AWS list · Jul 26 · reprice due this month"),azr:N,gcp:N,oci:N,crw:Q("quote","contract-model"),neb:Q("on card","added to Nebius price list Jun 2026 · value not verified here"),lmb:Q("quote","clusters"),cru:N,fld:N,nsc:Q("quote","wholesale"),sfc:Q("roadmap","listed on SFC roadmap for market trading · Q2 26"),vst:N},
- b200:{aws:P("10.30",10.30,"Capacity Block per-GPU $10.30 · on-demand p6-b200 ~$14.24 · AWS list/mkt · Jul 26"),azr:N,gcp:Q("quote","A4 · committed via sales/DWS"),oci:Q("quote","B200.8 quote-only at cluster scale"),crw:P("~6.50",6.50,"contract-model access · estimate from dossier · 26"),neb:P("3.95–7.15",5.55,"committed $3.95 / on-demand $7.15 · Nebius rate card · Jun 26"),lmb:P("6.69",6.69,"on-demand list · firmed from ~$5 as Blackwell demand rose · Jul 26"),cru:Q("quote","sales-gated"),fld:Q("quote","aggregated availability varies"),nsc:Q("quote","wholesale"),sfc:N,vst:Q("rare","scarce on p2p supply · host-set")},
- h200:{aws:P("4.98–6.22",5.60,"Capacity Blocks p5e/p5en range · AWS list · Jul 26 (+15% reprice this year)"),azr:Q("quote","ND H200 v5 previewed late 2025 · negotiated"),gcp:Q("quote","A3 Ultra (3.2 Tb/s RDMA) · quota/DWS"),oci:P("10.00",10.00,"bare-metal list, same card as H100.8 · negotiated deals far below · OCI list · 26"),crw:P("6.31",6.31,"on-demand list · committed 15–60% below · CW card · 26"),neb:P("2.45–4.50",3.48,"committed $2.45 / on-demand $4.50 · Nebius rate card · Jun 26"),lmb:Q("quote","H200 in clusters only"),cru:P("4.29",4.29,"on-demand list, per-minute billing · Crusoe · 26"),fld:P("~2.30",2.30,"aggregator index on-demand · marketed, cross-checked · 26"),nsc:Q("quote","wholesale"),sfc:Q("roadmap","H200 blocks on SFC roadmap"),vst:Q("rare","thin p2p supply")},
- h100:{aws:P("3.93–6.88",4.50,"Capacity Block $3.93–4.33 · on-demand ~$6.88 post mid-2025 cuts · list/mkt · Jul 26"),azr:P("6.98–12.29",9.60,"NC H100 NVL $6.98 · ND96isr $12.29 (the training SKU) · list/mkt · May 26"),gcp:P("~11.06",11.06,"a3-highgpu on-demand us-central1 · spot escape hatch $2.25 · list · 26"),oci:P("10.00",10.00,"bare-metal list · negotiated superclusters $2.50–4.50 (deal-reported) · 26"),crw:P("6.16",6.16,"on-demand list · committed 15–60% below (~$2.5–5.2) · CW card · 26"),neb:P("2.15–3.85",3.00,"committed $2.15 / on-demand $3.85 · undercuts CW list ~40%, hyperscalers 60–80% · Jun 26"),lmb:P("2.49–3.44",2.99,"on-demand by config · 1-Click Clusters $3.99 (IB fabric premium) · list · 26"),cru:P("3.90",3.90,"on-demand list · reserved est. high-$2s for 1yr+ · Crusoe · 26"),fld:P("~2.10",2.10,"aggregator index on-demand · one of the market's true price floors · 26"),nsc:P("low-$2s",2.25,"multi-year negotiated enterprise · deal-reported · no self-serve · 26"),sfc:P("1.49–1.68",1.58,"cleared market average Feb–Mar 26 · zone dispersion $1.75–5.00 · SFC"),vst:P("1.38–1.87",1.65,"interruptible $1.38–1.65 · on-demand tier ~$1.87 · host-set · early 26")},
- a100:{aws:P("1.48",1.48,"Capacity Block per-GPU · AWS list · Jul 26"),azr:P("~3.40",3.40,"ND A100 v4 on-demand · estimate from list derivations · 26"),gcp:P("3.28",3.28,"a2-highgpu per-GPU on-demand · tracker print · Mar 26"),oci:P("~4.00",4.00,"BM.GPU A100 80G bare metal list · moderate confidence · 26"),crw:P("~2.21",2.21,"legacy fleet monetized down-market · historical card · 25"),neb:N,lmb:P("1.99–2.79",2.39,"on-demand list · 26"),cru:Q("quote","offered; price via sales"),fld:Q("quote","legacy aggregated fleets · varies"),nsc:N,sfc:N,vst:P("0.6–1.0",0.80,"host-set p2p range · est · 26")},
- l40s:{aws:P("~1.86",1.86,"G6e (L40S) 1-GPU on-demand · list · 26"),azr:N,gcp:P("0.71",0.71,"G2 (L4 — nearest class) on-demand · list · 26"),oci:P("~3.74",3.74,"BM L40S.4 list · moderate confidence · 26"),crw:Q("quote","down-market inventory varies"),neb:P("0.74–1.80",1.10,"L40S from $0.74 · RTX PRO 6000 $0.95/$1.80 · Nebius card · Jun 26"),lmb:N,cru:Q("quote","offered via sales"),fld:P("~1.00",1.00,"aggregated L40S · est · 26"),nsc:N,sfc:N,vst:P("~0.67",0.67,"host-set p2p · est · 26")},
- mi:{aws:N,azr:Q("quote","ND MI300X v5 available · passed on MI325X (reported) · price via sales"),gcp:N,oci:P("6.00–8.60",7.00,"MI300X ~$6 list · MI355X ~$8.60 market-clustered flat (early-cycle premium) · 26"),crw:N,neb:N,lmb:N,cru:P("~8.60",8.60,"MI355X market-clustered flat pricing · only neocloud here with live AMD line · est · 26"),fld:N,nsc:Q("quote","MI300X 8-way OAM nodes · wholesale"),sfc:N,vst:N},
- tpu:{aws:N,azr:N,gcp:Q("quote","Ironwood (v7) GA, committed deals dominate · anchor effective rate est. ~$1.60/TPU-hr · SemiAnalysis TCO: ~30% below GB200, ~41% below GB300"),oci:N,crw:N,neb:N,lmb:N,cru:N,fld:Q("early","early external TPU access via Google partnership"),nsc:N,sfc:N,vst:N},
- trn:{aws:Q("quote","Trn2/Trn3 UltraServers · pitched 30–40% better price-perf vs GPUs · Neuron SDK maturity gates it to elite teams until mid-26 software drops"),azr:N,gcp:N,oci:N,crw:N,neb:N,lmb:N,cru:N,fld:N,nsc:N,sfc:N,vst:N}
+ gb300:{aws:Q("quote","P6e-GB300 UltraServers GA Dec 2025 · price not public · list absent","deal"),azr:Q("quote","ND GB300 v7 · first 4,608-GPU cluster Oct 2025 · negotiated","deal"),gcp:Q("quote","A4X Max · committed deals dominate","deal"),oci:Q("quote","GB300 in deployment · queued allocation","deal"),crw:Q("quote","first GB300 NVL72 deploy Jul 2025 · contract-only","deal"),neb:Q("quote","GB300 Exemplar Cloud for training · by contact","S7"),lmb:Q("quote","single-tenant GB300 NVL72 clusters incl. hydrogen-powered ECL site · negotiated","deal"),cru:N,fld:Q("pre-alloc","frontier custom builds 100% pre-allocated to anchor (Anthropic)","deal"),nsc:Q("quote","building GB300/Rubin for Microsoft and OpenAI · wholesale","deal"),sfc:N,vst:N},
+ gb200:{aws:P("10.58",10.58,"Capacity Block per-GPU · Dallas Local Zone only · AWS list · Jul 26","S1"),azr:Q("quote","ND GB200 v6 · oft-cited figure implies low-teens $/GPU-hr · low confidence","est"),gcp:Q("quote","A4X · allocation-request via sales/DWS"),oci:Q("quote","GB200 NVL72 racks · quote-only at cluster scale"),crw:Q("quote","sold as 2-superchip instances · GPU pricing reserved for inference-platform customers","S6"),neb:Q("quote","GB200 NVL72 by contact · Nebius card · Jun 26","S7"),lmb:Q("quote","frontier tier negotiated","deal"),cru:Q("quote","sales-gated, limited availability"),fld:Q("quote","bespoke clusters via partner DCs"),nsc:Q("quote","wholesale only"),sfc:N,vst:N},
+ b300:{aws:P("11.70",11.70,"Capacity Block per-GPU · AWS list · Jul 26 · reprice due this month","S1"),azr:N,gcp:N,oci:N,crw:Q("quote","contract-model"),neb:Q("on card","added to Nebius price list Jun 2026 · value not verified here","S7"),lmb:Q("quote","clusters"),cru:N,fld:N,nsc:Q("quote","wholesale"),sfc:Q("roadmap","listed on SFC roadmap for market trading · Q2 26"),vst:N},
+ b200:{aws:P("10.30",10.30,"Capacity Block per-GPU $10.30 · on-demand p6-b200 ~$14.24 · AWS list/mkt · Jul 26","S1"),azr:N,gcp:Q("quote","A4 · committed via sales/DWS"),oci:Q("quote","B200.8 quote-only at cluster scale"),crw:P("~6.50",6.50,"contract-model access · estimate from dossier · 26","est"),neb:P("3.95–7.15",5.55,"committed $3.95 / on-demand $7.15 · Nebius rate card · Jun 26","S7"),lmb:P("6.69",6.69,"on-demand list · firmed from ~$5 as Blackwell demand rose · Jul 26","S8"),cru:Q("quote","sales-gated"),fld:Q("quote","aggregated availability varies"),nsc:Q("quote","wholesale"),sfc:N,vst:Q("rare","scarce on p2p supply · host-set","S12")},
+ h200:{aws:P("4.98–6.22",5.60,"Capacity Blocks p5e/p5en range · AWS list · Jul 26 (+15% reprice this year)","S1"),azr:Q("quote","ND H200 v5 previewed late 2025 · negotiated","deal"),gcp:Q("quote","A3 Ultra (3.2 Tb/s RDMA) · quota/DWS"),oci:P("10.00",10.00,"bare-metal list, same card as H100.8 · negotiated deals far below · OCI list · 26","S5"),crw:P("6.31",6.31,"on-demand list · committed 15–60% below · CW card · 26","S6"),neb:P("2.45–4.50",3.48,"committed $2.45 / on-demand $4.50 · Nebius rate card · Jun 26","S7"),lmb:Q("quote","H200 in clusters only"),cru:P("4.29",4.29,"on-demand list, per-minute billing · Crusoe · 26","S9"),fld:P("~2.30",2.30,"aggregator index on-demand · marketed, cross-checked · 26","S10"),nsc:Q("quote","wholesale"),sfc:Q("roadmap","H200 blocks on SFC roadmap"),vst:Q("rare","thin p2p supply")},
+ h100:{aws:P("3.93–6.88",4.50,"Capacity Block $3.93–4.33 · on-demand ~$6.88 post mid-2025 cuts · list/mkt · Jul 26","S1"),azr:P("6.98–12.29",9.60,"NC H100 NVL $6.98 · ND96isr $12.29 (the training SKU) · list/mkt · May 26","S3"),gcp:P("~11.06",11.06,"a3-highgpu on-demand us-central1 · spot escape hatch $2.25 · list · 26","S4"),oci:P("10.00",10.00,"bare-metal list · negotiated superclusters $2.50–4.50 (deal-reported) · 26","S5"),crw:P("6.16",6.16,"on-demand list · committed 15–60% below (~$2.5–5.2) · CW card · 26","S6"),neb:P("2.15–3.85",3.00,"committed $2.15 / on-demand $3.85 · undercuts CW list ~40%, hyperscalers 60–80% · Jun 26","S7"),lmb:P("2.49–3.44",2.99,"on-demand by config · 1-Click Clusters $3.99 (IB fabric premium) · list · 26","S8"),cru:P("3.90",3.90,"on-demand list · reserved est. high-$2s for 1yr+ · Crusoe · 26","S9"),fld:P("~2.10",2.10,"aggregator index on-demand · one of the market's true price floors · 26","S10"),nsc:P("low-$2s",2.25,"multi-year negotiated enterprise · deal-reported · no self-serve · 26","deal"),sfc:P("1.49–1.68",1.58,"cleared market average Feb–Mar 26 · zone dispersion $1.75–5.00 · SFC","S11"),vst:P("1.38–1.87",1.65,"interruptible $1.38–1.65 · on-demand tier ~$1.87 · host-set · early 26","S12")},
+ a100:{aws:P("1.48",1.48,"Capacity Block per-GPU · AWS list · Jul 26","S1"),azr:P("~3.40",3.40,"ND A100 v4 on-demand · estimate from list derivations · 26","est"),gcp:P("3.28",3.28,"a2-highgpu per-GPU on-demand · tracker print · Mar 26","est"),oci:P("~4.00",4.00,"BM.GPU A100 80G bare metal list · moderate confidence · 26","S5"),crw:P("~2.21",2.21,"legacy fleet monetized down-market · historical card · 25","est"),neb:N,lmb:P("1.99–2.79",2.39,"on-demand list · 26","S8"),cru:Q("quote","offered; price via sales"),fld:Q("quote","legacy aggregated fleets · varies"),nsc:N,sfc:N,vst:P("0.6–1.0",0.80,"host-set p2p range · est · 26","est")},
+ l40s:{aws:P("~1.86",1.86,"G6e (L40S) 1-GPU on-demand · list · 26","S2"),azr:N,gcp:P("0.71",0.71,"G2 (L4 — nearest class) on-demand · list · 26","S4"),oci:P("~3.74",3.74,"BM L40S.4 list · moderate confidence · 26","S5"),crw:Q("quote","down-market inventory varies"),neb:P("0.74–1.80",1.10,"L40S from $0.74 · RTX PRO 6000 $0.95/$1.80 · Nebius card · Jun 26","S7"),lmb:N,cru:Q("quote","offered via sales"),fld:P("~1.00",1.00,"aggregated L40S · est · 26","est"),nsc:N,sfc:N,vst:P("~0.67",0.67,"host-set p2p · est · 26","est")},
+ mi:{aws:N,azr:Q("quote","ND MI300X v5 available · passed on MI325X (reported) · price via sales","deal"),gcp:N,oci:P("6.00–8.60",7.00,"MI300X ~$6 list · MI355X ~$8.60 market-clustered flat (early-cycle premium) · 26","S5"),crw:N,neb:N,lmb:N,cru:P("~8.60",8.60,"MI355X market-clustered flat pricing · only neocloud here with live AMD line · est · 26","est"),fld:N,nsc:Q("quote","MI300X 8-way OAM nodes · wholesale"),sfc:N,vst:N},
+ tpu:{aws:N,azr:N,gcp:Q("quote","Ironwood (v7) GA, committed deals dominate · anchor effective rate est. ~$1.60/TPU-hr · SemiAnalysis TCO: ~30% below GB200, ~41% below GB300","S13"),oci:N,crw:N,neb:N,lmb:N,cru:N,fld:Q("early","early external TPU access via Google partnership","deal"),nsc:N,sfc:N,vst:N},
+ trn:{aws:Q("quote","Trn2/Trn3 UltraServers · pitched 30–40% better price-perf vs GPUs · Neuron SDK maturity gates it to elite teams until mid-26 software drops","deal"),azr:N,gcp:N,oci:N,crw:N,neb:N,lmb:N,cru:N,fld:N,nsc:N,sfc:N,vst:N}
 };
 var DOS={
  aws:{strip:["hyperscaler","AA-range credit","capex ~$200B 26","backlog $364B","fabric: EFA/SRD (no IB)"],
@@ -255,80 +313,80 @@ var M={od:{},sp:{},co:{}};
  function put(ch,sku,prov,cell){ M[ch][sku]=M[ch][sku]||{}; M[ch][sku][prov]=cell; }
  var q=Q, p=P;
  // --- H100 ---
- put("od","h100","aws",p("6.88",6.88,"on-demand normalized, post mid-2025 cuts · mkt · 26"));
- put("co","h100","aws",p("3.93–4.33",4.13,"Capacity Blocks (upfront, short-term) · Savings Plans 30–60% off 1–3yr · list · Jul 26"));
+ put("od","h100","aws",p("6.88",6.88,"on-demand normalized, post mid-2025 cuts · mkt · 26","S2"));
+ put("co","h100","aws",p("3.93–4.33",4.13,"Capacity Blocks (upfront, short-term) · Savings Plans 30–60% off 1–3yr · list · Jul 26","S1"));
  put("sp","h100","aws",q("thin","spot exists nominally 60–90% off; GPU pools shallow — not a real supply layer"));
- put("od","h100","azr",p("6.98–12.29",9.60,"NC H100 NVL $6.98 · ND96isr $12.29 · list/mkt · May 26"));
- put("co","h100","azr",p("~8.0",8.0,"1yr reservation ~-35% off ND · derived est · 26"));
- put("sp","h100","azr",p("2.2–3.7",2.95,"70–82% off with 30-second eviction · est · 26"));
- put("od","h100","gcp",p("~11.06",11.06,"a3-highgpu us-central1 · list · 26"));
- put("co","h100","gcp",p("5.0–7.0",6.0,"CUD 37–55% off · derived est · 26"));
- put("sp","h100","gcp",p("2.25",2.25,"preemptible A3 · list · 26"));
- put("od","h100","oci",p("10.00",10.00,"bare-metal list · OCI · 26"));
- put("co","h100","oci",p("2.50–4.50",3.50,"negotiated superclusters, deal-reported · mod confidence · H1 26"));
+ put("od","h100","azr",p("6.98–12.29",9.60,"NC H100 NVL $6.98 · ND96isr $12.29 · list/mkt · May 26","S3"));
+ put("co","h100","azr",p("~8.0",8.0,"1yr reservation ~-35% off ND · derived est · 26","est"));
+ put("sp","h100","azr",p("2.2–3.7",2.95,"70–82% off with 30-second eviction · est · 26","est"));
+ put("od","h100","gcp",p("~11.06",11.06,"a3-highgpu us-central1 · list · 26","S4"));
+ put("co","h100","gcp",p("5.0–7.0",6.0,"CUD 37–55% off · derived est · 26","est"));
+ put("sp","h100","gcp",p("2.25",2.25,"preemptible A3 · list · 26","S4"));
+ put("od","h100","oci",p("10.00",10.00,"bare-metal list · OCI · 26","S5"));
+ put("co","h100","oci",p("2.50–4.50",3.50,"negotiated superclusters, deal-reported · mod confidence · H1 26","deal"));
  put("sp","h100","oci",{s:"n"});
- put("od","h100","crw",p("6.16",6.16,"published list (unusual for its class) · 26"));
- put("co","h100","crw",p("2.5–5.2",3.85,"15–60% below list for committed / 6mo+ terms · derived · 26"));
- put("sp","h100","crw",q("new","Spot + Flex Reservations launched Q1 26 · pricing not public"));
- put("od","h100","neb",p("3.85",3.85,"Nebius rate card · Jun 26"));
- put("co","h100","neb",p("2.15",2.15,"committed on card · undercuts CW list ~40%, hyperscalers 60–80% · Jun 26"));
+ put("od","h100","crw",p("6.16",6.16,"published list (unusual for its class) · 26","S6"));
+ put("co","h100","crw",p("2.5–5.2",3.85,"15–60% below list for committed / 6mo+ terms · derived · 26","est"));
+ put("sp","h100","crw",q("new","Spot + Flex Reservations launched Q1 26 · pricing not public","deal"));
+ put("od","h100","neb",p("3.85",3.85,"Nebius rate card · Jun 26","S7"));
+ put("co","h100","neb",p("2.15",2.15,"committed on card · undercuts CW list ~40%, hyperscalers 60–80% · Jun 26","S7"));
  put("sp","h100","neb",q("avail","preemptible pricing available · number not published"));
- put("od","h100","lmb",p("2.49–3.44",2.99,"by config · 1CC clusters $3.99 (IB premium) · list · 26"));
- put("co","h100","lmb",q("quote","Private Cloud 1–3yr negotiated"));
+ put("od","h100","lmb",p("2.49–3.44",2.99,"by config · 1CC clusters $3.99 (IB premium) · list · 26","S8"));
+ put("co","h100","lmb",q("quote","Private Cloud 1–3yr negotiated","deal"));
  put("sp","h100","lmb",{s:"n"});
- put("od","h100","cru",p("3.90",3.90,"list, per-minute billing · 26"));
- put("co","h100","cru",p("high-$2s",2.85,"reserved 1yr+ · dossier estimate, low-mod confidence"));
+ put("od","h100","cru",p("3.90",3.90,"list, per-minute billing · 26","S9"));
+ put("co","h100","cru",p("high-$2s",2.85,"reserved 1yr+ · dossier estimate, low-mod confidence","est"));
  put("sp","h100","cru",q("avail","spot tier exists · price via console/sales"));
- put("od","h100","fld",p("~2.10",2.10,"aggregator index · marketed, cross-checked · 26"));
+ put("od","h100","fld",p("~2.10",2.10,"aggregator index · marketed, cross-checked · 26","S10"));
  put("co","h100","fld",q("quote","enterprise bespoke take-or-pay"));
- put("sp","h100","fld",p("0.6–1.5",1.05,"70–90% off list for fault-tolerant work · marketed · 26"));
+ put("sp","h100","fld",p("0.6–1.5",1.05,"70–90% off list for fault-tolerant work · marketed · 26","S10"));
  put("od","h100","nsc",{s:"n"});
- put("co","h100","nsc",p("low-$2s",2.25,"multi-year enterprise, deal-reported · 26"));
+ put("co","h100","nsc",p("low-$2s",2.25,"multi-year enterprise, deal-reported · 26","deal"));
  put("sp","h100","nsc",{s:"n"});
  put("od","h100","sfc",{s:"n"});
- put("co","h100","sfc",q("forward","forward blocks trade at market · SFC"));
- put("sp","h100","sfc",p("1.49–1.68",1.58,"cleared market avg Feb–Mar 26 · zones $1.75–5.00"));
- put("od","h100","vst",p("~1.87",1.87,"on-demand tier, host-set · 26"));
+ put("co","h100","sfc",q("forward","forward blocks trade at market · SFC","S11"));
+ put("sp","h100","sfc",p("1.49–1.68",1.58,"cleared market avg Feb–Mar 26 · zones $1.75–5.00","S11"));
+ put("od","h100","vst",p("~1.87",1.87,"on-demand tier, host-set · 26","S12"));
  put("co","h100","vst",{s:"n"});
- put("sp","h100","vst",p("1.38–1.65",1.50,"interruptible, host-set · early 26"));
+ put("sp","h100","vst",p("1.38–1.65",1.50,"interruptible, host-set · early 26","S12"));
  // --- H200 ---
  put("od","h200","aws",q("quote","p5e/p5en on-demand exists; CB is the practical channel"));
- put("co","h200","aws",p("4.98–6.22",5.60,"Capacity Blocks · +15% reprice this year · list · Jul 26"));
+ put("co","h200","aws",p("4.98–6.22",5.60,"Capacity Blocks · +15% reprice this year · list · Jul 26","S1"));
  put("sp","h200","aws",q("thin","shallow pools"));
- put("od","h200","azr",q("quote","ND H200 v5 · negotiated")); put("co","h200","azr",q("quote","EA/MACC reservation")); put("sp","h200","azr",{s:"n"});
+ put("od","h200","azr",q("quote","ND H200 v5 · negotiated","deal")); put("co","h200","azr",q("quote","EA/MACC reservation")); put("sp","h200","azr",{s:"n"});
  put("od","h200","gcp",q("quote","A3 Ultra · quota/DWS")); put("co","h200","gcp",q("quote","CUD via sales")); put("sp","h200","gcp",q("avail","DWS flex-start between spot and OD"));
- put("od","h200","oci",p("10.00",10.00,"same list card as H100.8 · 26")); put("co","h200","oci",q("quote","negotiated well below list")); put("sp","h200","oci",{s:"n"});
- put("od","h200","crw",p("6.31",6.31,"list · 26")); put("co","h200","crw",p("2.5–5.4",3.95,"15–60% below · derived · 26")); put("sp","h200","crw",q("new","Flex/Spot Q1 26"));
- put("od","h200","neb",p("4.50",4.50,"rate card · Jun 26")); put("co","h200","neb",p("2.45",2.45,"committed on card · Jun 26")); put("sp","h200","neb",q("avail","preemptible available"));
- put("od","h200","lmb",q("quote","clusters only")); put("co","h200","lmb",q("quote","negotiated")); put("sp","h200","lmb",{s:"n"});
- put("od","h200","cru",p("4.29",4.29,"list · 26")); put("co","h200","cru",q("quote","reserved negotiated")); put("sp","h200","cru",q("avail","spot tier"));
- put("od","h200","fld",p("~2.30",2.30,"aggregator index · 26")); put("co","h200","fld",q("quote","bespoke")); put("sp","h200","fld",p("~0.7–1.6",1.15,"70–90% off · marketed"));
+ put("od","h200","oci",p("10.00",10.00,"same list card as H100.8 · 26","S5")); put("co","h200","oci",q("quote","negotiated well below list","deal")); put("sp","h200","oci",{s:"n"});
+ put("od","h200","crw",p("6.31",6.31,"list · 26","S6")); put("co","h200","crw",p("2.5–5.4",3.95,"15–60% below · derived · 26","est")); put("sp","h200","crw",q("new","Flex/Spot Q1 26","deal"));
+ put("od","h200","neb",p("4.50",4.50,"rate card · Jun 26","S7")); put("co","h200","neb",p("2.45",2.45,"committed on card · Jun 26","S7")); put("sp","h200","neb",q("avail","preemptible available"));
+ put("od","h200","lmb",q("quote","clusters only")); put("co","h200","lmb",q("quote","negotiated","deal")); put("sp","h200","lmb",{s:"n"});
+ put("od","h200","cru",p("4.29",4.29,"list · 26","S9")); put("co","h200","cru",q("quote","reserved negotiated","deal")); put("sp","h200","cru",q("avail","spot tier"));
+ put("od","h200","fld",p("~2.30",2.30,"aggregator index · 26","S10")); put("co","h200","fld",q("quote","bespoke")); put("sp","h200","fld",p("~0.7–1.6",1.15,"70–90% off · marketed","S10"));
  put("od","h200","nsc",{s:"n"}); put("co","h200","nsc",q("quote","wholesale")); put("sp","h200","nsc",{s:"n"});
  put("od","h200","sfc",{s:"n"}); put("co","h200","sfc",q("roadmap","H200 blocks on roadmap")); put("sp","h200","sfc",q("roadmap","roadmap"));
  put("od","h200","vst",q("rare","thin p2p supply")); put("co","h200","vst",{s:"n"}); put("sp","h200","vst",q("rare","thin"));
  // --- B200 ---
- put("od","b200","aws",p("~14.24",14.24,"p6-b200 on-demand list · mkt · May 26"));
- put("co","b200","aws",p("10.30",10.30,"Capacity Block · list · Jul 26"));
+ put("od","b200","aws",p("~14.24",14.24,"p6-b200 on-demand list · mkt · May 26","S2"));
+ put("co","b200","aws",p("10.30",10.30,"Capacity Block · list · Jul 26","S1"));
  put("sp","b200","aws",{s:"n"});
  put("od","b200","azr",{s:"n"}); put("co","b200","azr",{s:"n"}); put("sp","b200","azr",{s:"n"});
- put("od","b200","gcp",q("quote","A4 · sales/DWS")); put("co","b200","gcp",q("quote","committed dominates")); put("sp","b200","gcp",q("avail","DWS"));
+ put("od","b200","gcp",q("quote","A4 · sales/DWS")); put("co","b200","gcp",q("quote","committed dominates","deal")); put("sp","b200","gcp",q("avail","DWS"));
  put("od","b200","oci",q("quote","B200.8 quote-only")); put("co","b200","oci",q("quote","queued allocation")); put("sp","b200","oci",{s:"n"});
- put("od","b200","crw",q("quote","contract-model")); put("co","b200","crw",p("~6.50",6.50,"contract access · dossier est · 26")); put("sp","b200","crw",q("new","Flex/Spot Q1 26"));
- put("od","b200","neb",p("7.15",7.15,"rate card · Jun 26")); put("co","b200","neb",p("3.95",3.95,"committed on card · Jun 26")); put("sp","b200","neb",q("avail","preemptible"));
- put("od","b200","lmb",p("6.69",6.69,"list, firmed from ~$5 as Blackwell demand rose · Jul 26")); put("co","b200","lmb",q("quote","1CC/Private Cloud")); put("sp","b200","lmb",{s:"n"});
+ put("od","b200","crw",q("quote","contract-model")); put("co","b200","crw",p("~6.50",6.50,"contract access · dossier est · 26","est")); put("sp","b200","crw",q("new","Flex/Spot Q1 26","deal"));
+ put("od","b200","neb",p("7.15",7.15,"rate card · Jun 26","S7")); put("co","b200","neb",p("3.95",3.95,"committed on card · Jun 26","S7")); put("sp","b200","neb",q("avail","preemptible"));
+ put("od","b200","lmb",p("6.69",6.69,"list, firmed from ~$5 as Blackwell demand rose · Jul 26","S8")); put("co","b200","lmb",q("quote","1CC/Private Cloud")); put("sp","b200","lmb",{s:"n"});
  put("od","b200","cru",q("quote","sales-gated")); put("co","b200","cru",q("quote","sales-gated")); put("sp","b200","cru",{s:"n"});
  put("od","b200","fld",q("quote","varies by facility")); put("co","b200","fld",q("quote","bespoke")); put("sp","b200","fld",q("rare","limited"));
  put("od","b200","nsc",{s:"n"}); put("co","b200","nsc",q("quote","wholesale")); put("sp","b200","nsc",{s:"n"});
  put("od","b200","sfc",{s:"n"}); put("co","b200","sfc",{s:"n"}); put("sp","b200","sfc",{s:"n"});
  put("od","b200","vst",q("rare","scarce p2p")); put("co","b200","vst",{s:"n"}); put("sp","b200","vst",q("rare","scarce"));
  // --- B300 ---
- put("od","b300","aws",q("quote","p6-b300 on-demand ~$14+ · CB is the channel"));
- put("co","b300","aws",p("11.70",11.70,"Capacity Block · list · Jul 26 · reprice due this month"));
+ put("od","b300","aws",q("quote","p6-b300 on-demand ~$14+ · CB is the channel","S2"));
+ put("co","b300","aws",p("11.70",11.70,"Capacity Block · list · Jul 26 · reprice due this month","S1"));
  put("sp","b300","aws",{s:"n"});
  ["azr","gcp","oci","cru","vst"].forEach(function(x){put("od","b300",x,{s:"n"});put("co","b300",x,{s:"n"});put("sp","b300",x,{s:"n"});});
  put("od","b300","crw",q("quote","contract")); put("co","b300","crw",q("quote","contract")); put("sp","b300","crw",{s:"n"});
- put("od","b300","neb",q("on card","added to price list Jun 26 · value not verified here")); put("co","b300","neb",q("on card","Jun 26 card")); put("sp","b300","neb",{s:"n"});
- put("od","b300","lmb",q("quote","clusters")); put("co","b300","lmb",q("quote","negotiated")); put("sp","b300","lmb",{s:"n"});
+ put("od","b300","neb",q("on card","added to price list Jun 26 · value not verified here","S7")); put("co","b300","neb",q("on card","Jun 26 card","S7")); put("sp","b300","neb",{s:"n"});
+ put("od","b300","lmb",q("quote","clusters")); put("co","b300","lmb",q("quote","negotiated","deal")); put("sp","b300","lmb",{s:"n"});
  put("od","b300","fld",{s:"n"}); put("co","b300","fld",q("quote","bespoke")); put("sp","b300","fld",{s:"n"});
  put("od","b300","nsc",{s:"n"}); put("co","b300","nsc",q("quote","wholesale")); put("sp","b300","nsc",{s:"n"});
  put("od","b300","sfc",{s:"n"}); put("co","b300","sfc",q("roadmap","B300 on SFC roadmap Q2 26")); put("sp","b300","sfc",q("roadmap","roadmap"));
@@ -342,24 +400,24 @@ var M={od:{},sp:{},co:{}};
    });
  });
  // GB200 AWS committed = the CB print
- put("co","gb200","aws",p("10.58",10.58,"Capacity Block per-GPU · Dallas LZ only · list · Jul 26"));
+ put("co","gb200","aws",p("10.58",10.58,"Capacity Block per-GPU · Dallas LZ only · list · Jul 26","S1"));
  // --- A100, L40S, MI, TPU, TRN: use D table for OD; committed/spot mostly derived or gated ---
  ["a100","l40s","mi","tpu","trn"].forEach(function(sk){
    PROV.forEach(function(pr){
      var base=D[sk][pr.id]||{s:"n"};
      put("od",sk,pr.id,base);
-     put("co",sk,pr.id, base.s==="p"?q("quote","commitment discounts apply; negotiated"):(base.s==="q"?base:{s:"n"}));
+     put("co",sk,pr.id, base.s==="p"?q("quote","commitment discounts apply; negotiated","deal"):(base.s==="q"?base:{s:"n"}));
      put("sp",sk,pr.id, {s:"n"});
    });
  });
  // A100 spot exceptions
- put("sp","a100","gcp",p("~1.15",1.15,"preemptible a2 · est · 26"));
- put("sp","a100","vst",p("0.4–0.8",0.60,"interruptible host-set · est"));
- put("sp","a100","fld",p("~0.5–0.9",0.70,"aggregated spot · est"));
- put("sp","l40s","vst",p("~0.45",0.45,"interruptible host-set · est"));
+ put("sp","a100","gcp",p("~1.15",1.15,"preemptible a2 · est · 26","est"));
+ put("sp","a100","vst",p("0.4–0.8",0.60,"interruptible host-set · est","est"));
+ put("sp","a100","fld",p("~0.5–0.9",0.70,"aggregated spot · est","est"));
+ put("sp","l40s","vst",p("~0.45",0.45,"interruptible host-set · est","est"));
  // TPU committed
- put("co","tpu","gcp",Q("quote","1–3yr pod-scale commitments · anchor effective ~$1.60/TPU-hr est"));
- put("co","trn","aws",Q("quote","Savings-Plan style commitments · pitched 30–40% better price-perf"));
+ put("co","tpu","gcp",Q("quote","1–3yr pod-scale commitments · anchor effective ~$1.60/TPU-hr est","est"));
+ put("co","trn","aws",Q("quote","Savings-Plan style commitments · pitched 30–40% better price-perf","deal"));
 })();
 
 /* ===================== scatter rendering ===================== */
@@ -378,7 +436,7 @@ Object.keys(M).forEach(function(ch){
      var c=row[pr.id];
      if(c&&c.s==="p"&&isFinite(c.n)){
        var m=(c.v||"").replace(/~/g,"").match(/(\d+(?:\.\d+)?)\s*–\s*(\d+(?:\.\d+)?)/);
-       PTS.push({ch:ch,sku:sku,ci:ci,prov:pr.id,n:c.n,v:c.v,t:c.t||"",lo:m?+m[1]:null,hi:m?+m[2]:null});
+       PTS.push({ch:ch,sku:sku,ci:ci,prov:pr.id,n:c.n,v:c.v,t:c.t||"",src:c.src,lo:m?+m[1]:null,hi:m?+m[2]:null});
      }
    });
  });
@@ -391,7 +449,7 @@ function gatedFor(sku,chans){
    chans.forEach(function(ch){
      var c=(M[ch][sku]||{})[pr.id];
      if(c&&c.s==="p")priced=true;
-     if(c&&c.s==="q")notes.push({ch:ch,v:c.v||"quote",t:c.t||"sold, price gated"});
+     if(c&&c.s==="q")notes.push({ch:ch,v:c.v||"quote",t:c.t||"sold, price gated",src:c.src});
    });
    if(!priced&&notes.length)out.push({prov:pr.id,notes:notes});
  });
@@ -412,14 +470,14 @@ function seg(){
  var opts=[{id:"all",l:"all channels"}].concat(CH);
  opts.forEach(function(c){h+='<button data-c="'+c.id+'" class="'+(c.id===chSel?"on":"")+'">'+c.l+"</button>"});
  el.innerHTML=h;
- el.querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){chSel=this.dataset.c;render()})});
+ el.querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){clearPreset();chSel=this.dataset.c;render()})});
 }
 function sellerChips(){
  var el=document.getElementById("sellers"),h="";
  PROV.forEach(function(p){h+='<button data-p="'+p.id+'" class="'+p.g+(p.id===sel?" on":"")+'" title="'+p.name+' — click to trace + open file">'+p.ab+"</button>"});
  el.innerHTML=h;
  el.querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){
-   sel=this.dataset.p===sel?null:this.dataset.p;render();renderDossier();
+   clearPreset();sel=this.dataset.p===sel?null:this.dataset.p;render();renderDossier();
  })});
 }
 function shapeFor(pt,col,dim){
@@ -462,7 +520,7 @@ function render(){
    g.forEach(function(gd,k){
      var col=k%6,rowi=Math.floor(k/6);
      var gx=xm-(Math.min(g.length,6)-1)*5.5+col*11, gy=YT-52+rowi*13;
-     var dim=sel&&gd.prov!==sel;
+     var dim=dimP(gd.prov);
      s+='<text x="'+gx+'" y="'+gy+'" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="'+GCOL[PMAP[gd.prov].g]+'" opacity="'+(dim?0.13:0.75)+'" style="cursor:pointer" data-g="'+sku+':'+gd.prov+'">×</text>';
    });
  });
@@ -478,8 +536,8 @@ function render(){
    });
  }
  // points: dimmed first, selected on top
- vis.filter(function(pt){return sel&&pt.prov!==sel}).forEach(function(pt){s+=shapeFor(pt,GCOL[PMAP[pt.prov].g],true)});
- vis.filter(function(pt){return !sel||pt.prov===sel}).forEach(function(pt){s+=shapeFor(pt,GCOL[PMAP[pt.prov].g],false)});
+ vis.filter(function(pt){return dimP(pt.prov)}).forEach(function(pt){s+=shapeFor(pt,GCOL[PMAP[pt.prov].g],true)});
+ vis.filter(function(pt){return !dimP(pt.prov)}).forEach(function(pt){s+=shapeFor(pt,GCOL[PMAP[pt.prov].g],false)});
  document.getElementById("sc").innerHTML=s;
 }
 
@@ -498,12 +556,13 @@ svg.addEventListener("mousemove",function(ev){
  var t=ev.target;
  if(t.dataset&&t.dataset.i!==undefined){
    var pt=PTS[+t.dataset.i],pr=PMAP[pt.prov];
-   showTip(ev,"<b>"+pr.name+" · "+SKUMAP[pt.sku].l+"</b><em>"+CHNAME[pt.ch]+" · $"+pt.v+"/GPU-hr</em><em>"+pt.t+"</em>");
+   showTip(ev,"<b>"+pr.name+" · "+SKUMAP[pt.sku].l+"</b><em>"+CHNAME[pt.ch]+" · $"+pt.v+"/GPU-hr</em><em>"+pt.t+"</em>"+(pt.src?"<em>src "+pt.src+"</em>":""));
  }else if(t.dataset&&t.dataset.g){
    var parts=t.dataset.g.split(":"),g=gatedFor(parts[0],activeChans()).filter(function(x){return x.prov===parts[1]})[0];
    if(g){var pr2=PMAP[parts[1]];
      var body=g.notes.map(function(nn){return"<em>"+CHNAME[nn.ch]+" · "+nn.v+" — "+nn.t+"</em>"}).join("");
-     showTip(ev,"<b>"+pr2.name+" · "+SKUMAP[parts[0]].l+"</b>"+body);
+     var gsrcs=[];g.notes.forEach(function(nn){if(nn.src&&gsrcs.indexOf(nn.src)<0)gsrcs.push(nn.src)});
+     showTip(ev,"<b>"+pr2.name+" · "+SKUMAP[parts[0]].l+"</b>"+body+(gsrcs.length?"<em>src "+gsrcs.join(" · ")+"</em>":""));
    }
  }else tip.style.display="none";
 });
@@ -512,7 +571,7 @@ svg.addEventListener("click",function(ev){
  var t=ev.target,p=null;
  if(t.dataset&&t.dataset.i!==undefined)p=PTS[+t.dataset.i].prov;
  else if(t.dataset&&t.dataset.g)p=t.dataset.g.split(":")[1];
- if(p){sel=p===sel?null:p;render();renderDossier();}
+ if(p){clearPreset();sel=p===sel?null:p;render();renderDossier();}
 });
 
 function renderDossier(){
@@ -528,9 +587,128 @@ function renderDossier(){
  h+='<div class="ask"><b>ask them</b>'+d.ask+'</div>';
  h+='<details><summary>go deeper</summary><p>'+d.more+'</p></details>';
  el.className="card dossier open";el.innerHTML=h;
+ wrapTerms(el);
 }
-document.getElementById("rst").addEventListener("click",function(){sel=null;render();renderDossier()});
+document.getElementById("rst").addEventListener("click",function(){clearPreset();sel=null;render();renderDossier()});
 render();
+
+/* ===================== additive — phase 3 ===================== */
+function renderSources(){
+ var h="";
+ SOURCES.forEach(function(s){
+   h+="<li><b>"+s.id+"</b> — "+s.label+(s.note?" ("+s.note+")":"");
+   if(s.url)h+=' → <a href="'+s.url+'" target="_blank" rel="noopener">'+s.url.replace(/^https?:\/\/(www\.)?/,"").replace(/\/$/,"")+"</a>";
+   h+="</li>";
+ });
+ document.getElementById("srclist").innerHTML=h;
+}
+renderSources();
+
+/* preset plates */
+var PRESETS={
+ 1:{groups:["hyp","mkt"],ch:"od",cap:"hyperscaler list runs 2–6× the market floor for identical silicon"},
+ 2:{groups:["neo"],ch:"co",cap:"neocloud committed rates cluster in a narrow band — where negotiated deals actually land"},
+ 3:{groups:["mkt"],ch:"sp",cap:"marketplace prints are clearing prices, not discounts — dated for a reason"}
+};
+var preset=null;
+function dimP(provId){
+ if(sel)return provId!==sel;
+ if(preset)return PRESETS[preset].groups.indexOf(PMAP[provId].g)<0;
+ return false;
+}
+function syncPresetUI(){
+ document.querySelectorAll("#presets button").forEach(function(b){b.className=+b.dataset.ps===preset?"on":""});
+ document.getElementById("pcap").textContent=preset?PRESETS[preset].cap:"";
+}
+function applyPreset(n){
+ preset=n;chSel=PRESETS[n].ch;
+ if(sel){sel=null;renderDossier();}
+ render();syncPresetUI();
+}
+function clearPreset(){if(preset!==null){preset=null;syncPresetUI();}}
+document.querySelectorAll("#presets button").forEach(function(b){
+ b.addEventListener("click",function(){
+   var n=+this.dataset.ps;
+   if(preset===n){clearPreset();render();}
+   else applyPreset(n);
+ });
+});
+document.querySelectorAll(".plink").forEach(function(a){
+ a.addEventListener("click",function(ev){
+   ev.preventDefault();
+   applyPreset(+this.dataset.ps);
+   document.querySelector(".cwrap").scrollIntoView({behavior:"smooth",block:"center"});
+ });
+});
+
+/* term layer — terms that literally appear in this page's dossier prose */
+var TERMS={
+ "take-or-pay":"commit to fixed volume at a fixed rate for the term and pay whether you use it or not.",
+ "data residency / sovereignty commitment":"a contractual, not marketing, guarantee of where data and compute physically sit and which jurisdiction governs."
+};
+var TERM_PATTERNS=[
+ {re:/take-or-pay/g,k:"take-or-pay"},
+ {re:/data[- ]residency/g,k:"data residency / sovereignty commitment"}
+];
+function wrapTerms(root){
+ if(!root)return;
+ var walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null,false);
+ var nodes=[];
+ while(walker.nextNode()){
+   var nd=walker.currentNode,el=nd.parentNode,skip=false;
+   while(el&&el!==root){
+     if(el.nodeType===1&&(el.tagName==="A"||el.tagName==="B"||el.tagName==="STRONG"||el.tagName==="SUMMARY"||
+        el.classList.contains("gl")||el.classList.contains("side")||el.classList.contains("plink")||
+        el.classList.contains("badge")||el.classList.contains("dict"))){skip=true;break}
+     el=el.parentNode;
+   }
+   if(!skip)nodes.push(nd);
+ }
+ nodes.forEach(function(nd){
+   var txt=nd.nodeValue,any=false;
+   TERM_PATTERNS.forEach(function(tp){tp.re.lastIndex=0;if(tp.re.test(txt))any=true});
+   if(!any)return;
+   var frag=document.createDocumentFragment(),rest=txt;
+   while(rest){
+     var bi=-1,best=null,bp=null;
+     TERM_PATTERNS.forEach(function(tp){
+       tp.re.lastIndex=0;var m=tp.re.exec(rest);
+       if(m&&(bi<0||m.index<bi)){bi=m.index;best=m[0];bp=tp}
+     });
+     if(bi<0){frag.appendChild(document.createTextNode(rest));break}
+     if(bi>0)frag.appendChild(document.createTextNode(rest.slice(0,bi)));
+     var sp=document.createElement("span");sp.className="gl";sp.setAttribute("data-term",bp.k);sp.textContent=best;
+     frag.appendChild(sp);
+     rest=rest.slice(bi+best.length);
+   }
+   nd.parentNode.replaceChild(frag,nd);
+ });
+}
+var tpop=document.createElement("div");tpop.id="tpop";document.body.appendChild(tpop);
+var tpopFor=null;
+function showTermPop(sp){
+ var k=sp.getAttribute("data-term");
+ if(!TERMS[k])return;
+ tpop.innerHTML='<p class="tl"></p><p class="td"></p>';
+ tpop.querySelector(".tl").textContent=k;
+ tpop.querySelector(".td").textContent=TERMS[k];
+ tpop.style.display="block";tpopFor=sp;
+ var r=sp.getBoundingClientRect(),pr=tpop.getBoundingClientRect();
+ var x=r.left,y=r.bottom+8;
+ if(x+pr.width>window.innerWidth-10)x=window.innerWidth-pr.width-10;
+ if(x<10)x=10;
+ if(y+pr.height>window.innerHeight-10)y=r.top-pr.height-8;
+ tpop.style.left=x+"px";tpop.style.top=y+"px";
+}
+function hideTermPop(){tpop.style.display="none";tpopFor=null}
+document.addEventListener("mouseover",function(ev){var sp=ev.target.closest?ev.target.closest(".gl"):null;if(sp)showTermPop(sp)});
+document.addEventListener("mouseout",function(ev){if(ev.target.closest&&ev.target.closest(".gl"))hideTermPop()});
+document.addEventListener("click",function(ev){
+ var sp=ev.target.closest?ev.target.closest(".gl"):null;
+ if(sp){showTermPop(sp);return}
+ if(!tpop.contains(ev.target))hideTermPop();
+});
+document.addEventListener("keydown",function(ev){if(ev.key==="Escape")hideTermPop()});
 </script>
 </body>
 </html>
