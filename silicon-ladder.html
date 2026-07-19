@@ -51,9 +51,25 @@ h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(34
 .notes p strong{color:var(--ink);font-weight:500}
 .foot{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:44px;letter-spacing:.03em}
 @media(max-width:600px){.row{grid-template-columns:86px 1fr 78px 48px;gap:8px}.row .v{font-size:11px}}
+.nav-top,.nav-bot{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.nav-top a,.nav-bot a{color:var(--ink-2);text-decoration:none;white-space:nowrap}
+.nav-top a:hover,.nav-top a:focus-visible,.nav-bot a:hover,.nav-bot a:focus-visible{color:var(--teal);outline:none}
+.nav-top{margin:-48px -20px 44px;padding:11px 20px;border-bottom:1px solid var(--rule)}
+.nav-in{max-width:880px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 22px}
+.nav-here{color:var(--ink-3);margin:0 auto}
+.nav-bot{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 22px;margin-top:30px;padding-top:14px;border-top:1px solid var(--rule)}
+.nav-bot .nav-next{margin-left:auto}
 </style>
 </head>
 <body>
+<nav class="nav-top" aria-label="Manual navigation">
+  <div class="nav-in">
+    <a href="index.html">The compute desk</a>
+    <span class="nav-here">03 / 06 — The silicon ladder</span>
+    <a class="nav-prev" href="gpu-supply-book.html">← The supply book</a>
+    <a class="nav-next" href="the-fabric.html">The fabric tax →</a>
+  </div>
+</nav>
 <div class="wrap">
   <p class="eyebrow">Compute desk</p>
   <h1>The silicon ladder</h1>
@@ -79,6 +95,10 @@ h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(34
     <p>† Rubin figures are pre-volume: bandwidth spec is 22 TB/s with early shipments reported nearer 20 as HBM4 suppliers chase NVIDIA's pin speeds, and rack power is not final. HBM4 supply gates the ramp; first allocation goes to hyperscalers and frontier labs.</p>
   </div>
   <p class="foot">sources: NVIDIA datasheets · GTC 2026 keynote (Mar 2026) · SemiAnalysis via TechPowerUp (Mar 2026) · compiled July 2026 · companion to the supply book</p>
+  <nav class="nav-bot" aria-label="Manual navigation">
+    <a class="nav-prev" href="gpu-supply-book.html">← The supply book</a>
+    <a class="nav-next" href="the-fabric.html">The fabric tax →</a>
+  </nav>
 </div>
 
 <script>

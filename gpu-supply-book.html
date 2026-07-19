@@ -51,9 +51,25 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--teal);outline-o
 .rule-box{font-family:var(--mono);font-size:14px;background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--teal);border-radius:0 8px 8px 0;padding:14px 18px;margin:22px 0;color:var(--ink)}
 .foot{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:44px;letter-spacing:.03em}
 @media (max-width:560px){.tk{padding:12px 14px}.tk .v{font-size:20px}}
+.nav-top,.nav-bot{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.nav-top a,.nav-bot a{color:var(--ink-2);text-decoration:none;white-space:nowrap}
+.nav-top a:hover,.nav-top a:focus-visible,.nav-bot a:hover,.nav-bot a:focus-visible{color:var(--teal);outline:none}
+.nav-top{margin:-48px -20px 44px;padding:11px 20px;border-bottom:1px solid var(--rule)}
+.nav-in{max-width:880px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 22px}
+.nav-here{color:var(--ink-3);margin:0 auto}
+.nav-bot{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 22px;margin-top:30px;padding-top:14px;border-top:1px solid var(--rule)}
+.nav-bot .nav-next{margin-left:auto}
 </style>
 </head>
 <body>
+<nav class="nav-top" aria-label="Manual navigation">
+  <div class="nav-in">
+    <a href="index.html">The compute desk</a>
+    <span class="nav-here">02 / 06 — The supply book</span>
+    <a class="nav-prev" href="the-atlas-scatter.html">← The atlas</a>
+    <a class="nav-next" href="silicon-ladder.html">The silicon ladder →</a>
+  </div>
+</nav>
 <div class="wrap">
   <p class="eyebrow">Compute desk</p>
   <h1>The supply book</h1>
@@ -104,6 +120,10 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--teal);outline-o
     <p>One honest limitation: this demand curve is known and static. The real job prices an uncertain curve growing several-fold a year, which pushes optimal behavior toward shorter durations and paid-for flexibility beyond what this picture shows.</p>
   </div>
   <p class="foot">newsvendor critical ratio · load-duration framing after Modal, “How to price serverless” (2026)</p>
+  <nav class="nav-bot" aria-label="Manual navigation">
+    <a class="nav-prev" href="the-atlas-scatter.html">← The atlas</a>
+    <a class="nav-next" href="silicon-ladder.html">The silicon ladder →</a>
+  </nav>
 </div>
 
 <script>

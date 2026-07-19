@@ -15,20 +15,21 @@ Six interactive instruments on the economics of GPU procurement, built as self-c
 
 Each instrument ends with the questions a buyer should ask a supplier.
 
-## Build
+## Structure
 
-The instruments are standalone HTML files, individually viewable. `consolidate.py`
-embeds them as isolated `srcdoc` iframes directly into `index.html` — the page GitHub
-Pages serves — so their scripts and element IDs never collide. To rebuild after editing
-an instrument, or to add a new one:
+Seven hand-maintained source pages, no build step, no generated files: `index.html` is
+the contents page — cover, a ruled list of the six instruments, colophon — and each
+instrument is its own page, directly linkable, served as-is by GitHub Pages from the
+repo root. Position in the contents list is the instrument's number.
 
-```bash
-python3 consolidate.py
-```
+Every page is fully self-contained: its own CSS and JS, no shared stylesheets, no
+frameworks, no external JS. Each instrument carries a top and bottom nav strip
+(contents link plus prev/next); the ~20 lines of strip CSS are duplicated into every
+file on purpose, so no page depends on another. Edit any page directly.
 
-Add or reorder instruments by editing the `(filename, title, description)` tuples in
-`consolidate.py`, then rerun — list position is the instrument number. `index.html` is
-generated — edit the instruments or the script, never the output.
+To add instrument 07: create the new file with its nav strip, add its row to the
+contents list in `index.html`, and update the prev/next links on its two neighbors
+(today that means giving 06 a next link, and pointing 07 back at 06).
 
 ## Notes
 

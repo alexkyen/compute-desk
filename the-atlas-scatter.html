@@ -68,9 +68,24 @@ details p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
 .notes p{max-width:68ch;margin-bottom:13px;color:var(--ink-2)}
 .notes p strong{color:var(--ink);font-weight:500}
 .foot{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:40px;letter-spacing:.03em}
+.nav-top,.nav-bot{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.nav-top a,.nav-bot a{color:var(--ink-2);text-decoration:none;white-space:nowrap}
+.nav-top a:hover,.nav-top a:focus-visible,.nav-bot a:hover,.nav-bot a:focus-visible{color:var(--teal);outline:none}
+.nav-top{margin:-48px -20px 44px;padding:11px 20px;border-bottom:1px solid var(--rule)}
+.nav-in{max-width:880px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 22px}
+.nav-here{color:var(--ink-3);margin:0 auto}
+.nav-bot{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 22px;margin-top:30px;padding-top:14px;border-top:1px solid var(--rule)}
+.nav-bot .nav-next{margin-left:auto}
 </style>
 </head>
 <body>
+<nav class="nav-top" aria-label="Manual navigation">
+  <div class="nav-in">
+    <a href="index.html">The compute desk</a>
+    <span class="nav-here">01 / 06 — The atlas</span>
+    <a class="nav-next" href="gpu-supply-book.html">The supply book →</a>
+  </div>
+</nav>
 <div class="wrap">
   <p class="eyebrow">Compute desk · the atlas</p>
   <h1>The atlas</h1>
@@ -109,6 +124,9 @@ details p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
     <p><strong>Provenance travels with every mark.</strong> Each carries a grade — <em>list</em>, <em>mkt</em>, <em>deal</em>, <em>est</em> — in its tooltip with its date. The shape of this field decays in months, the numbers in weeks.</p>
   </div>
   <p class="foot">sources: provider rate cards and docs · SEC filings and earnings (Q1–Q2 2026) · deal reporting · provider dossiers (Jul 2026) · part of the compute desk</p>
+  <nav class="nav-bot" aria-label="Manual navigation">
+    <a class="nav-next" href="gpu-supply-book.html">The supply book →</a>
+  </nav>
 </div>
 <div id="tip"></div>
 

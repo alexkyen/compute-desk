@@ -50,9 +50,25 @@ input:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 .ask b{font-weight:500;letter-spacing:.08em;font-size:10px;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:4px}
 .foot{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:44px;letter-spacing:.03em}
 @media(max-width:560px){.tk{padding:12px 14px}.tk .v{font-size:20px}}
+.nav-top,.nav-bot{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.nav-top a,.nav-bot a{color:var(--ink-2);text-decoration:none;white-space:nowrap}
+.nav-top a:hover,.nav-top a:focus-visible,.nav-bot a:hover,.nav-bot a:focus-visible{color:var(--teal);outline:none}
+.nav-top{margin:-48px -20px 44px;padding:11px 20px;border-bottom:1px solid var(--rule)}
+.nav-in{max-width:880px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 22px}
+.nav-here{color:var(--ink-3);margin:0 auto}
+.nav-bot{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 22px;margin-top:30px;padding-top:14px;border-top:1px solid var(--rule)}
+.nav-bot .nav-next{margin-left:auto}
 </style>
 </head>
 <body>
+<nav class="nav-top" aria-label="Manual navigation">
+  <div class="nav-in">
+    <a href="index.html">The compute desk</a>
+    <span class="nav-here">04 / 06 — The fabric tax</span>
+    <a class="nav-prev" href="silicon-ladder.html">← The silicon ladder</a>
+    <a class="nav-next" href="the-two-trees.html">The two trees →</a>
+  </div>
+</nav>
 <div class="wrap">
   <p class="eyebrow">Compute desk</p>
   <h1>The fabric tax</h1>
@@ -99,6 +115,10 @@ input:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
     <p>This is what the fabric-factor tile is computing - delivered bandwidth as a fraction of best case, with effective price the sticker divided by it: two clusters with identical GPUs and identical sticker prices can differ 30%+ in delivered training throughput on wiring alone. Model here is illustrative — ring all-reduce, large-message regime, latency ignored, protocol efficiencies representative (IB ≈ 0.92, tuned RoCE ≈ 0.80 of line rate).</p>
   </div>
   <p class="foot">companion to the supply book and the silicon ladder · protocol efficiencies representative, not benchmarked · compiled July 2026</p>
+  <nav class="nav-bot" aria-label="Manual navigation">
+    <a class="nav-prev" href="silicon-ladder.html">← The silicon ladder</a>
+    <a class="nav-next" href="the-two-trees.html">The two trees →</a>
+  </nav>
 </div>
 
 <script>

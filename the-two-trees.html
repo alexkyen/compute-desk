@@ -48,9 +48,25 @@ svg{display:block;width:100%;height:auto;user-select:none}
 .ask b{font-weight:500;letter-spacing:.08em;font-size:10px;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:4px}
 .foot{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:44px;letter-spacing:.03em}
 @media(max-width:560px){.tk{padding:12px 14px}.tk .v{font-size:17px}}
+.nav-top,.nav-bot{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.nav-top a,.nav-bot a{color:var(--ink-2);text-decoration:none;white-space:nowrap}
+.nav-top a:hover,.nav-top a:focus-visible,.nav-bot a:hover,.nav-bot a:focus-visible{color:var(--teal);outline:none}
+.nav-top{margin:-48px -20px 44px;padding:11px 20px;border-bottom:1px solid var(--rule)}
+.nav-in{max-width:880px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 22px}
+.nav-here{color:var(--ink-3);margin:0 auto}
+.nav-bot{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 22px;margin-top:30px;padding-top:14px;border-top:1px solid var(--rule)}
+.nav-bot .nav-next{margin-left:auto}
 </style>
 </head>
 <body>
+<nav class="nav-top" aria-label="Manual navigation">
+  <div class="nav-in">
+    <a href="index.html">The compute desk</a>
+    <span class="nav-here">05 / 06 — The two trees</span>
+    <a class="nav-prev" href="the-fabric.html">← The fabric tax</a>
+    <a class="nav-next" href="sla-anatomy.html">SLA anatomy →</a>
+  </div>
+</nav>
 <div class="wrap">
   <p class="eyebrow">Compute desk</p>
   <h1>The two trees</h1>
@@ -88,6 +104,10 @@ svg{display:block;width:100%;height:auto;user-select:none}
     <p>The toy cluster shows one rank ring and one cross-rank pair so the wiring stays readable; in reality all rings run concurrently and NCCL juggles them. Counts assume 64-port switches, one NIC per GPU, 1:1 within each tree. Structure of the argument is unchanged at real scale.</p>
   </div>
   <p class="foot">continues the fabric tax · counts illustrative at 512 GPUs, 64-port switches · compiled July 2026</p>
+  <nav class="nav-bot" aria-label="Manual navigation">
+    <a class="nav-prev" href="the-fabric.html">← The fabric tax</a>
+    <a class="nav-next" href="sla-anatomy.html">SLA anatomy →</a>
+  </nav>
 </div>
 
 <script>
