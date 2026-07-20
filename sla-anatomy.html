@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SLA anatomy — what the nines actually pay</title>
+<title>The issues list — every negotiable term of the reference deal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
@@ -19,7 +19,6 @@ body{font-family:var(--serif);color:var(--ink);line-height:1.6;padding:48px 20px
 .wrap{max-width:880px;margin:0 auto}
 .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
 h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(34px,5.5vw,52px);line-height:1.05;margin:10px 0 14px;letter-spacing:-.01em}
-.dek{font-size:18px;color:var(--ink-2);max-width:62ch;margin-bottom:36px}
 .card{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:24px 26px}
 .seggroup{display:flex;flex-wrap:wrap;gap:22px}
 .seg{min-width:180px}
@@ -31,7 +30,7 @@ h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(34
 .seg button:focus-visible,input:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 .allowed{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);margin-top:10px}
 .allowed b{color:var(--ink);font-weight:500}
-.sliders{margin-top:18px;padding-top:18px;border-top:1px solid var(--rule);display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px 34px}
+.sliders{margin-top:18px;padding-top:18px;border-top:1px solid var(--rule);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:16px 34px}
 .sl label{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
 .sl label b{font-weight:500;color:var(--ink);letter-spacing:0}
 input[type=range]{width:100%;accent-color:var(--teal);height:22px}
@@ -44,7 +43,7 @@ input[type=range]{width:100%;accent-color:var(--teal);height:22px}
 .tk .v{font-family:var(--mono);font-weight:500;font-size:26px;margin-top:4px;font-variant-numeric:tabular-nums}
 .tk .v em{font-style:normal;font-size:14px;color:var(--ink-3)}
 .tk .v.bad{color:var(--oxide)}
-.status{font-style:italic;font-size:17px;color:var(--ink-2);margin:20px 2px 0;min-height:3.2em}
+.status{font-style:italic;font-size:17px;color:var(--ink-2);margin:20px 2px 0;min-height:3.2em;max-width:66ch}
 .notes{margin-top:52px;border-top:1px solid var(--rule);padding-top:30px}
 .notes h2{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;margin-bottom:18px}
 .notes p{max-width:66ch;margin-bottom:14px;color:var(--ink-2)}
@@ -69,17 +68,11 @@ input[type=range]{width:100%;accent-color:var(--teal);height:22px}
 .stepper a.st::after{content:attr(data-t);position:absolute;top:calc(100% + 7px);right:0;background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:3px 8px;font-size:10.5px;letter-spacing:.06em;color:var(--ink-2);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;z-index:12}
 .stepper a.st:hover::after,.stepper a.st:focus-visible::after{opacity:1}
 /* additive — phase 3 (new rules only) */
-.dict{margin-top:52px;border-top:1px solid var(--rule);padding-top:30px}
-.dict h2{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;margin-bottom:18px}
-.dict .dintro{max-width:66ch;margin-bottom:14px;color:var(--ink-2)}
-.dict details{max-width:66ch;margin:0 0 14px}
-.dict summary{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);cursor:pointer}
-.dict details p{max-width:66ch;margin:12px 0 0;color:var(--ink-2)}
-.dict details p b{color:var(--ink);font-weight:500}
 .ask.trap{border-left-color:var(--oxide)}
 .ask.trap b{color:var(--oxide)}
 .srcblock{max-width:78ch;margin-top:26px}
 .srcblock summary{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);cursor:pointer}
+.srcblock summary h2{display:inline;font:inherit;color:inherit;letter-spacing:inherit;text-transform:inherit}
 .srcblock ul{list-style:none;margin-top:10px}
 .srcblock li{font-family:var(--mono);font-size:11px;color:var(--ink-3);line-height:1.7;margin-bottom:3px}
 .srcblock a{color:var(--teal);text-decoration:underline;text-underline-offset:2px}
@@ -87,6 +80,96 @@ input[type=range]{width:100%;accent-color:var(--teal);height:22px}
 #tpop{position:fixed;display:none;z-index:11;max-width:300px;background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:10px 12px;box-shadow:0 3px 14px rgba(21,32,26,.12)}
 #tpop .tl{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
 #tpop .td{font-size:13px;line-height:1.5;color:var(--ink-2)}
+/* ===================== B2b — surviving shared pieces ===================== */
+.introline{font-family:var(--mono);font-size:11px;line-height:1.8;color:var(--ink-3);max-width:70ch;margin:0 0 6px}
+.capsline{font-size:13.5px;letter-spacing:.02em}
+.cbtn{font-family:var(--mono);font-size:11px;line-height:1;width:17px;height:17px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink-2);background:transparent;border:1px solid var(--rule);border-radius:4px;cursor:pointer;padding:0}
+.cbtn:hover{border-color:var(--teal);color:var(--teal)}
+.cbtn:disabled{color:#C2CAC3;border-color:var(--rule);cursor:default}
+.nothere{font-size:13.5px;font-style:italic;color:var(--ink-3)}
+.lvl{-webkit-appearance:none;appearance:none;font-family:var(--mono);font-weight:500;font-size:14px;font-variant-numeric:tabular-nums;color:var(--teal);background:transparent;border:0;border-bottom:1px dotted var(--ink-3);border-radius:0;padding:0 1px;cursor:pointer}
+.exhibit{margin-top:16px;padding-top:16px;border-top:1px dashed var(--rule)}
+.exhead{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);font-weight:500;margin-bottom:12px}
+.excap{font-size:13.5px;color:var(--ink-2);max-width:66ch;margin-top:16px}
+.srcblock a{overflow-wrap:anywhere}
+@keyframes clflash{from{background:var(--teal-dim)}to{background:transparent}}
+/* ===================== B2b — the issues list ===================== */
+/* reference deal card — labels 9px mono uppercase, values 14px mono ink */
+#refdeal{margin:26px 0 0}
+.dealcard{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:16px 18px}
+.dgrid{display:flex;flex-wrap:wrap;gap:14px 28px}
+.df{min-width:150px}
+.dder .df{min-width:0}
+.dfl{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:5px}
+.dfv{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:14px;font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1.3}
+.dfv b{font-weight:500;border-bottom:1px dotted var(--ink-3)}
+.dfv .dun{font-size:10px;color:var(--ink-3);font-weight:400}
+.df input[type=range]{width:110px;height:14px}
+.dder{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:12px;padding-top:12px;border-top:1px solid var(--rule)}
+.dealcap{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin:8px 2px 0;max-width:78ch}
+/* the board — sort controls + log-$ axis + fourteen rows */
+#issues{margin:26px 0 0}
+.boardbar{display:grid;grid-template-columns:172px 1fr 1fr 200px;gap:2px 18px;align-items:end;padding:0 16px 8px}
+.sortbar{grid-column:1/4;display:flex;flex-wrap:wrap;gap:6px}
+.sortbar button{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);background:transparent;border:1px solid var(--rule);border-radius:6px;padding:7px 12px;cursor:pointer}
+.sortbar button:hover{border-color:var(--teal);color:var(--teal)}
+.sortbar button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.baxis{position:relative;height:13px}
+.axlab{position:absolute;transform:translateX(-50%);font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap;transition:left .35s ease}
+#brows{background:var(--panel);border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+.irow{border-top:1px solid var(--rule);transition:transform .35s ease;scroll-margin-top:16px}
+.irow:first-child{border-top:0}
+.rhead{display:grid;grid-template-columns:172px 1fr 1fr 200px;gap:2px 18px;align-items:start;width:100%;text-align:left;background:none;border:0;padding:12px 16px;cursor:pointer;font:inherit;color:inherit}
+.rhead:focus-visible{outline:2px solid var(--teal);outline-offset:-2px}
+.rterm,.rcol,.rmoney{min-width:0}
+.rname{display:block;font-family:var(--serif);font-style:italic;font-size:15.5px;line-height:1.35;color:var(--ink)}
+.rhead:hover .rname,.rhead:focus-visible .rname{color:var(--teal)}
+.rtag{display:block;font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-top:4px}
+.rk{display:block;font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+.rcol{font-family:var(--mono);font-size:10.5px;line-height:1.5;color:var(--ink-2)}
+.rask{color:var(--teal)}
+.rask .rk{color:var(--ink-3)}
+.rmoney{position:relative;display:block;padding-top:1px}
+.rline{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.rval{font-family:var(--mono);font-size:10px;font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums}
+.rtagm{font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.rbar{position:relative;z-index:1;display:block;height:12px;border-radius:2px;background:var(--teal);margin-top:4px;width:0;transition:width .35s ease}
+.rbar.ill{background:repeating-linear-gradient(45deg,var(--teal) 0 2px,var(--teal-dim) 2px 5px)}
+.rchip{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);background:var(--teal-dim);border-radius:4px;padding:3px 8px}
+.gline{position:absolute;top:-14px;bottom:-14px;width:1px;background:var(--rule);transition:left .35s ease}
+/* expansions — one open at a time, max-height/opacity fold */
+.rbody{max-height:0;opacity:0;overflow:hidden;transition:max-height .3s ease,opacity .22s ease}
+.irow.open .rbody{opacity:1}
+.xin{padding:0 16px 16px}
+.xk{display:block;font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:16px 0 8px}
+.xpos{display:none}
+.xpos p{font-family:var(--mono);font-size:10.5px;line-height:1.5;color:var(--ink-2);margin:0;max-width:70ch}
+.xpos .xa{color:var(--teal)}
+.xwhy,.xread{font-family:var(--serif);font-style:italic;font-size:13.5px;line-height:1.6;color:var(--ink-2);margin:0;max-width:66ch}
+.xwhy em,.xread em{font-style:normal}
+.xread b{font-family:var(--mono);font-style:normal;font-size:11px;color:var(--teal);font-weight:500}
+.xread+.xread{margin-top:8px}
+.xrl p{font-size:14.5px;line-height:1.7;margin:0 0 12px;max-width:70ch}
+.xrl .capsline{font-size:13.5px}
+.xrl .nothere{font-size:13.5px}
+.xrl p:last-child{margin-bottom:0}
+.xrl del{color:var(--oxide)}
+.xrl ins{color:var(--teal);text-decoration:underline;text-underline-offset:2px}
+.xrl .nothere{text-decoration:line-through}
+.xmodel{font-family:var(--mono);font-size:9.5px;line-height:1.7;color:var(--ink-2);margin:0;max-width:70ch}
+a.xlink{color:var(--teal);text-decoration:underline;text-underline-offset:2px}
+a.xlink:hover,a.xlink:focus-visible{outline:none;text-decoration-thickness:2px}
+.rhead.flash{animation:clflash 1.2s ease-out 1}
+.xin .ask{margin:16px 0 0}
+@media(max-width:720px){
+  .boardbar,.rhead{grid-template-columns:minmax(0,1fr) 150px}
+  .sortbar{grid-column:1/2}
+  .rdraft,.rask{display:none}
+  .xpos{display:block}
+}
+@media(prefers-reduced-motion:reduce){
+  .irow,.rbar,.gline,.axlab,.rbody{transition:none!important}
+}
 </style>
 </head>
 <body>
@@ -102,9 +185,196 @@ input[type=range]{width:100%;accent-color:var(--teal);height:22px}
 </nav>
 <div class="wrap">
   <p class="eyebrow">Compute desk</p>
-  <h1>SLA anatomy</h1>
-  <p class="dek">A service-level agreement is an insurance contract, so read it like one: what counts as a claim, over what window it's measured, and what's excluded. The nines on the cover page are marketing; the value lives in three clauses. Stage a month's worth of failures below and see what the paper actually pays.</p>
+  <h1>The issues list</h1>
+  <p class="introline">every negotiable term of the reference deal · what the draft says · what you ask for · what it's worth — click a row to open it</p>
 
+  <section id="refdeal" aria-label="The reference deal">
+    <div class="dealcard">
+      <div class="dgrid">
+        <div class="df"><span class="dfl">committed capacity</span><span class="dfv" role="group" aria-label="Committed capacity, GPUs"><button type="button" class="cbtn" id="dcgd" aria-label="fewer GPUs">−</button><b id="dcgv">1,024</b><button type="button" class="cbtn" id="dcgi" aria-label="more GPUs">+</button><span class="dun">× H100</span></span></div>
+        <div class="df"><span class="dfl">term</span><span class="dfv" role="group" aria-label="Term, months"><button type="button" class="cbtn" id="dcmd" aria-label="shorter term">−</button><b id="dcmv">24</b><button type="button" class="cbtn" id="dcmi" aria-label="longer term">+</button><span class="dun">months</span></span></div>
+        <div class="df"><span class="dfl">rate</span><span class="dfv"><b id="dcrv">$2.35</b><input type="range" id="dcr" min="1.75" max="3.25" step="0.05" value="2.35" aria-label="Rate, dollars per GPU-hour"><span class="dun">/GPU-hr</span></span></div>
+        <div class="df"><span class="dfl">prepay</span><span class="dfv"><b id="dcpv">15%</b><input type="range" id="dcp" min="0" max="25" step="5" value="15" aria-label="Prepay, percent of TCV"><span class="dun">of TCV</span></span></div>
+      </div>
+      <div class="dder">
+        <div class="df"><span class="dfl">monthly</span><span class="dfv" id="dcmo">—</span></div>
+        <div class="df"><span class="dfl">TCV</span><span class="dfv" id="dctcv">—</span></div>
+        <div class="df"><span class="dfl">prepay $</span><span class="dfv" id="dcpp">—</span></div>
+      </div>
+    </div>
+    <p class="dealcap">the reference deal — every figure in the $ column is computed against it</p>
+  </section>
+
+  <section id="issues" aria-label="The issues list">
+    <div class="boardbar">
+      <div class="sortbar" role="group" aria-label="Sort the board">
+        <button type="button" id="sbd" class="on" aria-pressed="true">by $ at stake</button>
+        <button type="button" id="sbc" aria-pressed="false">by clause order</button>
+      </div>
+      <div class="baxis" id="baxis" aria-hidden="true"></div>
+    </div>
+    <div id="brows">
+      <div class="irow" id="ir-delivery" data-k="delivery">
+        <button type="button" class="rhead" aria-expanded="false" aria-controls="xb-delivery">
+          <span class="rterm"><span class="rname">delivery damages</span><span class="rtag">delivery · clause 1</span></span>
+          <span class="rcol rdraft"><span class="rk">the draft says</span>"commercially reasonable efforts" toward a target date</span>
+          <span class="rcol rask"><span class="rk">you ask for</span>0.5% of the prepay per day late; walk with a full refund past 45 days</span>
+          <span class="rmoney"><span class="rline"><span class="rval">—</span><span class="rtagm">illustrative</span></span><span class="rbar ill"></span></span>
+        </button>
+        <div class="rbody" id="xb-delivery">
+          <div class="xin">
+            <div class="xpos">
+              <p><span class="xk">the draft says</span>"commercially reasonable efforts" toward a target date</p>
+              <p class="xa"><span class="xk">you ask for</span>0.5% of the prepay per day late; walk with a full refund past 45 days</p>
+            </div>
+            <p class="xwhy"><span class="xk">why it bites</span>"commercially reasonable efforts" with no consequence attached is allocation priority, not a firm delivery commitment — a queue position dressed as a date.</p>
+            <div class="xrl">
+              <p class="xk">the redline</p>
+              <p>Provider shall <del>use commercially reasonable efforts to make</del> <ins>make</ins> the Committed Capacity available by the target date.<ins> If Ready-for-Service is delayed beyond the target date, Provider will credit Customer 0.5% of the Initial Payment per day of delay; if the delay exceeds forty-five (45) days, Customer may terminate this Order Form with a full refund of the Initial Payment.</ins></p>
+            </div>
+            <p class="xread"><span class="xk">the read</span><b>r1</b> — turn "efforts" into an obligation with a price on failure. without consequences attached, clause 1 is allocation priority wearing a delivery date.</p>
+            <p class="xmodel"><span class="xk">the model</span>1.5 × monthly — a 45-day slip: committed spend with no service and no remedy</p>
+          </div>
+        </div>
+      </div>
+      <div class="irow" id="ir-accept" data-k="accept">
+        <button type="button" class="rhead" aria-expanded="false" aria-controls="xb-accept">
+          <span class="rterm"><span class="rname">acceptance testing</span><span class="rtag">delivery · clause 1</span></span>
+          <span class="rcol rdraft"><span class="rk">the draft says</span>Ready for Service on Provider's own validation</span>
+          <span class="rcol rask"><span class="rk">you ask for</span>burn-in + acceptance tests to your spec; billing starts at your sign-off</span>
+          <span class="rmoney"><span class="rline"><span class="rval">—</span><span class="rtagm">illustrative</span></span><span class="rbar ill"></span></span>
+        </button>
+        <div class="rbody" id="xb-accept">
+          <div class="xin">
+            <div class="xpos">
+              <p><span class="xk">the draft says</span>Ready for Service on Provider's own validation</p>
+              <p class="xa"><span class="xk">you ask for</span>burn-in + acceptance tests to your spec; billing starts at your sign-off</p>
+            </div>
+            <p class="xwhy"><span class="xk">why it bites</span>Provider self-certifies acceptance, and the billing clock starts on its say-so.</p>
+            <div class="xrl">
+              <p class="xk">the redline</p>
+              <p>Capacity is Ready for Service upon <del>Provider's completion of its standard validation procedures.</del> <ins>completion of burn-in and acceptance testing — sustained multi-day load, interconnect at specified bandwidth, HBM and ECC error rates within specified thresholds — and Customer's written sign-off.</ins></p>
+            </div>
+            <p class="xread"><span class="xk">the read</span><b>r2</b> — the billing clock starts when the cluster passes <em>your</em> test, not their checklist. define pass criteria or you've bought whatever ships.</p>
+            <p class="xmodel"><span class="xk">the model</span>1 × monthly — first month billed on a cluster that fails your spec</p>
+          </div>
+        </div>
+      </div>
+      <div class="irow" id="ir-truedown" data-k="truedown">
+        <button type="button" class="rhead" aria-expanded="false" aria-controls="xb-truedown">
+          <span class="rterm"><span class="rname">true-up / true-down</span><span class="rtag">money · clause 2</span></span>
+          <span class="rcol rdraft"><span class="rk">the draft says</span>committed volume may not be reduced, ever</span>
+          <span class="rcol rask"><span class="rk">you ask for</span>±15% at months 9 and 18, at the Committed Rate</span>
+          <span class="rmoney"><span class="rline"><span class="rval">—</span><span class="rtagm">modeled</span></span><span class="rbar"></span></span>
+        </button>
+        <div class="rbody" id="xb-truedown">
+          <div class="xin">
+            <div class="xpos">
+              <p><span class="xk">the draft says</span>committed volume may not be reduced, ever</p>
+              <p class="xa"><span class="xk">you ask for</span>±15% at months 9 and 18, at the Committed Rate</p>
+            </div>
+            <p class="xwhy"><span class="xk">why it bites</span>a one-way ratchet — volume goes up at their future price, never down at yours; your year-one demand guess is now a <span class="xmonths">24</span>-month liability.</p>
+            <div class="xrl">
+              <p class="xk">the redline</p>
+              <p><del>Committed volume may not be reduced during the Committed Term.</del> <ins>Committed volume may be adjusted upward or downward by up to fifteen percent (15%) at months nine (9) and eighteen (18), at the Committed Rate (true-up / true-down).</ins></p>
+            </div>
+            <p class="xread"><span class="xk">the read</span><b>r3</b> — your year-one demand guess stops being a two-year liability. ±15% at two checkpoints is a standard, winnable ask.</p>
+            <p class="xmodel"><span class="xk">the model</span>0.15 × monthly × max(0, months − 9) — demand falls 15% at the first checkpoint; draft makes you pay it anyway for the remaining term</p>
+          </div>
+        </div>
+      </div>
+      <div class="irow" id="ir-energy" data-k="energy">
+        <button type="button" class="rhead" aria-expanded="false" aria-controls="xb-energy">
+          <span class="rterm"><span class="rname">energy pass-through</span><span class="rtag">money · clause 3</span></span>
+          <span class="rcol rdraft"><span class="rk">the draft says</span>power-cost increases pass through on 30 days' notice, uncapped</span>
+          <span class="rcol rask"><span class="rk">you ask for</span>capped at 5% per contract year, documentation auditable</span>
+          <span class="rmoney"><span class="rline"><span class="rval">—</span><span class="rtagm">illustrative</span></span><span class="rbar ill"></span></span>
+        </button>
+        <div class="rbody" id="xb-energy">
+          <div class="xin">
+            <div class="xpos">
+              <p><span class="xk">the draft says</span>power-cost increases pass through on 30 days' notice, uncapped</p>
+              <p class="xa"><span class="xk">you ask for</span>capped at 5% per contract year, documentation auditable</p>
+            </div>
+            <p class="xwhy"><span class="xk">why it bites</span>index-linked pricing in disguise — the pass-through floats your "fixed" rate with the provider's power bill.</p>
+            <div class="xrl">
+              <p class="xk">the redline</p>
+              <p>The Committed Rate is fixed for the Committed Term, except that Provider may pass through documented increases in power and facility input costs on thirty (30) days' notice<ins>, not to exceed five percent (5%) in any contract year, with supporting documentation subject to Customer audit</ins>.</p>
+            </div>
+            <p class="xread"><span class="xk">the read</span><b>r4</b> — the pass-through survives, capped and auditable. striking it entirely is a losing fight; bounding it is not.</p>
+            <p class="xmodel"><span class="xk">the model</span>0.05 × 12 × monthly — one year of drift at the 5% cap you're asking for, as a floor on uncapped exposure</p>
+          </div>
+        </div>
+      </div>
+      <div class="irow" id="ir-prepay" data-k="prepay">
+        <button type="button" class="rhead" aria-expanded="false" aria-controls="xb-prepay">
+          <span class="rterm"><span class="rname">prepay refundability</span><span class="rtag">money · clause 3</span></span>
+          <span class="rcol rdraft"><span class="rk">the draft says</span>Initial Payment non-refundable unless you terminate for cause</span>
+          <span class="rcol rask"><span class="rk">you ask for</span>refundable pro-rata on any termination</span>
+          <span class="rmoney"><span class="rline"><span class="rval">—</span><span class="rtagm">modeled</span></span><span class="rbar"></span></span>
+        </button>
+        <div class="rbody" id="xb-prepay">
+          <div class="xin">
+            <div class="xpos">
+              <p><span class="xk">the draft says</span>Initial Payment non-refundable unless you terminate for cause</p>
+              <p class="xa"><span class="xk">you ask for</span>refundable pro-rata on any termination</p>
+            </div>
+            <p class="xwhy"><span class="xk">why it bites</span>the prepay is your cash working as their collateral, and on most exits it's simply gone.</p>
+            <div class="xrl">
+              <p class="xk">the redline</p>
+              <p>The Initial Payment is <del>non-refundable except upon Customer's termination for cause</del><ins> refundable pro-rata upon any termination of this Order Form</ins>.</p>
+            </div>
+            <p class="xread"><span class="xk">the read</span><b>r5</b> — the prepay stops being forfeitable collateral. pro-rata refund on any exit is the floor position.</p>
+            <p class="xmodel"><span class="xk">the model</span>prepay$ — cash forfeited under the draft on any termination that isn't your cause</p>
+          </div>
+        </div>
+      </div>
+      <div class="irow" id="ir-mfn" data-k="mfn">
+        <button type="button" class="rhead" aria-expanded="false" aria-controls="xb-mfn">
+          <span class="rterm"><span class="rname">most-favored-nation</span><span class="rtag">money · clause 3</span></span>
+          <span class="rcol rdraft"><span class="rk">the draft says</span>not in the draft — no MFN anywhere in the paper</span>
+          <span class="rcol rask"><span class="rk">you ask for</span>no comparable customer pays less; audit annually</span>
+          <span class="rmoney"><span class="rline"><span class="rchip">rate protection</span></span></span>
+        </button>
+        <div class="rbody" id="xb-mfn">
+          <div class="xin">
+            <div class="xpos">
+              <p><span class="xk">the draft says</span>not in the draft — no MFN anywhere in the paper</p>
+              <p class="xa"><span class="xk">you ask for</span>no comparable customer pays less; audit annually</p>
+            </div>
+            <p class="xwhy"><span class="xk">why it bites</span>nothing stops a comparable customer paying less next quarter.</p>
+            <div class="xrl">
+              <p class="xk">the redline</p>
+              <p class="nothere">[what's not here — this agreement contains no most-favored-nation (MFN) protection.]</p>
+              <p><ins>3.4 Provider represents that the effective rate hereunder is no less favorable than that offered to any customer of comparable volume and term, and Customer may audit compliance annually (most-favored-nation).</ins></p>
+            </div>
+            <p class="xread"><span class="xk">the read</span><b>r6</b> — MFN with an audit right. expect the most friction here — it attacks bespoke anchor pricing directly, which is exactly why it's worth asking.</p>
+            <p class="xmodel"><span class="xk">the model</span>optionality — deliberately unnumbered</p>
+          </div>
+        </div>
+      </div>
+      <div class="irow" id="ir-def" data-k="def">
+        <button type="button" class="rhead" aria-expanded="false" aria-controls="xb-def">
+          <span class="rterm"><span class="rname">definition of "available"</span><span class="rtag">availability · clause 4</span></span>
+          <span class="rcol rdraft"><span class="rk">the draft says</span>"Available" = the platform API answers</span>
+          <span class="rcol rask"><span class="rk">you ask for</span>availability measured per Committed GPU-hour, node-level</span>
+          <span class="rmoney"><span class="rline"><span class="rval">—</span><span class="rtagm">modeled</span></span><span class="rbar"></span></span>
+        </button>
+        <div class="rbody" id="xb-def">
+          <div class="xin">
+            <div class="xpos">
+              <p><span class="xk">the draft says</span>"Available" = the platform API answers</p>
+              <p class="xa"><span class="xk">you ask for</span>availability measured per Committed GPU-hour, node-level</p>
+            </div>
+            <p class="xwhy"><span class="xk">why it bites</span>platform-level "Available" means the metric only moves when everything is down; the dominant GPU failure mode — chronic, node-level — never registers. toggle the definition in Exhibit A and watch the same month flip between zero credits and six figures.</p>
+            <div class="xrl">
+              <p class="xk">the redline</p>
+              <p>4.1 "Monthly Uptime Percentage" means the percentage of minutes in a calendar month during which the Service is Available. The Service is "Available" when <del>Customer is able to access the Provider platform API.</del> <ins>a Committed GPU-hour is delivered by a node that is operational and performing to specification; a GPU-hour is Unavailable if its node is failed, degraded below specified interconnect bandwidth or error thresholds, or withdrawn from service. Monthly Uptime is computed over Committed GPU-hours.</ins></p>
+            </div>
+            <p class="xread"><span class="xk">the read</span><b>r7</b> — redefine the unit of failure: from "the platform" to "your GPU-hours." this single edit moves more money than every number in the schedule — it's what makes Exhibit A's node-level column real.</p>
+            <p class="xmodel"><span class="xk">the model</span><span id="xdefmodel">(0.10+0.10+0.25+0.10) × monthly — four breach months at the published schedule; platform-level = $0</span></p>
+            <div class="exhibit">
+              <p class="exhead">Exhibit A</p>
   <div class="card">
     <div class="seggroup">
       <div class="seg"><p class="lbl">Uptime commitment</p><div class="btns" id="cb"></div></div>
@@ -128,42 +398,177 @@ input[type=range]{width:100%;accent-color:var(--teal);height:22px}
     <div class="tk"><p class="l">Recovery ratio</p><p class="v" id="c4">—</p></div>
   </div>
   <p class="status" id="st"></p>
-
-  <div class="dict">
-    <h2>The negotiator's dictionary</h2>
-    <p class="dintro">The calculator above covers availability, windows, and credits. These are the other clauses that move money — grouped by what they're for.</p>
-    <details>
-      <summary>availability &amp; credits — beyond the calculator</summary>
-      <p><b>cure period</b> — the time the provider gets to fix a breach before credits or termination rights can be invoked; vague or uncapped cure language quietly neuters every remedy downstream of it.</p>
-      <p><b>maintenance-window notice</b> — the negotiable substance behind the exclusions checkbox: how much advance notice "scheduled maintenance" requires, how many hours per month it may consume, and who unilaterally decides an incident qualifies.</p>
-      <p><b>right-to-audit</b> — the ability to independently verify the provider's uptime and failure logs instead of trusting a self-reported number; the answer to "who measures, and how" that boilerplate SLAs never resolve.</p>
-    </details>
-    <details>
-      <summary>delivery &amp; capacity</summary>
-      <p><b>firm delivery commitment vs. allocation priority</b> — language that promises pricing and queue position but no enforceable delivery date with consequences is an option on capacity, not a contract for it. The single highest-leverage distinction in a 2026 GPU deal.</p>
-      <p><b>take-or-pay</b> — commit to fixed volume at a fixed rate for the term and pay whether you use it or not. The standard neocloud instrument — and the reason exit rights are hard to get: your committed cash flow is the collateral behind the provider's debt.</p>
-      <p><b>burn-in / acceptance testing</b> — pre-delivery stress testing (HBM, NVLink, fabric) with defined pass criteria before your billing clock starts. Ask what the criteria are and who signs off.</p>
-      <p><b>hot-spare pool</b> — standby nodes reserved against your cluster specifically, so failures swap from dedicated spares instead of queueing behind the general fleet.</p>
-      <p><b>time-to-replace (TTR)</b> — a contractual maximum on failed-node replacement. A number, not "best effort" or "commercially reasonable."</p>
-      <p><b>utilization floor</b> — the level below which you're billed anyway, and what happens to pricing beneath it. A published spot market well below on-demand signals genuine spare capacity; spot glued to on-demand — or absent — signals a fully committed fleet.</p>
-      <p><b>data residency / sovereignty commitment</b> — a contractual, not marketing, guarantee of where data and compute physically sit and which jurisdiction governs.</p>
-    </details>
-    <details>
-      <summary>pricing mechanics</summary>
-      <p><b>commitment-discount naming</b> — the same lever wearing four badges: AWS Capacity Blocks / Savings Plans, GCP CUDs, Azure reservations under EA/MACC, Oracle Universal Credits. Knowing the local name is table stakes.</p>
-      <p><b>most-favored-nation (MFN)</b> — a guarantee you never pay more than a comparable customer at comparable volume and term, ideally with an audit right. Expect friction; it's the direct counter to bespoke anchor pricing.</p>
-      <p><b>true-up / true-down (ramp schedule)</b> — the right to adjust committed volume at defined checkpoints in a multi-year term without repricing penalties, rather than living with your year-one guess.</p>
-      <p><b>price-lock vs. index-linked pricing</b> — whether the rate is fixed for the term or floats with inputs (energy above all). Ask which one you're signing; the answer is often buried.</p>
-    </details>
-    <details>
-      <summary>exit &amp; risk</summary>
-      <p><b>termination for convenience vs. for cause</b> — leave-anytime (rare here, for the take-or-pay financing reason above) versus leave-only-on-defined-breach (the default).</p>
-      <p><b>termination for chronic breach</b> — an exit trigger keyed to a pattern (N breaches in M months) rather than one severe incident; the clause that makes a string of "minor" months actionable.</p>
-      <p><b>assignment / change-of-control</b> — what happens to your contract if the provider is acquired, restructures, or fails — and whether you can assign if you are. In a consolidating market this outranks most of the SLA.</p>
-      <p><b>liability cap + exclusive remedy</b> — the pairing that locks in "credits are all you get": a damages cap plus language making service credits your sole remedy. The legal mechanism behind everything the calculator shows.</p>
-    </details>
-  </div>
-  <div class="ask trap"><b>the trap</b>'Credits as sole remedy' plus a liability cap is the whole ballgame; the nines are decoration around it.</div>
+              <p class="excap">Model is illustrative: 730-hour month, $2.50/GPU-hr contract rate, credits computed as tier % of monthly fees, node failures spread evenly across the window. Tier schedules are representative of published cloud SLAs (10% / 25% / 100% escalation; 99.99% commitments add a 30–50% band). The true downstream cost of an outage — churn, breached customer SLAs, engineering time — is what the multiplier slider approximates, and it is almost always the biggest number on this page.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="irow" id="ir-excl" data-k="excl">
+        <button type="button" class="rhead" aria-expanded="false" aria-controls="xb-excl">
+          <span class="rterm"><span class="rname">exclusions</span><span class="rtag">availability · clause 4</span></span>
+          <span class="rcol rdraft"><span class="rk">the draft says</span>maintenance uncapped; node failures excluded by name</span>
+          <span class="rcol rask"><span class="rk">you ask for</span>maintenance ≤8h/month on 7 days' notice; the node exclusion struck</span>
+          <span class="rmoney"><span class="rline"><span class="rval">—</span><span class="rtagm">modeled</span></span><span class="rbar"></span></span>
+        </button>
+        <div class="rbody" id="xb-excl">
+          <div class="xin">
+            <div class="xpos">
+              <p><span class="xk">the draft says</span>maintenance uncapped; node failures excluded by name</p>
+              <p class="xa"><span class="xk">you ask for</span>maintenance ≤8h/month on 7 days' notice; the node exclusion struck</p>
+            </div>
+            <p class="xwhy"><span class="xk">why it bites</span>the exclusions swallow the metric — node and component failures are excluded by name; this SLA measures the API's uptime, not your cluster's.</p>
+            <div class="xrl">
+              <p class="xk">the redline</p>
+              <p>4.2 Excluded from the calculation: scheduled maintenance<ins>, not to exceed eight (8) hours per month on seven (7) days' notice</ins>; events beyond Provider's reasonable control; <del>failures of individual nodes, GPUs, or components where the platform remains accessible;</del> and suspensions under Clause 6.</p>
+            </div>
+            <p class="xread"><span class="xk">the read</span><b>r8</b> — cap what "maintenance" can eat, and delete the exclusion that erased node failures. an exclusions list is where an SLA goes to die.</p>
+            <p class="xmodel"><span class="xk">the model</span>(16/730) × monthly × 12 — uncapped maintenance at 24h/mo vs the 8h ask, over a year</p>
+          </div>
+        </div>
+      </div>
+      <div class="irow" id="ir-ttr" data-k="ttr">
+        <button type="button" class="rhead" aria-expanded="false" aria-controls="xb-ttr">
+          <span class="rterm"><span class="rname">TTR + hot spares</span><span class="rtag">availability · clause 4</span></span>
+          <span class="rcol rdraft"><span class="rk">the draft says</span>not in the draft</span>
+          <span class="rcol rask"><span class="rk">you ask for</span>failed nodes replaced within 6 business hours from a 2% hot-spare pool</span>
+          <span class="rmoney"><span class="rline"><span class="rval">—</span><span class="rtagm">illustrative</span></span><span class="rbar ill"></span></span>
+        </button>
+        <div class="rbody" id="xb-ttr">
+          <div class="xin">
+            <div class="xpos">
+              <p><span class="xk">the draft says</span>not in the draft</p>
+              <p class="xa"><span class="xk">you ask for</span>failed nodes replaced within 6 business hours from a 2% hot-spare pool</p>
+            </div>
+            <p class="xwhy"><span class="xk">why it bites</span>the draft promises nothing when a node dies — no replacement clock, no reserved spares; your failures queue behind the general fleet.</p>
+            <div class="xrl">
+              <p class="xk">the redline</p>
+              <p><ins>4.5 Provider will replace any failed node within six (6) business hours from a hot-spare pool maintained at no less than two percent (2%) of cluster size (time-to-replace).</ins></p>
+            </div>
+            <p class="xread"><span class="xk">the read</span><b>r10</b> — a number, not "best effort." TTR plus dedicated spares costs the provider real money to honor — which is exactly why it signals fleet quality better than any count of nines.</p>
+            <p class="xmodel"><span class="xk">the model</span>0.25 × monthly — a quarter-month of capacity protected across the term</p>
+          </div>
+        </div>
+      </div>
+      <div class="irow" id="ir-chronic" data-k="chronic">
+        <button type="button" class="rhead" aria-expanded="false" aria-controls="xb-chronic">
+          <span class="rterm"><span class="rname">chronic breach exit</span><span class="rtag">exit · clause 4</span></span>
+          <span class="rcol rdraft"><span class="rk">the draft says</span>not in the draft</span>
+          <span class="rcol rask"><span class="rk">you ask for</span>3 breaches in 6 months → terminate, no cure, pro-rata refund</span>
+          <span class="rmoney"><span class="rline"><span class="rchip">exit right</span></span></span>
+        </button>
+        <div class="rbody" id="xb-chronic">
+          <div class="xin">
+            <div class="xpos">
+              <p><span class="xk">the draft says</span>not in the draft</p>
+              <p class="xa"><span class="xk">you ask for</span>3 breaches in 6 months → terminate, no cure, pro-rata refund</p>
+            </div>
+            <p class="xwhy"><span class="xk">why it bites</span>one catastrophic month has a remedy; a string of "minor" ones has none — without a pattern trigger, chronic breach never matures into an exit.</p>
+            <div class="xrl">
+              <p class="xk">the redline</p>
+              <p><ins>4.6 If Monthly Uptime breaches the Committed Level in any three (3) months within a rolling six (6) month window (chronic breach), Customer may terminate for cause without cure period, with pro-rata refund of the Initial Payment.</ins></p>
+            </div>
+            <p class="xread"><span class="xk">the read</span><b>r11</b> — make a pattern of bad months actionable, and let it bypass clause 6's cure period; pairs with <a class="xlink" href="#ir-def">r7</a> so chronic node pain can actually pull the trigger.</p>
+            <p class="xmodel"><span class="xk">the model</span>optionality — deliberately unnumbered</p>
+          </div>
+        </div>
+      </div>
+      <div class="irow" id="ir-cure" data-k="cure">
+        <button type="button" class="rhead" aria-expanded="false" aria-controls="xb-cure">
+          <span class="rterm"><span class="rname">cure period</span><span class="rtag">exit · clause 6</span></span>
+          <span class="rcol rdraft"><span class="rk">the draft says</span>every breach gets 30 days' notice and cure</span>
+          <span class="rcol rask"><span class="rk">you ask for</span>15-day cure for availability; chronic breach skips cure</span>
+          <span class="rmoney"><span class="rline"><span class="rval">—</span><span class="rtagm">illustrative</span></span><span class="rbar ill"></span></span>
+        </button>
+        <div class="rbody" id="xb-cure">
+          <div class="xin">
+            <div class="xpos">
+              <p><span class="xk">the draft says</span>every breach gets 30 days' notice and cure</p>
+              <p class="xa"><span class="xk">you ask for</span>15-day cure for availability; chronic breach skips cure</p>
+            </div>
+            <p class="xwhy"><span class="xk">why it bites</span>a 30-day cure period on an availability breach means a month of pain before any remedy matures — and it resets with every breach.</p>
+            <div class="xrl">
+              <p class="xk">the redline</p>
+              <p>Either party may terminate for material breach not cured within thirty (30) days of written notice<ins>, except that chronic breach under Clause 4.6 requires no cure period and availability breaches carry a fifteen (15) day cure</ins>.</p>
+            </div>
+            <p class="xread"><span class="xk">the read</span><b>r14</b> — a month of pain before remedies mature was the draft's design. shorten cure for availability, and <a class="xlink" href="#ir-chronic">chronic breach</a> skips it entirely.</p>
+            <p class="xmodel"><span class="xk">the model</span>1 × monthly — one month of exposure before any remedy matures</p>
+          </div>
+        </div>
+      </div>
+      <div class="irow" id="ir-cap" data-k="cap">
+        <button type="button" class="rhead" aria-expanded="false" aria-controls="xb-cap">
+          <span class="rterm"><span class="rname">credits cap &amp; sole remedy</span><span class="rtag">money · clause 6</span></span>
+          <span class="rcol rdraft"><span class="rk">the draft says</span>liability capped at 3 months' fees; credits the sole and exclusive remedy</span>
+          <span class="rcol rask"><span class="rk">you ask for</span>12-month cap; confidentiality, data protection, gross negligence carved out</span>
+          <span class="rmoney"><span class="rline"><span class="rval">—</span><span class="rtagm">illustrative</span></span><span class="rbar ill"></span></span>
+        </button>
+        <div class="rbody" id="xb-cap">
+          <div class="xin">
+            <div class="xpos">
+              <p><span class="xk">the draft says</span>liability capped at 3 months' fees; credits the sole and exclusive remedy</p>
+              <p class="xa"><span class="xk">you ask for</span>12-month cap; confidentiality, data protection, gross negligence carved out</p>
+            </div>
+            <p class="xwhy"><span class="xk">why it bites</span>three locks on one door — sole remedy, credits-not-cash (worth zero if you're leaving), and a 30-day claims gate with the burden of proof on you.</p>
+            <div class="xrl">
+              <p class="xk">the redline</p>
+              <p class="capsline">PROVIDER'S AGGREGATE LIABILITY UNDER THIS AGREEMENT IS CAPPED AT FEES PAID IN THE <del>THREE (3) MONTHS</del> <ins>TWELVE (12) MONTHS</ins> PRECEDING THE CLAIM, AND SERVICE CREDITS ARE CUSTOMER'S SOLE AND EXCLUSIVE REMEDY FOR ANY FAILURE OF AVAILABILITY.<ins> THE CAP DOES NOT APPLY TO BREACHES OF CONFIDENTIALITY OR DATA PROTECTION, OR TO PROVIDER'S GROSS NEGLIGENCE OR WILLFUL MISCONDUCT.</ins></p>
+              <p>4.3 If Monthly Uptime falls below the Committed Level of <select class="lvl" aria-label="Committed Level, percent"><option value="0">99.0</option><option value="1">99.5</option><option value="2" selected>99.9</option></select>%, Customer's sole and exclusive remedy is a Service Credit per the Schedule below, applied against future invoices only<del>, provided Customer submits a written claim with supporting logs within thirty (30) days of the incident</del>.<ins> Credits are calculated automatically from Provider telemetry, which Customer may audit on request.</ins></p>
+            </div>
+            <p class="xread"><span class="xk">the read</span><b>r15</b> — note what this redline does <em>not</em> do: it doesn't delete the cap or the sole-remedy language. sophisticated buyers widen the cap, carve out the unforgivable, and build the <a class="xlink" href="#ir-chronic">chronic-breach exit</a> around it. the trap below describes the draft; this is what beating it actually looks like.</p>
+            <p class="xread"><b>r9</b> — flip the burden of proof: automatic credits from auditable telemetry, not a claims process you must win inside thirty days.</p>
+            <div class="ask trap"><b>the trap</b>'Credits as sole remedy' plus a liability cap is the whole ballgame; the nines are decoration around it.</div>
+            <p class="xmodel"><span class="xk">the model</span>9 × monthly — recoverable delta on a catastrophic claim: 12-month ask minus 3-month draft cap</p>
+          </div>
+        </div>
+      </div>
+      <div class="irow" id="ir-assign" data-k="assign">
+        <button type="button" class="rhead" aria-expanded="false" aria-controls="xb-assign">
+          <span class="rterm"><span class="rname">assignment / change of control</span><span class="rtag">exit · clause 7</span></span>
+          <span class="rcol rdraft"><span class="rk">the draft says</span>you may not assign; they may, to anyone</span>
+          <span class="rcol rask"><span class="rk">you ask for</span>mutual consent; exit if they're bought by your competitor</span>
+          <span class="rmoney"><span class="rline"><span class="rchip">exit right</span></span></span>
+        </button>
+        <div class="rbody" id="xb-assign">
+          <div class="xin">
+            <div class="xpos">
+              <p><span class="xk">the draft says</span>you may not assign; they may, to anyone</p>
+              <p class="xa"><span class="xk">you ask for</span>mutual consent; exit if they're bought by your competitor</p>
+            </div>
+            <p class="xwhy"><span class="xk">why it bites</span>asymmetric paper in a consolidating market — their obligations travel to whoever buys them; yours travel nowhere.</p>
+            <div class="xrl">
+              <p class="xk">the redline</p>
+              <p><del>Customer may not assign this Agreement without Provider's prior written consent. Provider may assign this Agreement to any affiliate or successor, including in connection with a merger, acquisition, or sale of assets.</del> <ins>Neither party may assign this Agreement without the other's prior written consent, not to be unreasonably withheld. If Provider undergoes a change of control to a competitor of Customer, Customer may terminate on ninety (90) days' notice.</ins></p>
+            </div>
+            <p class="xread"><span class="xk">the read</span><b>r16</b> — symmetry, plus an exit if their acquirer is your competitor. in a consolidating market this comment outranks most of the SLA.</p>
+            <p class="xmodel"><span class="xk">the model</span>optionality — deliberately unnumbered</p>
+          </div>
+        </div>
+      </div>
+      <div class="irow" id="ir-fm" data-k="fm">
+        <button type="button" class="rhead" aria-expanded="false" aria-controls="xb-fm">
+          <span class="rterm"><span class="rname">force majeure carve-out</span><span class="rtag">delivery · clause 8</span></span>
+          <span class="rcol rdraft"><span class="rk">the draft says</span>supplier shortages and delays are force majeure</span>
+          <span class="rcol rask"><span class="rk">you ask for</span>supply-chain delay doesn't excuse Clause 1 delivery</span>
+          <span class="rmoney"><span class="rline"><span class="rval">—</span><span class="rtagm">illustrative</span></span><span class="rbar ill"></span></span>
+        </button>
+        <div class="rbody" id="xb-fm">
+          <div class="xin">
+            <div class="xpos">
+              <p><span class="xk">the draft says</span>supplier shortages and delays are force majeure</p>
+              <p class="xa"><span class="xk">you ask for</span>supply-chain delay doesn't excuse Clause 1 delivery</p>
+            </div>
+            <p class="xwhy"><span class="xk">why it bites</span>the most likely delivery failure in this market — the GPUs arriving late — is pre-excused as force majeure.</p>
+            <div class="xrl">
+              <p class="xk">the redline</p>
+              <p>Neither party is liable for delay caused by events beyond its reasonable control, including acts of government, power or facility failures, <del>and shortages or delays of suppliers or component manufacturers.</del><ins>. Delays in Provider's supply chain do not excuse the delivery obligations of Clause 1.</ins></p>
+            </div>
+            <p class="xread"><span class="xk">the read</span><b>r17</b> — the most likely failure in this market — late GPUs — stops being pre-excused. force majeure keeps earthquakes; it loses supply chain.</p>
+            <p class="xmodel"><span class="xk">the model</span>1.5 × monthly — the same slip, pre-excused as force majeure</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <div class="notes">
     <h2>Reading the paper like a buyer</h2>
@@ -174,14 +579,20 @@ input[type=range]{width:100%;accent-color:var(--teal);height:22px}
     <div class="ask"><b>Ask the supplier</b>Define "unavailable" for me — does it include a single node down, or degraded interconnect performance, or only full loss of the API? And what was your fleet's node-level annualized failure rate last quarter?</div>
     <div class="ask"><b>Ask the supplier</b>Measured monthly or annually? Read me the exclusions list. And what's the claims process — automatic, or do I file with logs inside 30 days?</div>
     <div class="ask"><b>Ask the supplier</b>Forget credits: what's your committed time-to-replace on a failed node, do you hold hot spares against my cluster, and do I get termination rights on chronic breach?</div>
-    <p>Model is illustrative: 730-hour month, $2.50/GPU-hr contract rate, credits computed as tier % of monthly fees, node failures spread evenly across the window. Tier schedules are representative of published cloud SLAs (10% / 25% / 100% escalation; 99.99% commitments add a 30–50% band). The true downstream cost of an outage — churn, breached customer SLAs, engineering time — is what the multiplier slider approximates, and it is almost always the biggest number on this page.</p>
   </div>
   <details class="srcblock">
-    <summary>sources</summary>
+    <summary><h2>sources</h2></summary>
     <ul>
       <li>Meta, "The Llama 3 Herd of Models" (2024) → <a href="https://arxiv.org/abs/2407.21783" target="_blank" rel="noopener">arxiv.org/abs/2407.21783</a></li>
       <li>Modal, "Keeping 20,000 GPUs healthy" (Jan 2026) → <a href="https://modal.com/blog/gpu-health" target="_blank" rel="noopener">modal.com/blog/gpu-health</a></li>
       <li>tier schedules: representative composite of published cloud compute SLAs, not any single contract.</li>
+      <li>AWS, "Amazon Compute Service Level Agreement" → <a href="https://aws.amazon.com/compute/sla/" target="_blank" rel="noopener">aws.amazon.com/compute/sla</a></li>
+      <li>CoreWeave, "Terms of Service" — canonical platform legal terms → <a href="https://docs.coreweave.com/docs/policies/terms-of-service" target="_blank" rel="noopener">docs.coreweave.com/docs/policies/terms-of-service</a></li>
+      <li>Lambda, "Terms of Service" — cloud terms (credits: no cash value, offset future fees only) → <a href="https://lambda.ai/legal/terms-of-service" target="_blank" rel="noopener">lambda.ai/legal/terms-of-service</a></li>
+      <li>CoreWeave, Form 10-K, fiscal 2025 (filed Mar 2026) — take-or-pay committed contracts and initial-payment structure, SEC EDGAR → <a href="https://www.sec.gov/Archives/edgar/data/1769628/000176962826000104/0001769628-26-000104-index.htm" target="_blank" rel="noopener">sec.gov/Archives/edgar/data/1769628/000176962826000104</a></li>
+      <li>contract language: original composite drafted for this desk — structurally patterned on published GPU-cloud SLAs and reported committed-deal structures; no clause reproduces any real agreement.</li>
+      <li>$ column: modeled figures are computed from the reference deal with the formula shown in each row; illustrative figures are stated scenarios; optionality is deliberately unnumbered.</li>
+      <li>all parties, dollar figures, and dates in the agreement are fictional and illustrative.</li>
     </ul>
   </details>
   <p class="foot">companion to the desk’s other instruments · sources in the block above · compiled July 2026</p>
@@ -189,25 +600,25 @@ input[type=range]{width:100%;accent-color:var(--teal);height:22px}
     <a class="nav-prev" href="the-two-trees.html">← The two trees</a>
   </nav>
 </div>
-
 <script>
+/* shared credit-schedule constants — single source of truth for Exhibit A, Clause 4.4, and the deal ticket */
 var COMMITS=[
- {label:"99.5%",v:0.995,tiers:[[0.995,10],[0.99,25],[0.95,100]]},
- {label:"99.9%",v:0.999,tiers:[[0.999,10],[0.99,25],[0.95,100]]},
- {label:"99.99%",v:0.9999,tiers:[[0.9999,10],[0.999,30],[0.99,50],[0.95,100]]}
+ {label:"99.0%",v:0.990,tiers:[[0.990,10],[0.95,25]]},
+ {label:"99.5%",v:0.995,tiers:[[0.995,10],[0.99,25],[0.95,50]]},
+ {label:"99.9%",v:0.999,tiers:[[0.999,10],[0.99,25],[0.95,100]]}
 ];
 var DEFS=[{id:"plat",label:"platform down"},{id:"inst",label:"instance-level"}];
 var WINS=[{id:"mo",label:"monthly",hrs:730},{id:"yr",label:"annual",hrs:8760}];
-var cSel=1,dSel=0,wSel=0;
+var cSel=2,dSel=1,wSel=0; /* B2b: the widget opens on the instance-level definition — the ask being priced */
 var platH=0,nodeGH=5000,fleet=512,mult=3,excl=false;
-var RATE=2.5,HM=730;
+var RATE=2.5,HM=730,CAL={credit:0,loss:0};
 function seg(el,items,sel,cb){
   var h="";items.forEach(function(it,i){h+='<button class="'+(i===sel?"on":"")+'">'+it.label+"</button>"});
   el.innerHTML=h;
   el.querySelectorAll("button").forEach(function(b,i){b.addEventListener("click",function(){cb(i)})});
 }
 function rebuild(){
-  seg(document.getElementById("cb"),COMMITS,cSel,function(i){cSel=i;rebuild()});
+  seg(document.getElementById("cb"),COMMITS,cSel,function(i){setLevel(i)});
   seg(document.getElementById("db"),DEFS,dSel,function(i){dSel=i;rebuild()});
   seg(document.getElementById("wb"),WINS,wSel,function(i){wSel=i;rebuild()});
   render();
@@ -263,6 +674,8 @@ function render(){
     msg="A clean month — nothing to claim. Use the sliders to stage a bad one: start with node-level failures alone, then flip the definition of \"unavailable\" and watch the same month change value by six figures.";
   }
   document.getElementById("st").textContent=msg;
+  CAL.credit=credit;CAL.loss=loss;
+  if(typeof renderBoard==="function")renderBoard(true);
 }
 document.getElementById("ps").addEventListener("input",function(){platH=+this.value;render()});
 document.getElementById("ns").addEventListener("input",function(){nodeGH=+this.value;render()});
@@ -272,34 +685,18 @@ document.getElementById("ex").addEventListener("change",function(){excl=this.che
 rebuild();
 
 /* ===================== additive — phase 3 ===================== */
-/* term layer — one-line definitions (first sentence of each dictionary entry) */
+/* term layer — scoped to the coda only (B2b: the board's terms are rows, not hovers) */
 var TERMS={
- "cure period":"the time the provider gets to fix a breach before credits or termination rights can be invoked; vague or uncapped cure language quietly neuters every remedy downstream of it.",
- "maintenance-window notice":"the negotiable substance behind the exclusions checkbox: how much advance notice \"scheduled maintenance\" requires, how many hours per month it may consume, and who unilaterally decides an incident qualifies.",
- "right-to-audit":"the ability to independently verify the provider's uptime and failure logs instead of trusting a self-reported number; the answer to \"who measures, and how\" that boilerplate SLAs never resolve.",
- "firm delivery commitment vs. allocation priority":"language that promises pricing and queue position but no enforceable delivery date with consequences is an option on capacity, not a contract for it.",
- "take-or-pay":"commit to fixed volume at a fixed rate for the term and pay whether you use it or not.",
  "burn-in / acceptance testing":"pre-delivery stress testing (HBM, NVLink, fabric) with defined pass criteria before your billing clock starts.",
  "hot-spare pool":"standby nodes reserved against your cluster specifically, so failures swap from dedicated spares instead of queueing behind the general fleet.",
  "time-to-replace (TTR)":"a contractual maximum on failed-node replacement.",
- "utilization floor":"the level below which you're billed anyway, and what happens to pricing beneath it.",
- "data residency / sovereignty commitment":"a contractual, not marketing, guarantee of where data and compute physically sit and which jurisdiction governs.",
- "commitment-discount naming":"the same lever wearing four badges: AWS Capacity Blocks / Savings Plans, GCP CUDs, Azure reservations under EA/MACC, Oracle Universal Credits.",
- "most-favored-nation (MFN)":"a guarantee you never pay more than a comparable customer at comparable volume and term, ideally with an audit right.",
- "true-up / true-down (ramp schedule)":"the right to adjust committed volume at defined checkpoints in a multi-year term without repricing penalties, rather than living with your year-one guess.",
- "price-lock vs. index-linked pricing":"whether the rate is fixed for the term or floats with inputs (energy above all).",
- "termination for convenience vs. for cause":"leave-anytime (rare here, for the take-or-pay financing reason above) versus leave-only-on-defined-breach (the default).",
- "termination for chronic breach":"an exit trigger keyed to a pattern (N breaches in M months) rather than one severe incident; the clause that makes a string of \"minor\" months actionable.",
- "assignment / change-of-control":"what happens to your contract if the provider is acquired, restructures, or fails — and whether you can assign if you are.",
- "liability cap + exclusive remedy":"the pairing that locks in \"credits are all you get\": a damages cap plus language making service credits your sole remedy."
+ "termination for chronic breach":"an exit trigger keyed to a pattern (N breaches in M months) rather than one severe incident; the clause that makes a string of \"minor\" months actionable."
 };
 var TERM_PATTERNS=[
  {re:/time-to-replace/g,k:"time-to-replace (TTR)"},
  {re:/hot-spare pools?/g,k:"hot-spare pool"},
  {re:/burn-in and acceptance testing/g,k:"burn-in / acceptance testing"},
- {re:/termination rights on chronic breach/g,k:"termination for chronic breach"},
- {re:/liability cap/g,k:"liability cap + exclusive remedy"},
- {re:/take-or-pay/g,k:"take-or-pay"}
+ {re:/termination rights on chronic breach/g,k:"termination for chronic breach"}
 ];
 function wrapTerms(root){
  if(!root)return;
@@ -308,9 +705,8 @@ function wrapTerms(root){
  while(walker.nextNode()){
    var nd=walker.currentNode,el=nd.parentNode,skip=false;
    while(el&&el!==root){
-     if(el.nodeType===1&&(el.tagName==="A"||el.tagName==="B"||el.tagName==="STRONG"||el.tagName==="SUMMARY"||
-        el.classList.contains("gl")||el.classList.contains("side")||
-        el.classList.contains("dict"))){skip=true;break}
+     if(el.nodeType===1&&(el.tagName==="A"||el.tagName==="B"||el.tagName==="STRONG"||el.tagName==="SUMMARY"||/^H[1-6]$/.test(el.tagName)||
+        el.classList.contains("gl"))){skip=true;break}
      el=el.parentNode;
    }
    if(!skip)nodes.push(nd);
@@ -336,7 +732,6 @@ function wrapTerms(root){
  });
 }
 wrapTerms(document.querySelector(".notes"));
-document.querySelectorAll(".ask.trap").forEach(function(d){wrapTerms(d)});
 var tpop=document.createElement("div");tpop.id="tpop";document.body.appendChild(tpop);
 var tpopFor=null;
 function showTermPop(sp){
@@ -362,6 +757,213 @@ document.addEventListener("click",function(ev){
  if(!tpop.contains(ev.target))hideTermPop();
 });
 document.addEventListener("keydown",function(ev){if(ev.key==="Escape")hideTermPop()});
+
+/* ===================== B2 — shared deal constants ===================== */
+var GOPTS=[256,512,1024,2048,4096],MOPTS=[12,24,36];
+function dollars(x){return "$"+Math.round(x).toLocaleString("en-US")}
+function setLevel(i){
+ cSel=i;
+ document.querySelectorAll("select.lvl").forEach(function(s){s.value=String(i)});
+ rebuild();
+}
+
+document.querySelectorAll("select.lvl").forEach(function(s){s.addEventListener("change",function(){setLevel(+this.value)})});
+
+/* ===================== B2b — the reference deal + the $ engine ===================== */
+/* deal state (same option sets and math as the B2 ticket; formulas per brief B2b Task 3) */
+var dcG=2,dcM=1,dcRate=2.35,dcPre=15;
+function deal(){
+ var g=GOPTS[dcG],m=MOPTS[dcM],mo=g*dcRate*HM;
+ return {g:g,m:m,monthly:mo,tcv:mo*m,prepay:mo*m*dcPre/100};
+}
+/* definition row — the calculator's published schedule priced over a bad year:
+   node-measured uptimes of the four breach months; the platform measure of the same year is clean */
+var BADYEAR={node:[99.85,99.7,98.8,99.87],plat:[]};
+function byCredits(defId){
+ var s=0;
+ (BADYEAR[defId]||[]).forEach(function(u){
+  var t=0;COMMITS[cSel].tiers.forEach(function(tr){if(u/100<tr[0])t=tr[1]});
+  s+=t;
+ });
+ return s/100;
+}
+function defStake(d){return (byCredits("node")-byCredits("plat"))*d.monthly}
+/* the fourteen issues — ord is the rN / document position (clause-order sort key) */
+var ROWS=[
+ {k:"delivery",ord:1,tag:"illustrative",f:function(d){return 1.5*d.monthly}},
+ {k:"accept",ord:2,tag:"illustrative",f:function(d){return 1*d.monthly}},
+ {k:"truedown",ord:3,tag:"modeled",f:function(d){return .15*d.monthly*Math.max(0,d.m-9)}},
+ {k:"energy",ord:4,tag:"illustrative",f:function(d){return .05*12*d.monthly}},
+ {k:"prepay",ord:5,tag:"modeled",f:function(d){return d.prepay}},
+ {k:"mfn",ord:6,chip:"rate protection"},
+ {k:"def",ord:7,tag:"modeled",f:function(d){return dSel===1?defStake(d):0}},
+ {k:"excl",ord:8,tag:"modeled",f:function(d){return (16/730)*d.monthly*12}},
+ {k:"ttr",ord:10,tag:"illustrative",f:function(d){return .25*d.monthly}},
+ {k:"chronic",ord:11,chip:"exit right"},
+ {k:"cure",ord:14,tag:"illustrative",f:function(d){return 1*d.monthly}},
+ {k:"cap",ord:15,tag:"illustrative",f:function(d){return 9*d.monthly}},
+ {k:"assign",ord:16,chip:"exit right"},
+ {k:"fm",ord:17,tag:"illustrative",f:function(d){return 1.5*d.monthly}}
+];
+function rowStakes(){
+ var d=deal();
+ return ROWS.map(function(r){return {k:r.k,ord:r.ord,chip:r.chip||null,tag:r.chip?"optionality":r.tag,v:r.f?r.f(d):null}});
+}
+function renderDeal(){
+ var d=deal();
+ document.getElementById("dcgv").textContent=d.g.toLocaleString("en-US");
+ document.getElementById("dcmv").textContent=d.m;
+ document.getElementById("dcrv").textContent="$"+dcRate.toFixed(2);
+ document.getElementById("dcpv").textContent=dcPre+"%";
+ document.getElementById("dcgd").disabled=dcG===0;
+ document.getElementById("dcgi").disabled=dcG===GOPTS.length-1;
+ document.getElementById("dcmd").disabled=dcM===0;
+ document.getElementById("dcmi").disabled=dcM===MOPTS.length-1;
+ document.getElementById("dcmo").textContent=dollars(d.monthly);
+ document.getElementById("dctcv").textContent=dollars(d.tcv);
+ document.getElementById("dcpp").textContent=dollars(d.prepay);
+ if(typeof renderBoard==="function")renderBoard(true);
+}
+document.getElementById("dcgd").addEventListener("click",function(){if(dcG>0){dcG--;renderDeal()}});
+document.getElementById("dcgi").addEventListener("click",function(){if(dcG<GOPTS.length-1){dcG++;renderDeal()}});
+document.getElementById("dcmd").addEventListener("click",function(){if(dcM>0){dcM--;renderDeal()}});
+document.getElementById("dcmi").addEventListener("click",function(){if(dcM<MOPTS.length-1){dcM++;renderDeal()}});
+document.getElementById("dcr").addEventListener("input",function(){dcRate=+this.value;renderDeal()});
+document.getElementById("dcp").addEventListener("input",function(){dcPre=+this.value;renderDeal()});
+
+/* the board — log-$ axis, bars glide on deal change, FLIP re-rank under $-sort */
+var sortMode="$";
+var RMQ=window.matchMedia?window.matchMedia("(prefers-reduced-motion: reduce)"):{matches:false};
+function currentOrder(){
+ var stakes=rowStakes();
+ if(sortMode==="clause"){stakes.sort(function(a,b){return a.ord-b.ord})}
+ else{stakes.sort(function(a,b){
+  var av=a.v===null?-1:a.v,bv=b.v===null?-1:b.v;
+  if(av!==bv)return bv-av;
+  return a.ord-b.ord;
+ })}
+ return stakes.map(function(s){return s.k});
+}
+function applyOrder(anim){
+ var brows=document.getElementById("brows");
+ var els=currentOrder().map(function(k){return document.getElementById("ir-"+k)});
+ var same=true,ch=brows.children;
+ for(var i=0;i<els.length;i++){if(ch[i]!==els[i]){same=false;break}}
+ if(same)return;
+ var firsts=null;
+ if(anim&&!RMQ.matches){firsts={};els.forEach(function(el){firsts[el.id]=el.getBoundingClientRect().top})}
+ els.forEach(function(el){brows.appendChild(el)});
+ if(firsts){
+  els.forEach(function(el){
+   var dy=firsts[el.id]-el.getBoundingClientRect().top;
+   if(!dy)return;
+   el.style.transition="none";el.style.transform="translateY("+dy+"px)";
+  });
+  void brows.offsetHeight;
+  els.forEach(function(el){el.style.transition="";el.style.transform=""});
+ }
+}
+function renderBoard(glide){
+ if(typeof dcG==="undefined"||dcG===undefined)return; /* pre-init call from the calculator's first rebuild() */
+ var stakes=rowStakes(),vals=[];
+ stakes.forEach(function(s){if(s.v!==null&&s.v>0)vals.push(s.v)});
+ var d0=Math.min.apply(null,vals)/2,d1=Math.max.apply(null,vals)*1.5;
+ var l0=Math.log(d0),l1=Math.log(d1);
+ function X(v){return Math.max(0,Math.min(100,(Math.log(v)-l0)/(l1-l0)*100))}
+ var decs=[];
+ [1e5,1e6,1e7,1e8].forEach(function(g){if(g>=d0&&g<=d1)decs.push(g)});
+ var ax=document.getElementById("baxis"),h="";
+ decs.forEach(function(g){h+='<span class="axlab" style="left:'+X(g).toFixed(2)+'%">'+(g>=1e6?"$"+(g/1e6)+"M":"$"+(g/1e3)+"k")+"</span>"});
+ ax.innerHTML=h;
+ stakes.forEach(function(s){
+  var row=document.getElementById("ir-"+s.k);if(!row)return;
+  var cell=row.querySelector(".rmoney");
+  var gl=cell.querySelectorAll(".gline");
+  if(gl.length!==decs.length){
+   gl.forEach(function(g){g.remove()});
+   decs.forEach(function(){var i=document.createElement("i");i.className="gline";cell.insertBefore(i,cell.firstChild)});
+   gl=cell.querySelectorAll(".gline");
+  }
+  decs.forEach(function(g,i){gl[i].style.left=X(g).toFixed(2)+"%"});
+  if(s.v===null)return;
+  row.querySelector(".rval").textContent=money(s.v);
+  row.querySelector(".rbar").style.width=(s.v>0?X(s.v).toFixed(2):"0")+"%";
+ });
+ var dm=document.getElementById("xdefmodel");
+ if(dm)dm.textContent=defModelText();
+ document.querySelectorAll(".xmonths").forEach(function(sp){sp.textContent=String(MOPTS[dcM])});
+ if(sortMode==="$")applyOrder(glide);
+}
+function defModelText(){
+ if(dSel!==1)return "platform-level measures the same bad year clean — $0 recovered; flip “unavailable” to instance-level in Exhibit A below to price what the draft definition erases";
+ var parts=[];
+ BADYEAR.node.forEach(function(u){
+  var t=0;COMMITS[cSel].tiers.forEach(function(tr){if(u/100<tr[0])t=tr[1]});
+  if(t>0)parts.push((t/100).toFixed(2));
+ });
+ var words=["no","one","two","three","four"];
+ return "("+parts.join("+")+") × monthly — "+(words[parts.length]||parts.length)+" breach month"+(parts.length===1?"":"s")+" at the published schedule; platform-level = $0";
+}
+function setSort(m){
+ sortMode=m;
+ var bd=document.getElementById("sbd"),bc=document.getElementById("sbc");
+ bd.className=m==="$"?"on":"";bd.setAttribute("aria-pressed",m==="$"?"true":"false");
+ bc.className=m==="clause"?"on":"";bc.setAttribute("aria-pressed",m==="clause"?"true":"false");
+ applyOrder(true);
+}
+document.getElementById("sbd").addEventListener("click",function(){setSort("$")});
+document.getElementById("sbc").addEventListener("click",function(){setSort("clause")});
+
+/* expansions — one open at a time; header buttons fold, cross-links close + scroll + flash */
+function openIt(row){
+ row.classList.add("open");
+ row.querySelector(".rhead").setAttribute("aria-expanded","true");
+ var body=row.querySelector(".rbody");
+ if(RMQ.matches){body.style.maxHeight="none";return}
+ body.style.maxHeight=body.scrollHeight+"px";
+ body.addEventListener("transitionend",function done(ev){
+  if(ev.target!==body||ev.propertyName!=="max-height")return;
+  body.removeEventListener("transitionend",done);
+  if(row.classList.contains("open"))body.style.maxHeight="none";
+ });
+}
+function closeIt(row){
+ var body=row.querySelector(".rbody");
+ row.classList.remove("open");
+ row.querySelector(".rhead").setAttribute("aria-expanded","false");
+ if(RMQ.matches){body.style.maxHeight="";return}
+ if(body.style.maxHeight==="none"){body.style.maxHeight=body.scrollHeight+"px";void body.offsetHeight}
+ body.style.maxHeight="0px";
+}
+function flashRow(row){
+ var head=row.querySelector(".rhead");
+ head.classList.remove("flash");void head.offsetWidth;
+ head.classList.add("flash");
+ head.addEventListener("animationend",function h(){head.classList.remove("flash");head.removeEventListener("animationend",h)});
+}
+document.getElementById("brows").addEventListener("click",function(ev){
+ var xl=ev.target.closest?ev.target.closest(".xlink"):null;
+ if(xl){
+  ev.preventDefault();
+  var cur=ev.target.closest(".irow");
+  if(cur&&cur.classList.contains("open"))closeIt(cur);
+  var t=document.querySelector(xl.getAttribute("href"));
+  if(t){
+   t.scrollIntoView({behavior:RMQ.matches?"auto":"smooth",block:"center"});
+   flashRow(t);
+  }
+  return;
+ }
+ var head=ev.target.closest?ev.target.closest(".rhead"):null;
+ if(!head)return;
+ var row=head.closest(".irow");
+ if(row.classList.contains("open")){closeIt(row);return}
+ var was=document.querySelector("#brows .irow.open");
+ if(was)closeIt(was);
+ openIt(row);
+ setTimeout(function(){row.scrollIntoView({behavior:RMQ.matches?"auto":"smooth",block:"nearest"})},RMQ.matches?0:200);
+});
+renderDeal();
 </script>
 </body>
 </html>
