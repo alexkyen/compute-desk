@@ -86,7 +86,7 @@ input[type=range]{width:100%;accent-color:var(--teal);height:22px}
 .cbtn{font-family:var(--mono);font-size:11px;line-height:1;width:17px;height:17px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink-2);background:transparent;border:1px solid var(--rule);border-radius:4px;cursor:pointer;padding:0}
 .cbtn:hover{border-color:var(--teal);color:var(--teal)}
 .cbtn:disabled{color:#C2CAC3;border-color:var(--rule);cursor:default}
-.nothere{font-size:13.5px;font-style:italic;color:var(--ink-3)}
+.nothere{font-size:13.5px;font-style:italic;color:var(--ink-3);text-decoration:line-through}
 .lvl{-webkit-appearance:none;appearance:none;font-family:var(--mono);font-weight:500;font-size:14px;font-variant-numeric:tabular-nums;color:var(--teal);background:transparent;border:0;border-bottom:1px dotted var(--ink-3);border-radius:0;padding:0 1px;cursor:pointer}
 .exhibit{margin-top:16px;padding-top:16px;border-top:1px dashed var(--rule)}
 .exhead{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);font-weight:500;margin-bottom:12px}
@@ -141,21 +141,18 @@ input[type=range]{width:100%;accent-color:var(--teal);height:22px}
 .rbody{max-height:0;opacity:0;overflow:hidden;transition:max-height .3s ease,opacity .22s ease}
 .irow.open .rbody{opacity:1}
 .xin{padding:0 16px 16px}
-.xk{display:block;font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:16px 0 8px}
+.xk{display:block;font-family:var(--mono);font-style:normal;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:16px 0 8px}
 .xpos{display:none}
 .xpos p{font-family:var(--mono);font-size:10.5px;line-height:1.5;color:var(--ink-2);margin:0;max-width:70ch}
 .xpos .xa{color:var(--teal)}
 .xwhy,.xread{font-family:var(--serif);font-style:italic;font-size:13.5px;line-height:1.6;color:var(--ink-2);margin:0;max-width:66ch}
 .xwhy em,.xread em{font-style:normal}
 .xread b{font-family:var(--mono);font-style:normal;font-size:11px;color:var(--teal);font-weight:500}
-.xread+.xread{margin-top:8px}
-.xrl p{font-size:14.5px;line-height:1.7;margin:0 0 12px;max-width:70ch}
+.xrl p:not(.xk){font-size:13.5px;line-height:1.65;margin:0 0 12px;max-width:70ch}
 .xrl .capsline{font-size:13.5px}
-.xrl .nothere{font-size:13.5px}
 .xrl p:last-child{margin-bottom:0}
 .xrl del{color:var(--oxide)}
 .xrl ins{color:var(--teal);text-decoration:underline;text-underline-offset:2px}
-.xrl .nothere{text-decoration:line-through}
 .xmodel{font-family:var(--mono);font-size:9.5px;line-height:1.7;color:var(--ink-2);margin:0;max-width:70ch}
 a.xlink{color:var(--teal);text-decoration:underline;text-underline-offset:2px}
 a.xlink:hover,a.xlink:focus-visible{outline:none;text-decoration-thickness:2px}
@@ -176,7 +173,7 @@ a.xlink:hover,a.xlink:focus-visible{outline:none;text-decoration-thickness:2px}
 <nav class="nav-top" aria-label="Manual navigation">
   <div class="nav-in">
     <a href="index.html">The compute desk</a>
-    <span class="nav-here">06 / 06 — SLA anatomy</span>
+    <span class="nav-here">06 / 06 — The issues list</span>
     <span class="stepper">
       <a class="st" href="the-two-trees.html" data-t="The two trees" aria-label="Previous: The two trees">←</a>
       <span class="st dis" aria-hidden="true">→</span>
@@ -398,7 +395,7 @@ a.xlink:hover,a.xlink:focus-visible{outline:none;text-decoration-thickness:2px}
     <div class="tk"><p class="l">Recovery ratio</p><p class="v" id="c4">—</p></div>
   </div>
   <p class="status" id="st"></p>
-              <p class="excap">Model is illustrative: 730-hour month, $2.50/GPU-hr contract rate, credits computed as tier % of monthly fees, node failures spread evenly across the window. Tier schedules are representative of published cloud SLAs (10% / 25% / 100% escalation; 99.99% commitments add a 30–50% band). The true downstream cost of an outage — churn, breached customer SLAs, engineering time — is what the multiplier slider approximates, and it is almost always the biggest number on this page.</p>
+              <p class="excap">Model is illustrative: 730-hour month, the reference deal's contract rate, credits computed as tier % of monthly fees, node failures spread evenly across the window. Tier schedules are representative of published cloud SLAs (10% / 25% / 100% escalation; 99.99% commitments add a 30–50% band). The true downstream cost of an outage — churn, breached customer SLAs, engineering time — is what the multiplier slider approximates, and it is almost always the biggest number on this page.</p>
             </div>
           </div>
         </div>
@@ -560,7 +557,7 @@ a.xlink:hover,a.xlink:focus-visible{outline:none;text-decoration-thickness:2px}
             <p class="xwhy"><span class="xk">why it bites</span>the most likely delivery failure in this market — the GPUs arriving late — is pre-excused as force majeure.</p>
             <div class="xrl">
               <p class="xk">the redline</p>
-              <p>Neither party is liable for delay caused by events beyond its reasonable control, including acts of government, power or facility failures, <del>and shortages or delays of suppliers or component manufacturers.</del><ins>. Delays in Provider's supply chain do not excuse the delivery obligations of Clause 1.</ins></p>
+              <p>Neither party is liable for delay caused by events beyond its reasonable control, including acts of government, power or facility failures<del>, and shortages or delays of suppliers or component manufacturers</del>.<ins> Delays in Provider's supply chain do not excuse the delivery obligations of Clause 1.</ins></p>
             </div>
             <p class="xread"><span class="xk">the read</span><b>r17</b> — the most likely failure in this market — late GPUs — stops being pre-excused. force majeure keeps earthquakes; it loses supply chain.</p>
             <p class="xmodel"><span class="xk">the model</span>1.5 × monthly — the same slip, pre-excused as force majeure</p>
@@ -572,12 +569,12 @@ a.xlink:hover,a.xlink:focus-visible{outline:none;text-decoration-thickness:2px}
 
   <div class="notes">
     <h2>Reading the paper like a buyer</h2>
-    <p><strong>The definition clause is worth more than the nines.</strong> Most SLAs define "unavailable" at the platform or region level: the API is down, everything is down. But the dominant failure mode of a GPU fleet is chronic and node-level — a GPU falls off the bus, HBM throws errors, a NIC flaps — and under a platform-level definition, none of it registers on the availability metric. Meta's Llama 3 team reported 419 unexpected interruptions in 54 days of training on 16,384 H100s, roughly one hardware failure every three hours, overwhelmingly at the node level. Under boilerplate SLA language, that entire experience measures as 100% uptime. And it isn't a training-run anecdote: Modal, operating a 20,000 GPU multi-cloud pool, reports the same node-level texture - ECC errors, thermal violations, hardware slowdowns - and concludes "it's underappreciated how unreliable GPUs are." Toggle the definition above and watch the same month of pain flip between zero credits and six figures.</p>
-    <p><strong>The measurement window is where the lawyers hid the value.</strong> A one-hour outage is a 99.86% month — a breach of a 99.9% monthly commitment — but a 99.989% year, no breach at all. Same incident, same headline nines, different clause, different payout. Annual measurement dilutes every incident by a factor of twelve; monthly measurement is the buyer's floor position.</p>
-    <p><strong>Credits are shaped to pay on the rare event and never on the chronic one.</strong> Play with the sliders and you'll notice something honest: for a total platform outage, tiered credits (10–100% of monthly fees) can look adequate, even generous, against the direct GPU-hour loss. That's by design — total outages are rare, capped at one month's fees, claims-gated, and often excluded, so they're cheap to insure. The chronic node-level failures that actually dominate the cost of running GPUs pay nothing. And credits are service credits against future bills, not cash — worth exactly zero if the relationship is ending, which is the moment you'd most want them.</p>
-    <p><strong>What actually protects a serious customer isn't the availability SLA at all</strong> — it's operational commitments: time-to-replace on a failed node, hot-spare pools held against your cluster, burn-in and acceptance testing before delivery, and termination rights on chronic breach. Those clauses cost the provider real money to honor, which is precisely why they signal fleet quality better than any number of nines on the cover page.</p>
+    <p><strong>The definition clause is worth more than the nines.</strong> Most SLAs define "unavailable" at the platform or region level: the API is down, everything is down. But the dominant failure mode of a GPU fleet is chronic and node-level — a GPU falls off the bus, HBM throws errors, a NIC flaps — and under a platform-level definition, none of it registers on the availability metric. Meta's Llama 3 team reported 419 unexpected interruptions in 54 days of training on 16,384 H100s, roughly one hardware failure every three hours, overwhelmingly at the node level. Under boilerplate SLA language, that entire experience measures as 100% uptime. And it isn't a training-run anecdote: Modal, operating a 20,000 GPU multi-cloud pool, reports the same node-level texture - ECC errors, thermal violations, hardware slowdowns - and concludes "it's underappreciated how unreliable GPUs are." Open the definition row above and toggle the definition — the same month of pain flips between zero credits and six figures.</p>
     <div class="ask"><b>Ask the supplier</b>Define "unavailable" for me — does it include a single node down, or degraded interconnect performance, or only full loss of the API? And what was your fleet's node-level annualized failure rate last quarter?</div>
+    <p><strong>The measurement window is where the lawyers hid the value.</strong> A one-hour outage is a 99.86% month — a breach of a 99.9% monthly commitment — but a 99.989% year, no breach at all. Same incident, same headline nines, different clause, different payout. Annual measurement dilutes every incident by a factor of twelve; monthly measurement is the buyer's floor position.</p>
     <div class="ask"><b>Ask the supplier</b>Measured monthly or annually? Read me the exclusions list. And what's the claims process — automatic, or do I file with logs inside 30 days?</div>
+    <p><strong>Credits are shaped to pay on the rare event and never on the chronic one.</strong> Open the definition row and work its calculator — you'll notice something honest: for a total platform outage, tiered credits (10–100% of monthly fees) can look adequate, even generous, against the direct GPU-hour loss. That's by design — total outages are rare, capped at one month's fees, claims-gated, and often excluded, so they're cheap to insure. The chronic node-level failures that actually dominate the cost of running GPUs pay nothing. And credits are service credits against future bills, not cash — worth exactly zero if the relationship is ending, which is the moment you'd most want them.</p>
+    <p><strong>What actually protects a serious customer isn't the availability SLA at all</strong> — it's operational commitments: time-to-replace on a failed node, hot-spare pools held against your cluster, burn-in and acceptance testing before delivery, and termination rights on chronic breach. Those clauses cost the provider real money to honor, which is precisely why they signal fleet quality better than any number of nines on the cover page.</p>
     <div class="ask"><b>Ask the supplier</b>Forget credits: what's your committed time-to-replace on a failed node, do you hold hot spares against my cluster, and do I get termination rights on chronic breach?</div>
   </div>
   <details class="srcblock">
