@@ -42,6 +42,8 @@ h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(34
 .dh h2{font-family:var(--serif);font-style:italic;font-weight:400;font-size:26px}
 .badge{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--rule);border-radius:4px;padding:3px 8px;color:var(--ink-2)}
 .badge.hot{border-color:var(--oxide);color:var(--oxide)}
+a.xlink{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--teal);text-decoration:underline;text-underline-offset:2px}
+a.xlink:hover,a.xlink:focus-visible{outline:none;text-decoration-thickness:2px}
 .dossier p{max-width:68ch;color:var(--ink-2);margin-bottom:12px}
 .ask{font-family:var(--mono);font-size:13px;background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:13px 16px;margin-top:6px;color:var(--ink);max-width:72ch}
 .ask b{font-weight:500;letter-spacing:.08em;font-size:10px;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:4px}
@@ -122,7 +124,7 @@ var GENS=[
   p1:"Identical Hopper compute — the entire upgrade is memory: 141 GB of HBM3e at 4.8 TB/s. That makes it a pure inference play: a 70B-parameter model fits in FP16 on a single GPU, with no sharding and no interconnect tax.",
   p2:"The lesson for a buyer is that a generation's value can live entirely in HBM. Price-per-FLOP and price-per-GB rank the same chip very differently, so the right ranking depends on which resource your demand actually exhausts first.",
   ask:"Is my demand compute-bound or memory-bound — and is the H200 premium over H100 smaller than the sharding cost it removes?"},
- {id:"B200",arch:"Blackwell",year:"2024",mem:192,memT:"HBM3e",bw:8,comp:20,prec:"FP4",pw:1000,nvl:1800,nvlG:"NVLink 5",dom:72,est:false,
+ {id:"B200",arch:"Blackwell",year:"2024",mem:192,memT:"HBM3e",bw:8,comp:20,prec:"FP4",pw:1000,nvl:1800,nvlG:"NVLink 5",dom:72,est:false,plate:true,
   t:"The rack becomes the product",
   p1:"A true architecture change: FP4 tensor cores, NVLink 5 at 1.8 TB/s, and a coherent domain that jumps from 8 GPUs to 72 in the GB200 NVL72 — from this point the natural unit of purchase is the rack, not the server.",
   p2:"At 1,000 W per GPU it forces liquid cooling, which is the moment the industry's binding constraint migrated from chip supply to power and facility readiness. Two suppliers quoting the same B200 price can differ entirely in whether their buildings can actually run them.",
@@ -187,7 +189,8 @@ function render(){
   document.getElementById("dh").innerHTML='<h2>'+g.t+'</h2>'
     +'<span class="badge">'+g.id+" · "+g.arch+'</span>'
     +'<span class="badge">'+g.year+'</span>'
-    +'<span class="badge'+(gSel===GENS.length-1?" hot":"")+'">'+g.nvlG+" · "+g.memT+'</span>';
+    +'<span class="badge'+(gSel===GENS.length-1?" hot":"")+'">'+g.nvlG+" · "+g.memT+'</span>'
+    +(g.plate?'<a class="xlink" href="plate-nvl72.html">see the object →</a>':'');
   document.getElementById("dp1").textContent=g.p1;
   document.getElementById("dp2").textContent=g.p2;
   document.getElementById("ask").textContent=g.ask;

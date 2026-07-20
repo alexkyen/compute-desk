@@ -31,6 +31,13 @@ To add instrument 07: create the new file with its nav strip, add its row to the
 contents list in `index.html`, and update the prev/next links on its two neighbors
 (today that means giving 06 a next link, and pointing 07 back at 06).
 
+One companion plate sits outside the numbered sequence — `plate-nvl72.html`, a 3D
+exploded model of the GB200 NVL72 rack, cross-linked from the silicon ladder and
+the fabric tax rather than listed in the contents — and it carries the site's one
+documented exception to the no-external-JS rule: a pinned, minified Three.js build
+(r147, MIT) inlined into the page, so the file remains fully self-contained and
+served as-is.
+
 ## Notes
 
 Framing after Modal, "How to price serverless" (2026). Hardware figures compiled July 2026;
