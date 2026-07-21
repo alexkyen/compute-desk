@@ -157,8 +157,8 @@ input[type=range]{width:100%;accent-color:var(--teal);height:22px}
 .xrl del{color:var(--oxide)}
 .xrl ins{color:var(--teal);text-decoration:underline;text-underline-offset:2px}
 .xmodel{font-family:var(--mono);font-size:9.5px;line-height:1.7;color:var(--ink-2);margin:0;max-width:70ch}
-a.xlink{color:var(--teal);text-decoration:underline;text-underline-offset:2px}
-a.xlink:hover,a.xlink:focus-visible{outline:none;text-decoration-thickness:2px}
+a.iref{color:var(--teal);text-decoration:underline;text-underline-offset:2px}
+a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
 .rhead.flash{animation:clflash 1.2s ease-out 1}
 .xin .ask{margin:16px 0 0}
 @media(max-width:720px){
@@ -467,7 +467,7 @@ a.xlink:hover,a.xlink:focus-visible{outline:none;text-decoration-thickness:2px}
               <p class="xk">the redline</p>
               <p><ins>4.6 If Monthly Uptime breaches the Committed Level in any three (3) months within a rolling six (6) month window (chronic breach), Customer may terminate for cause without cure period, with pro-rata refund of the Initial Payment.</ins></p>
             </div>
-            <p class="xread"><span class="xk">the read</span><b>r11</b> — make a pattern of bad months actionable, and let it bypass clause 6's cure period; pairs with <a class="xlink" href="#ir-def">r7</a> so chronic node pain can actually pull the trigger.</p>
+            <p class="xread"><span class="xk">the read</span><b>r11</b> — make a pattern of bad months actionable, and let it bypass clause 6's cure period; pairs with <a class="iref" href="#ir-def">r7</a> so chronic node pain can actually pull the trigger.</p>
             <p class="xmodel"><span class="xk">the model</span>optionality — deliberately unnumbered</p>
           </div>
         </div>
@@ -490,7 +490,7 @@ a.xlink:hover,a.xlink:focus-visible{outline:none;text-decoration-thickness:2px}
               <p class="xk">the redline</p>
               <p>Either party may terminate for material breach not cured within thirty (30) days of written notice<ins>, except that chronic breach under Clause 4.6 requires no cure period and availability breaches carry a fifteen (15) day cure</ins>.</p>
             </div>
-            <p class="xread"><span class="xk">the read</span><b>r14</b> — a month of pain before remedies mature was the draft's design. shorten cure for availability, and <a class="xlink" href="#ir-chronic">chronic breach</a> skips it entirely.</p>
+            <p class="xread"><span class="xk">the read</span><b>r14</b> — a month of pain before remedies mature was the draft's design. shorten cure for availability, and <a class="iref" href="#ir-chronic">chronic breach</a> skips it entirely.</p>
             <p class="xmodel"><span class="xk">the model</span>1 × monthly — one month of exposure before any remedy matures</p>
           </div>
         </div>
@@ -514,7 +514,7 @@ a.xlink:hover,a.xlink:focus-visible{outline:none;text-decoration-thickness:2px}
               <p class="capsline">PROVIDER'S AGGREGATE LIABILITY UNDER THIS AGREEMENT IS CAPPED AT FEES PAID IN THE <del>THREE (3) MONTHS</del> <ins>TWELVE (12) MONTHS</ins> PRECEDING THE CLAIM, AND SERVICE CREDITS ARE CUSTOMER'S SOLE AND EXCLUSIVE REMEDY FOR ANY FAILURE OF AVAILABILITY.<ins> THE CAP DOES NOT APPLY TO BREACHES OF CONFIDENTIALITY OR DATA PROTECTION, OR TO PROVIDER'S GROSS NEGLIGENCE OR WILLFUL MISCONDUCT.</ins></p>
               <p>4.3 If Monthly Uptime falls below the Committed Level of <select class="lvl" aria-label="Committed Level, percent"><option value="0">99.0</option><option value="1">99.5</option><option value="2" selected>99.9</option></select>%, Customer's sole and exclusive remedy is a Service Credit per the Schedule below, applied against future invoices only<del>, provided Customer submits a written claim with supporting logs within thirty (30) days of the incident</del>.<ins> Credits are calculated automatically from Provider telemetry, which Customer may audit on request.</ins></p>
             </div>
-            <p class="xread"><span class="xk">the read</span><b>r15</b> — note what this redline does <em>not</em> do: it doesn't delete the cap or the sole-remedy language. sophisticated buyers widen the cap, carve out the unforgivable, and build the <a class="xlink" href="#ir-chronic">chronic-breach exit</a> around it. the trap below describes the draft; this is what beating it actually looks like.</p>
+            <p class="xread"><span class="xk">the read</span><b>r15</b> — note what this redline does <em>not</em> do: it doesn't delete the cap or the sole-remedy language. sophisticated buyers widen the cap, carve out the unforgivable, and build the <a class="iref" href="#ir-chronic">chronic-breach exit</a> around it. the trap below describes the draft; this is what beating it actually looks like.</p>
             <p class="xread"><b>r9</b> — flip the burden of proof: automatic credits from auditable telemetry, not a claims process you must win inside thirty days.</p>
             <div class="ask trap"><b>the trap</b>'Credits as sole remedy' plus a liability cap is the whole ballgame; the nines are decoration around it.</div>
             <p class="xmodel"><span class="xk">the model</span>9 × monthly — recoverable delta on a catastrophic claim: 12-month ask minus 3-month draft cap</p>
@@ -572,7 +572,7 @@ a.xlink:hover,a.xlink:focus-visible{outline:none;text-decoration-thickness:2px}
 
   <div class="notes">
     <h2>Reading the paper like a buyer</h2>
-    <p><strong>The definition clause is worth more than the nines.</strong> Most SLAs define "unavailable" at the platform or region level: the API is down, everything is down. But the dominant failure mode of a GPU fleet is chronic and node-level — a GPU falls off the bus, HBM throws errors, a NIC flaps — and under a platform-level definition, none of it registers on the availability metric. Meta's Llama 3 team reported 419 unexpected interruptions in 54 days of training on 16,384 H100s, roughly one hardware failure every three hours, overwhelmingly at the node level. Under boilerplate SLA language, that entire experience measures as 100% uptime. And it isn't a training-run anecdote: Modal, operating a 20,000 GPU multi-cloud pool, reports the same node-level texture - ECC errors, thermal violations, hardware slowdowns - and concludes "it's underappreciated how unreliable GPUs are." Open the <a class="xlink" href="#ir-def">definition of "available"</a> row above and flip "Unavailable" means in Exhibit A — the same month of pain swings between zero credits and six figures.</p>
+    <p><strong>The definition clause is worth more than the nines.</strong> Most SLAs define "unavailable" at the platform or region level: the API is down, everything is down. But the dominant failure mode of a GPU fleet is chronic and node-level — a GPU falls off the bus, HBM throws errors, a NIC flaps — and under a platform-level definition, none of it registers on the availability metric. Meta's Llama 3 team reported 419 unexpected interruptions in 54 days of training on 16,384 H100s, roughly one hardware failure every three hours, overwhelmingly at the node level. Under boilerplate SLA language, that entire experience measures as 100% uptime. And it isn't a training-run anecdote: Modal, operating a 20,000 GPU multi-cloud pool, reports the same node-level texture - ECC errors, thermal violations, hardware slowdowns - and concludes "it's underappreciated how unreliable GPUs are." Open the <a class="iref" href="#ir-def">definition of "available"</a> row above and flip "Unavailable" means in Exhibit A — the same month of pain swings between zero credits and six figures.</p>
     <div class="ask"><b>Ask the supplier</b>Define "unavailable" for me — does it include a single node down, or degraded interconnect performance, or only full loss of the API? And what was your fleet's node-level annualized failure rate last quarter?</div>
     <p><strong>The measurement window is where the lawyers hid the value.</strong> A one-hour outage is a 99.86% month — a breach of a 99.9% monthly commitment — but a 99.989% year, no breach at all. Same incident, same headline nines, different clause, different payout. Annual measurement dilutes every incident by a factor of twelve; monthly measurement is the buyer's floor position.</p>
     <div class="ask"><b>Ask the supplier</b>Measured monthly or annually? Read me the exclusions list. And what's the claims process — automatic, or do I file with logs inside 30 days?</div>
