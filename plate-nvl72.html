@@ -23,14 +23,21 @@ h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(34
 .card{background:var(--panel);border:1px solid var(--rule);border-radius:10px}
 .plate-card{overflow:hidden}
 .stages{display:flex;gap:6px;flex-wrap:wrap;padding:14px 16px;border-bottom:1px solid var(--rule)}
-.stages button{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--ink-2);background:transparent;border:1px solid var(--rule);border-radius:6px;padding:7px 12px;cursor:pointer}
-.stages button:hover{border-color:var(--teal);color:var(--teal)}
-.stages button.on{background:var(--teal);border-color:var(--teal);color:#fff}
-.stages button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.stages button,.subrow button{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--ink-2);background:transparent;border:1px solid var(--rule);border-radius:6px;padding:7px 12px;cursor:pointer}
+.stages button:hover,.subrow button:hover{border-color:var(--teal);color:var(--teal)}
+.stages button.on,.subrow button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.stages button:focus-visible,.subrow button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.subrow{display:flex;align-items:center;gap:8px 10px;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--rule)}
+.subrow[hidden]{display:none}
+.subrow .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-right:2px}
 .viewport{display:grid;grid-template-columns:1fr 292px}
 .scene{position:relative;min-height:540px;background:var(--panel)}
 .scene canvas{display:block;width:100%;height:100%;position:absolute;inset:0;touch-action:none;cursor:grab}
 .scene canvas:active{cursor:grabbing}
+.scene .lab{position:absolute;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;color:var(--ink-2);background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:3px 8px;pointer-events:none;z-index:5;white-space:nowrap}
+#hovlab{display:none;max-width:280px;white-space:normal}
+#hovlab b{font-weight:500}
+#modechip{display:none;left:10px;bottom:10px;max-width:calc(100% - 20px);white-space:normal}
 #fallback-fig{padding:22px 18px}
 #fallback-fig svg{display:block;width:100%;height:auto}
 #fallback-fig .fig-cap{font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.04em;margin-top:10px;max-width:60ch}
@@ -48,8 +55,11 @@ h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(34
 .scrub-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--ink-3)}
 input[type=range]{flex:1;accent-color:var(--teal);height:22px}
 input[type=range]:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.count-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 18px;padding:12px 16px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--ink-3)}
+.count-row b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
+.count-row .schematic{margin-left:auto;text-transform:uppercase;letter-spacing:.14em;font-size:9.5px}
 .hint{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;color:var(--ink-3);margin:10px 2px 0}
-.no3d .scene canvas,.no3d .scrub-row,.no3d .hint{display:none}
+.no3d .scene canvas,.no3d .scrub-row,.no3d .subrow,.no3d .count-row,.no3d .hint,.no3d .scene .lab{display:none}
 .notes{margin-top:52px;border-top:1px solid var(--rule);padding-top:30px}
 .notes h2{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;margin-bottom:18px}
 .notes p{max-width:66ch;margin-bottom:14px;color:var(--ink-2)}
@@ -109,8 +119,11 @@ a.xlink:hover,a.xlink:focus-visible{outline:none;text-decoration-thickness:2px}
 
   <div class="card plate-card">
     <div class="stages" id="tabs" role="tablist" aria-label="Stages of the plate"></div>
+    <div class="subrow" id="subrow" hidden></div>
     <div class="viewport">
       <div class="scene" id="scene-wrap">
+        <div class="lab" id="hovlab"></div>
+        <div class="lab" id="modechip"></div>
         <div id="fallback-fig">
           <svg viewBox="0 0 860 620" role="img" aria-label="Static figure: the NVL72 rack in side elevation with the rear copper NVLink spine drawn as arcs linking the nine center NVSwitch trays to the eighteen compute trays">
 <rect x="110" y="70" width="140" height="500" rx="3" style="fill:var(--panel);stroke:var(--ink);stroke-width:1.4"/>
@@ -174,8 +187,9 @@ a.xlink:hover,a.xlink:focus-visible{outline:none;text-decoration-thickness:2px}
       <input type="range" id="scrub" min="0" max="3" step="0.001" value="0" aria-label="Scrub through the four stages of the plate">
       <span aria-hidden="true">IV</span>
     </div>
+    <div class="count-row" id="counts" aria-live="off"></div>
   </div>
-  <p class="hint">drag to orbit · scroll or pinch to zoom · arrow keys on the scrubber step the stages</p>
+  <p class="hint">drag to orbit · scroll or pinch to zoom · hover or tap parts to name them · re-selecting a stage replays its move</p>
 
   <div class="notes">
     <h2>Reading the object like a buyer</h2>
@@ -184,7 +198,7 @@ a.xlink:hover,a.xlink:focus-visible{outline:none;text-decoration-thickness:2px}
     <p><strong>The rack is the commercial unit.</strong> Because coherence ends at the rails, the rack is the natural unit of coherent compute — and the market has organized around it: NVL72 pricing is quoted per rack, capacity blocks are counted in racks, and SLA terms attach to rack-shaped failure domains. Ask capacity questions in racks, not GPUs.</p>
     <div class="ask"><b>Ask the supplier</b>Is the facility NVL72-qualified — power density and liquid loops delivered, not planned — and are your quote, your capacity blocks, and your SLA denominated in racks?</div>
   </div>
-  <p class="foot">geometry schematic, proportions honest · figures: NVIDIA GB200 NVL72 datasheet — 72 Blackwell GPUs, 36 Grace CPUs, 18 compute trays × 2 GB200 superchips, 9 NVSwitch trays, ~5,000-cable copper spine, 1.8 TB/s NVLink per GPU, 192 GB HBM3e per GPU, ~120 kW, liquid-cooled · compiled July 2026 · companion plate to the silicon ladder and the fabric tax</p>
+  <p class="foot">geometry schematic, proportions honest · figures: NVIDIA GB200 NVL72 datasheet — 72 Blackwell GPUs, 36 Grace CPUs, 18 compute trays × 2 GB200 superchips, 9 NVSwitch trays, ~5,000-cable copper spine, 1.8 TB/s NVLink per GPU, 192 GB HBM3e per GPU, 480 GB LPDDR5X per Grace, 900 GB/s NVLink-C2C, 10 TB/s NV-HBI die-to-die, ~120 kW, liquid-cooled · compiled July 2026 · companion plate to the silicon ladder and the fabric tax</p>
   <nav class="nav-bot" aria-label="Manual navigation">
     <a class="nav-prev" href="silicon-ladder.html">← The silicon ladder</a>
     <a class="nav-next" href="the-fabric.html">The fabric tax →</a>
@@ -224,7 +238,7 @@ var STAGES=[
   body:"Behind the midplane: ~5,000 direct copper NVLink cables — a few hundred are drawn here to stand in for them — carrying every GPU's 1.8 TB/s through the switch trays. Copper at these speeds reaches about one rack before the signal gives out, and this spine is that reach made visible. Inside it, 72 GPUs pool memory like one device. One cable-length beyond it you cross into optics, and the fabric tax begins.",
   stats:[["Copper cables","~5,000","amber"],["NVLink per GPU","1.8 TB/s","teal"],["Domain size","72 GPUs","teal"],["Past the rack","optics","amber"]]},
  {tab:"IV — Superchip",eyebrow:"Stage IV — the superchip",title:"The atom of the machine",
-  body:"One compute tray, drawn clear of the rack: two GB200 superchips. Each is one Grace CPU (gray) and two Blackwell GPUs (green), and every GPU is walled in by its own eight stacks of HBM3e (amber) — 192 GB per GPU, owned outright. The two rows meeting in the middle are neighbors, not a pool: what the pair shares is the NVLink between them, over which each can reach the other's memory — a bandwidth story, not a shared-wall story. Thirty-six of these boards fill the rack behind it. Everything the silicon ladder prices, and everything the spine connects, begins as this object.",
+  body:"One compute tray, drawn clear of the rack: two GB200 superchips. Each is one Grace CPU (gray) with its own soldered LPDDR5X banks, joined by NVLink-C2C to two Blackwell GPUs (green), and every GPU is walled in by its own eight stacks of HBM3e (amber) — 192 GB per GPU, owned outright. The two rows meeting in the middle are neighbors, not a pool: what the pair shares is the NVLink between them, over which each can reach the other's memory — a bandwidth story, not a shared-wall story. And each green package is itself two dies stitched into one GPU by the NV-HBI seam — step inside one GPU to see it. Thirty-six of these boards fill the rack behind it. Everything the silicon ladder prices, and everything the spine connects, begins as this object.",
   stats:[["Superchips per tray","2","teal"],["HBM3e per GPU","192 GB","amber"],["NVLink per GPU","1.8 TB/s","teal"],["Superchips per rack","36","teal"]]}
 ];
 
@@ -236,6 +250,10 @@ var tabsEl=document.getElementById("tabs"),
     bodyEl=document.getElementById("an-body"),
     statsEl=document.getElementById("an-stats"),
     scrub=document.getElementById("scrub"),
+    subEl=document.getElementById("subrow"),
+    countsEl=document.getElementById("counts"),
+    hovEl=document.getElementById("hovlab"),
+    chipEl=document.getElementById("modechip"),
     sceneWrap=document.getElementById("scene-wrap");
 var reduceMq=window.matchMedia("(prefers-reduced-motion: reduce)");
 function reduced(){return reduceMq.matches}
@@ -335,7 +353,7 @@ function rnd(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}
 
 /* ---------- renderer / scene / camera ---------- */
 var canvas=document.createElement("canvas");
-canvas.setAttribute("aria-label","Interactive 3D model of a GB200 NVL72 rack. Drag to orbit, scroll to zoom; use the stage tabs and scrubber to take it apart.");
+canvas.setAttribute("aria-label","Interactive 3D model of a GB200 NVL72 rack. Drag to orbit, scroll to zoom; use the stage tabs and scrubber to take it apart. Hover or tap parts to name them.");
 sceneWrap.appendChild(canvas);
 var renderer;
 try{
@@ -372,6 +390,61 @@ var matFrame=lam(INK2),      linFrame=lin(INK,0.9),
     matGrace=lam(INK3),      matGPU=lam(TEAL),   matHBM=lam(AMBER),
     linGround=lin(INK3,0.55);
 [matBoard,matGrace,matGPU,matHBM].forEach(function(m){m.opacity=0});
+/* stage-IV additions: LPDDR/C2C/mezzanine at module level; a focus material set
+   (…F) so one B200 package can hold full ink while the GPU zoom ghosts the rest */
+var matLP=lam(0xE8DFC4,0),   matC2C=lam(TEAL,0),   matMezz=lam(INK2,0),
+    matSub=lam(0xEDEFE6,0),  matSubF=lam(0xEDEFE6,0),
+    matGPUF=lam(TEAL,0),     matHBMF=lam(AMBER,0),
+    matSeam=lam(INK2,0),     matEgress=lam(AMBER,0),
+    linChipF=lin(INK,0),     linZoom=lin(INK2,0),
+    linDim=lin(INK3,0);
+var invisMat=new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false});
+
+/* ---------- mono canvas-sprite labels (Plate II production helper) ---------- */
+var LABELS=[];
+function drawLabelCanvas(rec){
+  var scale=2,px=26,pad=5;
+  var ctx=rec.cv.getContext("2d");
+  ctx.font="500 "+(px*scale)+"px 'IBM Plex Mono',ui-monospace,monospace";
+  var w=Math.ceil(ctx.measureText(rec.txt).width)+pad*2*scale;
+  rec.cv.width=w;rec.cv.height=Math.ceil(px*scale*1.5);
+  ctx=rec.cv.getContext("2d");
+  ctx.font="500 "+(px*scale)+"px 'IBM Plex Mono',ui-monospace,monospace";
+  ctx.textBaseline="middle";
+  ctx.fillStyle=rec.color;
+  ctx.fillText(rec.txt,pad*scale,rec.cv.height/2);
+  rec.sp.scale.set(rec.h*rec.cv.width/rec.cv.height,rec.h,1);
+  if(rec.tex)rec.tex.needsUpdate=true;
+}
+function label(txt,cssColor,worldH){
+  var rec={txt:txt,color:cssColor,h:worldH,cv:document.createElement("canvas")};
+  var sp=new THREE.Sprite(new THREE.SpriteMaterial({transparent:true,opacity:1,depthTest:false}));
+  sp.renderOrder=20;
+  rec.sp=sp;
+  drawLabelCanvas(rec);
+  rec.tex=new THREE.CanvasTexture(rec.cv);
+  rec.tex.minFilter=THREE.LinearFilter;
+  sp.material.map=rec.tex;
+  LABELS.push(rec);
+  return sp;
+}
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){
+  LABELS.forEach(drawLabelCanvas);needs=true;
+});
+
+/* ---------- generic timed animations (zoom fades) ---------- */
+var anims=[];
+function addAnim(dur,tick,done,delay){anims.push({t:-(delay||0),dur:dur,tick:tick,done:done});needs=true}
+function stepAnims(dt){
+  for(var i=anims.length-1;i>=0;i--){
+    var a=anims[i];
+    a.t+=dt;
+    if(a.t<0)continue;
+    var f=Math.min(a.t/a.dur,1);
+    a.tick(f);
+    if(f>=1){anims.splice(i,1);if(a.done)a.done()}
+  }
+}
 
 /* ---------- helpers: merged ink linework ---------- */
 function edgesOf(geo,dx,dy,dz){
@@ -467,20 +540,24 @@ var faceS=(function(){
   return lineGeo([edgesOf(trayGeoS),segs(d)]);
 })();
 
-var computeTrays=[],switchTrays=[];
+var EXT_C=0.22; // identical hardware explodes identically: one extension for all compute trays
+var computeTrays=[],switchTrays=[],trayHits=[];
 computeY.forEach(function(y,i){
   if(i===HERO)return; // hero built separately
   var g=new THREE.Group();
   g.position.set(0,y,TRAY_Z);
-  g.add(new THREE.Mesh(trayGeoC,matTrayC));
+  var tm=new THREE.Mesh(trayGeoC,matTrayC);
+  tm.userData={tip:"ctray",hl:[TW+0.02,trayH+0.012,TD+0.02]};
+  g.add(tm);trayHits.push(tm);
   g.add(new THREE.LineSegments(faceC,linTrayC));
-  g.userData.ext=0.16+0.11*((i*5)%7)/6; // staggered drawer fan
   rack.add(g);computeTrays.push(g);
 });
 switchY.forEach(function(y){
   var g=new THREE.Group();
   g.position.set(0,y,TRAY_Z+0.02);
-  g.add(new THREE.Mesh(trayGeoS,matTrayS));
+  var tm=new THREE.Mesh(trayGeoS,matTrayS);
+  tm.userData={tip:"stray",hl:[TW+0.02,trayH+0.012,TD-0.02]};
+  g.add(tm);trayHits.push(tm);
   g.add(new THREE.LineSegments(faceS,linTrayS));
   rack.add(g);switchTrays.push(g);
 });
@@ -509,27 +586,79 @@ var shell=new THREE.Group();hero.add(shell);
   lines.push(segs(d));
   shell.add(new THREE.LineSegments(lineGeo(lines),linShellH));
 })();
+/* invisible hit proxy: in the rack stages the hero is just another compute tray */
+var heroProxy=new THREE.Mesh(trayGeoC,invisMat);
+heroProxy.userData={tip:"ctray",hl:[TW+0.02,trayH+0.012,TD+0.02],always:true};
+hero.add(heroProxy);
+trayHits.push(heroProxy);
 
-/* one GB200 superchip: board + 1 Grace + 2 Blackwell + 16 HBM + board linework */
+/* one GB200 superchip: board + 1 Grace + LPDDR5X + C2C links + 2 B200 packages
+   (2 dies, 8 HBM, substrate each) + mezzanine strips + board linework.
+   focus routes one package (gx = FOCX) to the …F materials so the stage-IV GPU
+   zoom can hold it at full ink while the rest of the module ghosts. */
 var BL=0.42,BW=0.195,BT=0.007; // board length (z), width (x), thickness
-function superchip(){
-  var g=new THREE.Group(),lines=[];
+var FOCX=0.051,parts=[];
+function superchip(focus){
+  var g=new THREE.Group(),lines=[],flines=[];
   var bg=new THREE.BoxGeometry(BW,BT,BL);
   g.add(new THREE.Mesh(bg,matBoard));
   lines.push(edgesOf(bg));
   var topY=BT/2;
   var grace=new THREE.BoxGeometry(0.085,0.011,0.085);
   var gm=new THREE.Mesh(grace,matGrace);gm.position.set(0,topY+0.0055,0.125);
-  g.add(gm);lines.push(edgesOf(grace,0,topY+0.0055,0.125));
+  gm.userData={tip:"grace",hl:[0.09,0.015,0.09]};
+  g.add(gm);parts.push(gm);
+  lines.push(edgesOf(grace,0,topY+0.0055,0.125));
+  /* LPDDR5X: low flat soldered banks flanking Grace — CPU memory, not HBM */
+  var lp=new THREE.BoxGeometry(0.032,0.005,0.042);
+  [-0.0645,0.0645].forEach(function(lx){
+    [0.101,0.149].forEach(function(lz){
+      var lm=new THREE.Mesh(lp,matLP);lm.position.set(lx,topY+0.0025,lz);
+      lm.userData={tip:"lpddr",hl:[0.036,0.008,0.046]};
+      g.add(lm);parts.push(lm);
+      lines.push(edgesOf(lp,lx,topY+0.0025,lz));
+    });
+  });
+  /* NVLink-C2C: one flat link from Grace to each package */
+  [-1,1].forEach(function(sgn){
+    var x1=sgn*0.018,z1=0.0825,x2=sgn*FOCX,z2=-0.008;
+    var len=Math.hypot(x2-x1,z2-z1);
+    var cm=new THREE.Mesh(new THREE.BoxGeometry(0.014,0.0025,len),matC2C);
+    cm.position.set((x1+x2)/2,topY+0.0012,(z1+z2)/2);
+    cm.rotation.y=Math.atan2(x2-x1,z2-z1);
+    cm.userData={tip:"c2c",hl:[0.02,0.006,len+0.01]};
+    g.add(cm);parts.push(cm);
+  });
+  /* mezzanine strips under the board: the module ends at a connector, not at air */
+  var mz=new THREE.BoxGeometry(0.012,0.006,0.36);
+  [-1,1].forEach(function(sgn){
+    var mm=new THREE.Mesh(mz,matMezz);
+    mm.position.set(sgn*(BW/2-0.018),-BT/2-0.003,0);
+    mm.userData={tip:"mezz",hl:[0.016,0.01,0.364]};
+    g.add(mm);parts.push(mm);
+    lines.push(edgesOf(mz,sgn*(BW/2-0.018),-BT/2-0.003,0));
+  });
   var gpu=new THREE.BoxGeometry(0.058,0.011,0.058);
   var hbm=new THREE.BoxGeometry(0.0145,0.013,0.030);
-  var hbmMesh=new THREE.InstancedMesh(hbm,matHBM,16),hi=0;
+  var sub=new THREE.BoxGeometry(0.104,0.003,0.180);
   var m4=new THREE.Matrix4();
   [-0.051,0.051].forEach(function(gx){
+    var isF=focus&&gx===FOCX;
+    var dl=isF?flines:lines;
+    /* package substrate: the unit that holds the die pair and its eight stacks */
+    var sm=new THREE.Mesh(sub,isF?matSubF:matSub);
+    sm.position.set(gx,topY+0.0015,-0.095);
+    sm.userData={tip:"pkg",hl:[0.108,0.007,0.184]};
+    g.add(sm);parts.push(sm);
+    dl.push(edgesOf(sub,gx,topY+0.0015,-0.095));
+    var hbmMesh=new THREE.InstancedMesh(hbm,isF?matHBMF:matHBM,8),hi=0;
+    hbmMesh.userData={tip:"hbm",hl:[0.018,0.016,0.034]};
     [-0.045,-0.145].forEach(function(gz){
-      var gpuM=new THREE.Mesh(gpu,matGPU);
+      var gpuM=new THREE.Mesh(gpu,isF?matGPUF:matGPU);
       gpuM.position.set(gx,topY+0.0055,gz);
-      g.add(gpuM);lines.push(edgesOf(gpu,gx,topY+0.0055,gz));
+      gpuM.userData={tip:"die",hl:[0.062,0.015,0.062]};
+      g.add(gpuM);parts.push(gpuM);
+      dl.push(edgesOf(gpu,gx,topY+0.0055,gz));
       [-1,1].forEach(function(side){
         /* HBM is per-package: the center-facing row sits tight against its own die,
            leaving a stack-width seam between the two packages — two walls, never one */
@@ -540,27 +669,51 @@ function superchip(){
         }
       });
     });
+    g.add(hbmMesh);parts.push(hbmMesh);
+    if(isF){
+      /* NV-HBI: the seam that makes two dies present as one GPU — subject of the zoom */
+      var seam=new THREE.Mesh(new THREE.BoxGeometry(0.046,0.007,0.040),matSeam);
+      seam.position.set(gx,topY+0.0045,-0.095);
+      seam.userData={tip:"seam",hl:[0.05,0.011,0.044]};
+      g.add(seam);parts.push(seam);
+      /* NVLink-5 egress: the package's path off the module toward the switch trays */
+      var eg=new THREE.Mesh(new THREE.BoxGeometry(0.018,0.002,0.026),matEgress);
+      eg.position.set(gx,topY+0.001,-0.196);
+      eg.userData={tip:"egress",hl:[0.022,0.006,0.032]};
+      g.add(eg);parts.push(eg);
+      var yz=topY+0.009,ye=topY+0.002,zl=[];
+      [-0.105,-0.095,-0.085].forEach(function(sz){zl.push([gx-0.017,yz,sz,gx+0.017,yz,sz])});
+      zl.push([gx-0.006,ye,-0.203,gx,ye,-0.210],[gx,ye,-0.210,gx+0.006,ye,-0.203]);
+      g.add(new THREE.LineSegments(lineGeo([segs(zl)]),linZoom));
+    }
   });
-  g.add(hbmMesh);
-  /* board linework: inset outline, traces Grace->GPUs, corner mounting ticks.
+  /* board linework: inset outline + corner mounting ticks (the old generic
+     Grace->GPU traces are superseded by the explicit C2C links above).
      Segments are [x, y, z] with y the board's top surface. */
   var yb=topY+0.0008,d=[];
   var l=-(BW/2-0.009),r=BW/2-0.009,b=-(BL/2-0.009),t=BL/2-0.009;
   d.push([l,yb,b,r,yb,b],[r,yb,b,r,yb,t],[r,yb,t,l,yb,t],[l,yb,t,l,yb,b]);
-  [-0.02,0,0.02].forEach(function(dx){
-    d.push([dx,yb,0.082,dx,yb,0.02],[dx,yb,0.02,dx*2.2,yb,-0.012]);
-  });
   [[l+0.006,b+0.006],[r-0.006,b+0.006],[l+0.006,t-0.006],[r-0.006,t-0.006]].forEach(function(c){
     d.push([c[0]-0.004,yb,c[1],c[0]+0.004,yb,c[1]],[c[0],yb,c[1]-0.004,c[0],yb,c[1]+0.004]);
   });
   lines.push(segs(d));
   g.add(new THREE.LineSegments(lineGeo(lines),linChip));
+  if(flines.length)g.add(new THREE.LineSegments(lineGeo(flines),linChipF));
   return g;
 }
-var chipA=superchip(),chipB=superchip();
+var chipA=superchip(false),chipB=superchip(true);
 chipA.position.set(-0.118,0.012,0);
 chipB.position.set(0.118,0.012,0);
 hero.add(chipA);hero.add(chipB);
+/* labels for the new links (sprites face the camera; opacity driven in applyP) */
+var labC2C=label("NVLink-C2C","#4A574F",0.016);labC2C.position.set(0,0.030,0.037);chipB.add(labC2C);
+var labSeam=label("NV-HBI · 10 TB/s","#117758",0.016);labSeam.position.set(FOCX,0.045,-0.095);chipB.add(labSeam);
+var labEgr=label("NVLink-5 · 1.8 TB/s","#D98F12",0.015);labEgr.position.set(FOCX,0.038,-0.20);chipB.add(labEgr);
+[labC2C,labSeam,labEgr].forEach(function(s){s.material.opacity=0});
+/* camera anchor at the focus package's center, for the GPU-zoom key */
+var focusAnchor=new THREE.Object3D();
+focusAnchor.position.set(FOCX,0.01,-0.095);
+chipB.add(focusAnchor);
 
 /* ---------- the copper spine: ~5,000 cables, 378 drawn, instanced ---------- */
 var CABLE_SEGS=13,cableCount=0;
@@ -605,6 +758,11 @@ var spine=new THREE.InstancedMesh(unitCyl,matCable,cableCount*CABLE_SEGS);
 var spineGroup=new THREE.Group();
 spineGroup.add(spine);
 scene.add(spineGroup);
+/* invisible hit proxy around the loom (raycasting 5k cable instances is wasteful) */
+var spineProxy=new THREE.Mesh(new THREE.BoxGeometry(0.86,innerHi-innerLo,0.64),invisMat);
+spineProxy.position.set(0,(innerLo+innerHi)/2,ZREAR-0.32);
+spineProxy.userData={tip:"spine",always:true};
+spineGroup.add(spineProxy);
 
 /* ---------- ghosted liquid-cooling manifold (stage II) ---------- */
 var manifold=new THREE.InstancedMesh(unitCyl,matManif,2+computeY.length*2);
@@ -625,6 +783,13 @@ var manifold=new THREE.InstancedMesh(unitCyl,matManif,2+computeY.length*2);
 })();
 rack.add(manifold);
 
+/* ---------- dimension callouts (utility/mono; figures already on the site) ---------- */
+var labDimH=label("2.36 m","#4A574F",0.11);labDimH.position.set(-0.64,1.18,0.55);labDimH.material.opacity=0;scene.add(labDimH);
+var labKW=label("~120 kW · liquid-cooled","#D98F12",0.095);labKW.position.set(-0.62,1.62,0.30);labKW.material.opacity=0;scene.add(labKW);
+scene.add(new THREE.LineSegments(lineGeo([segs([
+  [-0.46,0,0.55,-0.46,H,0.55],[-0.50,0,0.55,-0.42,0,0.55],[-0.50,H,0.55,-0.42,H,0.55]
+])]),linDim));
+
 /* ---------- choreography: master parameter p in [0,3] ---------- */
 function clamp(v,a,b){return v<a?a:v>b?b:v}
 function smooth(t){return t*t*(3-2*t)}
@@ -642,10 +807,11 @@ var K={
   manifOp:  [0,0.42,0,0],
   chipOp:   [0.9,0.9,0.12,1],chipLine:[0.5,0.5,0.08,0.85],
   groundOp: [0.55,0.55,0.35,0.30],
-  slideC:   [0,1,0,0],      // multiplies each tray's ext
-  slideS:   [0,1,0,0]
+  slideC:   [0,1,0,0],      // multiplies the uniform tray extension
+  slideS:   [0,1,0,0],
+  dimLine:  [0.7,0,0,0], dimLab:[0.95,0,0,0], kwLab:[0,0.9,0,0]
 };
-var p=0;
+var p=0,zoom=0,zt=0,spineHot=false; // zoom: stage-IV level (0 module, 1 one GPU); zt its eased 0..1
 var _v3a=new THREE.Vector3(),_v3b=new THREE.Vector3();
 
 function applyP(){
@@ -654,20 +820,30 @@ function applyP(){
   matTrayS.opacity=kv(K.traySOp,p);   linTrayS.opacity=kv(K.traySLine,p);
   matFrame.opacity=kv(K.frameOp,p);   linFrame.opacity=kv(K.frameLine,p);
   matShelf.opacity=kv(K.shelfOp,p);
-  matCable.opacity=kv(K.cableOp,p);
+  matCable.opacity=Math.min(1,kv(K.cableOp,p)*(spineHot?1.5:1)+(spineHot?0.12:0));
   matManif.opacity=kv(K.manifOp,p);
   linGround.opacity=kv(K.groundOp,p);
+  linDim.opacity=kv(K.dimLine,p);
+  labDimH.material.opacity=kv(K.dimLab,p);
+  labKW.material.opacity=kv(K.kwLab,p);
   spineGroup.position.z=kv(K.spineZ,p);
 
   var sc=kv(K.slideC,p),ss=kv(K.slideS,p);
-  computeTrays.forEach(function(g){g.position.z=TRAY_Z+g.userData.ext*sc});
+  computeTrays.forEach(function(g){g.position.z=TRAY_Z+EXT_C*sc});
   switchTrays.forEach(function(g){g.position.z=TRAY_Z+0.02+0.34*ss});
 
   /* hero tray: drawer in II (open top shows the boards), recede in III,
-     full extraction to a presentation position in IV */
-  var chipO=kv(K.chipOp,p);
-  matBoard.opacity=chipO;matGrace.opacity=chipO;matGPU.opacity=chipO;matHBM.opacity=chipO;
-  linChip.opacity=kv(K.chipLine,p);
+     full extraction to a presentation position in IV.
+     zt ghosts the module around the focus package at GPU zoom. */
+  var chipO=kv(K.chipOp,p),chipL=kv(K.chipLine,p),gh=1-0.90*zt;
+  matBoard.opacity=chipO*gh;matGrace.opacity=chipO*gh;matLP.opacity=chipO*gh;
+  matMezz.opacity=chipO*gh;matSub.opacity=chipO*gh;
+  matGPU.opacity=chipO*(1-0.88*zt);matHBM.opacity=chipO*(1-0.88*zt);
+  matC2C.opacity=chipO*0.9*(1-zt);
+  matGPUF.opacity=chipO;matHBMF.opacity=chipO;matSubF.opacity=chipO;
+  matSeam.opacity=chipO*0.92*zt;matEgress.opacity=chipO*0.9*zt;
+  linChip.opacity=chipL*(1-0.9*zt);linChipF.opacity=chipL;linZoom.opacity=chipL*zt;
+  var pres=0;
   if(p<2){
     hero.position.set(0,heroY,TRAY_Z+0.22*sc);
     hero.rotation.set(0,0,0);
@@ -692,11 +868,16 @@ function applyP(){
     chipA.position.set(-0.118-0.075*lift,0.012+0.115*lift,-0.02*lift);
     chipB.position.set(0.118+0.075*lift,0.012+0.150*lift,0.06*lift);
     chipA.rotation.y=0.14*lift;chipB.rotation.y=-0.10*lift;
+    pres=b;
   }
+  /* link labels ride the presentation glide; level picks which set shows */
+  labC2C.material.opacity=pres*(1-zt)*0.95;
+  labSeam.material.opacity=pres*zt*0.95;
+  labEgr.material.opacity=pres*zt*0.95;
   needs=true;
 }
 
-/* ---------- camera rig: damped orbit + designed per-stage keys ---------- */
+/* ---------- camera rig: damped orbit + designed per-stage choreography ---------- */
 var cam={theta:0.55,phi:1.12,radius:4.0,target:new THREE.Vector3(0,1.18,0)};
 var CAMKEYS=[
   {theta:0.55,phi:1.12,radius:4.0,target:[0,1.18,0]},
@@ -704,12 +885,20 @@ var CAMKEYS=[
   {theta:2.62,phi:1.30,radius:3.5,target:[0,1.15,-0.62]},
   {theta:0.78,phi:1.18,radius:0.88,target:[0.58,1.40,1.44]} // presented superchip fills the frame
 ];
-var camTween=null,dragging=false,vTheta=0,vPhi=0,needs=true;
+/* per-stage designed move: k0 is the replay start, k1 the shaping mid key;
+   the resolved framing is always CAMKEYS[i] */
+var CHOREO=[
+  {k0:{theta:0.95,phi:1.38,radius:1.7,target:[0,1.65,0.45]},k1:{theta:0.72,phi:1.22,radius:2.9,target:[0,1.35,0.2]},dur:2600},
+  {k0:{theta:-0.30,phi:1.34,radius:4.8,target:[0,0.9,0.4]},k1:{theta:0.02,phi:1.30,radius:4.2,target:[0,1.05,0.3]},dur:1600},
+  {k0:{theta:1.15,phi:1.02,radius:4.9,target:[0,1.45,-0.15]},k1:{theta:1.75,phi:1.10,radius:4.5,target:[0,1.3,-0.35]},dur:1800},
+  {k0:{theta:0.40,phi:0.90,radius:3.0,target:[0.1,1.6,0.7]},k1:{theta:0.62,phi:0.98,radius:2.0,target:[0.35,1.5,1.0]},dur:1600}
+];
+var camTween=null,camBez=null,dragging=false,vTheta=0,vPhi=0,needs=true;
 var lastInteract=-1e9;
 
 function applyCam(){
   cam.phi=clamp(cam.phi,0.15,1.55);
-  cam.radius=clamp(cam.radius,0.32,7.5);
+  cam.radius=clamp(cam.radius,0.15,7.5);
   var sp=Math.sin(cam.phi);
   camera.position.set(
     cam.target.x+cam.radius*sp*Math.sin(cam.theta),
@@ -718,29 +907,50 @@ function applyCam(){
   camera.lookAt(cam.target);
   needs=true;
 }
+function setCam(key){
+  cam.theta=key.theta;cam.phi=key.phi;cam.radius=key.radius;
+  cam.target.set(key.target[0],key.target[1],key.target[2]);
+  camTween=null;camBez=null;applyCam();
+}
+function cancelCamMoves(){camTween=null;camBez=null}
 function tweenCam(key,dur){
-  if(reduced()||dur===0){
-    cam.theta=key.theta;cam.phi=key.phi;cam.radius=key.radius;
-    cam.target.set(key.target[0],key.target[1],key.target[2]);
-    camTween=null;applyCam();return;
-  }
+  if(reduced()||dur===0){setCam(key);return}
   var dTheta=key.theta-cam.theta;
   dTheta=((dTheta+Math.PI)%(2*Math.PI)+2*Math.PI)%(2*Math.PI)-Math.PI; // shortest arc
+  camBez=null;
   camTween={t:0,dur:dur||1100,
     from:{theta:cam.theta,phi:cam.phi,radius:cam.radius,tx:cam.target.x,ty:cam.target.y,tz:cam.target.z},
     to:{theta:cam.theta+dTheta,phi:key.phi,radius:key.radius,tx:key.target[0],ty:key.target[1],tz:key.target[2]}};
 }
+/* one continuous designed move: quadratic bezier through a mid key (no joint pause) */
+function tweenCamBezier(k0,k1,k2,dur){
+  if(reduced()){setCam(k2);return}
+  camTween=null;
+  camBez={t:0,dur:dur,k0:k0,k1:k1,k2:k2};
+  needs=true;
+}
+function bez(a,b,c,t){var u=1-t;return u*u*a+2*u*t*b+t*t*c}
+function flyStage(i,replay){
+  var c=CHOREO[i];
+  if(reduced()){setCam(CAMKEYS[i]);return}
+  if(replay)setCam(c.k0);
+  tweenCamBezier({theta:cam.theta,phi:cam.phi,radius:cam.radius,
+    target:[cam.target.x,cam.target.y,cam.target.z]},c.k1,CAMKEYS[i],c.dur);
+}
 function ease(t){return t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2}
 
-/* ---------- input: orbit / zoom / pinch ---------- */
-var pointers={},pinchD=0,lastX=0,lastY=0;
+/* ---------- input: orbit / zoom / pinch / hover / tap ---------- */
+var pointers={},pinchD=0,lastX=0,lastY=0,downX=0,downY=0,downT=0;
 canvas.style.touchAction="none";
 canvas.addEventListener("pointerdown",function(e){
   canvas.setPointerCapture(e.pointerId);
   pointers[e.pointerId]=[e.clientX,e.clientY];
   var ids=Object.keys(pointers);
-  if(ids.length===1){dragging=true;lastX=e.clientX;lastY=e.clientY;vTheta=0;vPhi=0;camTween=null}
-  else if(ids.length===2){
+  if(ids.length===1){
+    dragging=true;lastX=e.clientX;lastY=e.clientY;vTheta=0;vPhi=0;
+    downX=e.clientX;downY=e.clientY;downT=performance.now();
+    cancelCamMoves();
+  }else if(ids.length===2){
     dragging=false;
     var a=pointers[ids[0]],b=pointers[ids[1]];
     pinchD=Math.hypot(a[0]-b[0],a[1]-b[1]);
@@ -748,7 +958,10 @@ canvas.addEventListener("pointerdown",function(e){
   interact();
 });
 canvas.addEventListener("pointermove",function(e){
-  if(!(e.pointerId in pointers))return;
+  if(!(e.pointerId in pointers)){
+    if(e.pointerType==="mouse")probe(e,false);
+    return;
+  }
   pointers[e.pointerId]=[e.clientX,e.clientY];
   var ids=Object.keys(pointers);
   if(ids.length===1&&dragging){
@@ -767,30 +980,176 @@ canvas.addEventListener("pointermove",function(e){
   interact();
 });
 function endPointer(e){
+  var wasTap=dragging
+    &&performance.now()-downT<300
+    &&Math.hypot(e.clientX-downX,e.clientY-downY)<7;
   delete pointers[e.pointerId];
   if(Object.keys(pointers).length===0)dragging=false;
   pinchD=0;
+  if(wasTap)probe(e,true);
 }
 canvas.addEventListener("pointerup",endPointer);
-canvas.addEventListener("pointercancel",endPointer);
+canvas.addEventListener("pointercancel",function(e){
+  delete pointers[e.pointerId];
+  if(Object.keys(pointers).length===0)dragging=false;
+  pinchD=0;
+});
+canvas.addEventListener("pointerleave",function(){if(!tipSticky)clearTip()});
 canvas.addEventListener("wheel",function(e){
   e.preventDefault();
   cam.radius*=Math.exp(clamp(e.deltaY,-120,120)*0.0011);
-  camTween=null;applyCam();interact();
+  cancelCamMoves();applyCam();interact();
 },{passive:false});
 function interact(){lastInteract=performance.now()}
 
+/* ---------- tooltips + hover-highlight (facts fixed by the phase-5.2 table) ---------- */
+var TIPS={
+  grace:["Grace CPU","72 Arm Neoverse V2 cores; the module's host processor"],
+  lpddr:["LPDDR5X","480 GB soldered CPU memory; one address space with GPU memory over C2C"],
+  c2c:["NVLink-C2C","900 GB/s per GPU, cache-coherent; CPU and GPU read each other's memory directly"],
+  pkg:["B200 package","one GPU to software; two dies in silicon"],
+  die:["compute die","one of two reticle-limited dies; 4NP process"],
+  seam:["NV-HBI seam","10 TB/s die-to-die link; makes two dies present as one GPU"],
+  hbm:["HBM3e stack","one of 8 stacks owned by this GPU alone; peer GPU reaches it only over NVLink"],
+  egress:["NVLink-5 egress","1.8 TB/s to the rack fabric, via the tray board to the NVSwitch trays"],
+  mezz:["mezzanine edge","the whole module mounts to the compute tray baseboard; power, cooling, and fabric routing come from the tray"],
+  ctray:["compute tray","2 GB200 superchips; 1 of 18 identical drawers"],
+  stray:["NVSwitch tray","1 of 9 — the rack's NVLink fabric"],
+  spine:["NVLink spine","~5,000 direct copper cables; 1.8 TB/s per GPU"]
+};
+var raycaster=new THREE.Raycaster(),mouseNDC=new THREE.Vector2();
+var tipShown=false,tipSticky=false;
+var hlBox=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1,1,1)),lin(TEAL,0.95));
+hlBox.matrixAutoUpdate=false;hlBox.visible=false;hlBox.renderOrder=10;
+scene.add(hlBox);
+var _hm=new THREE.Matrix4(),_hv=new THREE.Vector3();
+
+function clearHL(){
+  hlBox.visible=false;
+  if(spineHot){spineHot=false;matCable.opacity=kv(K.cableOp,p)}
+  canvas.style.cursor="grab";
+  needs=true;
+}
+function clearTip(){tipShown=false;tipSticky=false;hovEl.style.display="none";clearHL()}
+function showHL(obj,inst){
+  var u=obj.userData;
+  if(u.tip==="spine"){
+    spineHot=true;
+    matCable.opacity=Math.min(1,kv(K.cableOp,p)*1.5+0.12);
+    hlBox.visible=false;
+  }else{
+    obj.updateWorldMatrix(true,false);
+    if(obj.isInstancedMesh&&inst!==undefined){obj.getMatrixAt(inst,_hm);_hm.premultiply(obj.matrixWorld)}
+    else _hm.copy(obj.matrixWorld);
+    _hm.scale(_hv.set(u.hl[0],u.hl[1],u.hl[2]));
+    hlBox.matrix.copy(_hm);
+    hlBox.visible=true;
+  }
+  canvas.style.cursor="pointer";
+  needs=true;
+}
+function showTip(t,e,r){
+  hovEl.innerHTML="<b>"+t[0]+"</b> — "+t[1];
+  hovEl.style.display="block";
+  hovEl.style.left=Math.max(4,Math.min(e.clientX-r.left+12,r.width-292))+"px";
+  hovEl.style.top=Math.max(e.clientY-r.top-34,4)+"px";
+  tipShown=true;
+}
+function probe(e,isTap){
+  var r=canvas.getBoundingClientRect();
+  mouseNDC.set(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1);
+  raycaster.setFromCamera(mouseNDC,camera);
+  var targets=committed===3?parts:(committed===2?[spineProxy]:trayHits.concat([spineProxy]));
+  var hits=raycaster.intersectObjects(targets,false),hit=null;
+  for(var i=0;i<hits.length;i++){
+    var o=hits[i].object,m=o.material;
+    if(!o.userData.always&&m&&m.opacity<0.05)continue; // skip parts not currently drawn
+    hit=hits[i];break;
+  }
+  if(hit){
+    var u=hit.object.userData;
+    /* desktop click on the package zooms in; hover already names it */
+    if(isTap&&e.pointerType==="mouse"&&committed===3&&zoom===0&&
+       (u.tip==="pkg"||u.tip==="die"||u.tip==="hbm")){setZoom(1);return}
+    showHL(hit.object,hit.instanceId);
+    showTip(TIPS[u.tip],e,r);
+    tipSticky=!!isTap&&e.pointerType!=="mouse"; // touch has no hover; its tips stay until tap-away/Esc
+  }else if(isTap||!tipSticky){
+    clearTip();
+  }
+}
+window.addEventListener("keydown",function(e){
+  if(e.key!=="Escape")return;
+  if(tipShown){clearTip();return}
+  if(zoom===1)setZoom(0);
+});
+
+/* ---------- stage-IV GPU zoom: ghost the module, settle on one package ---------- */
+function setZoom(z,noCam){
+  if(zoom===z)return;
+  zoom=z;
+  buildSubrow();updateCounts();clearTip();
+  chipEl.style.display=z?"block":"none";
+  if(z)chipEl.textContent="schematic — topology faithful, not to scale";
+  var from=zt,to=z;
+  if(reduced()){zt=to;applyP()}
+  else addAnim(480,function(f){zt=from+(to-from)*smooth(f);applyP()});
+  if(!noCam){
+    if(z){
+      focusAnchor.getWorldPosition(_v3a);
+      tweenCam({theta:0.34,phi:0.66,radius:0.36,target:[_v3a.x,_v3a.y,_v3a.z]},1100);
+    }else{
+      tweenCam(CAMKEYS[3],1000);
+    }
+  }
+}
+
+/* ---------- sub-toggles (clone of the stage-button chrome) ---------- */
+function buildSubrow(){
+  var fid=document.activeElement&&document.activeElement.id;
+  var h="";
+  if(committed===3){
+    h='<span class="lbl">The superchip</span>'
+     +'<button id="tg-mod" class="'+(zoom===0?"on":"")+'" aria-pressed="'+(zoom===0)+'">the module</button>'
+     +'<button id="tg-gpu" class="'+(zoom===1?"on":"")+'" aria-pressed="'+(zoom===1)+'">inside one GPU</button>';
+  }
+  subEl.innerHTML=h;
+  subEl.hidden=!h;
+  if(fid&&fid.indexOf("tg-")===0){var fe=document.getElementById(fid);if(fe)fe.focus()}
+  var b;
+  if((b=document.getElementById("tg-mod")))b.addEventListener("click",function(){setZoom(0)});
+  if((b=document.getElementById("tg-gpu")))b.addEventListener("click",function(){setZoom(1)});
+}
+
+/* ---------- count footer (figures already on the site; always labeled schematic) ---------- */
+function updateCounts(){
+  var h="";
+  if(committed===0){
+    h="one NVLink domain — <b>72</b> GPUs · <b>36</b> Grace CPUs · one rack";
+  }else if(committed===1){
+    h="<b>18</b> compute trays · <b>9</b> NVSwitch trays · ~<b>120</b> kW, liquid-cooled";
+  }else if(committed===2){
+    h="copper spine — ~<b>5,000</b> cables · <b>1.8</b> TB/s per GPU · domain ends at the rack";
+  }else{
+    if(zoom===1)h="one B200 — <b>2</b> dies · <b>1</b> NV-HBI seam · <b>8</b> HBM3e stacks";
+    else h="<b>2</b> superchips per tray · per superchip: <b>1</b> Grace + <b>2</b> GPUs · <b>8</b> HBM stacks per GPU";
+  }
+  countsEl.innerHTML=h+'<span class="schematic">schematic</span>';
+}
+
 /* ---------- stage / scrub driving ---------- */
-var pTween=null,committed=0;
+var pTween=null,committed=0,camFollow=true; // camFollow: scrub drives the camera; tabs fly it themselves
 function setP(v,fromScrub){
   p=clamp(v,0,3);
   if(!fromScrub)scrub.value=p;
+  if(zoom===1&&p<2.995)setZoom(0,true); // leaving stage IV drops the GPU zoom
   applyP();
   var st=Math.round(p);
   if(st!==committed){
     committed=st;
     renderPanel(st);
-    if(!dragging)tweenCam(CAMKEYS[st]);
+    buildSubrow();updateCounts();clearTip();
+    if(camFollow&&!dragging)tweenCam(CAMKEYS[st]);
   }
 }
 function animateP(to,dur){
@@ -798,8 +1157,16 @@ function animateP(to,dur){
   pTween={from:p,to:to,t:0,dur:dur||900};
   needs=true;
 }
-gotoStage=function(i){animateP(i);interact()};
-scrub.addEventListener("input",function(){pTween=null;setP(parseFloat(this.value),true);interact()});
+gotoStage=function(i){
+  var replay=(i===committed&&!pTween&&Math.abs(p-i)<0.005);
+  camFollow=false;
+  if(zoom===1)setZoom(0,true); // the stage move owns the camera
+  animateP(i);
+  flyStage(i,replay);
+  buildSubrow();updateCounts();
+  interact();
+};
+scrub.addEventListener("input",function(){pTween=null;camFollow=true;setP(parseFloat(this.value),true);interact()});
 scrub.addEventListener("change",function(){ // release: settle on a stage
   var r=Math.round(p);
   if(Math.abs(p-r)>0.002)animateP(r,420);
@@ -837,6 +1204,7 @@ var lastT=performance.now();
 function frame(now){
   requestAnimationFrame(frame);
   var dt=Math.min(now-lastT,50);lastT=now;
+  stepAnims(dt);
   if(pTween){
     pTween.t+=dt;
     var f=clamp(pTween.t/pTween.dur,0,1);
@@ -854,28 +1222,40 @@ function frame(now){
     applyCam();
     if(camTween&&camTween.t>=camTween.dur)camTween=null;
   }
+  if(camBez){
+    camBez.t+=dt;
+    var fb=ease(clamp(camBez.t/camBez.dur,0,1));
+    var k0=camBez.k0,k1=camBez.k1,k2=camBez.k2;
+    cam.theta=bez(k0.theta,k1.theta,k2.theta,fb);
+    cam.phi=bez(k0.phi,k1.phi,k2.phi,fb);
+    cam.radius=bez(k0.radius,k1.radius,k2.radius,fb);
+    cam.target.set(
+      bez(k0.target[0],k1.target[0],k2.target[0],fb),
+      bez(k0.target[1],k1.target[1],k2.target[1],fb),
+      bez(k0.target[2],k1.target[2],k2.target[2],fb));
+    applyCam();
+    if(camBez&&camBez.t>=camBez.dur)camBez=null;
+  }
   if(!dragging&&(Math.abs(vTheta)>1e-5||Math.abs(vPhi)>1e-5)){ // inertia
     cam.theta+=vTheta;cam.phi+=vPhi;
     vTheta*=0.90;vPhi*=0.90;
     applyCam();
   }
-  if(committed===0&&!reduced()&&!dragging&&!camTween&&now-lastInteract>4500){
+  if(committed===0&&!reduced()&&!dragging&&!camTween&&!camBez&&now-lastInteract>4500){
     cam.theta+=0.00035*dt/16.7; // idle drift, stage I only
     applyCam();
   }
   if(needs){renderer.render(scene,camera);needs=false}
 }
 
-/* ---------- boot ---------- */
+/* ---------- boot: the stage-I choreography doubles as the intro ---------- */
 resize();
 applyP();
 applyCam();
-if(!reduced()){ // brief intro glide into the stage-I key
-  cam.theta=CAMKEYS[0].theta+0.55;
-  cam.radius=CAMKEYS[0].radius+0.9;
-  applyCam();
-  tweenCam(CAMKEYS[0],1500);
-}
+buildSubrow();
+updateCounts();
+if(reduced())setCam(CAMKEYS[0]);
+else{setCam(CHOREO[0].k0);tweenCamBezier(CHOREO[0].k0,CHOREO[0].k1,CAMKEYS[0],CHOREO[0].dur)}
 requestAnimationFrame(frame);
 })();
 </script>
