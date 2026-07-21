@@ -11,9 +11,7 @@ Six interactive instruments on the economics of GPU procurement, built as self-c
 3. **The silicon ladder** — the NVIDIA generations (H100 → H200 → B200 → B300 → Rubin) read from the buyer's chair, with a per-metric view and a depreciation-clock argument for why deep multi-year discounts can be the wrong trade.
 4. **The fabric tax** — what cluster wiring does to effective price. Interactive topology across InfiniBand/RoCE, oversubscription, and job placement, showing how identical GPUs price differently on interconnect alone.
 5. **The two trees** — fabric topology as a design choice. Fat-tree vs rail-optimized, interactive across three scenarios: why rails serve training collectives at a fraction of the switch and optics cost, what off-pattern traffic pays in NVLink detours, and how a single rail failure stalls every multi-node job at once.
-6. **SLA anatomy** — an SLA as an insurance contract. A calculator over the definition of "unavailable," the measurement window, and credit tiers, showing why credits rarely cover real losses and what operational clauses matter instead.
-
-Each instrument ends with the questions a buyer should ask a supplier.
+6. **The issues list** — every negotiable term of the reference deal, priced: what the draft says, what you ask for, the redline, and what each clause is worth against a configurable deal. The definition-of-"available" row embeds Exhibit A, the availability-SLA pricing model that shows why credits rarely cover real losses.
 
 ## Structure
 

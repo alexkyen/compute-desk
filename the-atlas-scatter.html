@@ -174,7 +174,7 @@ details p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
 <div class="wrap">
   <p class="eyebrow">Compute desk · the atlas</p>
   <h1>The atlas</h1>
-  <p class="dek">Twelve sellers, eight accelerators, and three channels on one board. Every seller holds a row; prices sit on a shared log axis, so equal distances are equal ratios: the hyperscaler-to-marketplace gap reads as a constant band, not a squashed tail. Step the silicon and the marks glide; the eight cells riding beside each row are that seller's availability across the whole ladder — <span style="font-family:var(--mono);color:var(--ink-3)">×</span> where a price is gated. Click a row to open the seller's file; hover anything for its provenance.</p>
+  <p class="dek">Twelve sellers, eight accelerators, and three channels on one board. Every seller holds a row; prices sit on a shared log axis, so equal distances are equal ratios: the hyperscaler-to-marketplace gap reads as a constant band, not a squashed tail. Step the silicon and the marks glide; the eight cells riding beside each row are that seller's availability across the whole ladder — <span style="font-family:var(--mono);color:var(--ink-3)">×</span> where a price is gated. Click a row to open the seller's file; hover or tap anything for its provenance.</p>
   <p class="provenance">compiled july 2026 from public rate cards, filings, and deal reporting · estimates marked · prices are perishable</p>
 </div>
 
@@ -197,7 +197,7 @@ details p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
     </div>
     <div class="legend"><span>● on-demand · ◐ committed · ○ spot · ─ range · tag = price gated</span></div>
     <div class="legend strip-legend"><span>▪ priced · × gated · blank = not listed</span></div>
-    <p class="bhint">‹ › to step the silicon · click a seller to open their file — up to three to compare · hover → source</p>
+    <p class="bhint">‹ › to step the silicon · click a seller to open their file — up to three to compare · hover or tap → source</p>
   </section>
   <div class="cmp" id="cmp" aria-live="polite" aria-label="seller comparison">
     <div class="cmpin">
@@ -781,27 +781,49 @@ function showTip(ev,html){
  if(y+r.height>window.innerHeight-8)y=ev.clientY-r.height-12;
  tip.style.left=x+"px";tip.style.top=y+"px";
 }
-boardEl.addEventListener("mousemove",function(ev){
- var t=ev.target.closest("[data-mch],[data-gt],[data-sc]");
- var row=t&&t.closest(".brow");
- if(!t||!row){tip.style.display="none";return}
+function tipHtmlFor(t){
+ var row=t.closest(".brow");
+ if(!row)return null;
  var p=PMAP[row.dataset.p],sk=SKUMAP[COLS[skuI]];
  if(t.hasAttribute("data-mch")){
    var c=cellFor(t.dataset.mch,COLS[skuI],p.id);
-   if(!c||c.s!=="p"){tip.style.display="none";return}
-   showTip(ev,"<b>"+p.name+" · "+sk.l+"</b><em>"+CHNAME[t.dataset.mch]+" · $"+c.v+"/GPU-hr</em><em>"+(c.t||"")+"</em>"+(c.src?"<em>src "+c.src+"</em>":""));
- }else if(t.hasAttribute("data-gt")){
+   if(!c||c.s!=="p")return null;
+   return "<b>"+p.name+" · "+sk.l+"</b><em>"+CHNAME[t.dataset.mch]+" · $"+c.v+"/GPU-hr</em><em>"+(c.t||"")+"</em>"+(c.src?"<em>src "+c.src+"</em>":"");
+ }
+ if(t.hasAttribute("data-gt")){
    var ls=laneState(p.id);
-   if(!ls.gated){tip.style.display="none";return}
+   if(!ls.gated)return null;
    var body=ls.gated.map(function(nn){return"<em>"+CHNAME[nn.ch]+" · "+nn.v+" — "+nn.t+"</em>"}).join("");
    var srcs=[];ls.gated.forEach(function(nn){if(nn.src&&srcs.indexOf(nn.src)<0)srcs.push(nn.src)});
-   showTip(ev,"<b>"+p.name+" · "+sk.l+"</b>"+body+(srcs.length?"<em>src "+srcs.join(" · ")+"</em>":""));
- }else{
-   var st=stripStatus(t.dataset.sc,p.id);
-   showTip(ev,"<b>"+SKUMAP[t.dataset.sc].l+" — "+(st==="p"?"priced":st==="g"?"gated":"not listed")+"</b>");
+   return "<b>"+p.name+" · "+sk.l+"</b>"+body+(srcs.length?"<em>src "+srcs.join(" · ")+"</em>":"");
  }
+ var st=stripStatus(t.dataset.sc,p.id);
+ return "<b>"+SKUMAP[t.dataset.sc].l+" — "+(st==="p"?"priced":st==="g"?"gated":"not listed")+"</b>";
+}
+boardEl.addEventListener("mousemove",function(ev){
+ var t=ev.target.closest("[data-mch],[data-gt],[data-sc]");
+ var html=t?tipHtmlFor(t):null;
+ if(!html){tip.style.display="none";return}
+ showTip(ev,html);
 });
 boardEl.addEventListener("mouseleave",function(){tip.style.display="none"});
+/* touch: a tap on a mark opens its tooltip; the rest of the row still opens the seller's file */
+var lastTouch={x:0,y:0,moved:false};
+boardEl.addEventListener("touchstart",function(ev){
+ var tc=ev.touches[0];lastTouch.x=tc.clientX;lastTouch.y=tc.clientY;lastTouch.moved=false;
+},{passive:true});
+boardEl.addEventListener("touchmove",function(){lastTouch.moved=true},{passive:true});
+boardEl.addEventListener("touchend",function(ev){
+ if(lastTouch.moved)return;
+ var t=ev.target.closest?ev.target.closest("[data-mch],[data-gt],[data-sc]"):null;
+ var html=t?tipHtmlFor(t):null;
+ if(!html){tip.style.display="none";return}
+ ev.preventDefault(); /* suppress the synthetic click so the tap reads the mark, not the row */
+ showTip({clientX:lastTouch.x,clientY:lastTouch.y},html);
+});
+document.addEventListener("touchstart",function(ev){
+ if(!boardEl.contains(ev.target))tip.style.display="none";
+},{passive:true});
 
 function singleFile(prov){
  var p=PMAP[prov], d=DOS[prov];
