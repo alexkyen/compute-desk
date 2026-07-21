@@ -176,7 +176,7 @@ a.xlink:hover,a.xlink:focus-visible{outline:none;text-decoration-thickness:2px}
 <nav class="nav-top" aria-label="Manual navigation">
   <div class="nav-in">
     <a href="index.html">The compute desk</a>
-    <span class="nav-here">06 / 06 — The issues list</span>
+    <span class="nav-here">07 / 07 — The issues list</span>
     <span class="stepper">
       <a class="st" href="the-two-trees.html" data-t="The two trees" aria-label="Previous: The two trees">←</a>
       <span class="st dis" aria-hidden="true">→</span>
@@ -934,7 +934,9 @@ function setSort(m){
 document.getElementById("sbd").addEventListener("click",function(){setSort("$")});
 document.getElementById("sbc").addEventListener("click",function(){setSort("clause")});
 
-/* expansions — one open at a time; header buttons fold, cross-links close + scroll + flash */
+/* expansions — one open at a time; header buttons fold. Cross-reference links
+   (from anywhere: board rows, coda, tooltip footers) are handled by the
+   document-level opener below, which opens the target before scrolling. */
 function openIt(row){
  row.classList.add("open");
  row.querySelector(".rhead").setAttribute("aria-expanded","true");
@@ -962,18 +964,6 @@ function flashRow(row){
  head.addEventListener("animationend",function h(){head.classList.remove("flash");head.removeEventListener("animationend",h)});
 }
 document.getElementById("brows").addEventListener("click",function(ev){
- var xl=ev.target.closest?ev.target.closest(".xlink"):null;
- if(xl){
-  ev.preventDefault();
-  var cur=ev.target.closest(".irow");
-  if(cur&&cur.classList.contains("open"))closeIt(cur);
-  var t=document.querySelector(xl.getAttribute("href"));
-  if(t){
-   t.scrollIntoView({behavior:RMQ.matches?"auto":"smooth",block:"center"});
-   flashRow(t);
-  }
-  return;
- }
  var head=ev.target.closest?ev.target.closest(".rhead"):null;
  if(!head)return;
  var row=head.closest(".irow");
@@ -984,7 +974,8 @@ document.getElementById("brows").addEventListener("click",function(ev){
  setTimeout(function(){row.scrollIntoView({behavior:RMQ.matches?"auto":"smooth",block:"nearest"})},RMQ.matches?0:200);
 });
 
-/* expand-on-arrival — any #ir-* hash target (coda links, tooltip footers, shared URLs) opens its row before scrolling */
+/* expand-on-arrival — any #ir-* target (board cross-links, coda links, tooltip
+   footers, shared URLs) opens its row before scrolling */
 function arriveAt(id){
  var row=document.getElementById(id);
  if(!row||!row.classList.contains("irow"))return;
@@ -1001,7 +992,7 @@ function arriveAt(id){
 window.addEventListener("hashchange",function(){arriveAt(location.hash.slice(1))});
 document.addEventListener("click",function(ev){
  var a=ev.target.closest?ev.target.closest('a[href^="#ir-"]'):null;
- if(!a||a.closest("#brows"))return; /* in-board cross-links keep their own handler */
+ if(!a)return;
  ev.preventDefault();
  hideTermPop();
  var id=a.getAttribute("href").slice(1);

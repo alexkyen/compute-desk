@@ -76,19 +76,25 @@ input[type=range]:focus-visible{outline:2px solid var(--teal);outline-offset:2px
 .nav-top{margin:-48px -20px 44px;padding:11px 20px;border-bottom:1px solid var(--rule)}
 .nav-in{max-width:880px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 22px}
 .nav-here{color:var(--ink-3);margin:0 auto}
-.nav-refs{display:inline-flex;gap:22px}
 .nav-bot{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 22px;margin-top:30px;padding-top:14px;border-top:1px solid var(--rule)}
 .nav-bot .nav-next{margin-left:auto}
+.stepper{display:inline-flex;gap:6px}
+.stepper .st{display:inline-flex;align-items:center;justify-content:center;width:26px;height:24px;border:1px solid var(--rule);border-radius:6px;position:relative;text-decoration:none}
+.stepper a.st{color:var(--ink-2)}
+.stepper a.st:hover,.stepper a.st:focus-visible{border-color:var(--teal);color:var(--teal)}
+.stepper span.st{color:#C2CAC3;cursor:default}
+.stepper a.st::after{content:attr(data-t);position:absolute;top:calc(100% + 7px);right:0;background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:3px 8px;font-size:10.5px;letter-spacing:.06em;color:var(--ink-2);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;z-index:12}
+.stepper a.st:hover::after,.stepper a.st:focus-visible::after{opacity:1}
 </style>
 </head>
 <body>
 <nav class="nav-top" aria-label="Manual navigation">
   <div class="nav-in">
     <a href="index.html">The compute desk</a>
-    <span class="nav-here">Plate I — The NVL72 rack</span>
-    <span class="nav-refs">
-      <a href="silicon-ladder.html">← The silicon ladder</a>
-      <a href="the-fabric.html">The fabric tax →</a>
+    <span class="nav-here">04 / 07 — The NVL72 rack</span>
+    <span class="stepper">
+      <a class="st" href="silicon-ladder.html" data-t="The silicon ladder" aria-label="Previous: The silicon ladder">←</a>
+      <a class="st" href="the-fabric.html" data-t="The fabric tax" aria-label="Next: The fabric tax">→</a>
     </span>
   </div>
 </nav>
@@ -213,7 +219,7 @@ var STAGES=[
   body:"Behind the midplane: ~5,000 direct copper NVLink cables — a few hundred are drawn here to stand in for them — carrying every GPU's 1.8 TB/s through the switch trays. Copper at these speeds reaches about one rack before the signal gives out, and this spine is that reach made visible. Inside it, 72 GPUs pool memory like one device. One cable-length beyond it you cross into optics, and the fabric tax begins.",
   stats:[["Copper cables","~5,000","amber"],["NVLink per GPU","1.8 TB/s","teal"],["Domain size","72 GPUs","teal"],["Past the rack","optics","amber"]]},
  {tab:"IV — Superchip",eyebrow:"Stage IV — the superchip",title:"The atom of the machine",
-  body:"One compute tray, drawn clear of the rack: two GB200 superchips. Each is one Grace CPU (gray) and two Blackwell GPUs (teal), and every GPU is walled in by its stacks of HBM3e (amber) — 192 GB per GPU. Thirty-six of these boards fill the rack behind it. Everything the silicon ladder prices, and everything the spine connects, begins as this object.",
+  body:"One compute tray, drawn clear of the rack: two GB200 superchips. Each is one Grace CPU (gray) and two Blackwell GPUs (green), and every GPU is walled in by its own eight stacks of HBM3e (amber) — 192 GB per GPU, owned outright. The two rows meeting in the middle are neighbors, not a pool: what the pair shares is the NVLink between them, over which each can reach the other's memory — a bandwidth story, not a shared-wall story. Thirty-six of these boards fill the rack behind it. Everything the silicon ladder prices, and everything the spine connects, begins as this object.",
   stats:[["Superchips per tray","2","teal"],["HBM3e per GPU","192 GB","amber"],["NVLink per GPU","1.8 TB/s","teal"],["Superchips per rack","36","teal"]]}
 ];
 
@@ -519,8 +525,11 @@ function superchip(){
       gpuM.position.set(gx,topY+0.0055,gz);
       g.add(gpuM);lines.push(edgesOf(gpu,gx,topY+0.0055,gz));
       [-1,1].forEach(function(side){
+        /* HBM is per-package: the center-facing row sits tight against its own die,
+           leaving a stack-width seam between the two packages — two walls, never one */
+        var off=side*gx<0?0.0365:0.0445;
         for(var r=0;r<2;r++){
-          m4.makeTranslation(gx+side*0.0445,topY+0.0065,gz+(r-0.5)*0.034);
+          m4.makeTranslation(gx+side*off,topY+0.0065,gz+(r-0.5)*0.034);
           hbmMesh.setMatrixAt(hi++,m4);
         }
       });
