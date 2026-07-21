@@ -69,10 +69,10 @@ svg{display:block;width:100%;height:auto;user-select:none}
 <nav class="nav-top" aria-label="Manual navigation">
   <div class="nav-in">
     <a href="index.html">The compute desk</a>
-    <span class="nav-here">06 / 07 — The two trees</span>
+    <span class="nav-here">06 / 08 — The two trees</span>
     <span class="stepper">
       <a class="st" href="the-fabric.html" data-t="The fabric tax" aria-label="Previous: The fabric tax">←</a>
-      <a class="st" href="sla-anatomy.html" data-t="The issues list" aria-label="Next: The issues list">→</a>
+      <a class="st" href="plate-pod.html" data-t="The pod" aria-label="Next: The pod">→</a>
     </span>
   </div>
 </nav>
@@ -108,14 +108,14 @@ svg{display:block;width:100%;height:auto;user-select:none}
     <p><strong>The cost gap is countable.</strong> 512 GPUs with 64-port switches: a 1:1 fat-tree needs 16 leaves plus 16 spines and 1,024 optical links; rails need 8 switches and 512 links, with optics the dominant line item. Roughly 4× fewer switches and half the optics for identical delivered performance — <em>on collective-shaped traffic.</em></p>
     <p><strong>What rails deleted is every path between different ranks on different nodes.</strong> Off-pattern traffic — mixture-of-experts all-to-all routing, embedding lookups, parameter-server flows, storage and data loading — must detour: hop the NVLink bridge inside the node to borrow a port on the right rail, then cross. The detour spends NVLink bandwidth the collectives also need, and turns first-class traffic into second-class. The fat-tree pays for generality; rails pay only for the pattern training uses, and everything off-pattern gets taxed. And the first item on that list has changed teams: expert-parallel all-to-all is now the traffic shape of large-MoE serving, not just training — a rails cluster bought cheap for collectives can end up taxing the inference it was bought to run.</p>
     <div class="ask"><b>Ask the supplier</b>If it's rails: is the scheduler rail-aware, what's the NCCL configuration, and what are your measured numbers for all-to-all — not just all-reduce — at my job size?</div>
-    <p><strong>Failure modes are shaped by the wiring too.</strong> A fat-tree leaf death is deep but narrow — its nodes drop, the rest run. A spine death is shallow and wide — capacity dips, nothing disconnects. A rail death is the strange one: no node goes down, but every node loses the same port simultaneously, and since an all-reduce finishes only when its slowest ring does, one failed box can stall every multi-node job in the cluster at once.</p>
+    <p><strong>Failure modes are shaped by the wiring too.</strong> A fat-tree leaf death is deep but narrow — its nodes drop, the rest run. A spine death is shallow and wide — capacity dips, nothing disconnects. A rail death is the strange one: no node goes down, but every node loses the same port simultaneously, and since an all-reduce finishes only when its slowest ring does, one failed box can stall every multi-node job in the cluster at once. Both trees are wired through one physical row on the pod plate — <a class="xlink" href="plate-pod.html">stand in it and watch the stripe →</a></p>
     <div class="ask"><b>Ask the supplier</b>Full fat-tree or rail-optimized — show me the topology diagram. And when one switch fails, what exactly keeps running: which nodes, which rails, which of my jobs?</div>
     <p>The toy cluster shows one rank ring and one cross-rank pair so the wiring stays readable; in reality all rings run concurrently and NCCL juggles them. Counts assume 64-port switches, one NIC per GPU, 1:1 within each tree. Structure of the argument is unchanged at real scale.</p>
   </div>
   <p class="foot">continues the fabric tax · counts illustrative at 512 GPUs, 64-port switches · compiled July 2026</p>
   <nav class="nav-bot" aria-label="Manual navigation">
     <a class="nav-prev" href="the-fabric.html">← The fabric tax</a>
-    <a class="nav-next" href="sla-anatomy.html">The issues list →</a>
+    <a class="nav-next" href="plate-pod.html">The pod →</a>
   </nav>
 </div>
 
