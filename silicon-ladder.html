@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The silicon ladder — NVIDIA generations from a buyer's point of view</title>
+<title>The NVIDIA generations — a buyer's point of view</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
@@ -76,7 +76,7 @@ p a.xlink{margin-left:.5em}
 <nav class="nav-top" aria-label="Manual navigation">
   <div class="nav-in">
     <a href="index.html">The compute desk</a>
-    <span class="nav-here">03 / 08 — The silicon ladder</span>
+    <span class="nav-here">03 / 08 — The NVIDIA generations</span>
     <span class="stepper">
       <a class="st" href="gpu-supply-book.html" data-t="The supply book" aria-label="Previous: The supply book">←</a>
       <a class="st" href="plate-nvl72.html" data-t="The NVL72 rack" aria-label="Next: The NVL72 rack">→</a>
@@ -85,8 +85,8 @@ p a.xlink{margin-left:.5em}
 </nav>
 <div class="wrap">
   <p class="eyebrow">Compute desk</p>
-  <h1>The silicon ladder</h1>
-  <p class="dek">Five generations of NVIDIA datacenter silicon, read from a buyer's point of view. Switch the metric to see where each generation actually improved; select a chip to see what it means when you're the one signing the capacity contract.</p>
+  <h1>The NVIDIA generations</h1>
+  <p class="dek">Five generations of NVIDIA datacenter GPUs, read from a buyer's point of view. Switch the metric to see where each generation actually improved; select a chip to see what it means when you're the one signing the capacity contract.</p>
 
   <div class="card">
     <div class="metrics" id="mx" role="tablist" aria-label="Metric"></div>
@@ -118,7 +118,7 @@ p a.xlink{margin-left:.5em}
 var GENS=[
  {id:"H100",arch:"Hopper",year:"2022",mem:80,memT:"HBM3",bw:3.35,comp:4,prec:"FP8",pw:700,nvl:900,nvlG:"NVLink 4",dom:8,est:false,
   t:"The unit of account",
-  p1:"The GPU the AI boom was built on, and the most liquid asset in the market: the deepest supply across every provider, the most published pricing, and the reference unit in which every other chip's value gets quoted. Most capacity paper in circulation is still H100 paper.",
+  p1:"The GPU the AI boom was built on, and the most liquid asset in the market: the deepest supply across every provider, the most published pricing, and the reference unit in which every other chip's value gets quoted. Most capacity contracts in circulation are still H100 contracts.",
   p2:"Its price history is the market's core lesson: declines of 40–50% over 12–18 months were driven by supply expansion, not by successor announcements — new generations don't crash the incumbent's price; volume does.",
   ask:"How old is the fleet, what fabric is it wired with, and how does my rate track a reference index as H100 market pricing keeps sliding?"},
  {id:"H200",arch:"Hopper refresh",year:"2024",mem:141,memT:"HBM3e",bw:4.8,comp:4,prec:"FP8",pw:700,nvl:900,nvlG:"NVLink 4",dom:8,est:false,
@@ -128,18 +128,18 @@ var GENS=[
   ask:"Is my demand compute-bound or memory-bound — and is the H200 premium over H100 smaller than the sharding cost it removes?"},
  {id:"B200",arch:"Blackwell",year:"2024",mem:192,memT:"HBM3e",bw:8,comp:20,prec:"FP4",pw:1000,nvl:1800,nvlG:"NVLink 5",dom:72,est:false,plate:true,
   t:"The rack becomes the product",
-  p1:"A true architecture change: FP4 tensor cores, NVLink 5 at 1.8 TB/s, and a coherent domain that jumps from 8 GPUs to 72 in the GB200 NVL72 — from this point the natural unit of purchase is the rack, not the server.",
+  p1:"A true architecture change: FP4 tensor cores, NVLink 5 at 1.8 TB/s, and the number of GPUs acting as one machine jumping from 8 to 72 in the GB200 NVL72 — from this point the natural unit of purchase is the rack, not the server.",
   p2:"At 1,000 W per GPU it forces liquid cooling, which is the moment the industry's binding constraint migrated from chip supply to power and facility readiness. Two suppliers quoting the same B200 price can differ entirely in whether their buildings can actually run them.",
   ask:"Is the facility genuinely NVL72-ready — power density, liquid cooling loops, delivered or merely planned?"},
  {id:"B300",arch:"Blackwell Ultra",year:"2025",mem:288,memT:"HBM3e",bw:8,comp:30,prec:"FP4",pw:1400,nvl:1800,nvlG:"NVLink 5",dom:72,est:false,
   t:"Proof of the annual cadence",
   p1:"A mid-cycle bump — 288 GB of HBM3e and 1.4 kW — arriving just one year after B200. The chip matters less than the tempo it confirms: NVIDIA now ships a meaningful upgrade every single year.",
-  p2:"That cadence is the depreciation clock ticking inside every multi-year commitment. A 3-year reserved contract signed on any rung of this ladder will live through three launches; the discount has to be priced against that.",
+  p2:"That cadence is the depreciation clock ticking inside every multi-year commitment. A 3-year reserved contract signed on any generation on this page will live through three launches; the discount has to be priced against that.",
   ask:"What generation-swap, refresh, or early-exit rights can be written into a multi-year term — and what are they worth?"},
  {id:"R200",arch:"Rubin",year:"H2 2026",mem:288,memT:"HBM4",bw:22,comp:50,prec:"FP4",pw:2300,nvl:3600,nvlG:"NVLink 6",dom:72,est:true,
   t:"The depreciation event",
   p1:"TSMC 3nm, 336 billion transistors, 288 GB of HBM4 at a 22 TB/s spec (early shipments reported nearer 20), NVLink 6, and a marketed 50 PFLOPS of FP4. The 10× inference-cost claims come from specific MoE benchmarks at long context; 2–3× is the sober expectation for dense models.",
-  p2:"HBM4 supply gates the ramp and first allocation goes to hyperscalers and frontier labs — scarcity premium at launch, then the usual price cascade rolling down every rung above this line. For the buyer, Rubin isn't (yet) something to procure; it's the event to hedge.",
+  p2:"HBM4 supply gates the ramp and first allocation goes to hyperscalers and frontier labs — scarcity premium at launch, then the usual price declines rolling down through every earlier generation. For the buyer, Rubin isn't (yet) something to procure; it's the event to hedge.",
   ask:"Where do I sit in the allocation queue — and what does Rubin's ramp do to the renewal and resale value of every H100, H200, and B200 commitment on my book?"}
 ];
 var METRICS=[
@@ -148,7 +148,7 @@ var METRICS=[
  {k:"comp",label:"compute",unit:" PFLOPS",cap:"Headline FLOPS as NVIDIA markets them — sparsity included, and the precision narrows each generation (FP8 → FP4), so these multiples flatter the silicon.",fmt:function(g){return g.comp+" PF "+g.prec},val:function(g){return g.comp}},
  {k:"pw",label:"power",unit:" W",cap:"The new binding constraint: per-GPU wattage decides cooling, cooling decides which facilities qualify, and facilities are now the scarce input.",fmt:function(g){return (g.pw>=1000?(g.pw/1000).toFixed(1)+" kW":g.pw+" W")+(g.est?" †":"")},val:function(g){return g.pw}},
  {k:"nvl",label:"nvlink",unit:" GB/s",cap:"GPU-to-GPU bandwidth — the all-reduce tax on training and on serving any model too large for one GPU. Same chip, different fabric, different effective price.",fmt:function(g){return (g.nvl/1000).toFixed(1)+" TB/s"},val:function(g){return g.nvl}},
- {k:"dom",label:"domain",unit:" GPUs",cap:"How many GPUs share one coherent NVLink fabric — the 8 → 72 jump is why the unit of purchase became the rack, and why 'a thousand GPUs' says nothing without topology.",fmt:function(g){return g.dom+" GPUs · "+g.nvlG},val:function(g){return g.dom}}
+ {k:"dom",label:"machine size",unit:" GPUs",cap:"How many GPUs are wired together to act as one machine — the 8 → 72 jump is why the unit of purchase became the rack, and why 'a thousand GPUs' says nothing without the wiring diagram.",fmt:function(g){return g.dom+" GPUs · "+g.nvlG},val:function(g){return g.dom}}
 ];
 var mSel=0, gSel=0;
 function buildMetrics(){

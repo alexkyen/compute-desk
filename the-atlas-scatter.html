@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The atlas — GPU market prices on one board</title>
+<title>The sellers — every GPU seller’s prices on one board</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
@@ -137,7 +137,7 @@ details p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
 <nav class="nav-top" aria-label="Manual navigation">
   <div class="nav-in">
     <a href="index.html">The compute desk</a>
-    <span class="nav-here">01 / 08 — The atlas</span>
+    <span class="nav-here">01 / 08 — The sellers</span>
     <span class="stepper">
       <span class="st dis" aria-hidden="true">←</span>
       <a class="st" href="gpu-supply-book.html" data-t="The supply book" aria-label="Next: The supply book">→</a>
@@ -145,8 +145,8 @@ details p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
   </div>
 </nav>
 <div class="wrap">
-  <p class="eyebrow">Compute desk · the atlas</p>
-  <h1>The atlas</h1>
+  <p class="eyebrow">Compute desk · the sellers</p>
+  <h1>The sellers</h1>
   <p class="dek">Twelve sellers, eight accelerators, and three ways to buy, all on one board. Each seller has a row, and prices sit on a log scale — equal distances mean equal ratios, so the gap between a hyperscaler and a marketplace is visible at any price level. Use the ‹ › arrows to switch between chips; the small cells beside each row show which chips each seller actually offers (<span style="font-family:var(--mono);color:var(--ink-3)">×</span> means the price is gated behind sales). Click a seller to open their file, and hover any number to see where it came from.</p>
 </div>
 
@@ -185,7 +185,7 @@ details p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
     <summary>sources &amp; method</summary>
     <ul id="srclist"></ul>
   </details>
-  <p class="foot">sources: the “sources &amp; method” list above — every print carries a src ID · part of the compute desk · compiled july 2026</p>
+  <p class="foot">sources: the “sources &amp; method” list above — every price carries a source ID · part of the compute desk · compiled july 2026</p>
   <nav class="nav-bot" aria-label="Manual navigation">
     <a class="nav-next" href="gpu-supply-book.html">The supply book →</a>
   </nav>
@@ -197,18 +197,18 @@ details p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
 var SOURCES=[
  {id:"S1",label:"AWS EC2 Capacity Blocks pricing",url:"https://aws.amazon.com/ec2/capacityblocks/pricing/",note:"Jul 2026"},
  {id:"S2",label:"AWS EC2 on-demand pricing",url:"https://aws.amazon.com/ec2/pricing/on-demand/",note:"Jul 2026"},
- {id:"S3",label:"Microsoft Azure Linux VM pricing",url:"https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/",note:"NC/ND series · May 2026 prints"},
+ {id:"S3",label:"Microsoft Azure Linux VM pricing",url:"https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/",note:"NC/ND series · May 2026 prices"},
  {id:"S4",label:"Google Cloud accelerator pricing",url:"https://cloud.google.com/products/compute/pricing",note:"accelerator-optimized · 2026"},
  {id:"S5",label:"Oracle Cloud price list",url:"https://www.oracle.com/cloud/price-list/",note:"BM.GPU shapes · 2026"},
  {id:"S6",label:"CoreWeave pricing",url:"https://www.coreweave.com/pricing",note:"per-instance card · 2026"},
  {id:"S7",label:"Nebius rate card",url:"https://nebius.com/prices",note:"Jun 2026"},
  {id:"S8",label:"Lambda pricing",url:"https://lambda.ai/pricing",note:"Jul 2026"},
  {id:"S9",label:"Crusoe Cloud pricing",url:"https://crusoe.ai/cloud/pricing",note:"2026"},
- {id:"S10",label:"Fluidstack — no public rate card; prints are the aggregator's marketed index rates, cross-checked against deal reporting"},
- {id:"S11",label:"SF Compute market prices",url:"https://sfcompute.com/prices",note:"live cleared prices · prints Feb–Mar 2026"},
+ {id:"S10",label:"Fluidstack — no public rate card; prices are the aggregator's marketed index rates, cross-checked against deal reporting"},
+ {id:"S11",label:"SF Compute market prices",url:"https://sfcompute.com/prices",note:"live cleared prices · Feb–Mar 2026"},
  {id:"S12",label:"Vast.ai marketplace pricing",url:"https://vast.ai/pricing",note:"live · host-set"},
  {id:"deal",label:"deal-reported: compiled from Q1–Q2 2026 earnings calls, filings, and press coverage; triangulated across sources, not from a single citable page"},
- {id:"est",label:"estimate: derived by the desk from adjacent public prints; method over link by design"}
+ {id:"est",label:"estimate: derived by the desk from nearby public prices; method over link by design"}
 ];
 var PROV=[
  {id:"aws",ab:"AWS",name:"AWS",band:"Hyperscalers",g:"hyp",arch:"hyperscaler"},
@@ -254,7 +254,7 @@ var DOS={
   buy:"Self-serve Capacity Blocks (upfront-paid, repriced ~quarterly, 256-instance org cap ≈ 2,048 GPUs); Savings Plans 30–60%; EDP/PPA private pricing 1–5yr at scale; GPU spot pools shallow.",
   flags:["List runs 2–3× neoclouds for identical silicon, and $0.09/GB egress punishes inference platforms specifically.","No InfiniBand anywhere — EFA works but demands NCCL tuning discipline at 10k+ GPU scale.","Queue position sits behind internal workloads and anchor labs; on-demand for frontier SKUs is unreliable by design."],
   ask:"At our spend, what does private pricing unlock — and what committed delivery, not best-effort, backs it?",
-  more:"Telling detail from the dossier: OpenAI's AWS cluster runs GB300s with ConnectX-8 and OpenAI's own MRC protocol — not EFA — evidence that sophisticated tenants route around parts of the native stack. The Oct 20, 2025 us-east-1 outage (~15h DynamoDB DNS cascade) is the control-plane concentration counterpoint to the gold-standard compliance story. Pricing complexity itself is a tax: Capacity Blocks, ODCRs, Savings Plans, and private pricing interact enough to require a FinOps function."},
+  more:"Telling detail from the dossier: OpenAI's AWS cluster runs GB300s with ConnectX-8 and OpenAI's own MRC protocol — not EFA — evidence that sophisticated tenants route around parts of the native stack. The Oct 20, 2025 us-east-1 outage (~15h DynamoDB DNS cascade) is the control-plane concentration counterpoint to the gold-standard compliance reputation. Pricing complexity itself is a tax: Capacity Blocks, ODCRs, Savings Plans, and private pricing interact enough to require a FinOps function."},
  azr:{strip:["hyperscaler","fortress credit","RPO ~$400B","fabric: real InfiniBand","capex ~$35B+/qtr"],
   fin:"The hyperscaler most transformed by one customer: ~27% of OpenAI plus ~$250B incremental Azure commitment post-restructuring; countered with the Anthropic three-way ($30B Azure commitment, up to 1GW). Structurally short — $60B+ committed to buying from neoclouds (Nscale, Lambda, CoreWeave, Nebius, IREN).",
   buy:"Enterprise-first: meaningful GPU allocation requires capacity reservations under EA/MACC, 1–3yr, minimum spends in the millions; reservations 30–60%; spot 70–82% off with 30-second eviction; burst beyond reservation genuinely hard.",
@@ -262,15 +262,15 @@ var DOS={
   ask:"Given your own neocloud purchases, what committed delivery — not quota — will you contract to a platform our size?",
   more:"The differentiator is genuine: fleet-wide Quantum-2/X800 InfiniBand, fat-tree non-blocking, now extended by Fairwater AI-WAN superfactories — for the largest rented synchronous training clusters, the best fabric of the four hyperscalers. MACC dollars apply to Foundry model spend (Claude GA in Foundry since Jun 2026), which matters if part of your buy is tokens rather than raw GPUs. Oct 29, 2025 Front Door global outage (~8h) nine days after AWS's — a bad month for hyperscaler control planes."},
  gcp:{strip:["hyperscaler","fortress credit","capex $175–185B 26","fabric: RoCE/Falcon + TPU OCS","TPU: 4.3M→10M chips"],
-  fin:"Fastest-growing of the three with sustained profitability; the strategic story is TPU externalization — Anthropic's expansion to ~1M TPUs (gigawatt-class, then 3.5GW via Broadcom for 2027) is the anchor validation; Gemini/DeepMind compete internally for the same silicon.",
+  fin:"Fastest-growing of the three with sustained profitability; the strategic move is TPU externalization — Anthropic's expansion to ~1M TPUs (gigawatt-class, then 3.5GW via Broadcom for 2027) is the anchor validation; Gemini/DeepMind compete internally for the same silicon.",
   buy:"Self-serve to quota walls; serious volume via CUDs (~37–55%) plus sales-negotiated capacity reservations; Dynamic Workload Scheduler sits between spot and on-demand; TPU commitments typically 1–3yr pod-scale. Hungrier than AWS for AI logos.",
   flags:["NVIDIA GPU scarcity and quota bureaucracy is the most-cited complaint — GCP is where you plan capacity, not find it.","Highest list prices of the market; the spot escape hatch ($2.25 H100) is the honest tier.","TPU lock-in is real: XLA/JAX porting tax; the ecosystem outside Google/Anthropic-class teams is thinner."],
   ask:"Quote GPU and TPU terms side by side for the same workload — and show me which one the account team is paid to sell.",
-  more:"TPU economics are the story worth knowing cold: SemiAnalysis models externally-rented v7 TCO ~30% below GB200 and ~41% below GB300 per hour, with the anchor's effective rate estimated ~$1.60/TPU-hr. OCS (optical circuit switching) reroutes around failures automatically — a genuine reliability differentiator at pod scale (~99.999% fleet uptime claim for liquid-cooled systems). Eighth-gen TPUs split into Sunfish (training, Broadcom) and Zebrafish (inference, MediaTek) for late 2027."},
+  more:"TPU economics are worth knowing cold: SemiAnalysis models externally-rented v7 TCO ~30% below GB200 and ~41% below GB300 per hour, with the anchor's effective rate estimated ~$1.60/TPU-hr. OCS (optical circuit switching) reroutes around failures automatically — a genuine reliability differentiator at pod scale (~99.999% fleet uptime claim for liquid-cooled systems). Eighth-gen TPUs split into Sunfish (training, Broadcom) and Zebrafish (inference, MediaTek) for late 2027."},
  oci:{strip:["levered hyperscaler","BBB- / ~198bp CDS","RPO $638B · ~½ OpenAI","debt $153B record","fabric: RoCEv2 + Acceleron"],
   fin:"The most financially aggressive hyperscaler: OCI infra revenue +93%, FY27 capex guided $70B (S&P projects higher), negative FCF, $20B share sale planned, ~$50B debt+equity to raise in 2026. Landlord-financier of Stargate — Abilene is developed by Crusoe/Blue Owl, leased to Oracle, consumed by OpenAI.",
   buy:"Enterprise-sales above single nodes; supercluster reservations 1–3+yr; Universal Credits discount everything; historically the most price-flexible hyperscaler negotiator — real leverage on price, weak leverage on timing (you queue behind OpenAI, Meta, xAI).",
-  flags:["Concentration: if OpenAI's spending wobbles, a triple-digit-billion chunk of RPO is impaired.","Late-2025 reporting put gross margins on some GPU rentals in the mid-teens with losses on early Blackwell — a supplier subsidizing your rate has its own clock.","Delivery dates have slipped; capacity competes with anchors who outrank you."],
+  flags:["Concentration: if OpenAI's spending wobbles, a triple-digit-billion chunk of RPO is impaired.","Late-2025 reporting put gross margins on some GPU rentals in the mid-teens with losses on early Blackwell — a supplier subsidizing your rate can't do so forever.","Delivery dates have slipped; capacity competes with anchors who outrank you."],
   ask:"How is our capacity segregated from anchor-committed builds, and what completion guarantees stand behind the delivery date?",
   more:"Two genuine differentiators cut through the credit noise: egress at ~$0.0085/GB after 10TB free — an order of magnitude below AWS/GCP/Azure, material for a serving platform — and the only hyperscaler three-part SLA (availability, manageability, performance) with financially-backed credits, still capped at service credits in practice. Bare metal is the default; OCI Dedicated Region runs the whole cloud air-gapped on-premises — the strongest sovereign/regulated posture of the twelve. Negotiated superclusters reportedly land $2.50–4.50/H100-hr."},
  crw:{strip:["public neocloud","debt $24.9B · DDTLs A3→BB+","backlog $99.4B","ClusterMAX Platinum","fabric: IB rail-optimized"],
@@ -290,7 +290,7 @@ var DOS={
   buy:"Uniquely two-speed: true zero-commitment self-serve at the bottom (minute billing, no egress), 1-Click Clusters 16–2,000+ GPUs with one-week minimums in the middle (invoice on approval, payment within 10 days or forfeiture), negotiated Private Cloud at the top. Lowest minimum spends of the twelve.",
   flags:["On-demand availability droughts are documented — 'checking twice a week for six months' for 1× H100 — the self-serve tier is popular and shallow.","Scale ceiling: ~25k+ GPUs today against a 1M-GPU/3GW-by-2030 ambition financed by deals not yet done.","Pre-IPO convertible carries penalties if no IPO within a year — an incentive structure that can distort near-term commercial behavior; storage/platform layer is thin (bring your own data plane)."],
   ask:"After the Microsoft and NVIDIA commitments, how much uncommitted capacity remains for multi-tenant buyers this year?",
-  more:"The one-week cluster minimum (vs. months elsewhere) is a genuine structural differentiator for burst training — the scalpel, not the hospital. NVIDIA Exemplar validation benchmarked its H100 infrastructure within 5% of NVIDIA's published baselines: real third-party goodput evidence. Kansas City 24MW AI factory (10k+ Blackwell Ultra) online early 2026, with the entire initial deployment dedicated to a single customer — the indie brand inverting into an anchor-supply business before your eyes."},
+  more:"The one-week cluster minimum (vs. months elsewhere) is a genuine structural differentiator for burst training. NVIDIA Exemplar validation benchmarked its H100 infrastructure within 5% of NVIDIA's published baselines: real third-party goodput evidence. Kansas City 24MW AI factory (10k+ Blackwell Ultra) online early 2026, with the entire initial deployment dedicated to a single customer — the indie brand inverting into an anchor-supply business before your eyes."},
  cru:{strip:["energy-first builder","~$10B val · $30B talks","Abilene 2.1GW combined","ClusterMAX Gold","fabric: IB (Hopper-era)"],
   fin:"Primarily a vertically-integrated datacenter developer that also runs a cloud: Abilene (1.2GW, OpenAI/Oracle) financed via $15B JV with Blue Owl, $9.6B JPMorgan debt, 15-yr lease; 900MW Microsoft campus adjacent (first building mid-2027); Meta ~1.6GW contracted; revenue $276M (2024) toward a projected ~$2B (2026) — the jump the valuation rests on.",
   buy:"Self-serve on-demand for H100/H200 with per-minute billing and spot/reserved tiers; everything frontier is enterprise-sales 1–3yr; the real large-buyer product is build-to-suit campuses with your power profile — nobody else here productizes physical placement (Edge Zones, Spark modular DCs).",
@@ -304,7 +304,7 @@ var DOS={
   ask:"How much capacity is genuinely uncommitted for multi-tenant sale over the next 12 months, and in which facilities?",
   more:"The two-speed availability is unique: frontier custom facilities 100% pre-allocated, while the aggregation network maintains excellent immediate on-demand and spot for multi-node H100/H200 without contracts or quota-gating. Best fit is asynchronous, fault-tolerant work that can exploit the spot lever aggressively through a single clean API; mistake if your pipeline needs uniform inter-node latency. The market's cleanest case study of lenders underwriting tenant credit instead of GPUs."},
  nsc:{strip:["sovereign wholesale","$14.6B val · $3.7B raised","MSFT $10B+ · 66k Rubin","hydro at 4–5¢/kWh","fabric: IB + Blackwell RoCE"],
-  fin:"Arkon Energy spinout (2024) turned Europe's fastest-rising private AI hyperscaler story: $2B Series C (Mar 2026, NVIDIA/Dell/Citadel/Jane Street), Microsoft commitments including 66,000 Rubin GPUs into Sines, Portugal (€695M buildout) and Narvik, Norway for Microsoft/OpenAI workloads; IPO talks for late 2026 via GS/JPM.",
+  fin:"Arkon Energy spinout (2024) turned Europe's fastest-rising private AI hyperscaler: $2B Series C (Mar 2026, NVIDIA/Dell/Citadel/Jane Street), Microsoft commitments including 66,000 Rubin GPUs into Sines, Portugal (€695M buildout) and Narvik, Norway for Microsoft/OpenAI workloads; IPO talks for late 2026 via GS/JPM.",
   buy:"Purely enterprise wholesale: sales-gated, quote-only, take-or-pay 1–3+yr backed by customer prepayments that unlock asset-backed financing; no self-serve at all. Negotiated H100-class multi-year contracts reportedly sit at competitive low-$2s — energy savings passed to long-term buyers.",
   flags:["Immediate revenue trajectory completely dominated by Microsoft/OpenAI buildouts; independent buyers risk sitting secondary to Azure's capacity deficit.","Capital treadmill: $3.7B raised in under two years, scaling on debt and rapid-fire equity — macro-liquidity exposure.","Arctic-circle construction brings real execution risk (documented Narvik weather delays, early 2026)."],
   ask:"You are building for the hyperscaler we also buy from — where does an independent platform sit in your allocation when Azure's deficit widens?",
@@ -314,13 +314,13 @@ var DOS={
   buy:"Pick size, duration, zone; pay the clearing price; hours-to-weeks blocks with no sales call. Forward blocks make it the closest thing this market has to a futures curve.",
   flags:["You don't choose the underlying host — QoS rides on operators you can't diligence directly.","Platform-thin venture-stage counterparty; your real exposure is to whoever owns the metal.","Depth is H100-era today; H200/B300 are roadmap items, not inventory."],
   ask:"For this zone: who is the underlying operator, what is the measured NCCL, and what is the mid-block eviction and refund policy?",
-  more:"Two node classes matter: h100i (Kubernetes, 3.2Tb/s InfiniBand) versus h100v (VMs, no IB) — the same lesson as the fabric instrument, priced live. Strategic value to a platform buyer is less the capacity than the price discovery: the cleared print is the floor that disciplines every reserved quote you negotiate, and the secondary wave of expiring A100/H100 reservations later in 2026 will trade through venues like this."},
+  more:"Two node classes matter: h100i (Kubernetes, 3.2Tb/s InfiniBand) versus h100v (VMs, no IB) — the same lesson as the network tax page, priced live. Strategic value to a platform buyer is less the capacity than the price discovery: the cleared price is the floor that disciplines every reserved quote you negotiate, and the secondary wave of expiring A100/H100 reservations later in 2026 will trade through venues like this."},
  vst:{strip:["p2p marketplace","120k+ devs · 14k paying","~38 employees","host-set pricing","fabric: none guaranteed"],
   fin:"The absolute price floor: hosts from hobbyist rigs to Tier-3 colos set their own prices; H100 interruptible $1.38–1.65 with an on-demand tier near $1.87; 16× YoY paying-customer growth on a ~38-person team.",
   buy:"Self-serve per-machine bids on interruptible or on-demand tiers; Docker containers, no dedicated IPs; SOC 2 on the platform, not the hosts.",
   flags:["Eviction risk and host-level variance make it non-production supply.","Heterogeneity defeats any uniform performance assumption; verify each host.","Blackwell-class supply is scarce to absent on p2p."],
   ask:"What share of listed H100 hosts are verified datacenter-grade with uptime history — and can we filter to only those?",
-  more:"Its role in your file is dual: the floor print for the dispersion chart, and a demand-side comp — its 120k developers are precisely the prosumer pool a serverless platform converts when they outgrow babysitting marketplace instances. As supply, it's the tier below institutional; as a signal, it's where GPU abundance shows up first."}
+  more:"Its role in your file is dual: the floor price for the dispersion chart, and a demand-side comp — its 120k developers are precisely the prosumer pool a serverless platform converts when they outgrow babysitting marketplace instances. As supply, it's the tier below institutional; as a signal, it's where GPU abundance shows up first."}
 };
 var CH=[{id:"od",l:"on-demand"},{id:"sp",l:"spot / interruptible"},{id:"co",l:"committed / reserved"}];
 var M={od:{},sp:{},co:{}};

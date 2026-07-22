@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The fabric tax — what wiring does to a GPU-hour</title>
+<title>The network tax — what wiring does to a GPU-hour</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
@@ -75,17 +75,17 @@ p a.xlink{margin-left:.5em}
 <nav class="nav-top" aria-label="Manual navigation">
   <div class="nav-in">
     <a href="index.html">The compute desk</a>
-    <span class="nav-here">05 / 08 — The fabric tax</span>
+    <span class="nav-here">05 / 08 — The network tax</span>
     <span class="stepper">
       <a class="st" href="plate-nvl72.html" data-t="The NVL72 rack" aria-label="Previous: The NVL72 rack">←</a>
-      <a class="st" href="the-two-trees.html" data-t="The two trees" aria-label="Next: The two trees">→</a>
+      <a class="st" href="the-two-trees.html" data-t="The two topologies" aria-label="Next: The two topologies">→</a>
     </span>
   </div>
 </nav>
 <div class="wrap">
   <p class="eyebrow">Compute desk</p>
-  <h1>The fabric tax</h1>
-  <p class="dek">"1,024 H100s" is not a spec — it's a rumor until you know how they're wired. This is a 128-GPU cluster: four racks under four leaf switches under a spine. Choose the protocol, the oversubscription, and where the job lands, and watch the same silicon change price.</p>
+  <h1>The network tax</h1>
+  <p class="dek">This is a 128-GPU cluster: four racks under four leaf switches under a spine. Choose the protocol, the oversubscription, and where the job lands, and watch the same GPUs change price.</p>
 
   <div class="card">
     <div class="seggroup">
@@ -104,33 +104,33 @@ p a.xlink{margin-left:.5em}
   <div class="ticker">
     <div class="tk"><p class="l">Bandwidth per GPU</p><p class="v" id="c1">—</p></div>
     <div class="tk"><p class="l">All-reduce per step</p><p class="v" id="c2">—</p></div>
-    <div class="tk"><p class="l">Fabric factor</p><p class="v" id="c3">—</p></div>
+    <div class="tk"><p class="l">Delivered share</p><p class="v" id="c3">—</p></div>
     <div class="tk"><p class="l">$2.50 sticker, effectively</p><p class="v" id="c4">—</p></div>
   </div>
   <p class="status" id="st"></p>
 
   <div class="notes">
     <h2>Reading the wiring like a buyer</h2>
-    <p><strong>The hierarchy is the whole story.</strong> Inside one node, GPUs talk over NVLink at hundreds of GB/s. The moment a job outgrows the node, traffic drops onto the network at NIC speed — 400 Gb/s (50 GB/s) per GPU in a standard H100 build — an order of magnitude slower. Training synchronizes gradients across every GPU each step (the all-reduce), so for any model too large for one node, the network is in the inner loop and its bandwidth prices the whole cluster. The boundary itself is physical: copper NVLink reaches about one rack and no farther — <a class="xlink" href="plate-nvl72.html">see the object →</a> — past it, traffic crosses into the optics this page prices.</p>
+    <p><strong>Why the hierarchy matters.</strong> Inside one node, GPUs talk over NVLink at hundreds of GB/s. The moment a job outgrows the node, traffic drops onto the network at NIC speed — 400 Gb/s (50 GB/s) per GPU in a standard H100 build — an order of magnitude slower. Training synchronizes gradients across every GPU each step (the all-reduce), so for any model too large for one node, the network sits inside every training step and its bandwidth sets the pace of the whole cluster. The boundary itself is physical: copper NVLink reaches about one rack and no farther — <a class="xlink" href="plate-nvl72.html">see the rack →</a> — past it, traffic moves onto the optical network, and that is the cost this page measures.</p>
     <p><strong>InfiniBand vs. RoCE is a protocol choice, not a speed choice.</strong> Both run the same wire rates; both carry RDMA. InfiniBand is lossless by construction (credit-based flow control, sub-microsecond switching) and historically delivers ~90%+ of line rate to NCCL collectives. RoCEv2 is RDMA over Ethernet made lossless with PFC and ECN — cheaper, multi-vendor, easier to operate at hyperscale, but its delivered efficiency depends heavily on tuning and congestion control. Well-engineered Ethernet fabrics (NVIDIA's own Spectrum-X, and the Ultra Ethernet effort) claim to close to within a few points of InfiniBand; untuned RoCE can fall far below. The buyer's conclusion: never accept line rate as an answer — demand measured NCCL bus bandwidth at your job size.</p>
     <div class="ask"><b>Ask the supplier</b>InfiniBand or Ethernet, which NIC generation, and what measured NCCL all-reduce bus bandwidth do you see at my job size — not line rate, measured?</div>
-    <p><strong>Oversubscription is a quiet discount you pay, not receive.</strong> A 2:1 fabric has half as much uplink capacity out of each leaf as downlink under it — fine for inference microservices that rarely cross leaves, poisonous for training all-reduces that cross constantly. It's invisible on the price sheet and only appears in the topology diagram, which is precisely why you ask for the topology diagram. Corollary: placement is free money — a job packed inside one leaf never touches the spine, so a topology-aware scheduler recovers bandwidth that oversubscription took away. And the ratio is countable in the flesh: flip the pod plate to 2:1 and <a class="xlink" href="plate-pod.html">watch half the fibers leave the tray →</a></p>
+    <p><strong>Oversubscription is a discount for the seller, not for you.</strong> A 2:1 fabric has half as much uplink capacity out of each leaf as downlink under it — fine for inference microservices that rarely cross leaves, a serious drag on training all-reduces that cross constantly. It's invisible on the price sheet and only appears in the topology diagram, which is precisely why you ask for the topology diagram. The flip side: good placement is free performance — a job packed inside one leaf never touches the spine, so a topology-aware scheduler recovers bandwidth that oversubscription took away. And you can physically count the ratio: flip the pod page to 2:1 and <a class="xlink" href="plate-pod.html">count the missing fibers on the pod page →</a></p>
     <div class="ask"><b>Ask the supplier</b>What's the oversubscription ratio, leaf to spine — and can your scheduler place my job within a single leaf or rail?</div>
-    <p><strong>Rail-optimized designs</strong> take this further: each of a node's eight NICs connects to its own "rail" of switches, so same-rank GPUs across nodes are one hop apart — cheaper than a full fat-tree, excellent for collectives, weaker for arbitrary traffic. The point isn't to memorize designs; it's to know the failure modes each one buys.</p>
+    <p><strong>Rail-optimized designs</strong> take this further: each of a node's eight NICs connects to its own "rail" of switches, so same-rank GPUs across nodes are one hop apart — cheaper than a full fat-tree, excellent for collectives, weaker for arbitrary traffic. The point isn't to memorize designs; it's to know what can go wrong with each.</p>
     <div class="ask"><b>Ask the supplier</b>Full fat-tree or rail-optimized? Show me the topology diagram, and tell me the blast radius when one spine switch fails.</div>
-    <p><strong>For an inference-first fleet, the tax mostly runs in
-      reverse.</strong> The skill is declining to pay for fabric the workload
-      won't touch, since most serving lives inside one node on NVLink. The
-      exceptions are the ones growing: expert-parallel MoE serving puts an
-      all-to-all on the network every layer, and disaggregated prefill/decode
-      ships KV cache between pools over RDMA. The largest-model inference
-      quietly re-acquires a training-shaped network bill.</p>
-    <p>This is what the fabric-factor tile is computing - delivered bandwidth as a fraction of best case, with effective price the sticker divided by it: two clusters with identical GPUs and identical sticker prices can differ 30%+ in delivered training throughput on wiring alone. Model here is illustrative — ring all-reduce, large-message regime, latency ignored, protocol efficiencies representative (IB ≈ 0.92, tuned RoCE ≈ 0.80 of line rate).</p>
+    <p><strong>For an inference-first fleet, the goal is mostly to avoid the tax.</strong> The skill is not paying for network the workload
+      won't use, since most serving lives inside one node on NVLink. The
+      exceptions are the ones growing: serving large mixture-of-experts models puts
+      heavy traffic on the network at every layer, and the newer split designs
+      (prompt processing on one pool of machines, token generation on another)
+      ship large caches between them. The largest-model inference ends up
+      with a training-sized network bill.</p>
+    <p>This is what the "delivered share" tile shows: the bandwidth you actually get as a fraction of the best case, with the effective price being the sticker price divided by that share. Two clusters with identical GPUs and identical sticker prices can differ 30%+ in delivered training speed on wiring alone. The model is simplified: it assumes the standard synchronization pattern (a ring all-reduce) moving large chunks of data, ignores latency, and uses representative protocol efficiencies (InfiniBand ≈ 0.92, tuned RoCE ≈ 0.80 of line rate).</p>
   </div>
-  <p class="foot">companion to the supply book and the silicon ladder · protocol efficiencies representative, not benchmarked · compiled July 2026</p>
+  <p class="foot">companion to the supply book and the NVIDIA generations · protocol efficiencies representative, not benchmarked · compiled July 2026</p>
   <nav class="nav-bot" aria-label="Manual navigation">
     <a class="nav-prev" href="plate-nvl72.html">← The NVL72 rack</a>
-    <a class="nav-next" href="the-two-trees.html">The two trees →</a>
+    <a class="nav-next" href="the-two-trees.html">The two topologies →</a>
   </nav>
 </div>
 
