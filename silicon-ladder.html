@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The silicon ladder — NVIDIA generations, read from the buyer's chair</title>
+<title>The silicon ladder — NVIDIA generations from a buyer's point of view</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
@@ -86,7 +86,7 @@ p a.xlink{margin-left:.5em}
 <div class="wrap">
   <p class="eyebrow">Compute desk</p>
   <h1>The silicon ladder</h1>
-  <p class="dek">Five generations of NVIDIA datacenter silicon, read from the buyer's chair. Switch the metric to see where each generation actually moved; select a rung for what it means when you're the one signing the capacity contract.</p>
+  <p class="dek">Five generations of NVIDIA datacenter silicon, read from a buyer's point of view. Switch the metric to see where each generation actually improved; select a chip to see what it means when you're the one signing the capacity contract.</p>
 
   <div class="card">
     <div class="metrics" id="mx" role="tablist" aria-label="Metric"></div>
@@ -103,7 +103,7 @@ p a.xlink{margin-left:.5em}
   <div class="notes">
     <h2>Reading the spec sheet like a buyer</h2>
     <p><strong>The comparability trap.</strong> Headline FLOPS include sparsity and shift numeric precision every generation — Hopper's marketed number is FP8, Blackwell's and Rubin's are FP4 — so cross-generation compute multiples partly measure the arithmetic getting narrower, not just the silicon getting faster. Memory capacity and bandwidth are the honest cross-generation rulers, which is convenient, because for inference they are usually the binding ones.</p>
-    <p><strong>The depreciation clock.</strong> The cadence is now annual — Blackwell 2024, Blackwell Ultra 2025, Rubin 2026, Rubin Ultra promised 2027 — and each launch resets the resale and renewal value of everything above it on this page. Historically, prices of the incumbent fall 40–50% over 12–18 months from supply expansion, then further when the successor ships in volume. Every multi-year commitment is short this clock.</p>
+    <p><strong>The depreciation clock.</strong> The cadence is now annual — Blackwell 2024, Blackwell Ultra 2025, Rubin 2026, Rubin Ultra promised 2027 — and each launch resets the resale and renewal value of everything above it on this page. Historically, prices of the incumbent fall 40–50% over 12–18 months from supply expansion, then further when the successor ships in volume. Every multi-year commitment runs against this clock.</p>
     <p><strong>The constraint migrated.</strong> From B200 onward the practical scarcity isn't chips — it's watts and plumbing. Rack power densities that force liquid cooling mean the question "can you get GPUs?" quietly became "can your facility host them?", which is why datacenter readiness now belongs in supplier diligence alongside price.</p>
     <p>† Rubin figures are pre-volume: bandwidth spec is 22 TB/s with early shipments reported nearer 20 as HBM4 suppliers chase NVIDIA's pin speeds, and rack power is not final. HBM4 supply gates the ramp; first allocation goes to hyperscalers and frontier labs.</p>
   </div>
@@ -146,7 +146,7 @@ var METRICS=[
  {k:"mem",label:"memory",unit:" GB",cap:"Sets what fits on one GPU — a 70B model in FP16 needs ~140 GB; anything that doesn't fit pays the sharding and interconnect tax.",fmt:function(g){return g.mem+" GB "+g.memT},val:function(g){return g.mem}},
  {k:"bw",label:"bandwidth",unit:" TB/s",cap:"The inference bottleneck: generating tokens is mostly moving weights from HBM to compute, so bandwidth is the honest cross-generation ruler.",fmt:function(g){return g.bw+" TB/s"+(g.est?" †":"")},val:function(g){return g.bw}},
  {k:"comp",label:"compute",unit:" PFLOPS",cap:"Headline FLOPS as NVIDIA markets them — sparsity included, and the precision narrows each generation (FP8 → FP4), so these multiples flatter the silicon.",fmt:function(g){return g.comp+" PF "+g.prec},val:function(g){return g.comp}},
- {k:"pw",label:"power",unit:" W",cap:"The constraint that ate the industry: per-GPU wattage decides cooling, cooling decides which facilities qualify, and facilities are now the scarce input.",fmt:function(g){return (g.pw>=1000?(g.pw/1000).toFixed(1)+" kW":g.pw+" W")+(g.est?" †":"")},val:function(g){return g.pw}},
+ {k:"pw",label:"power",unit:" W",cap:"The new binding constraint: per-GPU wattage decides cooling, cooling decides which facilities qualify, and facilities are now the scarce input.",fmt:function(g){return (g.pw>=1000?(g.pw/1000).toFixed(1)+" kW":g.pw+" W")+(g.est?" †":"")},val:function(g){return g.pw}},
  {k:"nvl",label:"nvlink",unit:" GB/s",cap:"GPU-to-GPU bandwidth — the all-reduce tax on training and on serving any model too large for one GPU. Same chip, different fabric, different effective price.",fmt:function(g){return (g.nvl/1000).toFixed(1)+" TB/s"},val:function(g){return g.nvl}},
  {k:"dom",label:"domain",unit:" GPUs",cap:"How many GPUs share one coherent NVLink fabric — the 8 → 72 jump is why the unit of purchase became the rack, and why 'a thousand GPUs' says nothing without topology.",fmt:function(g){return g.dom+" GPUs · "+g.nvlG},val:function(g){return g.dom}}
 ];
