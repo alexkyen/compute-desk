@@ -84,7 +84,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--teal);outline-o
 <div class="wrap">
   <p class="eyebrow">Compute desk</p>
   <h1>The supply book</h1>
-  <p class="dek">A serverless GPU platform buys capacity ahead of demand: cheap if committed, flexible if not. Drag the <code>K</code> line to size the committed layer against a year of demand, sorted from busiest hour to quietest, and watch the economics settle.</p>
+  <p class="dek">A serverless GPU platform buys capacity ahead of demand: cheap if committed, flexible if not. Drag the <code>K</code> line to size the committed layer against a year of demand, sorted from busiest hour to quietest, and see how the economics change.</p>
 
   <div class="card">
     <div class="legend">
@@ -123,11 +123,11 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--teal);outline-o
 
   <div class="notes">
     <h2>How to read it</h2>
-    <p>The model: average demand is fixed at 100 GPUs; on-demand capacity costs $6.00 per GPU-hour; reserved capacity costs $6.00 divided by the discount multiple, but is paid for every hour whether used or not. Everything under the oxide curve is sellable demand; any committed capacity above the curve is paid-for silence.</p>
+    <p>The model: average demand is fixed at 100 GPUs; on-demand capacity costs $6.00 per GPU-hour; reserved capacity costs $6.00 divided by the discount multiple, but is paid for every hour whether used or not. Everything under the demand curve is sellable; any committed capacity above the curve is paid for but sits idle.</p>
     <div class="rule-box">commit a GPU ⇔ its expected utilization ≥ reserved ÷ on-demand price<br>at a 3× discount: breakeven = $2.00 / $6.00 = 33% of hours</div>
-    <p><strong>Feel the valley.</strong> Sweep K from zero to max and watch blended cost fall, bottom out at the dashed optimal line, and rise. Note how flat the bottom is — being 20% wrong on book size barely costs anything. Real capacity books die from counterparty and duration risk, not mis-sizing.</p>
-    <p><strong>Crank volatility.</strong> Hold the discount and raise peak-to-average. The optimal line dives and the amber elastic share swells: spikier demand means committing less, regardless of how good the discount is. When peak-to-average far exceeds the discount multiple, even the optimal book barely beats pure on-demand.</p>
-    <p><strong>Crank the discount.</strong> Hold volatility and raise the discount. Breakeven utilization is just one over the discount, so a deeper discount makes it rational to commit further into rarely-used layers. Every turn of discount negotiated changes how much of the demand curve the book can afford to own.</p>
+    <p><strong>The cost curve has a flat bottom.</strong> Sweep K from zero to max and watch blended cost fall, bottom out at the dashed optimal line, and rise. Note how flat the bottom is — being 20% wrong on book size barely costs anything. Real capacity books die from counterparty and duration risk, not mis-sizing.</p>
+    <p><strong>Raise volatility.</strong> Hold the discount and raise peak-to-average. The optimal line drops and the amber on-demand share grows: spikier demand means committing less, regardless of how good the discount is. When peak-to-average far exceeds the discount multiple, even the optimal book barely beats pure on-demand.</p>
+    <p><strong>Raise the discount.</strong> Hold volatility and raise the discount. Breakeven utilization is just one over the discount, so a deeper discount makes it rational to commit further into rarely-used layers. Every turn of discount negotiated changes how much of the demand curve the book can afford to own.</p>
     <p>One honest limitation: this demand curve is known and static. The real job prices an uncertain curve growing several-fold a year, which pushes optimal behavior toward shorter durations and paid-for flexibility beyond what this picture shows.</p>
   </div>
   <p class="foot">newsvendor critical ratio · load-duration framing after Modal, “<a href="https://modal.com/blog/how-to-price-serverless" target="_blank" rel="noopener">How to price serverless</a>” (2026)</p>
