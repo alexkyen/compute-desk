@@ -39,6 +39,6 @@ keeps a static SVG fallback and working stage copy when WebGL is unavailable.
 
 ## Notes
 
-Framing after Modal, "How to price serverless" (2026). Hardware figures compiled July 2026;
-Rubin-generation specs are pre-volume and marked accordingly in the NVIDIA generations. Atlas
+Inspired by Modal, "How to price serverless GPUs" (2026). Hardware figures compiled July 2026;
+Rubin-generation specs are pre-volume and marked accordingly in the NVIDIA generations. Seller
 prices are perishable; estimates and deal-reported figures are marked in their tooltips.
