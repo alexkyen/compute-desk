@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The atlas — the GPU market as a field of prints</title>
+<title>The atlas — GPU market prices on one board</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
@@ -147,39 +147,39 @@ details p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
 <div class="wrap">
   <p class="eyebrow">Compute desk · the atlas</p>
   <h1>The atlas</h1>
-  <p class="dek">Twelve sellers, eight accelerators, and three channels on one board. Every seller holds a row; prices sit on a shared log axis, so equal distances are equal ratios: the hyperscaler-to-marketplace gap reads as a constant band, not a squashed tail. Step the silicon and the marks glide; the eight cells riding beside each row are that seller's availability across the whole ladder — <span style="font-family:var(--mono);color:var(--ink-3)">×</span> where a price is gated. Click a row to open the seller's file; hover or tap anything for its provenance.</p>
+  <p class="dek">Twelve sellers, eight accelerators, and three ways to buy, all on one board. Each seller has a row, and prices sit on a log scale — equal distances mean equal ratios, so the gap between a hyperscaler and a marketplace is visible at any price level. Use the ‹ › arrows to switch between chips; the small cells beside each row show which chips each seller actually offers (<span style="font-family:var(--mono);color:var(--ink-3)">×</span> means the price is gated behind sales). Click a seller to open their file, and hover any number to see where it came from.</p>
 </div>
 
 <div class="stage" id="stage">
   <section class="bsec">
     <div class="controls">
-      <div class="stp" role="group" aria-label="silicon stepper">
-        <button class="sarr" id="sprev" aria-label="previous silicon">‹</button>
+      <div class="stp" role="group" aria-label="chip selector">
+        <button class="sarr" id="sprev" aria-label="previous chip">‹</button>
         <span class="scur" id="scur"></span>
-        <button class="sarr" id="snext" aria-label="next silicon">›</button>
+        <button class="sarr" id="snext" aria-label="next chip">›</button>
         <span class="spos" id="spos"></span>
       </div>
       <div class="seg" id="ch"></div>
       <div class="seg" id="srt"></div>
     </div>
-    <div class="board" id="board" aria-label="Price board: one row per seller, prices for the stepped silicon generation on a shared log dollar axis, availability strip across all generations">
+    <div class="board" id="board" aria-label="Price board: one row per seller, prices for the selected chip on a shared log dollar axis, availability strip across all chips">
       <div class="axis" id="axis"></div>
       <div class="rows" id="rows"></div>
     </div>
     <div class="legend"><span>● on-demand · ◐ committed · ○ spot · ─ range · tag = price gated</span></div>
     <div class="legend strip-legend"><span>▪ priced · × gated · blank = not listed</span></div>
-    <p class="bhint">‹ › to step the silicon · click a seller to open their file · hover or tap → source</p>
+    <p class="bhint">‹ › to switch chips · click a seller to open their file · hover or tap for source</p>
   </section>
 </div>
 
 <div class="wrap">
   <div class="notes">
-    <h2>How to read the field</h2>
-    <p><strong>The log axis is the point of this view.</strong> On a linear axis, the difference between $1.50 and $3 disappears next to the difference between $10 and $12 — but to a buyer they are the same event: a 2× spread. Log scale makes ratios distances, so the three archetype bands sit at roughly constant heights across generations: marketplaces at the floor, neoclouds in a tight middle band, hyperscaler list floating 2–6× above it for identical silicon. The useful question is rarely what a price is — it's which band it belongs to.</p>
-    <p><strong>The strips are the wall of ×.</strong> Eight cells ride beside every seller — filled where a price prints, × where the silicon is sold but the price is gated, blank where they don't play. Read them top to bottom and the market's shape appears without a single number: Hopper is a market; Blackwell is an allocation; the rack-scale rows are almost pure ×.</p>
-    <p><strong>Step the board and watch the dots.</strong> A seller whose mark barely moves from H100 to H200 is telling you their book is long Hopper; a mark that dissolves into a gated tag at B200 is telling you Blackwell is an allocation, not a market. When the board is sorted by price, watch the rows trade places as you step — who holds their rank across generations is itself a fact about how they sell.</p>
-    <p><strong>What the field compresses.</strong> Published ranges draw as a span from low to high, and the nuance behind a gated offering ("on card", "roadmap", "pre-alloc") survives only in the tag tooltips. The field is built for shape and negotiation; when you need the exact number to put in a model, follow the tooltip to its source.</p>
-    <p><strong>Provenance travels with every mark.</strong> Each carries a grade — <em>list</em>, <em>mkt</em>, <em>deal</em>, <em>est</em> — in its tooltip with its date. The shape of this field decays in months, the numbers in weeks.</p>
+    <h2>How to read the board</h2>
+    <p><strong>Why the axis is logarithmic.</strong> On a linear scale, the difference between $1.50 and $3 disappears next to the difference between $10 and $12 — but to a buyer they're the same event: a 2× spread. On a log scale, equal distances mean equal ratios, so the three groups hold roughly constant positions across generations: marketplaces at the bottom, neoclouds in a tight middle band, hyperscaler list prices 2–6× above them for the same chip. The useful question is rarely what a price is — it's which band it sits in.</p>
+    <p><strong>The availability strip.</strong> The eight cells beside each row are one cell per chip: filled where the seller publishes a price, × where they sell it but the price is behind sales, blank where they don't offer it at all. Read the strips top to bottom and the market's shape shows up before any number does: Hopper is an open market, Blackwell is an allocation, and the rack-scale systems are almost all ×.</p>
+    <p><strong>What changes as you switch chips.</strong> A seller whose price barely moves from H100 to H200 probably has plenty of Hopper inventory; one whose price disappears into a gated tag at B200 is telling you Blackwell is allocated, not openly sold. With the board sorted by price, notice which sellers keep their rank across generations — that consistency, or the lack of it, says something about how they sell.</p>
+    <p><strong>What the board leaves out.</strong> Published ranges draw as a span from low to high, and the detail behind a gated offering ("on card", "roadmap", "pre-alloc") survives only in the tag tooltips. This view is built for comparison, not precision; when you need an exact number for a model, follow the tooltip to its source.</p>
+    <p><strong>Every price shows its source.</strong> Each mark carries a grade — <em>list</em>, <em>mkt</em>, <em>deal</em>, <em>est</em> — in its tooltip, along with a date. The overall shape of the market changes over months; the individual numbers change in weeks.</p>
   </div>
   <details class="srcblock">
     <summary>sources &amp; method</summary>
