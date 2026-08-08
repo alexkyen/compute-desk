@@ -5,6 +5,9 @@
   --text-ui:11px;
   --text-support:12px;
   --text-dense:14px;
+  --space-support:16px;
+  --space-section:36px;
+  --space-divider:26px;
 }
 
 /* Keep the editorial serif, but use a quieter roman face for structural titles. */
@@ -57,6 +60,13 @@ h1,.toc .t,.panel h2,.dh h2,.section h3,.rname{font-style:normal}
 .tool-action:hover,.tool-action:focus-visible,.tool-actions button:hover,.tool-actions button:focus-visible,
 .tool-actions a:hover,.tool-actions a:focus-visible{border-color:var(--teal);color:var(--teal);outline:2px solid transparent}
 .tool-message{font-family:var(--mono);font-size:var(--text-ui);color:var(--ink-2);min-height:1.6em;margin-top:6px}
+.tool-message:empty{min-height:0;margin-top:0}
+
+/* Keep the transition from each model to its notes consistent across modules. */
+.notes{margin-top:var(--space-section);padding-top:var(--space-divider)}
+
+/* Give interpretive status copy room before the model it describes. */
+.status + .card{margin-top:var(--space-support)}
 
 .assumptions{
   margin:18px 0 0;padding:12px 15px;border:1px solid var(--rule);border-radius:7px;background:var(--paper);
