@@ -3,6 +3,13 @@
   --amber:#8B5A00;
 }
 
+/* Keep the editorial serif, but use a quieter roman face for structural titles. */
+h1,.toc .t,.panel h2,.dh h2,.section h3,.rname{font-style:normal}
+.rname{font-weight:500}
+
+/* Supplier prompts are supporting copy, not a competing data layer. */
+.ask{font-size:12px;line-height:1.55}
+
 .skip-link{
   position:fixed;left:16px;top:12px;z-index:1000;transform:translateY(-160%);
   padding:9px 13px;border-radius:6px;background:var(--ink);color:var(--panel);
