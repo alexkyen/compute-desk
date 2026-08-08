@@ -1,0 +1,10 @@
+{
+  "name": "compute-desk",
+  "version": "2026.8.0",
+  "private": true,
+  "description": "Decision tools for buying and operating GPU capacity.",
+  "scripts": {
+    "test": "node scripts/check-site.mjs"
+  },
+  "license": "MIT"
+}

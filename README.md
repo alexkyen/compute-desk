@@ -1,44 +1,60 @@
 # The Compute Desk
 
-Eight interactive pages on the economics of buying GPU compute, built as self-contained HTML.
+[The Compute Desk](https://alexkyen.github.io/compute-desk/) is a set of browser-based decision tools for GPU procurement, infrastructure planning, and contract negotiation. It turns public market evidence and explicit operating assumptions into planning ranges, comparison tables, bills of material, and negotiation work products.
 
-**Live:** https://alexkyen.github.io/compute-desk/
+The tools are designed for commercial and technical operators. They are not a quotation system, an engineering design package, or legal advice. Each model identifies its assumptions and links to the shared [methods and sources](https://alexkyen.github.io/compute-desk/methodology.html).
 
-## The pages
+## Decision tools
 
-1. **The sellers** — the market itself: twelve sellers, eight accelerators, three ways to buy, every public price plotted on a log scale with gated allocations shown as absence. Compiled July 2026 from public rate cards, filings, and deal reporting.
-2. **The supply book** — how much capacity to commit, and at what duration. A load-duration curve with a draggable commitment line; the optimal point falls out of the newsvendor critical ratio (commit a GPU when its expected utilization exceeds the reserved-to-on-demand price ratio).
-3. **The NVIDIA generations** — the NVIDIA generations (H100 → H200 → B200 → B300 → Rubin) read from a buyer's point of view, with a per-metric view and a depreciation-clock argument for why deep multi-year discounts can be the wrong trade.
-4. **The NVL72 rack** — a 3D take-apart model of the GB200 NVL72: the rack, the trays, the ~5,000-cable copper spine, and the GB200 superchip, staged as an argument for why the coherent machine — and the commercial unit — ends at the rack.
-5. **The network tax** — what cluster wiring does to effective price. Interactive topology across InfiniBand/RoCE, oversubscription, and job placement, showing how identical GPUs price differently on interconnect alone.
-6. **The two topologies** — fabric topology as a design choice. Fat-tree vs rail-optimized, interactive across three scenarios: why rails serve training collectives at a fraction of the switch and optics cost, what off-pattern traffic pays in NVLink detours, and how a single rail failure stalls every multi-node job at once.
-7. **The pod** — a 3D datacenter row: eight compute racks, an end-of-row switch rack, and the overhead cable tray. The fat-tree snapped onto its hardware, oversubscription as fibers physically leaving the tray, and rails as a stripe of savings and blast radius painted down the row.
-8. **The issues list** — every negotiable term of the reference deal, priced: what the draft says, what you ask for, the redline, and what each clause is worth against a configurable deal. The definition-of-"available" row embeds Exhibit A, the availability-SLA pricing model that shows why credits rarely cover real losses.
+| Tool | Decision supported | Practical output |
+| --- | --- | --- |
+| [Market atlas](https://alexkyen.github.io/compute-desk/the-atlas-scatter.html) | Is a quote inside the public market range? | Filterable price benchmark, source trail, and comparison CSV |
+| [Capacity commitment](https://alexkyen.github.io/compute-desk/gpu-supply-book.html) | How much demand should be committed rather than bought on demand? | Critical-ratio commitment point, cost comparison, and scenario summary |
+| [Accelerator lifecycle](https://alexkyen.github.io/compute-desk/silicon-ladder.html) | Which NVIDIA accelerator generation fits the workload and contract horizon? | Metric comparison and buyer diligence prompts |
+| [NVL72 rack](https://alexkyen.github.io/compute-desk/plate-nvl72.html) | What is the technical and commercial boundary of the NVL72 system? | Staged 3D system view with a static fallback |
+| [Network cost](https://alexkyen.github.io/compute-desk/the-fabric.html) | How does collective communication change effective GPU economics? | Communication-time estimate and effective-price proxy |
+| [Topology planner](https://alexkyen.github.io/compute-desk/the-two-trees.html) | What does fat-tree versus rail-optimized fabric imply for equipment count and failure behavior? | Planning BOM and scenario comparison |
+| [Pod layout](https://alexkyen.github.io/compute-desk/plate-pod.html) | How do logical network choices map into a representative row? | Staged 3D physicalization with oversubscription and failure views |
+| [SLA and issues list](https://alexkyen.github.io/compute-desk/sla-anatomy.html) | Which commercial terms need escalation, and what exposure sits behind them? | Live SLA scenario, issue workflow, redline copy, and CSV export |
 
-## Structure
+## Evidence and model boundaries
 
-Nine hand-maintained source pages, no build step, no generated files: `index.html` is
-the contents page — cover, a ruled list of the eight pages, colophon — and each
-page stands alone, directly linkable, served as-is by GitHub Pages from the
-repo root. Position in the contents list is the page's number.
+- Public prices are normalized to USD per GPU-hour, with configuration and source context kept visible. A plotted point is a benchmark observation, not an executable offer.
+- Market evidence is graded as public list price, marketplace observation, reported deal, estimate, or model output. The atlas can exclude entries without a linked public source.
+- Demand imports preserve a load-duration distribution rather than chronology. They do not forecast growth or correlated outages.
+- Network outputs are planning proxies. Measured NCCL bandwidth can replace the default efficiency assumption, but the model does not reproduce application-level goodput.
+- Topology counts are planning estimates under the displayed port, radix, plane, and oversubscription assumptions. They must be reconciled with a vendor BOM.
+- Contract language is a composite negotiation aid. Exposure values are scenario values, not additive or probability-adjusted expected savings.
 
-Every page is fully self-contained: its own CSS and JS, no shared stylesheets, no
-frameworks, no external JS. Each page carries a top and bottom nav strip
-(contents link plus prev/next); the ~20 lines of strip CSS are duplicated into every
-file on purpose, so no page depends on another. Edit any page directly.
+See [`methodology.html`](methodology.html) for the complete evidence grades, normalization rules, assumptions, and freshness policy.
 
-To add page 09: create the new file with its nav strip, add its row to the
-contents list in `index.html`, and update the prev/next links on its two neighbors
-(today that means giving 08 a next link, and pointing 09 back at 08).
+## Repository structure
 
-Two of the pages are 3D companion views — `plate-nvl72.html` (04) and
-`plate-pod.html` (07) — and they carry the site's one documented exception to the
-no-external-JS rule: a pinned, minified Three.js build (r147, MIT) inlined into
-each page, so both files remain fully self-contained and served as-is. Each plate
-keeps a static SVG fallback and working stage copy when WebGL is unavailable.
+The site is intentionally lightweight and is served directly from the repository root by GitHub Pages.
 
-## Notes
+- `index.html` — landing page and tool navigation
+- `*.html` — eight directly linkable tools plus the methods page
+- `assets/desk.css` — shared accessibility, action, and responsive styles
+- `assets/desk.js` — URL-state, copy, print, export, and live-region helpers
+- `assets/three-r147.min.js` — pinned local Three.js runtime used by the two 3D plates
+- `scripts/check-site.mjs` — metadata, landmark, internal-link, and freshness checks
+- `.github/workflows/site-check.yml` — pull-request and scheduled verification
 
-Inspired by Modal, "How to price serverless GPUs" (2026). Hardware figures compiled July 2026;
-Rubin-generation specs are pre-volume and marked accordingly in the NVIDIA generations. Seller
-prices are perishable; estimates and deal-reported figures are marked in their tooltips.
+The individual tools keep their distinctive page-specific presentation and logic. Shared assets cover only site-level behavior and repeated utility styles. Both 3D pages retain static SVG fallbacks when WebGL is unavailable.
+
+## Local verification
+
+No package install or build step is required. Serve the directory with any static HTTP server, then open `index.html`.
+
+```sh
+npm test
+python3 -m http.server 4173
+```
+
+`npm test` uses only Node.js built-ins. The scheduled check fails when the atlas market-verification date is more than 45 days old, because stale price evidence should be visible before publication.
+
+## Ownership and license
+
+Designed, written, and implemented by Alex Yen. Corrections are welcome through [GitHub issues](https://github.com/alexkyen/compute-desk/issues).
+
+Original code is available under the [MIT License](LICENSE). The pinned Three.js runtime retains its upstream MIT notice. Linked specifications, rate cards, filings, and reporting remain subject to their original terms.

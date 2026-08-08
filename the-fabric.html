@@ -3,7 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The network tax — what wiring does to a GPU-hour</title>
+<meta name="description" content="Estimate the communication penalty and GPU-hour price proxy for a ring all-reduce under explicit fabric assumptions.">
+<meta property="og:title" content="The Network Tax — GPU fabric sensitivity">
+<meta property="og:description" content="Test how protocol, oversubscription, placement, compute time, and overlap affect a communication-bound GPU-hour.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://alexkyen.github.io/compute-desk/social-card.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:url" content="https://alexkyen.github.io/compute-desk/the-fabric.html">
+<link rel="canonical" href="https://alexkyen.github.io/compute-desk/the-fabric.html">
+<title>The network tax — GPU fabric sensitivity</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
@@ -48,12 +58,15 @@ input:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 .notes p strong{color:var(--ink);font-weight:500}
 .ask{font-family:var(--mono);font-size:13px;background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:13px 16px;margin:18px 0;color:var(--ink);max-width:72ch}
 .ask b{font-weight:500;letter-spacing:.08em;font-size:10px;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:4px}
+.model-inputs{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px;padding-top:16px;border-top:1px solid var(--rule)}
+.model-inputs label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:5px}
+.model-inputs input{width:100%;min-height:38px;border:1px solid var(--rule);border-radius:6px;background:var(--paper);padding:7px 8px;font-family:var(--mono);font-size:12px;color:var(--ink)}
 /* xlink v1 — canonical add-on link. do not edit per-page; change everywhere or nowhere. */
 a.xlink{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--teal);text-decoration:underline;text-underline-offset:2px;white-space:nowrap}
 a.xlink:hover,a.xlink:focus-visible{outline:none;text-decoration-thickness:2px}
 p a.xlink{margin-left:.5em}
 .foot{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:44px;letter-spacing:.03em}
-@media(max-width:560px){.tk{padding:12px 14px}.tk .v{font-size:20px}}
+@media(max-width:560px){.tk{padding:12px 14px}.tk .v{font-size:20px}.model-inputs{grid-template-columns:1fr 1fr}}
 .nav-top,.nav-bot{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
 .nav-top a,.nav-bot a{color:var(--ink-2);text-decoration:none;white-space:nowrap}
 .nav-top a:hover,.nav-top a:focus-visible,.nav-bot a:hover,.nav-bot a:focus-visible{color:var(--teal);outline:none}
@@ -70,8 +83,10 @@ p a.xlink{margin-left:.5em}
 .stepper a.st::after{content:attr(data-t);position:absolute;top:calc(100% + 7px);right:0;background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:3px 8px;font-size:10.5px;letter-spacing:.06em;color:var(--ink-2);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;z-index:12}
 .stepper a.st:hover::after,.stepper a.st:focus-visible::after{opacity:1}
 </style>
+<link rel="stylesheet" href="assets/desk.css">
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 <nav class="nav-top" aria-label="Manual navigation">
   <div class="nav-in">
     <a href="index.html">The compute desk</a>
@@ -82,10 +97,20 @@ p a.xlink{margin-left:.5em}
     </span>
   </div>
 </nav>
-<div class="wrap">
+<main class="wrap" id="main">
   <p class="eyebrow">Compute desk</p>
   <h1>The network tax</h1>
-  <p class="dek">This is a 128-GPU cluster: four racks under four leaf switches under a spine. Choose the protocol, the oversubscription, and where the job lands, and watch the same GPUs change price.</p>
+  <p class="dek">Estimate the communication penalty for a ring all-reduce under explicit protocol, placement, compute-time, and overlap assumptions. Prefer measured NCCL bandwidth when a supplier provides it.</p>
+  <dl class="decision-strip"><div><dt>Decision supported</dt><dd><strong>Does the proposed fabric undermine the quote?</strong></dd></div><div><dt>Primary output</dt><dd>Modeled step penalty and price proxy</dd></div><div><dt>Model boundary</dt><dd>One full-gradient ring all-reduce; not total application goodput</dd></div></dl>
+  <p class="scope-note warning">The price output is a communication-bound proxy, not realized training cost. It excludes sharding, topology-aware collective selection, pipeline bubbles, congestion, storage, and application failures.</p>
+
+  <div class="ticker" aria-label="Scenario outputs">
+    <div class="tk"><p class="l">Bandwidth per GPU</p><p class="v" id="c1">—</p></div>
+    <div class="tk"><p class="l">All-reduce per step</p><p class="v" id="c2">—</p></div>
+    <div class="tk"><p class="l">Modeled throughput</p><p class="v" id="c3">—</p></div>
+    <div class="tk"><p class="l">Communication-bound proxy</p><p class="v" id="c4">—</p></div>
+  </div>
+  <p class="status" id="st" aria-live="polite"></p>
 
   <div class="card">
     <div class="seggroup">
@@ -99,49 +124,49 @@ p a.xlink{margin-left:.5em}
       <input type="range" id="ms" min="7" max="405" step="1" value="70" aria-label="Model size in billions of parameters">
       <b id="mv">70B</b>
     </div>
+    <div class="model-inputs">
+      <div><label for="computeInput">Compute-only step · sec</label><input id="computeInput" type="number" min="0.01" step="0.1" value="10"></div>
+      <div><label for="overlapInput">Comm overlap · %</label><input id="overlapInput" type="number" min="0" max="100" step="5" value="50"></div>
+      <div><label for="measuredInput">Measured NCCL · GB/s</label><input id="measuredInput" type="number" min="0" step="1" value="0" aria-describedby="measuredHelp"><span id="measuredHelp" class="sr-only">Enter zero to use the topology estimate</span></div>
+      <div><label for="stickerInput">Sticker · $/GPU-hr</label><input id="stickerInput" type="number" min="0.01" step="0.01" value="2.50"></div>
+    </div>
+    <div class="assumptions" id="fabricAssumptions"></div>
   </div>
-
-  <div class="ticker">
-    <div class="tk"><p class="l">Bandwidth per GPU</p><p class="v" id="c1">—</p></div>
-    <div class="tk"><p class="l">All-reduce per step</p><p class="v" id="c2">—</p></div>
-    <div class="tk"><p class="l">Delivered share</p><p class="v" id="c3">—</p></div>
-    <div class="tk"><p class="l">$2.50 sticker, effectively</p><p class="v" id="c4">—</p></div>
-  </div>
-  <p class="status" id="st"></p>
+  <div class="tool-actions"><button type="button" data-copy-link>copy scenario link</button><button type="button" id="downloadFabric">download summary</button></div><p class="tool-message" aria-live="polite"></p>
 
   <div class="notes">
-    <h2>Reading the wiring like a buyer</h2>
+    <h2>Fabric diligence</h2>
     <p><strong>Why the hierarchy matters.</strong> Inside one node, GPUs talk over NVLink at hundreds of GB/s. The moment a job outgrows the node, traffic drops onto the network at NIC speed — 400 Gb/s (50 GB/s) per GPU in a standard H100 build — an order of magnitude slower. Training synchronizes gradients across every GPU each step (the all-reduce), so for any model too large for one node, the network sits inside every training step and its bandwidth sets the pace of the whole cluster. The boundary itself is physical: copper NVLink reaches about one rack and no farther — <a class="xlink" href="plate-nvl72.html">see the rack →</a> — past it, traffic moves onto the optical network, and that is the cost this page measures.</p>
-    <p><strong>InfiniBand vs. RoCE is a protocol choice, not a speed choice.</strong> Both run the same wire rates; both carry RDMA. InfiniBand is lossless by construction (credit-based flow control, sub-microsecond switching) and historically delivers ~90%+ of line rate to NCCL collectives. RoCEv2 is RDMA over Ethernet made lossless with PFC and ECN — cheaper, multi-vendor, easier to operate at hyperscale, but its delivered efficiency depends heavily on tuning and congestion control. Well-engineered Ethernet fabrics (NVIDIA's own Spectrum-X, and the Ultra Ethernet effort) claim to close to within a few points of InfiniBand; untuned RoCE can fall far below. The buyer's conclusion: never accept line rate as an answer — demand measured NCCL bus bandwidth at your job size.</p>
+    <p><strong>Protocol labels do not establish delivered performance.</strong> InfiniBand and RoCE can run the same nominal wire rate and both carry RDMA. Their delivered collective bandwidth depends on NIC and switch generation, topology, congestion control, tuning, and job size. Use line rate only as a ceiling; request measured NCCL bus bandwidth for the proposed configuration.</p>
     <div class="ask"><b>Ask the supplier</b>InfiniBand or Ethernet, which NIC generation, and what measured NCCL all-reduce bus bandwidth do you see at my job size — not line rate, measured?</div>
-    <p><strong>Oversubscription is a discount for the seller, not for you.</strong> A 2:1 fabric has half as much uplink capacity out of each leaf as downlink under it — fine for inference microservices that rarely cross leaves, a serious drag on training all-reduces that cross constantly. It's invisible on the price sheet and only appears in the topology diagram, which is precisely why you ask for the topology diagram. The flip side: good placement is free performance — a job packed inside one leaf never touches the spine, so a topology-aware scheduler recovers bandwidth that oversubscription took away. And you can physically count the ratio: flip the pod page to 2:1 and <a class="xlink" href="plate-pod.html">count the missing fibers on the pod page →</a></p>
+    <p><strong>Oversubscription changes the value of placement.</strong> A 2:1 fabric has half as much uplink capacity out of each leaf as downlink below it. Workloads that remain within a leaf may see little effect; jobs crossing leaf and spine tiers may contend for the reduced uplink capacity. Ask for both the topology diagram and the scheduler's placement policy. The pod page shows the planning ratio physically: <a class="xlink" href="plate-pod.html">compare the tray at 1:1 and 2:1 →</a></p>
     <div class="ask"><b>Ask the supplier</b>What's the oversubscription ratio, leaf to spine — and can your scheduler place my job within a single leaf or rail?</div>
-    <p><strong>Rail-optimized designs</strong> take this further: each of a node's eight NICs connects to its own "rail" of switches, so same-rank GPUs across nodes are one hop apart — cheaper than a full fat-tree, excellent for collectives, weaker for arbitrary traffic. The point isn't to memorize designs; it's to know what can go wrong with each.</p>
+    <p><strong>Rail-optimized designs</strong> connect each node NIC to a corresponding switch rail, which can reduce switch count for expected collective patterns. Arbitrary cross-rank and all-to-all traffic may take a less direct path. Validate both the dominant workload and the failure behavior before accepting the cost tradeoff.</p>
     <div class="ask"><b>Ask the supplier</b>Full fat-tree or rail-optimized? Show me the topology diagram, and tell me the blast radius when one spine switch fails.</div>
-    <p><strong>For an inference-first fleet, the goal is mostly to avoid the tax.</strong> The skill is not paying for network the workload
-      won't use, since most serving lives inside one node on NVLink. The
-      exceptions are the ones growing: serving large mixture-of-experts models puts
-      heavy traffic on the network at every layer, and the newer split designs
-      (prompt processing on one pool of machines, token generation on another)
-      ship large caches between them. The largest-model inference ends up
-      with a training-sized network bill.</p>
-    <p>This is what the "delivered share" tile shows: the bandwidth you actually get as a fraction of the best case, with the effective price being the sticker price divided by that share. Two clusters with identical GPUs and identical sticker prices can differ 30%+ in delivered training speed on wiring alone. The model is simplified: it assumes the standard synchronization pattern (a ring all-reduce) moving large chunks of data, ignores latency, and uses representative protocol efficiencies (InfiniBand ≈ 0.92, tuned RoCE ≈ 0.80 of line rate).</p>
+    <p><strong>Inference requirements vary by serving architecture.</strong> Single-node serving may not justify a training-oriented scale-out fabric. Large mixture-of-experts deployments, disaggregated prefill and decode, or models sharded across nodes can create substantial east-west traffic. Size the network from the serving design and measured communication profile, not from the accelerator count alone.</p>
+    <p><strong>How the proxy is calculated.</strong> The model moves one FP16 gradient copy for every parameter through a ring all-reduce, exposes the portion not hidden by overlap, adds that time to the compute-only step, and scales the sticker price by the resulting throughput share. This is a sensitivity calculation, not a benchmark. The 0.92 InfiniBand and 0.80 tuned-RoCE efficiencies are planning assumptions; replace them with measured NCCL bus bandwidth whenever possible.</p>
   </div>
-  <p class="foot">companion to the supply book and the NVIDIA generations · protocol efficiencies representative, not benchmarked · compiled July 2026</p>
+  <p class="foot">model · protocol efficiencies are explicit planning assumptions, not benchmarks · model version 2026.08 · <a href="https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/usage/collectives.html">NCCL collectives</a> · <a href="methodology.html">methods &amp; limitations</a></p>
   <nav class="nav-bot" aria-label="Manual navigation">
     <a class="nav-prev" href="plate-nvl72.html">← The NVL72 rack</a>
     <a class="nav-next" href="the-two-trees.html">The two topologies →</a>
   </nav>
-</div>
+</main>
 
+<script src="assets/desk.js"></script>
 <script>
 var FABRICS=[{id:"ib",label:"InfiniBand 400G",eff:0.92},{id:"roce",label:"RoCE v2 400G",eff:0.80}];
 var OVERS=[{r:1,label:"1:1 full"},{r:2,label:"2:1"},{r:4,label:"4:1"}];
 var SPANS=[{id:"node",label:"one node · 8 GPUs",n:8},{id:"leaf",label:"one leaf · 32 GPUs",n:32},{id:"cluster",label:"cluster · 128 GPUs",n:128}];
 var fSel=0,oSel=0,sSel=2,params=70;
-var NIC=50, NVL=810, STICKER=2.5;
+var NIC=50, NVL=810, STICKER=2.5, computeSec=10, overlap=.5, measured=0;
+var q=ComputeDesk.params();
+if(q.has('fabric'))fSel=Math.max(0,FABRICS.findIndex(function(x){return x.id===q.get('fabric')}));
+if(q.has('over'))oSel=Math.max(0,OVERS.findIndex(function(x){return x.r===+q.get('over')}));
+if(q.has('span'))sSel=Math.max(0,SPANS.findIndex(function(x){return x.id===q.get('span')}));
+if(q.has('params'))params=Math.max(7,+q.get('params')||70);if(q.has('compute'))computeSec=Math.max(.01,+q.get('compute')||10);if(q.has('overlap'))overlap=Math.max(0,Math.min(1,(+q.get('overlap')||0)/100));if(q.has('measured'))measured=Math.max(0,+q.get('measured')||0);if(q.has('sticker'))STICKER=Math.max(.01,+q.get('sticker')||2.5);
 function seg(el,items,sel,cb){
-  var h="";items.forEach(function(it,i){h+='<button class="'+(i===sel?"on":"")+'">'+it.label+"</button>"});
+  var h="";items.forEach(function(it,i){h+='<button type="button" aria-pressed="'+(i===sel)+'" class="'+(i===sel?"on":"")+'">'+it.label+"</button>"});
   el.innerHTML=h;
   el.querySelectorAll("button").forEach(function(b,i){b.addEventListener("click",function(){cb(i)})});
 }
@@ -200,9 +225,11 @@ function render(){
   if(span.id==="node")B=NVL;
   else if(span.id==="leaf")B=NIC*fab.eff;
   else B=NIC*fab.eff/rho;
+  if(measured>0&&span.id!=="node")B=measured;
   var P=2*params;
   var t=2*P*(span.n-1)/(span.n*B);
-  var factor=Math.min(1,B/ideal);
+  var exposed=t*(1-overlap), modeledStep=computeSec+exposed;
+  var factor=Math.min(1,computeSec/modeledStep);
   var effCost=STICKER/factor;
   var cong=(span.id==="cluster"&&rho>1);
   drawTopo(span.id,rho,cong);
@@ -213,17 +240,25 @@ function render(){
   document.getElementById("c4").innerHTML="$"+effCost.toFixed(2)+"<em>/GPU-hr</em>";
   var msg;
   if(span.id==="node"){
-    msg="This job never touches the network — gradients ride NVLink at ~"+NVL+" GB/s inside the node. Protocol and oversubscription are moot until the model outgrows 8 GPUs; that's the cliff every scaling decision walks toward.";
+    msg="The modeled collective stays inside the node on NVLink. Protocol and spine oversubscription do not affect this scenario; the proxy still includes the exposed intra-node collective time.";
   }else if(span.id==="leaf"){
-    msg="Packed within one leaf, every GPU sees full NIC bandwidth — the spine's "+rho+":1 oversubscription is invisible from here. Topology-aware placement is free money: same cluster, no tax.";
+    msg="Packed within one leaf, the job avoids the oversubscribed spine. The proxy uses "+Math.round(B)+" GB/s per GPU and "+Math.round(overlap*100)+"% modeled communication overlap.";
   }else if(rho===1){
-    msg="Cluster-wide on a full-bisection fabric: the only tax is protocol efficiency ("+Math.round(fab.eff*100)+"% of line rate for "+(fab.id==="ib"?"InfiniBand":"tuned RoCE")+"). This is the honest baseline suppliers should be measured against.";
+    msg="Cluster-wide on the full-bisection planning case: bandwidth is "+(measured?'taken from the measured input':'estimated from line rate and protocol efficiency')+". Validate it with NCCL at the proposed job size.";
   }else{
-    msg="Cluster-wide across a "+rho+":1 spine: every byte crossing leaves shares uplinks, so effective bandwidth divides by "+rho+". Same GPUs, same sticker — but the $2.50 hour is really $"+effCost.toFixed(2)+". The discount was in the wiring, and you paid it.";
+    msg="Cluster-wide across the "+rho+":1 planning case, the model exposes "+exposed.toFixed(1)+" seconds of communication after overlap. The $"+effCost.toFixed(2)+" result is a communication-bound price proxy, not measured goodput.";
   }
   document.getElementById("st").textContent=msg;
+  document.getElementById('fabricAssumptions').innerHTML='<strong>Assumptions:</strong> FP16 full-gradient ring all-reduce; '+span.n+' GPUs; '+computeSec.toFixed(1)+'s compute-only step; '+Math.round(overlap*100)+'% communication overlap; '+(measured?measured+' GB/s measured input':fab.label+', '+rho+':1 topology estimate')+'.';
+  ComputeDesk.setParams({fabric:fab.id,over:rho,span:span.id,params:params,compute:computeSec,overlap:Math.round(overlap*100),measured:measured||null,sticker:STICKER.toFixed(2)});
 }
 document.getElementById("ms").addEventListener("input",function(){params=+this.value;render()});
+document.getElementById('computeInput').addEventListener('input',function(){computeSec=Math.max(.01,+this.value||10);render()});
+document.getElementById('overlapInput').addEventListener('input',function(){overlap=Math.max(0,Math.min(1,(+this.value||0)/100));render()});
+document.getElementById('measuredInput').addEventListener('input',function(){measured=Math.max(0,+this.value||0);render()});
+document.getElementById('stickerInput').addEventListener('input',function(){STICKER=Math.max(.01,+this.value||2.5);render()});
+document.getElementById('downloadFabric').addEventListener('click',function(){ComputeDesk.download('compute-desk-network.txt',['Compute Desk — network tax','Fabric: '+FABRICS[fSel].label,'Oversubscription: '+OVERS[oSel].r+':1','Placement: '+SPANS[sSel].label,'Model: '+params+'B parameters','Compute-only step: '+computeSec+' sec','Overlap: '+Math.round(overlap*100)+'%','Measured NCCL: '+(measured?measured+' GB/s':'not supplied'),'Sticker: $'+STICKER.toFixed(2)+'/GPU-hour','Scenario: '+location.href].join('\n'))});
+document.getElementById('ms').value=params;document.getElementById('computeInput').value=computeSec;document.getElementById('overlapInput').value=Math.round(overlap*100);document.getElementById('measuredInput').value=measured;document.getElementById('stickerInput').value=STICKER.toFixed(2);
 rebuild();
 </script>
 </body>

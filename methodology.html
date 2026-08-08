@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Methods, source standards, model boundaries, and update policy for the Compute Desk GPU procurement tools.">
+<meta property="og:title" content="Compute Desk — methods and sources">
+<meta property="og:description" content="How the Compute Desk classifies prices, models capacity and networks, and marks assumptions and freshness.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://alexkyen.github.io/compute-desk/social-card.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:url" content="https://alexkyen.github.io/compute-desk/methodology.html">
+<link rel="canonical" href="https://alexkyen.github.io/compute-desk/methodology.html">
+<title>Methods and sources — The Compute Desk</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F6F7F3;--panel:#FDFDFB;--ink:#15201A;--ink-2:#4A574F;--ink-3:#66736B;--rule:#DDE2DB;--teal:#117758;--amber:#8B5A00;--mono:"IBM Plex Mono",ui-monospace,monospace;--serif:"Newsreader",Georgia,serif}
+*{box-sizing:border-box;margin:0;padding:0}html{background:var(--paper)}body{font-family:var(--serif);color:var(--ink);line-height:1.65;padding:48px 20px 72px}.wrap{max-width:880px;margin:0 auto}.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}h1{font-style:italic;font-weight:400;font-size:clamp(34px,5.5vw,52px);line-height:1.05;margin:10px 0 14px}.dek{font-size:18px;color:var(--ink-2);max-width:66ch;margin-bottom:34px}.section{border-top:1px solid var(--rule);padding-top:25px;margin-top:34px}.section h2{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;margin-bottom:14px}.section h3{font-size:19px;font-style:italic;font-weight:400;margin:20px 0 6px}.section p,.section li{color:var(--ink-2);max-width:72ch}.section ul{padding-left:20px}.section li{margin:7px 0}.section strong{color:var(--ink);font-weight:500}.grade{font-family:var(--mono);font-size:11px;color:var(--teal)}a{color:var(--teal);text-underline-offset:2px}.nav{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin:-48px -20px 44px;padding:11px 20px;border-bottom:1px solid var(--rule)}.nav div{max-width:880px;margin:auto;display:flex;justify-content:space-between;gap:20px}.nav a{text-decoration:none}.foot{margin-top:44px;padding-top:16px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+</style>
+<link rel="stylesheet" href="assets/desk.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<nav class="nav" aria-label="Site navigation"><div><a href="index.html">The Compute Desk</a><span>Methods &amp; sources</span></div></nav>
+<main class="wrap" id="main">
+  <p class="eyebrow">Confidence layer</p>
+  <h1>Methods and sources</h1>
+  <p class="dek">The Compute Desk is a set of decision aids, not a quotation system, engineering design package, or legal opinion. This page defines what its numbers mean, where the models stop, and how freshness is signaled.</p>
+
+  <section class="section">
+    <h2>Evidence grades</h2>
+    <ul>
+      <li><span class="grade">LIST</span> — a public provider rate card or official specification. Configuration, region, term, and verification date should appear with the value.</li>
+      <li><span class="grade">MKT</span> — an observable marketplace or clearing price. It is a time-stamped market observation, not a capacity guarantee.</li>
+      <li><span class="grade">DEAL</span> — a value reported in a filing, earnings call, customer announcement, or attributable press report. It is not necessarily comparable with list pricing.</li>
+      <li><span class="grade">EST</span> — an author calculation or range derived from adjacent public evidence. Estimates are excluded by default when a page offers a confidence filter.</li>
+      <li><span class="grade">MODEL</span> — an illustrative scenario output. It is sensitive to the displayed assumptions and is not a forecast.</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2>Price normalization</h2>
+    <p>Prices are shown in US dollars per GPU-hour. Instance prices are divided by the number of GPUs in the instance. Unless the tooltip states otherwise, values exclude tax, storage, support, egress, and data-transfer charges. Accelerator form factor, host CPU and memory, fabric, region, availability, and commitment mechanics can make two nominally equal GPU-hours non-comparable.</p>
+    <p><strong>Use:</strong> benchmark the band around a quote and identify diligence questions. <strong>Do not use:</strong> treat a plotted point as an executable offer.</p>
+  </section>
+
+  <section class="section">
+    <h2>Model boundaries</h2>
+    <h3>Supply book</h3>
+    <p>The synthetic mode uses a stationary load-duration curve. The imported-data mode sorts observed hourly demand and therefore preserves duration, not chronology. Neither mode forecasts growth, correlated outages, contract minimums, or counterparty risk.</p>
+    <h3>Network tax</h3>
+    <p>The model estimates a ring all-reduce communication component and combines it with user-supplied compute time and overlap. It does not reproduce topology-aware NCCL tuning, congestion, sharding, pipeline bubbles, storage, or application-level goodput. A measured NCCL bandwidth input should be preferred when available.</p>
+    <h3>Topologies</h3>
+    <p>Equipment counts are planning estimates under the displayed endpoint, switch-radix, rail, oversubscription, and redundancy assumptions. A vendor design can allocate ports and redundant planes differently.</p>
+    <h3>Issues list</h3>
+    <p>Dollar values are scenario exposure, not probability-adjusted expected value and not additive savings. Clause examples are a composite negotiation aid, not legal advice or a substitute for counsel.</p>
+  </section>
+
+  <section class="section">
+    <h2>Freshness policy</h2>
+    <p>Price observations carry a verification month. The automated repository check warns when the market-data verification date is more than 45 days old. Hardware specifications are rechecked after major vendor announcements. Editorial conclusions do not inherit the authority of their cited sources.</p>
+  </section>
+
+  <section class="section">
+    <h2>Ownership and corrections</h2>
+    <p>Designed, written, and implemented by Alex Yen. Source code is available on <a href="https://github.com/alexkyen/compute-desk">GitHub</a>. Corrections can be submitted through the repository issue tracker. Code is MIT licensed; third-party source material remains subject to its original terms.</p>
+  </section>
+
+  <p class="foot">model version 2026.08 · methodology updated August 2026 · <a href="index.html">return to the desk</a></p>
+</main>
+<script src="assets/desk.js"></script>
+</body>
+</html>

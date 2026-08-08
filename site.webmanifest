@@ -1,0 +1,10 @@
+{
+  "name": "The Compute Desk",
+  "short_name": "Compute Desk",
+  "description": "Decision tools for buying and operating GPU capacity.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#F6F7F3",
+  "theme_color": "#15201A",
+  "icons": [{"src":"favicon.svg","sizes":"any","type":"image/svg+xml"}]
+}

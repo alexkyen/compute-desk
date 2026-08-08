@@ -3,7 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The two topologies — fat tree vs rail-optimized fabrics</title>
+<meta name="description" content="Compare illustrative fat-tree and rail-optimized GPU fabrics by equipment count, optics budget, traffic fit, and failure domain.">
+<meta property="og:title" content="The Two Topologies — GPU fabric planning">
+<meta property="og:description" content="Estimate switches and optical links for fat-tree and rail-optimized planning cases.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://alexkyen.github.io/compute-desk/social-card.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:url" content="https://alexkyen.github.io/compute-desk/the-two-trees.html">
+<link rel="canonical" href="https://alexkyen.github.io/compute-desk/the-two-trees.html">
+<title>The two topologies — GPU fabric planning</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
@@ -46,8 +56,11 @@ svg{display:block;width:100%;height:auto;user-select:none}
 .notes p strong{color:var(--ink);font-weight:500}
 .ask{font-family:var(--mono);font-size:13px;background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:13px 16px;margin:18px 0;color:var(--ink);max-width:72ch}
 .ask b{font-weight:500;letter-spacing:.08em;font-size:10px;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:4px}
+.bom{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px;padding-top:16px;border-top:1px solid var(--rule)}
+.bom label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:5px}
+.bom input,.bom select{width:100%;min-height:38px;border:1px solid var(--rule);border-radius:6px;background:var(--paper);padding:7px 8px;font-family:var(--mono);font-size:12px;color:var(--ink)}
 .foot{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:44px;letter-spacing:.03em}
-@media(max-width:560px){.tk{padding:12px 14px}.tk .v{font-size:17px}}
+@media(max-width:560px){.tk{padding:12px 14px}.tk .v{font-size:17px}.bom{grid-template-columns:1fr 1fr}}
 .nav-top,.nav-bot{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
 .nav-top a,.nav-bot a{color:var(--ink-2);text-decoration:none;white-space:nowrap}
 .nav-top a:hover,.nav-top a:focus-visible,.nav-bot a:hover,.nav-bot a:focus-visible{color:var(--teal);outline:none}
@@ -68,8 +81,10 @@ p a.xlink{margin-left:.5em}
 .stepper a.st::after{content:attr(data-t);position:absolute;top:calc(100% + 7px);right:0;background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:3px 8px;font-size:10.5px;letter-spacing:.06em;color:var(--ink-2);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;z-index:12}
 .stepper a.st:hover::after,.stepper a.st:focus-visible::after{opacity:1}
 </style>
+<link rel="stylesheet" href="assets/desk.css">
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 <nav class="nav-top" aria-label="Manual navigation">
   <div class="nav-in">
     <a href="index.html">The compute desk</a>
@@ -80,10 +95,21 @@ p a.xlink{margin-left:.5em}
     </span>
   </div>
 </nav>
-<div class="wrap">
+<main class="wrap" id="main">
   <p class="eyebrow">Compute desk</p>
   <h1>The two topologies</h1>
-  <p class="dek">The network tax page priced the wiring; this page compares two ways to arrange it. The same GPUs can be wired as one fat tree — full bandwidth at every level, any GPU to any GPU at full rate — or as eight skinny ones, each "rail" connecting the same-numbered GPU of every node. Rails cost a fraction as much and serve training traffic just as fast. The catch shows up in the other two scenarios. Toggle and see.</p>
+  <p class="dek">Compare illustrative fat-tree and rail-optimized fabrics for collective traffic, off-pattern traffic, and a single-switch failure. Adjust the planning inputs to estimate switches, links, and optics budget.</p>
+  <dl class="decision-strip"><div><dt>Decision supported</dt><dd><strong>Which fabric assumptions belong in the quote and design review?</strong></dd></div><div><dt>Primary output</dt><dd>Planning BOM, traffic tradeoff, and failure domain</dd></div><div><dt>Model boundary</dt><dd>Illustrative two-tier designs; vendor port allocation may differ</dd></div></dl>
+  <p class="scope-note warning">Counts are planning estimates under the displayed endpoint, radix, rail, oversubscription, and fabric-plane assumptions—not a vendor design or cabling schedule.</p>
+
+  <div class="ticker" aria-label="Planning outputs">
+    <div class="tk"><p class="l">Estimated switches</p><p class="v" id="c1">—</p></div>
+    <div class="tk"><p class="l">Estimated optical links</p><p class="v" id="c2">—</p></div>
+    <div class="tk"><p class="l">Optics budget</p><p class="v" id="c5">—</p></div>
+    <div class="tk"><p class="l">Any-to-any traffic</p><p class="v" id="c3">—</p></div>
+    <div class="tk"><p class="l">Single-switch exposure</p><p class="v" id="c4">—</p></div>
+  </div>
+  <p class="status" id="st" aria-live="polite"></p>
 
   <div class="card">
     <div class="seggroup">
@@ -96,40 +122,45 @@ p a.xlink{margin-left:.5em}
       <span><span class="sw" style="background:#D98F12"></span>detour / taxed</span>
       <span><span class="sw" style="background:#A63B26"></span>failed</span>
     </div>
+    <div class="bom">
+      <div><label for="gpuCount">GPU endpoints</label><input id="gpuCount" type="number" min="16" step="8" value="512"></div>
+      <div><label for="switchRadix">Switch radix</label><input id="switchRadix" type="number" min="16" step="8" value="64"></div>
+      <div><label for="railCount">Rails / GPUs per node</label><input id="railCount" type="number" min="1" max="16" step="1" value="8"></div>
+      <div><label for="bomOver">Fat-tree oversubscription</label><select id="bomOver"><option value="1">1:1</option><option value="2">2:1</option><option value="4">4:1</option></select></div>
+      <div><label for="planes">Independent fabric planes</label><select id="planes"><option value="1">1 plane</option><option value="2">2 planes</option></select></div>
+      <div><label for="opticCost">Optical link allowance · $</label><input id="opticCost" type="number" min="0" step="100" value="1200"></div>
+    </div>
+    <div class="assumptions" id="bomAssumptions"></div>
   </div>
-
-  <div class="ticker">
-    <div class="tk"><p class="l">Switches @ 512 GPUs</p><p class="v" id="c1">—</p></div>
-    <div class="tk"><p class="l">Optical links</p><p class="v" id="c2">—</p></div>
-    <div class="tk"><p class="l">Any-to-any traffic</p><p class="v" id="c3">—</p></div>
-    <div class="tk"><p class="l">Blast radius</p><p class="v" id="c4">—</p></div>
-  </div>
-  <p class="status" id="st"></p>
+  <div class="tool-actions"><button type="button" data-copy-link>copy scenario link</button><button type="button" id="downloadBom">download BOM</button></div><p class="tool-message" aria-live="polite"></p>
 
   <div class="notes">
-    <h2>Reading the trees like a buyer</h2>
-    <p><strong>Training traffic has a shape, and rails are wired to it.</strong> When NCCL runs an all-reduce, it builds rings of same-numbered GPUs: GPU-3 of node 12 exchanges with GPU-3 of nodes 11 and 13, and any data that must cross ranks moves inside each node over NVLink, where bandwidth is ~18× cheaper. So the network only ever sees same-numbered pairs — eight independent streams, one per rail. A rail design gives each of those streams its own dedicated switch, one hop, full rate, and simply deletes the spine tier the fat-tree needed to guarantee the same thing for everyone.</p>
-    <p><strong>The cost gap is countable.</strong> 512 GPUs with 64-port switches: a 1:1 fat-tree needs 16 leaves plus 16 spines and 1,024 optical links; rails need 8 switches and 512 links, with optics the dominant line item. Roughly 4× fewer switches and half the optics for identical delivered performance — <em>on collective-shaped traffic.</em></p>
-    <p><strong>What rails deleted is every path between different ranks on different nodes.</strong> Off-pattern traffic — mixture-of-experts all-to-all routing, embedding lookups, parameter-server flows, storage and data loading — must detour: hop the NVLink bridge inside the node to borrow a port on the right rail, then cross. The detour spends NVLink bandwidth the collectives also need, and turns first-class traffic into second-class. The fat-tree pays for generality; rails pay only for the pattern training uses, and everything off-pattern gets taxed. And the first item on that list is no longer just a training concern: that all-to-all pattern is now how large mixture-of-experts models are served, too — a rails cluster bought cheap for training can end up penalizing the inference it was bought to run.</p>
+    <h2>Topology diligence</h2>
+    <p><strong>Training traffic has a shape, and rails can be wired to it.</strong> In the illustrated mapping, collective channels keep corresponding GPU ranks on dedicated rails and use the high-bandwidth NVLink domain for intra-node movement. Actual NCCL algorithms and channel mappings are topology-, message-, and workload-dependent; NCCL can select rings, trees, NVLS, and other algorithms.</p>
+    <p><strong>The cost gap is countable only after the design assumptions are explicit.</strong> The calculator uses a simple two-tier Clos planning rule for fat-tree and one switch group per rail for the rail case. It is intended to expose quote assumptions, not replace the supplier's port map.</p>
+    <p><strong>Rails trade generality for an expected traffic pattern.</strong> Cross-rank traffic such as mixture-of-experts all-to-all routing, embedding lookups, parameter-server flows, storage, and data loading may need an intra-node hop before crossing the appropriate rail. That path can consume NVLink capacity shared with collective traffic. Measure all-to-all as well as all-reduce when the cluster will serve mixture-of-experts or other communication-heavy inference workloads.</p>
     <div class="ask"><b>Ask the supplier</b>If it's rails: is the scheduler rail-aware, what's the NCCL configuration, and what are your measured numbers for all-to-all — not just all-reduce — at my job size?</div>
-    <p><strong>Failure modes are shaped by the wiring too.</strong> A fat-tree leaf death is deep but narrow — its nodes drop, the rest run. A spine death is shallow and wide — capacity dips, nothing disconnects. A rail death is the strange one: no node goes down, but every node loses the same port simultaneously, and since an all-reduce finishes only when its slowest ring does, one failed box can stall every multi-node job in the cluster at once. Both trees are wired through one physical row on the pod page — <a class="xlink" href="plate-pod.html">see the failure stripe on the pod page →</a></p>
+    <p><strong>Failure modes are shaped by the wiring and its redundancy.</strong> In the single-plane toy case, a fat-tree leaf failure removes its attached endpoints while a rail-switch failure removes one rail across many nodes. Whether jobs stall or reroute depends on redundant planes, routing, scheduler placement, and collective configuration. Both examples are mapped onto one physical row on the pod page — <a class="xlink" href="plate-pod.html">see the failure stripe on the pod page →</a></p>
     <div class="ask"><b>Ask the supplier</b>Full fat-tree or rail-optimized — show me the topology diagram. And when one switch fails, what exactly keeps running: which nodes, which rails, which of my jobs?</div>
-    <p>The toy cluster shows one rank ring and one cross-rank pair so the wiring stays readable; in reality all rings run concurrently and NCCL juggles them. Counts assume 64-port switches, one NIC per GPU, 1:1 within each tree. Structure of the argument is unchanged at real scale.</p>
+    <p>The toy cluster shows one channel and one cross-rank pair so the wiring stays readable. Use the controls for a planning estimate, then ask the supplier for the actual logical topology, physical port map, redundancy behavior, and measured collective results.</p>
   </div>
-  <p class="foot">continues the network tax · counts illustrative at 512 GPUs, 64-port switches · compiled July 2026</p>
+  <p class="foot">model · two-tier planning estimate · <a href="https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/env.html#nccl-algo">NCCL algorithm selection</a> · <a href="methodology.html">methods &amp; limitations</a> · model version 2026.08</p>
   <nav class="nav-bot" aria-label="Manual navigation">
     <a class="nav-prev" href="the-fabric.html">← The network tax</a>
     <a class="nav-next" href="plate-pod.html">The pod →</a>
   </nav>
-</div>
+</main>
 
+<script src="assets/desk.js"></script>
 <script>
 var topo="fat", scen="coll";
+var gpuCount=512,switchRadix=64,railCount=8,bomOver=1,planes=1,opticCost=1200;
+var q=ComputeDesk.params();if(q.has('topo'))topo=q.get('topo')==='rail'?'rail':'fat';if(q.has('scen'))scen=q.get('scen');if(q.has('gpus'))gpuCount=Math.max(16,+q.get('gpus')||512);if(q.has('radix'))switchRadix=Math.max(16,+q.get('radix')||64);if(q.has('rails'))railCount=Math.max(1,+q.get('rails')||8);if(q.has('over'))bomOver=Math.max(1,+q.get('over')||1);if(q.has('planes'))planes=Math.max(1,+q.get('planes')||1);if(q.has('optic'))opticCost=Math.max(0,+q.get('optic')||1200);
 var NX=[50,240,430,620], NW=170;
 var TEAL="#117758", AMBER="#D98F12", OXIDE="#A63B26", IDLE="#DDE2DB";
 function gx(n,k){return NX[n]+31+k*38}
 function seg(el,items,cur,cb){
-  var h="";items.forEach(function(it){h+='<button class="'+(it.id===cur?"on":"")+'">'+it.label+"</button>"});
+  var h="";items.forEach(function(it){h+='<button type="button" aria-pressed="'+(it.id===cur)+'" class="'+(it.id===cur?"on":"")+'">'+it.label+"</button>"});
   el.innerHTML=h;
   var bs=el.querySelectorAll("button");
   items.forEach(function(it,i){bs[i].addEventListener("click",function(){cb(it.id)})});
@@ -214,25 +245,35 @@ function render(){
     wires+=line(gx(0,1),343,gx(0,3)-8,343,AMBER,2,false,true);
   }
   document.getElementById("net").innerHTML=s+wires+boxes+nodes;
-  var fat=topo==="fat";
-  document.getElementById("c1").textContent=fat?"32":"8";
-  document.getElementById("c2").textContent=fat?"1,024":"512";
+  var fat=topo==="fat",nodes=Math.ceil(gpuCount/railCount),downPorts=Math.floor(switchRadix/2),leaves=Math.ceil(gpuCount/downPorts),uplinksPerLeaf=Math.max(1,Math.ceil(downPorts/bomOver));
+  var fatSpines=Math.max(1,Math.ceil(leaves*uplinksPerLeaf/switchRadix));
+  var fatSwitches=(leaves+fatSpines)*planes,fatLinks=(gpuCount+leaves*uplinksPerLeaf)*planes;
+  var railGroups=Math.ceil(nodes/switchRadix),railSwitches=railCount*railGroups*planes,railLinks=gpuCount*planes;
+  var switches=fat?fatSwitches:railSwitches,links=fat?fatLinks:railLinks;
+  document.getElementById("c1").textContent=switches.toLocaleString();
+  document.getElementById("c2").textContent=links.toLocaleString();
+  document.getElementById("c5").textContent='$'+Math.round(links*opticCost/1000).toLocaleString()+'k';
   var c3el=document.getElementById("c3");
   c3el.textContent=fat?"full rate":"nvlink detour";
   c3el.className="v"+(fat?"":" bad");
   var c4el=document.getElementById("c4");
-  c4el.textContent=fat?"nodes under 1 leaf":"one rank, all nodes";
+  c4el.textContent=fat?Math.ceil(downPorts/railCount)+" nodes / leaf":"one rail across nodes";
   c4el.className="v"+(fat?"":" bad");
   var M={
-    "fat coll":"One rank ring shown (rank 1): same-rank GPUs climb to their leaf, cross one spine, come back down — full rate, paid for with an entire spine tier.",
-    "rail coll":"Rank-1 traffic never leaves rail 1: every rank ring is one hop on its own dedicated switch. Same delivered speed as the fat-tree — with no spine tier to buy.",
-    "fat cross":"GPU 1 on node 0 reaches GPU 3 on node 3 directly: leaf, spine, leaf, full rate. The fat-tree makes no assumptions about who talks to whom.",
-    "rail cross":"Rails don't interconnect. Traffic first hops the NVLink bridge inside node 0 to borrow a rail-3 port, then rides rail 3 across — a detour that spends NVLink bandwidth the collectives also need.",
-    "fat fail":"Leaf L dies: nodes 0 and 1 drop off; nodes 2 and 3 run untouched. Deep but narrow. A spine death is gentler still — capacity dips, nothing disconnects.",
-    "rail fail":"Rail 1 dies: every node loses its rank-1 port at the same instant. No node is down — but every multi-node job striped across rail 1 stalls. One box, cluster-wide bite."
+    "fat coll":"One illustrative collective channel is shown crossing leaf and spine tiers. Delivered performance depends on the actual channel map, link count, and congestion.",
+    "rail coll":"The illustrated rank-1 channel stays on rail 1. This is the traffic pattern the rail case is optimized for; validate it with the proposed NCCL configuration.",
+    "fat cross":"In the illustration, GPU 1 on node 0 reaches GPU 3 on node 3 through leaf, spine, and leaf tiers. Confirm delivered bandwidth under the proposed oversubscription and placement policy.",
+    "rail cross":"In this rail mapping, cross-rank traffic first crosses the NVLink domain inside node 0 to reach the corresponding rail, then travels across that rail. The extra path can consume bandwidth shared with collectives.",
+    "fat fail":"In the single-plane illustration, a leaf failure removes nodes 0 and 1 while nodes 2 and 3 remain attached. Actual isolation and recovery depend on redundant planes and routing.",
+    "rail fail":"In this single-plane illustration, rail 1 fails across every attached node. With redundant planes or rerouting, the result may be degraded bandwidth rather than a stalled job."
   };
   document.getElementById("st").textContent=M[topo+" "+scen];
+  document.getElementById('bomAssumptions').innerHTML='<strong>Planning case:</strong> '+gpuCount+' GPUs; '+railCount+' GPUs/NIC rails per node; '+switchRadix+'-port switches; '+bomOver+':1 fat-tree oversubscription; '+planes+' fabric plane'+(planes>1?'s':'')+'; $'+opticCost.toLocaleString()+' per optical link allowance.';
+  ComputeDesk.setParams({topo:topo,scen:scen,gpus:gpuCount,radix:switchRadix,rails:railCount,over:bomOver,planes:planes,optic:opticCost});
 }
+['gpuCount','switchRadix','railCount','bomOver','planes','opticCost'].forEach(function(id){document.getElementById(id).addEventListener('input',function(){gpuCount=Math.max(16,+document.getElementById('gpuCount').value||512);switchRadix=Math.max(16,+document.getElementById('switchRadix').value||64);railCount=Math.max(1,+document.getElementById('railCount').value||8);bomOver=Math.max(1,+document.getElementById('bomOver').value||1);planes=Math.max(1,+document.getElementById('planes').value||1);opticCost=Math.max(0,+document.getElementById('opticCost').value||0);render()})});
+document.getElementById('downloadBom').addEventListener('click',function(){var rows=['topology,gpus,switch_radix,rails,oversubscription,planes,optic_allowance','"'+topo+'",'+gpuCount+','+switchRadix+','+railCount+','+bomOver+','+planes+','+opticCost,'','','Planning estimate only. Obtain the vendor port map before procurement.',location.href];ComputeDesk.download('compute-desk-topology-bom.csv',rows.join('\n'),'text/csv;charset=utf-8')});
+document.getElementById('gpuCount').value=gpuCount;document.getElementById('switchRadix').value=switchRadix;document.getElementById('railCount').value=railCount;document.getElementById('bomOver').value=bomOver;document.getElementById('planes').value=planes;document.getElementById('opticCost').value=opticCost;
 rebuild();
 </script>
 </body>

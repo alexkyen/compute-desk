@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">The Compute Desk</title>
+  <desc id="desc">Decision tools for buying and operating GPU capacity.</desc>
+  <rect width="1200" height="630" fill="#F6F7F3"/>
+  <path d="M96 100h1008M96 528h1008" stroke="#DDE2DB"/>
+  <text x="96" y="78" fill="#117758" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="20" letter-spacing="5">THE COMPUTE DESK</text>
+  <text x="96" y="210" fill="#15201A" font-family="Georgia, serif" font-size="62" font-style="italic">Decision tools for buying</text>
+  <text x="96" y="286" fill="#15201A" font-family="Georgia, serif" font-size="62" font-style="italic">and operating GPU capacity</text>
+  <text x="96" y="376" fill="#4A574F" font-family="Georgia, serif" font-size="27">Price benchmarks · commitment sizing · fabric planning · contract exposure</text>
+  <g fill="#66736B" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="18" letter-spacing="2">
+    <text x="96" y="500">ALEX YEN</text>
+    <text x="1104" y="500" text-anchor="end">MODEL VERSION 2026.08</text>
+  </g>
+</svg>

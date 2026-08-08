@@ -3,7 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The issues list — what every clause is worth at the table</title>
+<meta name="description" content="Prioritize modeled GPU-cloud contract exposure against a configurable reference deal and review illustrative redlines.">
+<meta property="og:title" content="The Issues List — modeled contract exposure">
+<meta property="og:description" content="A configurable negotiation aid for GPU capacity agreements.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://alexkyen.github.io/compute-desk/social-card.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:url" content="https://alexkyen.github.io/compute-desk/sla-anatomy.html">
+<link rel="canonical" href="https://alexkyen.github.io/compute-desk/sla-anatomy.html">
+<title>The issues list — modeled GPU contract exposure</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
@@ -160,6 +170,13 @@ input[type=range]{width:100%;accent-color:var(--teal);height:22px}
 a.iref{color:var(--teal);text-decoration:underline;text-underline-offset:2px}
 a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
 .rhead.flash{animation:clflash 1.2s ease-out 1}
+.workflow{display:flex;flex-wrap:wrap;align-items:end;gap:8px 16px;margin-top:16px;padding-top:12px;border-top:1px solid var(--rule)}
+.workflow label{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.workflow select{display:block;min-height:36px;margin-top:4px;border:1px solid var(--rule);border-radius:5px;background:var(--paper);padding:6px 8px;font-family:var(--mono);font-size:11px;color:var(--ink)}
+.workflow button{min-height:36px;border:1px solid var(--rule);border-radius:5px;background:var(--panel);padding:6px 10px;font-family:var(--mono);font-size:11px;color:var(--teal);cursor:pointer}
+.irow[data-status="priority"]{box-shadow:inset 3px 0 0 var(--oxide)}
+.irow[data-status="accepted"]{box-shadow:inset 3px 0 0 var(--teal)}
+.irow[data-status="parked"]{opacity:.68}
 .xin .ask{margin:16px 0 0}
 @media(max-width:720px){
   .boardbar,.rhead{grid-template-columns:minmax(0,1fr) 150px}
@@ -171,8 +188,10 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
   .irow,.rbar,.gline,.axlab,.rbody{transition:none!important}
 }
 </style>
+<link rel="stylesheet" href="assets/desk.css">
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 <nav class="nav-top" aria-label="Manual navigation">
   <div class="nav-in">
     <a href="index.html">The compute desk</a>
@@ -183,10 +202,12 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
     </span>
   </div>
 </nav>
-<div class="wrap">
+<main class="wrap" id="main">
   <p class="eyebrow">Compute desk</p>
   <h1>The issues list</h1>
-  <p class="introline">every negotiable term of the reference deal · what the draft says · what you ask for · what it's worth — click a row to open it</p>
+  <p class="introline">reference deal · draft position · proposed ask · modeled exposure — open a row for the clause, redline, and calculation</p>
+  <dl class="decision-strip"><div><dt>Decision supported</dt><dd><strong>Which contract issues deserve negotiation priority?</strong></dd></div><div><dt>Primary output</dt><dd>Scenario exposure, proposed position, and redline</dd></div><div><dt>Model boundary</dt><dd>Composite agreement; exposure is not expected value or additive savings</dd></div></dl>
+  <p class="scope-note warning"><strong>Illustrative negotiation aid—not legal advice.</strong> The agreement is a fictional composite. Terms vary by provider, jurisdiction, and deal; use counsel for an actual agreement. Dollar figures are scenario exposure, are not probability-adjusted, and should not be added together.</p>
 
   <section id="refdeal" aria-label="The reference deal">
     <div class="dealcard">
@@ -202,7 +223,7 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
         <div class="df"><span class="dfl">prepay $</span><span class="dfv" id="dcpp">—</span></div>
       </div>
     </div>
-    <p class="dealcap">the reference deal — every figure in the $ column is computed against it</p>
+    <p class="dealcap">the reference deal — numerical exposures use these values unless a row is explicitly labeled illustrative</p>
   </section>
 
   <section id="issues" aria-label="The issues list">
@@ -383,10 +404,10 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
     </div>
     <p class="allowed" id="al"></p>
     <div class="sliders">
-      <div class="sl"><label>Platform outage this month <b id="pv">0.0 h</b></label><input type="range" id="ps" min="0" max="24" step="0.5" value="0"></div>
-      <div class="sl"><label>Node-level failures <b id="nv">5,000 GPU-h</b></label><input type="range" id="ns" min="0" max="20000" step="250" value="5000"></div>
-      <div class="sl"><label>Fleet under contract <b id="fv">512 GPUs</b></label><input type="range" id="fs" min="128" max="4096" step="128" value="512"></div>
-      <div class="sl"><label>True cost per lost GPU-h <b id="mv">3.0× rate</b></label><input type="range" id="msl" min="1" max="10" step="0.5" value="3"></div>
+      <div class="sl"><label for="ps">Platform outage this month <b id="pv">0.0 h</b></label><input type="range" id="ps" min="0" max="24" step="0.5" value="0"></div>
+      <div class="sl"><label for="ns">Node-level failures <b id="nv">5,000 GPU-h</b></label><input type="range" id="ns" min="0" max="20000" step="250" value="5000"></div>
+      <div class="sl"><label for="fs">Fleet from reference deal <b id="fv">1,024 GPUs</b></label><input type="range" id="fs" min="128" max="4096" step="128" value="1024" disabled aria-describedby="fleetHelp"><span id="fleetHelp" class="sr-only">Controlled by committed capacity in the reference deal above</span></div>
+      <div class="sl"><label for="msl">Downstream cost per lost GPU-h <b id="mv">3.0× rate</b></label><input type="range" id="msl" min="1" max="10" step="0.5" value="3"></div>
     </div>
     <label class="excl"><input type="checkbox" id="ex"> provider invokes exclusions (maintenance window / force majeure)</label>
   </div>
@@ -398,7 +419,7 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
     <div class="tk"><p class="l">Recovery ratio</p><p class="v" id="c4">—</p></div>
   </div>
   <p class="status" id="st"></p>
-              <p class="excap">Model is illustrative: 730-hour month, the reference deal's contract rate, credits computed as tier % of monthly fees, node failures spread evenly across the window. Tier schedules are representative of published cloud SLAs (10% / 25% / 100% escalation; 99.99% commitments add a 30–50% band). The true downstream cost of an outage — churn, breached customer SLAs, engineering time — is what the multiplier slider approximates, and it is almost always the biggest number on this page.</p>
+              <p class="excap">Illustrative model: 730-hour month, the reference deal's live rate and capacity, credits computed as a tier percentage of monthly fees, and node failures spread evenly across the window. Tier schedules are a representative composite. The downstream-cost multiplier is a sensitivity input, not an empirical estimate.</p>
             </div>
           </div>
         </div>
@@ -514,9 +535,9 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
               <p class="capsline">PROVIDER'S AGGREGATE LIABILITY UNDER THIS AGREEMENT IS CAPPED AT FEES PAID IN THE <del>THREE (3) MONTHS</del> <ins>TWELVE (12) MONTHS</ins> PRECEDING THE CLAIM, AND SERVICE CREDITS ARE CUSTOMER'S SOLE AND EXCLUSIVE REMEDY FOR ANY FAILURE OF AVAILABILITY.<ins> THE CAP DOES NOT APPLY TO BREACHES OF CONFIDENTIALITY OR DATA PROTECTION, OR TO PROVIDER'S GROSS NEGLIGENCE OR WILLFUL MISCONDUCT.</ins></p>
               <p>4.3 If Monthly Uptime falls below the Committed Level of <select class="lvl" aria-label="Committed Level, percent"><option value="0">99.0</option><option value="1">99.5</option><option value="2" selected>99.9</option></select>%, Customer's sole and exclusive remedy is a Service Credit per the Schedule below, applied against future invoices only<del>, provided Customer submits a written claim with supporting logs within thirty (30) days of the incident</del>.<ins> Credits are calculated automatically from Provider telemetry, which Customer may audit on request.</ins></p>
             </div>
-            <p class="xread"><span class="xk">the read</span><b>r15</b> — note what this redline does <em>not</em> do: it doesn't delete the cap or the sole-remedy language. sophisticated buyers widen the cap, carve out the unforgivable, and build the <a class="iref" href="#ir-chronic">chronic-breach exit</a> around it. the trap below describes the draft; this is what beating it actually looks like.</p>
+            <p class="xread"><span class="xk">the read</span><b>r15</b> — this redline does <em>not</em> delete the cap or the sole-remedy language. A buyer may seek a wider cap, specific carve-outs, and the <a class="iref" href="#ir-chronic">chronic-breach exit</a>; the appropriate position depends on leverage and counsel.</p>
             <p class="xread"><b>r9</b> — flip the burden of proof: automatic credits from auditable telemetry, not a claims process you must win inside thirty days.</p>
-            <div class="ask trap"><b>the trap</b>'Credits as sole remedy' plus a liability cap is the whole ballgame; the nines are decoration around it.</div>
+            <div class="ask trap"><b>the interaction</b>Sole-remedy language and the liability cap can materially limit the practical value of an availability commitment.</div>
             <p class="xmodel"><span class="xk">the model</span>9 × monthly — recoverable delta on a catastrophic claim: 12-month ask minus 3-month draft cap</p>
           </div>
         </div>
@@ -571,13 +592,13 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
   </section>
 
   <div class="notes">
-    <h2>Reading the paper like a buyer</h2>
-    <p><strong>The definition of "unavailable" matters more than the uptime number.</strong> Most SLAs define "unavailable" at the platform or region level: the API is down, everything is down. But the way GPU fleets actually fail is constant, machine-by-machine trouble — a GPU stops responding, its memory throws errors, a network card keeps dropping and reconnecting — and under a platform-level definition, none of it counts as downtime. Meta's Llama 3 team reported 419 unexpected interruptions in 54 days of training on 16,384 H100s, roughly one hardware failure every three hours, overwhelmingly at the node level. Under boilerplate SLA language, that entire experience measures as 100% uptime. And it isn't a training-run anecdote: Modal, operating a 20,000 GPU multi-cloud pool, reports the same machine-level failures — memory errors, overheating, hardware slowdowns — and concludes "it's underappreciated how unreliable GPUs are." Open the <a class="iref" href="#ir-def">definition of "available"</a> row above and switch what "unavailable" means in the sample contract: the same month of failures pays anywhere from zero to six figures in credits.</p>
+    <h2>Negotiation notes</h2>
+    <p><strong>The definition of "unavailable" determines which incidents count.</strong> Platform- or region-level definitions can exclude node, GPU, memory, and network-component failures while the API remains reachable. Meta's Llama 3 team reported 419 unexpected interruptions during 54 days of training on 16,384 H100s, with hardware failures occurring at the node level; Modal has also described recurring machine-level faults across a multi-cloud GPU pool. Open the <a class="iref" href="#ir-def">definition of "available"</a> row and compare platform-level with instance-level measurement in the illustrative contract.</p>
     <div class="ask"><b>Ask the supplier</b>Define "unavailable" for me — does it include a single node down, or degraded interconnect performance, or only full loss of the API? And what was your fleet's node-level annualized failure rate last quarter?</div>
-    <p><strong>The measurement window.</strong> A one-hour outage is a 99.86% month — a breach of a 99.9% monthly commitment — but a 99.989% year, no breach at all. Same incident, same headline percentage, different clause, different payout. Annual measurement dilutes every incident by a factor of twelve; monthly measurement is the buyer's floor position.</p>
+    <p><strong>The measurement window changes the threshold result.</strong> A one-hour outage is approximately 99.86% availability in a 730-hour month, but approximately 99.989% over a year. Specify the window, data source, aggregation level, and claim mechanics rather than relying on the headline percentage alone.</p>
     <div class="ask"><b>Ask the supplier</b>Measured monthly or annually? Read me the exclusions list. And what's the claims process — automatic, or do I file with logs inside 30 days?</div>
-    <p><strong>Credits pay on the rare event, never on the common one.</strong> Open the definition row and work its calculator: for a total platform outage, tiered credits (10–100% of monthly fees) can look adequate, even generous, against the direct GPU-hour loss. That's by design — total outages are rare, capped at one month's fees, paid only if you file a claim, and often excluded, so they're cheap to promise. The constant machine-level failures that actually dominate the cost of running GPUs pay nothing. And credits are service credits against future bills, not cash — worth exactly zero if the relationship is ending, which is the moment you'd most want them.</p>
-    <p><strong>What actually protects a serious customer isn't the availability SLA at all</strong> — it's operational commitments: time-to-replace on a failed node, hot-spare pools held against your cluster, burn-in and acceptance testing before delivery, and the right to terminate after repeated breaches. Those clauses cost the provider real money to honor, which is precisely why they say more about fleet quality than the 99.9% on the cover page.</p>
+    <p><strong>Credit recovery depends on the measured failure.</strong> Open the definition row and use its calculator: a total platform outage may trigger a tier, while recurring node-level failures may not register under a platform-only definition. Credits are commonly applied to future fees rather than paid as cash, which can reduce their value when the relationship is ending.</p>
+    <p><strong>Operational commitments complement service credits.</strong> Time-to-replace, dedicated spares, burn-in and acceptance testing, telemetry access, and termination rights address failure response and recurrence directly. Review them alongside the availability percentage and credit schedule.</p>
     <div class="ask"><b>Ask the supplier</b>Forget credits: what's your committed time-to-replace on a failed node, do you hold hot spares against my cluster, and do I get the right to terminate after repeated breaches?</div>
   </div>
   <details class="srcblock">
@@ -595,11 +616,13 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
       <li>all parties, dollar figures, and dates in the agreement are fictional and illustrative.</li>
     </ul>
   </details>
-  <p class="foot">companion to the rest of the desk · sources in the block above · compiled July 2026</p>
+  <div class="tool-actions"><button type="button" data-copy-link>copy scenario link</button><button type="button" id="exportIssues">export issues CSV</button><button type="button" data-print>print review</button></div><p class="tool-message" aria-live="polite"></p>
+  <p class="foot">illustrative composite · model version 2026.08 · <a href="methodology.html">methods, legal limitation &amp; sources</a></p>
   <nav class="nav-bot" aria-label="Manual navigation">
     <a class="nav-prev" href="plate-pod.html">← The pod</a>
   </nav>
-</div>
+</main>
+<script src="assets/desk.js"></script>
 <script>
 /* shared credit-schedule constants — single source of truth for Exhibit A, Clause 4.4, and the deal ticket */
 var COMMITS=[
@@ -609,11 +632,16 @@ var COMMITS=[
 ];
 var DEFS=[{id:"plat",label:"platform down"},{id:"inst",label:"instance-level"}];
 var WINS=[{id:"mo",label:"monthly",hrs:730},{id:"yr",label:"annual",hrs:8760}];
-var cSel=2,dSel=1,wSel=0; /* B2b: the widget opens on the instance-level definition — the ask being priced */
+var slaParams=ComputeDesk.params();
+var cSel=slaParams.has('sla')?Math.max(0,Math.min(COMMITS.length-1,+slaParams.get('sla')||0)):2,dSel=slaParams.get('def')==='plat'?0:1,wSel=slaParams.get('win')==='yr'?1:0;
 var platH=0,nodeGH=5000,fleet=512,mult=3,excl=false;
 var RATE=2.5,HM=730,CAL={credit:0,loss:0};
+if(slaParams.has('platform'))platH=Math.max(0,+slaParams.get('platform')||0);
+if(slaParams.has('node'))nodeGH=Math.max(0,+slaParams.get('node')||0);
+if(slaParams.has('mult'))mult=Math.max(1,+slaParams.get('mult')||3);
+if(slaParams.get('excl')==='1')excl=true;
 function seg(el,items,sel,cb){
-  var h="";items.forEach(function(it,i){h+='<button class="'+(i===sel?"on":"")+'">'+it.label+"</button>"});
+  var h="";items.forEach(function(it,i){h+='<button type="button" aria-pressed="'+(i===sel)+'" class="'+(i===sel?"on":"")+'">'+it.label+"</button>"});
   el.innerHTML=h;
   el.querySelectorAll("button").forEach(function(b,i){b.addEventListener("click",function(){cb(i)})});
 }
@@ -636,15 +664,18 @@ function allowedText(){
 }
 function render(){
   var commit=COMMITS[cSel], win=WINS[wSel];
-  var spend=fleet*RATE*HM;
-  var weightedDown=platH+(dSel===1?nodeGH/fleet:0);
+  var activeFleet=(typeof dcG!=="undefined"&&typeof GOPTS!=="undefined")?GOPTS[dcG]:fleet;
+  var activeRate=typeof dcRate!=="undefined"?dcRate:RATE;
+  fleet=activeFleet;RATE=activeRate;
+  var spend=activeFleet*activeRate*HM;
+  var weightedDown=platH+(dSel===1?nodeGH/activeFleet:0);
   var uptime=1-weightedDown/win.hrs;
   var tier=0;
   if(!excl){
     commit.tiers.forEach(function(t){if(uptime<t[0])tier=t[1]});
   }
   var credit=spend*tier/100;
-  var loss=(platH*fleet+nodeGH)*RATE*mult;
+  var loss=(platH*activeFleet+nodeGH)*activeRate*mult;
   var ratio=loss>0?credit/loss:(credit>0?Infinity:0);
   document.getElementById("al").innerHTML=allowedText();
   document.getElementById("pv").textContent=platH.toFixed(1)+" h";
@@ -661,27 +692,32 @@ function render(){
   else{c4.textContent=Math.round(ratio*100)+"%";c4.className="v"+(ratio<0.25?" bad":"")}
   var msg;
   if(excl){
-    msg="The exclusions clause fired — the incident was classified as scheduled maintenance or force majeure, so measured downtime is forgiven and credits are $0. Every SLA has this clause; the only questions are how wide it's drawn and who decides.";
+    msg="The selected exclusion removes this incident from the credit calculation. In an actual agreement, review the scope, notice mechanics, and who determines whether an exclusion applies.";
   }else if(dSel===0&&nodeGH>0&&platH===0){
-    msg=nodeGH.toLocaleString()+" GPU-hours of node failures — the failure mode that actually dominates GPU fleets — never touched the availability metric, because \"unavailable\" means the platform, not your nodes. Measured uptime: perfect. Credits: $0. The definition clause just ate your claim.";
+    msg=nodeGH.toLocaleString()+" GPU-hours of node failures do not enter this calculation because the selected definition measures platform availability. Modeled uptime remains 100% and modeled credits remain $0. Compare an instance-level definition and review the exclusions clause.";
   }else if(dSel===0&&platH>0&&tier===0){
-    msg="The outage happened, but "+(wSel===1?"annual measurement diluted it below the breach threshold — the same incident breaches a monthly window. ":"it stayed inside the allowed downtime budget. ")+"No tier triggered, no credit owed. The nines held; you still ate "+money(loss)+".";
+    msg="The outage happened, but "+(wSel===1?"annual measurement diluted it below the breach threshold — the same incident breaches a monthly window. ":"it stayed inside the allowed downtime budget. ")+"No tier triggered; modeled direct and downstream exposure is "+money(loss)+".";
   }else if(tier>0&&ratio>=1){
-    msg="On paper the credit covers the direct loss — tiered credits are designed to look adequate exactly here, on the rare total outage, because it's capped at a month's fees, claims-gated, and infrequent. Now drag node-level failures up and platform outage to zero: the chronic mode pays nothing. And remember these are service credits against future bills, not cash.";
+    msg="In this scenario the modeled credit covers the selected direct-loss multiplier. Test node-level incidents separately, and confirm whether credits are automatic, claims-based, refundable, or limited to future invoices.";
   }else if(tier>0){
-    msg="A breach, a tier, a payout — and it still recovers only "+Math.round(ratio*100)+"% of what the month truly cost once churn, downstream SLAs, and engineering time are counted. Credits are a rebate, not insurance; the protection you actually want is operational — time-to-replace, hot spares, exit rights.";
+    msg="The selected breach triggers a credit equal to "+Math.round(ratio*100)+"% of the modeled direct and downstream exposure. Review time-to-replace, spares, telemetry, and exit rights for losses the credit schedule does not address.";
   }else{
-    msg="A clean month — nothing to claim. Use the sliders to stage a bad one: start with node-level failures alone, then flip the definition of \"unavailable\" and watch the same month change value by six figures.";
+    msg="No selected incident triggers a claim. Add platform or node-level downtime, then compare definitions and measurement windows to see which incidents enter the calculation.";
   }
   document.getElementById("st").textContent=msg;
   CAL.credit=credit;CAL.loss=loss;
+  document.getElementById('fs').value=Math.min(4096,activeFleet);
+  ComputeDesk.setParams({sla:cSel,def:DEFS[dSel].id,win:WINS[wSel].id,platform:platH,node:nodeGH,mult:mult,excl:excl?1:null});
   if(typeof renderBoard==="function")renderBoard(true);
 }
 document.getElementById("ps").addEventListener("input",function(){platH=+this.value;render()});
 document.getElementById("ns").addEventListener("input",function(){nodeGH=+this.value;render()});
-document.getElementById("fs").addEventListener("input",function(){fleet=+this.value;render()});
 document.getElementById("msl").addEventListener("input",function(){mult=+this.value;render()});
 document.getElementById("ex").addEventListener("change",function(){excl=this.checked;render()});
+document.getElementById('ps').value=platH;
+document.getElementById('ns').value=nodeGH;
+document.getElementById('msl').value=mult;
+document.getElementById('ex').checked=excl;
 rebuild();
 
 /* ===================== additive — phase 3 ===================== */
@@ -731,7 +767,7 @@ function wrapTerms(root){
      });
      if(bi<0){frag.appendChild(document.createTextNode(rest));break}
      if(bi>0)frag.appendChild(document.createTextNode(rest.slice(0,bi)));
-     var sp=document.createElement("span");sp.className="gl";sp.setAttribute("data-term",bp.k);sp.textContent=best;
+     var sp=document.createElement("span");sp.className="gl";sp.setAttribute("data-term",bp.k);sp.setAttribute("tabindex","0");sp.setAttribute("role","button");sp.setAttribute("aria-label",best+": glossary definition");sp.textContent=best;
      frag.appendChild(sp);
      rest=rest.slice(bi+best.length);
    }
@@ -777,6 +813,8 @@ document.addEventListener("click",function(ev){
  if(!tpop.contains(ev.target))hideTermPop();
 });
 document.addEventListener("keydown",function(ev){if(ev.key==="Escape")hideTermPop()});
+document.addEventListener("focusin",function(ev){if(ev.target.classList&&ev.target.classList.contains("gl"))showTermPop(ev.target)});
+document.addEventListener("focusout",function(ev){if(ev.target.classList&&ev.target.classList.contains("gl"))scheduleTermHide()});
 
 /* ===================== B2 — shared deal constants ===================== */
 var GOPTS=[256,512,1024,2048,4096],MOPTS=[12,24,36];
@@ -792,6 +830,10 @@ document.querySelectorAll("select.lvl").forEach(function(s){s.addEventListener("
 /* ===================== B2b — the reference deal + the $ engine ===================== */
 /* deal state (same option sets and math as the B2 ticket; formulas per brief B2b Task 3) */
 var dcG=2,dcM=1,dcRate=2.35,dcPre=15;
+if(slaParams.has('g')){var gi=GOPTS.indexOf(+slaParams.get('g'));if(gi>=0)dcG=gi}
+if(slaParams.has('term')){var mi=MOPTS.indexOf(+slaParams.get('term'));if(mi>=0)dcM=mi}
+if(slaParams.has('rate'))dcRate=Math.max(1.75,Math.min(3.25,+slaParams.get('rate')||2.35));
+if(slaParams.has('pre'))dcPre=Math.max(0,Math.min(25,+slaParams.get('pre')||0));
 function deal(){
  var g=GOPTS[dcG],m=MOPTS[dcM],mo=g*dcRate*HM;
  return {g:g,m:m,monthly:mo,tcv:mo*m,prepay:mo*m*dcPre/100};
@@ -842,7 +884,9 @@ function renderDeal(){
  document.getElementById("dcmo").textContent=dollars(d.monthly);
  document.getElementById("dctcv").textContent=dollars(d.tcv);
  document.getElementById("dcpp").textContent=dollars(d.prepay);
- if(typeof renderBoard==="function")renderBoard(true);
+ fleet=d.g;RATE=dcRate;
+ ComputeDesk.setParams({g:d.g,term:d.m,rate:dcRate.toFixed(2),pre:dcPre});
+ if(typeof render==="function")render();
 }
 document.getElementById("dcgd").addEventListener("click",function(){if(dcG>0){dcG--;renderDeal()}});
 document.getElementById("dcgi").addEventListener("click",function(){if(dcG<GOPTS.length-1){dcG++;renderDeal()}});
@@ -850,10 +894,13 @@ document.getElementById("dcmd").addEventListener("click",function(){if(dcM>0){dc
 document.getElementById("dcmi").addEventListener("click",function(){if(dcM<MOPTS.length-1){dcM++;renderDeal()}});
 document.getElementById("dcr").addEventListener("input",function(){dcRate=+this.value;renderDeal()});
 document.getElementById("dcp").addEventListener("input",function(){dcPre=+this.value;renderDeal()});
+document.getElementById('dcr').value=dcRate;
+document.getElementById('dcp').value=dcPre;
 
 /* the board — log-$ axis, bars glide on deal change, FLIP re-rank under $-sort */
 var sortMode="$";
 var RMQ=window.matchMedia?window.matchMedia("(prefers-reduced-motion: reduce)"):{matches:false};
+var boardReady=false;
 function currentOrder(){
  var stakes=rowStakes();
  if(sortMode==="clause"){stakes.sort(function(a,b){return a.ord-b.ord})}
@@ -912,7 +959,8 @@ function renderBoard(glide){
  var dm=document.getElementById("xdefmodel");
  if(dm)dm.textContent=defModelText();
  document.querySelectorAll(".xmonths").forEach(function(sp){sp.textContent=String(MOPTS[dcM])});
- if(sortMode==="$")applyOrder(glide);
+ if(sortMode==="$")applyOrder(glide&&boardReady);
+ boardReady=true;
 }
 function defModelText(){
  if(dSel!==1)return "platform-level measures the same bad year clean — $0 recovered; flip “unavailable” to instance-level in Exhibit A below to price what the draft definition erases";
@@ -1000,6 +1048,25 @@ document.addEventListener("click",function(ev){
  else arriveAt(id);
 });
 if(location.hash)arriveAt(location.hash.slice(1));
+/* deal-team workflow: local review status, redline copy, and CSV export */
+var workflowState={};
+try{workflowState=JSON.parse(localStorage.getItem('computeDeskIssueState')||'{}')}catch(e){}
+document.querySelectorAll('#brows .irow').forEach(function(row){
+ var key=row.getAttribute('data-k'),xin=row.querySelector('.xin'),wrap=document.createElement('div');
+ wrap.className='workflow';
+ wrap.innerHTML='<label>Review status<select aria-label="Review status for '+key+'"><option value="open">open</option><option value="priority">priority</option><option value="accepted">accepted</option><option value="parked">parked</option></select></label><button type="button">copy proposed redline</button>';
+ var select=wrap.querySelector('select'),copy=wrap.querySelector('button');
+ select.value=workflowState[key]||'open';row.setAttribute('data-status',select.value);
+ select.addEventListener('change',function(){workflowState[key]=this.value;row.setAttribute('data-status',this.value);localStorage.setItem('computeDeskIssueState',JSON.stringify(workflowState))});
+ copy.addEventListener('click',function(){var red=row.querySelector('.xrl');ComputeDesk.copyText(red?red.innerText.trim():'No redline supplied',copy,'Redline copied')});
+ xin.appendChild(wrap);
+});
+document.getElementById('exportIssues').addEventListener('click',function(){
+ var rows=['issue,status,exposure,label'];
+ rowStakes().forEach(function(s){var vals=[s.k,workflowState[s.k]||'open',s.v===null?'':Math.round(s.v),s.tag];rows.push(vals.map(function(v){return '"'+String(v).replace(/"/g,'""')+'"'}).join(','))});
+ rows.push('');rows.push('"Scenario","'+location.href.replace(/"/g,'""')+'"');
+ ComputeDesk.download('compute-desk-issues.csv',rows.join('\n'),'text/csv;charset=utf-8');
+});
 renderDeal();
 </script>
 </body>
