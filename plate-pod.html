@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Map one illustrative GPU fabric from logical topology to physical racks, cable assemblies, transceivers, and failure domains.">
-<meta property="og:title" content="The Pod — a GPU fabric made physical">
-<meta property="og:description" content="A staged 3D view of one representative row layout and its cabling choices.">
+<meta name="description" content="Pull back to a whole datacenter row. Follow its cables and explore what happens when a connection fails.">
+<meta property="og:title" content="One rack is just the beginning — The Compute Desk">
+<meta property="og:description" content="Pull back to a whole datacenter row. Follow its cables and explore what happens when a connection fails.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://alexkyen.github.io/compute-desk/social-card.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:url" content="https://alexkyen.github.io/compute-desk/plate-pod.html">
 <link rel="canonical" href="https://alexkyen.github.io/compute-desk/plate-pod.html">
-<title>The pod — a GPU fabric made physical</title>
+<title>One rack is just the beginning — The Compute Desk</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -107,27 +107,23 @@ p a.xlink{margin-left:.5em}
 .stepper a.st:hover::after,.stepper a.st:focus-visible::after{opacity:1}
 </style>
 <link rel="stylesheet" href="assets/desk.css">
+<link rel="stylesheet" href="assets/experience.css">
+<link rel="stylesheet" href="assets/tool-experience.css">
+<link rel="stylesheet" href="assets/network-experiences.css">
+<meta name="theme-color" content="#181a17">
 </head>
-<body>
+<body class="experience tool-page pod-page">
 <a class="skip-link" href="#main">Skip to content</a>
-<nav class="nav-top" aria-label="Manual navigation">
-  <div class="nav-in">
-    <a href="index.html">The compute desk</a>
-    <span class="nav-here">07 / 08 — The pod</span>
-    <span class="stepper">
-      <a class="st" href="the-two-trees.html" data-t="The two topologies" aria-label="Previous: The two topologies">←</a>
-      <a class="st" href="sla-anatomy.html" data-t="The issues list" aria-label="Next: The issues list">→</a>
-    </span>
-  </div>
-</nav>
+<header class="site-header">
+  <a class="wordmark" href="index.html" aria-label="The Compute Desk home"><span class="brand-icon" aria-hidden="true">✳</span> THE COMPUTE DESK</a>
+  <nav aria-label="Main navigation"><a class="nav-explore" href="index.html#explore">Explore</a><a href="index.html#toolbox">The toolbox <span aria-hidden="true">↗</span></a></nav>
+</header>
 <main class="wrap" id="main">
-  <p class="eyebrow">Compute desk · companion page</p>
-  <h1>The pod</h1>
-  <p class="dek">Map one illustrative logical topology onto a physical row. Use it to check where switches, cable assemblies, transceivers, and failure domains sit; actual media and placement vary with speed, reach, and vendor design.</p>
-  <dl class="decision-strip"><div><dt>Decision supported</dt><dd><strong>Does the physical layout match the quoted logical fabric?</strong></dd></div><div><dt>Primary output</dt><dd>Placement, cabling, and failure-domain diligence</dd></div><div><dt>Evidence boundary</dt><dd>Representative row, not a construction drawing or cable schedule</dd></div></dl>
+  <header class="tool-intro"><div><p class="overline">02 / THE BIGGER PICTURE</p><h1>One rack is just the beginning.</h1></div><p class="dek">Pull back. Follow the cables. See how a room full of machines becomes one enormous computer.</p></header>
+
 
   <div class="card plate-card">
-    <div class="stages" id="tabs" role="tablist" aria-label="Stages of the plate"></div>
+    <div class="stages" id="tabs" role="tablist" aria-label="Explore the datacenter in four chapters"></div>
     <div class="subrow" id="subrow" hidden></div>
     <div class="viewport">
       <div class="scene" id="scene-wrap">
@@ -177,13 +173,13 @@ p a.xlink{margin-left:.5em}
 <text x="735" y="335" text-anchor="middle" style="font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;fill:var(--ink-2)">spines</text>
 <text x="480" y="402" text-anchor="middle" style="font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;fill:var(--ink-3)">8 compute racks · row ≈ 6 m</text>
 </svg>
-          <p class="fig-cap">Static figure (3D view unavailable): the row, stage I of the plate — eight compute racks, the end-of-row switch rack, and the tray overhead. The stage tabs still switch the reading at right.</p>
+          <p class="fig-cap">A still view of the room. The interactive model is unavailable, but the four chapters still explain how it works.</p>
         </div>
       </div>
       <aside class="panel" id="panel" role="tabpanel" aria-live="polite">
-        <p class="stage-eyebrow" id="an-eyebrow">Stage I — the row</p>
-        <h2 id="an-title">The rack joins a row</h2>
-        <p class="an-body" id="an-body">Eight compute racks stand in one representative row. The green rack is the NVL72 from the companion page; a ninth rack illustrates one possible location for network equipment. An overhead pathway carries the inter-rack cable assemblies shown in later stages.</p>
+        <p class="stage-eyebrow" id="an-eyebrow">CHAPTER 01 / ZOOM OUT</p>
+        <h2 id="an-title">A room with a purpose.</h2>
+        <p class="an-body" id="an-body">Eight racks of chips. One rack of network switches. The highlighted rack is the machine you just met. Cables overhead let the racks work together.</p>
         <div class="stats" id="an-stats">
           <div class="stat"><span class="l">Compute racks</span><span class="v teal">8</span></div>
           <div class="stat"><span class="l">Switch rack</span><span class="v teal">1</span></div>
@@ -194,23 +190,25 @@ p a.xlink{margin-left:.5em}
     </div>
     <div class="count-row" id="counts" aria-live="off"></div>
   </div>
-  <p class="hint">drag to orbit · scroll or pinch to zoom · re-selecting a stage replays its move</p>
+  <div class="scene-controls"><p class="hint">Drag to look around · pinch or scroll to get closer</p><button type="button" id="pausePod" aria-pressed="false">Pause motion</button></div>
 
-  <div class="notes">
+  <details class="notes reading-notes"><summary>The details, if you’re curious <span aria-hidden="true">+</span></summary><div class="detail-body">
+  <dl class="decision-strip"><div><dt>Decision supported</dt><dd><strong>Does the physical layout match the quoted logical fabric?</strong></dd></div><div><dt>Primary output</dt><dd>Placement, cabling, and failure-domain diligence</dd></div><div><dt>Evidence boundary</dt><dd>Representative row, not a construction drawing or cable schedule</dd></div></dl>
     <h2>Physical-design diligence</h2>
     <p><strong>The topology diagram becomes a placement and port map.</strong> A supplier's logical leaf and spine tiers must resolve to physical switches, ports, cable assemblies, and pathways. This illustration places leaves at top of rack and spines at end of row; other designs use middle-of-row, centralized, or distributed placement. Ask for both diagrams and reconcile them.</p>
     <p><strong>Distance and line rate determine media.</strong> Short links may use passive copper; longer or faster links may require AEC, AOC, or optical assemblies. A logical edge may map to multiple lanes or cables, and the cost depends on the actual bill of materials. At 2:1, this illustration removes half the leaf-to-spine capacity and associated assemblies. <a class="xlink" href="the-fabric.html">Model the communication sensitivity →</a></p>
     <p><strong>Rails change both cost and failure shape.</strong> In the single-plane illustration, removing a rail switch affects the corresponding path across attached nodes. Redundant planes, routing, and collective configuration determine whether jobs stall or continue at reduced bandwidth. <a class="xlink" href="the-two-trees.html">Configure the topology estimate →</a></p>
     <div class="ask"><b>Ask the supplier</b>Walk me down the row: which rack holds the spines, how many fibers are in the tray at my oversubscription ratio — and when one rail switch dies, which port goes dark on which racks, and which of my jobs stall?</div>
     <p style="margin-top:18px">The toy pod keeps the wiring readable: eight racks, four spines, one fiber per graph edge, counts in the dozens. Real rows run longer, real pods span many rows, and real trays carry thousands of fibers. The geometry of the argument — copper inside the rack, light between racks, rails as stripes down the row — is what scales; the numbers are not.</p>
-  </div>
+  </div></details>
   <div class="tool-actions"><button type="button" data-copy-link>copy stage link</button></div><p class="tool-message" aria-live="polite"></p>
   <p class="foot">schematic representative row · logical edges are not a construction cable schedule · model version 2026.08 · <a href="methodology.html">methods &amp; limitations</a></p>
-  <nav class="nav-bot" aria-label="Manual navigation">
-    <a class="nav-prev" href="the-two-trees.html">← The two topologies</a>
-    <a class="nav-next" href="sla-anatomy.html">The issues list →</a>
+  <nav class="nav-bot" aria-label="Continue exploring">
+    <a class="nav-prev" href="plate-nvl72.html"><span class="next-label">PREVIOUS EXPLORATION</span>← Meet the machine</a>
+    <a class="nav-next" href="silicon-ladder.html"><span class="next-label">KEEP EXPLORING</span>Meet the chips →</a>
   </nav>
 </main>
+<footer class="experience-footer"><a class="wordmark" href="index.html">THE COMPUTE DESK <span class="brand-icon" aria-hidden="true">✳</span></a><span>Made for curious people. By Alex Yen.</span><a href="methodology.html">Methods &amp; sources ↗</a></footer>
 
 <script src="assets/desk.js"></script>
 <script src="assets/three-r147.min.js"></script>
@@ -227,18 +225,18 @@ p a.xlink{margin-left:.5em}
 
 /* ---------- stage copy (the deliverable; the model serves it) ---------- */
 var STAGES=[
- {tab:"I — Row",eyebrow:"Stage I — the row",title:"The rack joins a row",
-  body:"Eight compute racks stand in one representative row. The green rack is the NVL72 from the companion page; a ninth rack illustrates one possible location for network equipment. An overhead pathway carries the inter-rack cable assemblies shown in later stages. Actual switch placement and pathway design vary.",
-  stats:[["Compute racks","8","teal"],["Switch rack","1","teal"],["Rack height","2.36 m","teal"],["Row length","≈ 5.9 m","amber"]]},
- {tab:"II — Diagram",eyebrow:"Stage II — the diagram made physical",title:"The graph, drawn twice",
-  body:"The fat-tree from the network pages becomes a physical port and pathway problem. This example places one leaf at the top of each rack and four spines in an end-of-row rack. The floating diagram shows the correspondence, but each logical edge can map to one or more cable assemblies and lanes. Hover or tap a node to identify the illustrated box.",
-  stats:[["Leaves","8 illustrated","teal"],["Spines","4 illustrated","teal"],["Logical edges","32","teal"],["Physical mapping","confirm BOM","amber"]]},
- {tab:"III — Tray",eyebrow:"Stage III — the tray is the bill",title:"The tray is the bill",
-  body:"Media follows speed and reach: short links may use passive copper, while longer or faster paths may require AEC, AOC, or optical assemblies. Flip to 2:1 and this schematic removes half the leaf-to-spine capacity and associated assemblies. Treat the counts as logical planning quantities until the vendor supplies the physical BOM.",
-  stats:[["Short links","copper / AEC possible","teal"],["Links at 1:1","32 schematic","amber"],["Endpoints at 1:1","64 schematic","amber"],["At 2:1","16 · 32","amber"]]},
- {tab:"IV — Rails",eyebrow:"Stage IV — rails",title:"The same tray, rewired",
-  body:"Rewire the example into eight rails—one per GPU position—and the illustrated spine tier disappears. In the single-plane failure view, rail 4 removes the same path across attached nodes. Whether a workload stalls or continues at reduced bandwidth depends on redundant planes, routing, and collective configuration. Trace the off-rail flow to see the illustrated detour.",
-  stats:[["Switch boxes","12 → 8","teal"],["Spine tier","deleted","teal"],["Rail down: racks hit","8 / 8","amber"],["Off-rail traffic","detours","amber"]]}
+ {tab:"01 / The room",eyebrow:"CHAPTER 01 / ZOOM OUT",title:"A room with a purpose.",
+  body:"Eight racks of chips. One rack of network switches. The highlighted rack is the machine you just met. Cables overhead let the racks work together.",
+  stats:[["Compute racks","8","teal"],["Network rack","1","teal"],["Rack height","2.36 m","teal"],["Illustrated row","≈ 5.9 m","amber"]]},
+ {tab:"02 / The connections",eyebrow:"CHAPTER 02 / MAKE THE CONNECTION",title:"A map becomes a machine.",
+  body:"A network diagram is a map of real equipment. Small switches on each rack connect to bigger shared switches. Lift the diagram to see how the pieces line up.",
+  stats:[["Rack switches","8","teal"],["Shared switches","4","teal"],["Connections drawn","32","teal"],["Physical cable count","varies by design","amber"]]},
+ {tab:"03 / The cables",eyebrow:"CHAPTER 03 / FOLLOW THE CABLES",title:"Every connection adds up.",
+  body:"Fast connections need real cables and hardware at each end. Halve the uplink capacity and half the illustrated connections disappear. Less equipment also means less room for messages.",
+  stats:[["At full capacity","32 connections","teal"],["Connection ends","64","amber"],["At half capacity","16 connections","teal"],["Connection ends","32","amber"]]},
+ {tab:"04 / The alternative",eyebrow:"CHAPTER 04 / REWIRE THE ROOM",title:"Same room. New routes.",
+  body:"Now matching chip positions share a rail across the room. It takes fewer switches in this example. Try losing a rail or tracing a message that needs a different path.",
+  stats:[["Switches in this example","12 → 8","teal"],["Shared switch tier","removed","teal"],["One rail lost","8 racks affected","amber"],["Cross-rail messages","take a detour","amber"]]}
 ];
 
 /* ---------- panel + tabs (work with or without WebGL) ---------- */
@@ -254,7 +252,12 @@ var tabsEl=document.getElementById("tabs"),
     chipEl=document.getElementById("modechip"),
     sceneWrap=document.getElementById("scene-wrap");
 var reduceMq=window.matchMedia("(prefers-reduced-motion: reduce)");
-function reduced(){return reduceMq.matches}
+var motionPaused=reduceMq.matches;
+var pauseButton=document.getElementById("pausePod");
+function syncPause(){pauseButton.textContent=motionPaused?"Resume motion":"Pause motion";pauseButton.setAttribute("aria-pressed",String(motionPaused))}
+function reduced(){return motionPaused}
+pauseButton.addEventListener("click",function(){motionPaused=!motionPaused;syncPause()});syncPause();
+reduceMq.addEventListener("change",function(){motionPaused=reduceMq.matches;syncPause()});
 var initialStage=Math.max(0,Math.min(3,+ComputeDesk.params().get("stage")||0));
 var shownStage=-1;
 
@@ -288,6 +291,7 @@ function renderPanel(i){
     s.stats.forEach(function(st){h+='<div class="stat"><span class="l">'+st[0]+'</span><span class="v '+st[2]+'">'+st[1]+"</span></div>"});
     statsEl.innerHTML=h;
     panelEl.classList.remove("swap");
+    panelEl.setAttribute("aria-labelledby","tab"+i);
   };
   tabsEl.querySelectorAll("button").forEach(function(b){
     var on=+b.dataset.i===i;
@@ -319,9 +323,9 @@ if(!window.THREE||!webglOK()){
 document.getElementById("fallback-fig").hidden=true;
 
 /* ---------- constants: geometry (m) and site tokens ---------- */
-var TEAL=0x117758,TEALDIM=0xDCEDE4,AMBER=0xD98F12,OXIDE=0xA63B26,
-    INK=0x15201A,INK2=0x4A574F,INK3=0x8A968E,PANEL=0xFDFDFB,COPPER=0xC9860F;
-var RAILC=[0x527C8A,0x3E8A70,0x7A9245,0xB08D3E,0x8A76B5,0xB56F94,0x5D77B5,0x8A8A76];
+var TEAL=0xe7f48b,TEALDIM=0x6b7950,AMBER=0xeac989,OXIDE=0xee9c86,
+    INK=0x86927b,INK2=0xaab99a,INK3=0x79856d,PANEL=0x20231e,COPPER=0xb9a06d;
+var RAILC=[0x9cc8d8,0x8cbaa3,0xc4d886,0xe0bc78,0xb4a5d4,0xda9eba,0x9bafe4,0xc4c8a5];
 
 var W=0.60,H=2.36,D=1.20,PITCH=0.64,NRACK=8,NVLIDX=2;
 var RX=[];for(var ri=0;ri<NRACK;ri++)RX.push(ri*PITCH-2.56);
@@ -351,10 +355,11 @@ try{
 renderer.setClearColor(PANEL,1);
 var scene=new THREE.Scene();
 var camera=new THREE.PerspectiveCamera(38,1.5,0.05,80);
-scene.add(new THREE.HemisphereLight(0xffffff,0xE9E6DC,0.92));
-var dl=new THREE.DirectionalLight(0xffffff,0.45);
+scene.add(new THREE.HemisphereLight(0xf1f3d9,0x11170e,1.15));
+var dl=new THREE.DirectionalLight(0xf8ffe3,1.2);
 dl.position.set(2.6,4.2,3.1);
 scene.add(dl);
+var rim=new THREE.DirectionalLight(0xadc988,0.65);rim.position.set(-4,2,-2);scene.add(rim);
 
 /* ---------- material helpers ---------- */
 function lam(color,op){
@@ -434,18 +439,18 @@ if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){
 });
 
 /* ---------- materials ---------- */
-var matRack=lam(0xF0F2EC),      linRack=lin(INK,0.85),
+var matRack=lam(0x333d2d),      linRack=lin(INK,0.85),
     linNVL=lin(TEAL,0.95),      matBand=lam(TEALDIM),
     matSwFrame=lam(INK2),       linSwFrame=lin(INK,0.9),
-    matLeaf=lam(0xFBFBF7),
+    matLeaf=lam(0x809067),
     matSpine=lam(TEALDIM),
-    matTray=lam(0xE7EAE2),      linTray=lin(INK,0.55),
+    matTray=lam(0x4f5b43),      linTray=lin(INK,0.55),
     matFiber=lin(TEAL,0),
     matTrx=lam(AMBER,0),
     matCopper=lin(COPPER,0),
     matNode=lam(PANEL,0),
     matEdge=lin(TEAL,0),
-    matBank=lam(0xF0F2EC,0),
+    matBank=lam(0x637453,0),
     matPort=lam(0xffffff,0),    // white base: per-instance colors carry the hue
     matTrace=new THREE.MeshLambertMaterial({color:AMBER,emissive:AMBER,emissiveIntensity:0.35,transparent:true,opacity:0}),
     matMark=lam(TEAL,0),
@@ -572,7 +577,7 @@ for(var bk=0;bk<8;bk++){
   scene.add(g);
   bankBoxes.push(g);
 }
-var failX=label("✕","#A63B26",0.22);
+var failX=label("✕","#ee9c86",0.22);
 failX.position.set(SWX-0.14,1.32+0.26*2,0.62);
 failX.material.opacity=0;
 scene.add(failX);
@@ -666,7 +671,7 @@ for(var nl=0;nl<8;nl++){
   m.userData={kind:"node",idx:nl};
   g.add(m);
   g.add(new THREE.LineSegments(lineGeo([edgesOf(nodeGeoL)]),linNode[nl]));
-  var lb=label("leaf "+nl,"#4A574F",0.13);
+  var lb=label("leaf "+nl,"#cad0c0",0.13);
   lb.position.set(0,0.17,0);
   g.add(lb);
   g.userData={snap:V3(RX[nl],LEAF_Y+0.075,0.02),lift:liftedLeafPos(nl),lab:lb,mesh:m};
@@ -679,7 +684,7 @@ for(var ns=0;ns<4;ns++){
   m2.userData={kind:"node",idx:8+ns};
   g2.add(m2);
   g2.add(new THREE.LineSegments(lineGeo([edgesOf(nodeGeoS)]),linNode[8+ns]));
-  var lb2=label("spine "+ns,"#4A574F",0.13);
+  var lb2=label("spine "+ns,"#cad0c0",0.13);
   lb2.position.set(0,0.18,0);
   g2.add(lb2);
   g2.userData={snap:V3(SWX,SPINE_Y[ns]+0.10,0.02),lift:liftedSpinePos(ns),lab:lb2,mesh:m2};
@@ -814,11 +819,11 @@ var dimSprites=[];
   d.push([-3.02,0,0.62,-3.02,H,0.62],[-3.07,0,0.62,-2.97,0,0.62],[-3.07,H,0.62,-2.97,H,0.62]);
   d.push([-2.86,0.015,1.02,3.04,0.015,1.02],[-2.86,0.015,0.97,-2.86,0.015,1.07],[3.04,0.015,0.97,3.04,0.015,1.07]);
   scene.add(new THREE.LineSegments(lineGeo([segs(d)]),linDim));
-  var a=label("2.36 m","#4A574F",0.15);a.position.set(-3.26,1.25,0.62);
-  var b=label("≈ 5.9 m — 8 compute racks + the switch rack","#4A574F",0.14);b.position.set(0.09,0.17,1.06);
-  var c=label("cable tray","#8A968E",0.14);c.position.set(-1.95,TRAY_Y+0.24,TZ);
-  var e=label("rack 3 — the NVL72 from the rack page","#117758",0.15);e.position.set(RX[NVLIDX],2.66,0.75);
-  var f=label("switch rack — no GPUs","#8A968E",0.14);f.position.set(SWX+0.02,2.62,0.55);
+  var a=label("2.36 m","#cad0c0",0.15);a.position.set(-3.26,1.25,0.62);
+  var b=label("≈ 5.9 m — 8 compute racks + the switch rack","#cad0c0",0.14);b.position.set(0.09,0.17,1.06);
+  var c=label("cable tray","#a0aa94",0.14);c.position.set(-1.95,TRAY_Y+0.24,TZ);
+  var e=label("rack 3 — the NVL72 from the rack page","#e7f48b",0.15);e.position.set(RX[NVLIDX],2.66,0.75);
+  var f=label("switch rack — no GPUs","#a0aa94",0.14);f.position.set(SWX+0.02,2.62,0.55);
   [a,b,c,e,f].forEach(function(sp){scene.add(sp);dimSprites.push(sp)});
 })();
 
@@ -997,7 +1002,7 @@ function setS4Mode(mode){
   matMark.opacity=trace?0.95:0;
   if(chipEl){
     chipEl.style.display=trace?"block":"none";
-    chipEl.textContent="gpu 3 · rack 1 → rail 3 → rack 6 → nvlink hop → gpu 6 — the detour the two topologies page prices";
+    chipEl.textContent="Chip 3 → rail 3 → another rack → internal connection → chip 6";
   }
   buildSubrow();
   updateCounts();
@@ -1021,13 +1026,13 @@ function buildSubrow(){
     h='<span class="lbl">The diagram</span>'
      +'<button id="tg-lift" aria-pressed="'+lifted+'">'+(lifted?"drop it onto the hardware":"lift the diagram out")+"</button>";
   }else if(stage===2){
-    h='<span class="lbl">Spine oversubscription</span>'
-     +'<button id="tg-11" class="'+(ratio===0?"on":"")+'" aria-pressed="'+(ratio===0)+'">1:1 full</button>'
-     +'<button id="tg-21" class="'+(ratio===1?"on":"")+'" aria-pressed="'+(ratio===1)+'">2:1</button>';
+    h='<span class="lbl">Shared uplink capacity</span>'
+     +'<button id="tg-11" class="'+(ratio===0?"on":"")+'" aria-pressed="'+(ratio===0)+'">Full capacity · 1:1</button>'
+     +'<button id="tg-21" class="'+(ratio===1?"on":"")+'" aria-pressed="'+(ratio===1)+'">Half capacity · 2:1</button>';
   }else if(stage===3){
-    h='<span class="lbl">Stress the row</span>'
-     +'<button id="tg-fail" class="'+(s4mode==="fail"?"on":"")+'" aria-pressed="'+(s4mode==="fail")+'">fail rail 4</button>'
-     +'<button id="tg-trace" class="'+(s4mode==="trace"?"on":"")+'" aria-pressed="'+(s4mode==="trace")+'">trace an off-rail flow</button>';
+    h='<span class="lbl">Try a different path</span>'
+     +'<button id="tg-fail" class="'+(s4mode==="fail"?"on":"")+'" aria-pressed="'+(s4mode==="fail")+'">Take one rail offline</button>'
+     +'<button id="tg-trace" class="'+(s4mode==="trace"?"on":"")+'" aria-pressed="'+(s4mode==="trace")+'">Trace a cross-rail message</button>';
   }
   subEl.innerHTML=h;
   subEl.hidden=!h;
@@ -1051,16 +1056,16 @@ function toggleLift(){
 function updateCounts(){
   var h="";
   if(stage===0){
-    h="a toy pod — <b>8</b> compute racks + <b>1</b> switch rack · tray overhead";
+    h="One illustrated row · <b>8</b> compute racks + <b>1</b> network rack";
   }else if(stage===1){
-    h="leaves <b>8</b> · spines <b>4</b> · graph edges <b>32</b> — each edge is a fiber in the tray";
+    h="<b>8</b> rack switches · <b>4</b> shared switches · <b>32</b> connections drawn";
   }else if(stage===2){
     var c=fiberCounts();
-    h="fibers in tray <b>"+c[0]+"</b> · transceivers <b>"+c[1]+"</b> · in-rack copper: transceiver-free";
+    h="Cables drawn <b>"+c[0]+"</b> · connection ends <b>"+c[1]+"</b> · illustrative counts";
   }else{
-    if(s4mode==="fail")h="rail 4 down — port 4 dark on <b>8 / 8</b> racks · every multi-node job stalled";
-    else if(s4mode==="trace")h="off-rail flow: rail 3 across + <b>1</b> nvlink hop in the destination rack";
-    else h="switch boxes <b>12 → 8</b> · tray <b>32 fibers → 8 rails</b> · spine tier deleted";
+    if(s4mode==="fail")h="One rail offline · <b>8 / 8</b> racks affected · jobs may stall without a backup path";
+    else if(s4mode==="trace")h="A cross-rail message · <b>1</b> extra internal hop in the destination rack";
+    else h="Switches <b>12 → 8</b> · overhead wiring reorganized into <b>8 rails</b>";
   }
   countsEl.innerHTML=h+'<span class="schematic">schematic</span>';
 }
@@ -1284,6 +1289,8 @@ var lastT=performance.now();
 function frame(now){
   requestAnimationFrame(frame);
   var dt=Math.min(now-lastT,50);lastT=now;
+  if(document.hidden)return;
+  if(motionPaused){if(needs){renderer.render(scene,camera);needs=false}return;}
   stepAnims(dt);
   if(camTween){
     camTween.t+=dt;

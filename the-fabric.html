@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Estimate the communication penalty and GPU-hour price proxy for a ring all-reduce under explicit fabric assumptions.">
-<meta property="og:title" content="The Network Tax — GPU fabric sensitivity">
-<meta property="og:description" content="Test how protocol, oversubscription, placement, compute time, and overlap affect a communication-bound GPU-hour.">
+<meta name="description" content="Fast chips still wait for messages. Change the network and see how working time and waiting time change.">
+<meta property="og:title" content="Why do fast chips wait? — The Compute Desk">
+<meta property="og:description" content="Fast chips still wait for messages. Change the network and see how working time and waiting time change.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://alexkyen.github.io/compute-desk/social-card.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:url" content="https://alexkyen.github.io/compute-desk/the-fabric.html">
 <link rel="canonical" href="https://alexkyen.github.io/compute-desk/the-fabric.html">
-<title>The network tax — GPU fabric sensitivity</title>
+<title>Why do fast chips wait? — The Compute Desk</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -84,46 +84,47 @@ p a.xlink{margin-left:.5em}
 .stepper a.st:hover::after,.stepper a.st:focus-visible::after{opacity:1}
 </style>
 <link rel="stylesheet" href="assets/desk.css">
+<link rel="stylesheet" href="assets/experience.css">
+<link rel="stylesheet" href="assets/tool-experience.css">
+<link rel="stylesheet" href="assets/network-experiences.css">
+<meta name="theme-color" content="#181a17">
 </head>
-<body>
+<body class="experience tool-page fabric-page">
 <a class="skip-link" href="#main">Skip to content</a>
-<nav class="nav-top" aria-label="Manual navigation">
-  <div class="nav-in">
-    <a href="index.html">The compute desk</a>
-    <span class="nav-here">05 / 08 — The network tax</span>
-    <span class="stepper">
-      <a class="st" href="plate-nvl72.html" data-t="The NVL72 rack" aria-label="Previous: The NVL72 rack">←</a>
-      <a class="st" href="the-two-trees.html" data-t="The two topologies" aria-label="Next: The two topologies">→</a>
-    </span>
-  </div>
-</nav>
+<header class="site-header">
+  <a class="wordmark" href="index.html" aria-label="The Compute Desk home"><span class="brand-icon" aria-hidden="true">✳</span> THE COMPUTE DESK</a>
+  <nav aria-label="Main navigation"><a class="nav-explore" href="index.html#explore">Explore</a><a href="index.html#toolbox">The toolbox <span aria-hidden="true">↗</span></a></nav>
+</header>
 <main class="wrap" id="main">
-  <p class="eyebrow">Compute desk</p>
-  <h1>The network tax</h1>
-  <p class="dek">Estimate the communication penalty for a ring all-reduce under explicit protocol, placement, compute-time, and overlap assumptions. Prefer measured NCCL bandwidth when a supplier provides it.</p>
-  <dl class="decision-strip"><div><dt>Decision supported</dt><dd><strong>Does the proposed fabric undermine the quote?</strong></dd></div><div><dt>Primary output</dt><dd>Modeled step penalty and price proxy</dd></div><div><dt>Model boundary</dt><dd>One full-gradient ring all-reduce; not total application goodput</dd></div></dl>
-  <p class="scope-note warning">The price output is a communication-bound proxy, not realized training cost. It excludes sharding, topology-aware collective selection, pipeline bubbles, congestion, storage, and application failures.</p>
+  <header class="tool-intro"><div><p class="overline">04 / THE NETWORK</p><h1>Why do fast chips wait?</h1></div><p class="dek">Even the fastest chip has to wait for its neighbors. Change the connections and watch how much work gets lost to the wait.</p></header>
 
-  <div class="ticker" aria-label="Scenario outputs">
-    <div class="tk"><p class="l">Bandwidth per GPU</p><p class="v" id="c1">—</p></div>
-    <div class="tk"><p class="l">All-reduce per step</p><p class="v" id="c2">—</p></div>
-    <div class="tk"><p class="l">Modeled throughput</p><p class="v" id="c3">—</p></div>
-    <div class="tk"><p class="l">Communication-bound proxy</p><p class="v" id="c4">—</p></div>
-  </div>
-  <p class="status" id="st" aria-live="polite"></p>
 
-  <div class="card">
+  <div class="card network-exhibit">
+    <div class="experiment-heading"><span class="overline">TRY THIS</span><p>Spread the job across more machines. Then narrow the connections.</p></div>
     <div class="seggroup">
-      <div class="seg"><p class="lbl">Fabric protocol</p><div class="btns" id="fb"></div></div>
-      <div class="seg"><p class="lbl">Spine oversubscription</p><div class="btns" id="ob"></div></div>
-      <div class="seg"><p class="lbl">Job placement</p><div class="btns" id="sb"></div></div>
+      <div class="seg"><p class="lbl">Connection type</p><div class="btns" id="fb"></div></div>
+      <div class="seg"><p class="lbl">Shared uplink capacity</p><div class="btns" id="ob"></div></div>
+      <div class="seg"><p class="lbl">Where the job runs</p><div class="btns" id="sb"></div></div>
     </div>
-    <svg id="topo" viewBox="0 0 840 320" role="img" aria-label="Cluster topology: two spine switches, four leaf switches, four racks of four nodes; link colors show where the selected job's traffic flows"></svg>
+    <div class="diagram-scroll"><svg id="topo" viewBox="0 0 840 320" role="img" aria-label="Cluster topology: two spine switches, four leaf switches, four racks of four nodes; link colors show where the selected job's traffic flows"></svg></div>
+    <div class="wait-visual" aria-label="Share of a modeled step spent computing versus waiting"><div class="wait-header"><span>In every training step</span><strong id="waitLabel">—</strong></div><div class="wait-track"><div id="workShare"></div><div id="waitShare"></div></div><div class="wait-legend"><span><i></i>Computing</span><span><i></i>Waiting for messages</span></div></div>
     <div class="sizer">
-      <span class="lbl">Model in training</span>
+      <span class="lbl">Model size</span>
       <input type="range" id="ms" min="7" max="405" step="1" value="70" aria-label="Model size in billions of parameters">
       <b id="mv">70B</b>
     </div>
+
+  </div>
+  <div class="ticker" aria-label="Scenario outputs">
+    <div class="tk"><p class="l">Bandwidth per GPU</p><p class="v" id="c1">—</p></div>
+    <div class="tk"><p class="l">Time to synchronize</p><p class="v" id="c2">—</p></div>
+    <div class="tk"><p class="l">Useful compute share</p><p class="v" id="c3">—</p></div>
+    <div class="tk"><p class="l">Modeled price proxy</p><p class="v" id="c4">—</p></div>
+  </div>
+  <p class="status" id="st" aria-live="polite"></p>
+
+  <p class="model-caption">A simplified model, not a benchmark. The price proxy includes only the communication delay shown here.</p>
+  <details class="advanced-settings"><summary>Tune the assumptions <span aria-hidden="true">+</span></summary><div class="detail-body">
     <div class="model-inputs">
       <div><label for="computeInput">Compute-only step · sec</label><input id="computeInput" type="number" min="0.01" step="0.1" value="10"></div>
       <div><label for="overlapInput">Comm overlap · %</label><input id="overlapInput" type="number" min="0" max="100" step="5" value="50"></div>
@@ -131,10 +132,12 @@ p a.xlink{margin-left:.5em}
       <div><label for="stickerInput">Sticker · $/GPU-hr</label><input id="stickerInput" type="number" min="0.01" step="0.01" value="2.50"></div>
     </div>
     <div class="assumptions" id="fabricAssumptions"></div>
-  </div>
+  </div></details>
   <div class="tool-actions"><button type="button" data-copy-link>copy scenario link</button><button type="button" id="downloadFabric">download summary</button></div><p class="tool-message" aria-live="polite"></p>
 
-  <div class="notes">
+  <details class="notes reading-notes"><summary>The details, if you’re curious <span aria-hidden="true">+</span></summary><div class="detail-body">
+  <dl class="decision-strip"><div><dt>Decision supported</dt><dd><strong>Does the proposed fabric undermine the quote?</strong></dd></div><div><dt>Primary output</dt><dd>Modeled step penalty and price proxy</dd></div><div><dt>Model boundary</dt><dd>One full-gradient ring all-reduce; not total application goodput</dd></div></dl>
+  <p class="scope-note warning">The price output is a communication-bound proxy, not realized training cost. It excludes sharding, topology-aware collective selection, pipeline bubbles, congestion, storage, and application failures.</p>
     <h2>Fabric diligence</h2>
     <p><strong>Why the hierarchy matters.</strong> Inside one node, GPUs talk over NVLink at hundreds of GB/s. The moment a job outgrows the node, traffic drops onto the network at NIC speed — 400 Gb/s (50 GB/s) per GPU in a standard H100 build — an order of magnitude slower. Training synchronizes gradients across every GPU each step (the all-reduce), so for any model too large for one node, the network sits inside every training step and its bandwidth sets the pace of the whole cluster. The boundary itself is physical: copper NVLink reaches about one rack and no farther — <a class="xlink" href="plate-nvl72.html">see the rack →</a> — past it, traffic moves onto the optical network, and that is the cost this page measures.</p>
     <p><strong>Protocol labels do not establish delivered performance.</strong> InfiniBand and RoCE can run the same nominal wire rate and both carry RDMA. Their delivered collective bandwidth depends on NIC and switch generation, topology, congestion control, tuning, and job size. Use line rate only as a ceiling; request measured NCCL bus bandwidth for the proposed configuration.</p>
@@ -145,19 +148,20 @@ p a.xlink{margin-left:.5em}
     <div class="ask"><b>Ask the supplier</b>Full fat-tree or rail-optimized? Show me the topology diagram, and tell me the blast radius when one spine switch fails.</div>
     <p><strong>Inference requirements vary by serving architecture.</strong> Single-node serving may not justify a training-oriented scale-out fabric. Large mixture-of-experts deployments, disaggregated prefill and decode, or models sharded across nodes can create substantial east-west traffic. Size the network from the serving design and measured communication profile, not from the accelerator count alone.</p>
     <p><strong>How the proxy is calculated.</strong> The model moves one FP16 gradient copy for every parameter through a ring all-reduce, exposes the portion not hidden by overlap, adds that time to the compute-only step, and scales the sticker price by the resulting throughput share. This is a sensitivity calculation, not a benchmark. The 0.92 InfiniBand and 0.80 tuned-RoCE efficiencies are planning assumptions; replace them with measured NCCL bus bandwidth whenever possible.</p>
-  </div>
+  </div></details>
   <p class="foot">model · protocol efficiencies are explicit planning assumptions, not benchmarks · model version 2026.08 · <a href="https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/usage/collectives.html">NCCL collectives</a> · <a href="methodology.html">methods &amp; limitations</a></p>
-  <nav class="nav-bot" aria-label="Manual navigation">
-    <a class="nav-prev" href="plate-nvl72.html">← The NVL72 rack</a>
-    <a class="nav-next" href="the-two-trees.html">The two topologies →</a>
+  <nav class="nav-bot" aria-label="Continue exploring">
+    <a class="nav-prev" href="silicon-ladder.html"><span class="next-label">PREVIOUS EXPLORATION</span>← Meet the chips</a>
+    <a class="nav-next" href="the-two-trees.html"><span class="next-label">KEEP EXPLORING</span>Give chips a better way to talk →</a>
   </nav>
 </main>
+<footer class="experience-footer"><a class="wordmark" href="index.html">THE COMPUTE DESK <span class="brand-icon" aria-hidden="true">✳</span></a><span>Made for curious people. By Alex Yen.</span><a href="methodology.html">Methods &amp; sources ↗</a></footer>
 
 <script src="assets/desk.js"></script>
 <script>
 var FABRICS=[{id:"ib",label:"InfiniBand 400G",eff:0.92},{id:"roce",label:"RoCE v2 400G",eff:0.80}];
-var OVERS=[{r:1,label:"1:1 full"},{r:2,label:"2:1"},{r:4,label:"4:1"}];
-var SPANS=[{id:"node",label:"one node · 8 GPUs",n:8},{id:"leaf",label:"one leaf · 32 GPUs",n:32},{id:"cluster",label:"cluster · 128 GPUs",n:128}];
+var OVERS=[{r:1,label:"Full · 1:1"},{r:2,label:"Half · 2:1"},{r:4,label:"Quarter · 4:1"}];
+var SPANS=[{id:"node",label:"One server · 8 chips",n:8},{id:"leaf",label:"One group · 32 chips",n:32},{id:"cluster",label:"Whole cluster · 128 chips",n:128}];
 var fSel=0,oSel=0,sSel=2,params=70;
 var NIC=50, NVL=810, STICKER=2.5, computeSec=10, overlap=.5, measured=0;
 var q=ComputeDesk.params();
@@ -178,7 +182,7 @@ function rebuild(){
 }
 function drawTopo(mode,rho,cong){
   var s='';
-  var IDLE="#DDE2DB", ACT="#117758", HOT="#D98F12", INKM="#8A968E";
+  var IDLE="#41483b", ACT="#e7f48b", HOT="#eac989", INKM="#a0aa94";
   var spineX=[300,540], leafX=[150,330,510,690];
   var upW=(rho===1?4:rho===2?2:1);
   var upActive=(mode==="cluster");
@@ -193,23 +197,23 @@ function drawTopo(mode,rho,cong){
     s+='<line x1="'+lx+'" y1="154" x2="'+lx+'" y2="212" stroke="'+(active?ACT:IDLE)+'" stroke-width="4" stroke-linecap="round"/>';
   });
   spineX.forEach(function(sx){
-    s+='<rect x="'+(sx-60)+'" y="22" width="120" height="34" rx="6" fill="#FDFDFB" stroke="'+(upActive?ACT:IDLE)+'" stroke-width="1.2"/>';
-    s+='<text x="'+sx+'" y="43" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#4A574F">spine</text>';
+    s+='<rect x="'+(sx-60)+'" y="22" width="120" height="34" rx="6" fill="#282e24" stroke="'+(upActive?ACT:IDLE)+'" stroke-width="1.2"/>';
+    s+='<text x="'+sx+'" y="43" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#cad0c0">spine</text>';
   });
   leafX.forEach(function(lx,li){
     var active=(mode==="cluster")||(mode==="leaf"&&li===0)||(mode==="node"&&li===0);
-    s+='<rect x="'+(lx-55)+'" y="120" width="110" height="34" rx="6" fill="#FDFDFB" stroke="'+(active&&mode!=="node"?ACT:IDLE)+'" stroke-width="1.2"/>';
-    s+='<text x="'+lx+'" y="141" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#4A574F">leaf '+(li+1)+'</text>';
+    s+='<rect x="'+(lx-55)+'" y="120" width="110" height="34" rx="6" fill="#282e24" stroke="'+(active&&mode!=="node"?ACT:IDLE)+'" stroke-width="1.2"/>';
+    s+='<text x="'+lx+'" y="141" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#cad0c0">leaf '+(li+1)+'</text>';
     for(var n=0;n<4;n++){
       var nx=lx-55+8+n*26;
       var on=(mode==="cluster")||(mode==="leaf"&&li===0)||(mode==="node"&&li===0&&n===0);
-      s+='<rect x="'+nx+'" y="212" width="22" height="20" rx="4" fill="'+(on?"#DCEDE4":"#F6F7F3")+'" stroke="'+(on?ACT:IDLE)+'" stroke-width="1.2"/>';
+      s+='<rect x="'+nx+'" y="212" width="22" height="20" rx="4" fill="'+(on?"#384331":"#242920")+'" stroke="'+(on?ACT:IDLE)+'" stroke-width="1.2"/>';
     }
     s+='<text x="'+lx+'" y="252" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="'+INKM+'">rack '+(li+1)+' · 4 nodes × 8 GPUs</text>';
   });
   s+='<text x="64" y="43" text-anchor="start" font-family="IBM Plex Mono, monospace" font-size="10" fill="'+INKM+'">uplinks '+rho+':1</text>';
   if(mode==="node"){
-    s+='<text x="150" y="286" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#117758">traffic stays on NVLink inside the node</text>';
+    s+='<text x="150" y="286" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#e7f48b">traffic stays on NVLink inside the node</text>';
   }
   s+='<text x="770" y="300" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="'+INKM+'">128 GPUs total</text>';
   document.getElementById("topo").innerHTML=s;
@@ -231,6 +235,9 @@ function render(){
   var exposed=t*(1-overlap), modeledStep=computeSec+exposed;
   var factor=Math.min(1,computeSec/modeledStep);
   var effCost=STICKER/factor;
+  document.getElementById("workShare").style.width=(factor*100)+"%";
+  document.getElementById("waitShare").style.width=((1-factor)*100)+"%";
+  document.getElementById("waitLabel").textContent=Math.round((1-factor)*100)+"% waiting";
   var cong=(span.id==="cluster"&&rho>1);
   drawTopo(span.id,rho,cong);
   document.getElementById("mv").textContent=params+"B";
@@ -240,13 +247,13 @@ function render(){
   document.getElementById("c4").innerHTML="$"+effCost.toFixed(2)+"<em>/GPU-hr</em>";
   var msg;
   if(span.id==="node"){
-    msg="The modeled collective stays inside the node on NVLink. Protocol and spine oversubscription do not affect this scenario; the proxy still includes the exposed intra-node collective time.";
+    msg="Close together, the chips use the server’s fast internal connection. Changing the outside network makes no difference here.";
   }else if(span.id==="leaf"){
-    msg="Packed within one leaf, the job avoids the oversubscribed spine. The proxy uses "+Math.round(B)+" GB/s per GPU and "+Math.round(overlap*100)+"% modeled communication overlap.";
+    msg="This job stays in one network group. It avoids the shared uplinks, so narrowing them does not slow this scenario.";
   }else if(rho===1){
-    msg="Cluster-wide on the full-bisection planning case: bandwidth is "+(measured?'taken from the measured input':'estimated from line rate and protocol efficiency')+". Validate it with NCCL at the proposed job size.";
+    msg="The job spans the cluster. At full uplink capacity, "+Math.round((1-factor)*100)+"% of the modeled step is still spent waiting. Try cutting capacity in half.";
   }else{
-    msg="Cluster-wide across the "+rho+":1 planning case, the model exposes "+exposed.toFixed(1)+" seconds of communication after overlap. The $"+effCost.toFixed(2)+" result is a communication-bound price proxy, not measured goodput.";
+    msg="With "+(rho===2?"half":"a quarter of")+" the uplink capacity, this job spends "+exposed.toFixed(1)+" seconds per step waiting for messages. More chips need enough network to keep them busy.";
   }
   document.getElementById("st").textContent=msg;
   document.getElementById('fabricAssumptions').innerHTML='<strong>Assumptions:</strong> FP16 full-gradient ring all-reduce; '+span.n+' GPUs; '+computeSec.toFixed(1)+'s compute-only step; '+Math.round(overlap*100)+'% communication overlap; '+(measured?measured+' GB/s measured input':fab.label+', '+rho+':1 topology estimate')+'.';

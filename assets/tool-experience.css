@@ -1,0 +1,62 @@
+/* Shared exhibit interface: the eight models retain their independent calculations. */
+.experience{--teal-dim:#343e24;--amber-dim:#423b29;--oxide:#efa68b;--oxide-dim:#493027;--pale:#292e23;--slate:#a4b8d2;--text-meta:11px;--text-ui:12px;--text-support:14px;--text-dense:15px;color-scheme:dark}
+.tool-page{padding:0 0 30px;min-height:100svh}
+.tool-page .wrap{width:90%;max-width:1280px;margin:0 auto}
+.tool-page .site-header{max-width:1280px;width:90%;margin:0 auto}
+.tool-page .tool-intro{padding:52px 0 34px;max-width:100%}
+.tool-page .tool-intro h1{font:400 clamp(40px,5.2vw,74px)/1.06 var(--sans);letter-spacing:-.06em;max-width:1050px;margin:15px 0 20px}
+.tool-page .tool-intro .dek{font:16px/1.7 var(--sans);color:var(--ink-2);max-width:670px;margin:0}
+.tool-page .eyebrow{font:10px/1.6 var(--mono);letter-spacing:.13em;color:var(--ink-3)}
+.tool-page .card{border-radius:5px;background:var(--panel);border-color:var(--rule);padding:28px}
+.tool-page h2,.tool-page h3{font-family:var(--sans);font-weight:400;font-style:normal;letter-spacing:-.025em}
+.tool-page .controls,.tool-page .seggroup{gap:16px 26px}
+.tool-page button,.tool-page input,.tool-page select,.tool-page textarea{font-family:var(--sans)}
+.tool-page button{cursor:pointer}
+.tool-page .seg button,.tool-page .metrics button,.tool-page .btns button{border-radius:30px;font:12px/1.25 var(--sans);letter-spacing:0;padding:11px 17px;min-height:42px;background:transparent;border:1px solid var(--rule);color:var(--ink-2)}
+.tool-page .seg button.on,.tool-page .metrics button.on,.tool-page .btns button.on{background:var(--teal);color:#20251c;border-color:var(--teal)}
+.tool-page .seg button:hover,.tool-page .metrics button:hover,.tool-page .btns button:hover{border-color:var(--teal)}
+.tool-page .seg .lbl,.tool-page .model-inputs label,.tool-page .input-grid label,.tool-page .bom label{font:11px/1.5 var(--sans);letter-spacing:.01em;text-transform:none;color:var(--ink-2)}
+.tool-page input[type=number],.tool-page input[type=text],.tool-page select,.tool-page textarea{background:var(--paper);border:1px solid var(--rule);color:var(--ink);border-radius:5px;min-height:42px;font-size:13px;padding:9px 11px;max-width:100%}
+.tool-page input[type=range]{accent-color:var(--teal);min-height:28px}
+.tool-page input[type=checkbox]{accent-color:var(--teal)}
+.tool-page .ticker{border-radius:5px;border-color:var(--rule);background:var(--panel);margin-top:18px}
+.tool-page .tk{padding:23px 25px;min-width:0}
+.tool-page .tk .l{font:11px/1.5 var(--sans);letter-spacing:0;text-transform:none;color:var(--ink-2)}
+.tool-page .tk .v{font:400 clamp(25px,3vw,42px)/1.25 var(--sans);letter-spacing:-.045em;margin-top:9px;overflow-wrap:anywhere}
+.tool-page .tk .v em{font-size:14px;letter-spacing:0}
+.tool-page .status{font:15px/1.65 var(--sans);margin:20px 0;min-height:0;max-width:850px;color:var(--ink-2)}
+.tool-page .caption{font:13px/1.65 var(--sans);font-style:normal;color:var(--ink-2)}
+.tool-page details{max-width:none}
+.tool-page details.disclosure,.tool-page details.notes,.tool-page details.model-details,.tool-page details.advanced-controls,.tool-page details.advanced,.tool-page details.sources,.tool-page details.assumptions-details{padding:0;margin:22px 0 0;border:1px solid var(--rule);border-radius:5px;background:transparent}
+.tool-page details>summary{font:14px/1.6 var(--sans);color:var(--ink);letter-spacing:0;text-transform:none;cursor:pointer;padding:17px 20px}
+.tool-page details>summary::marker{color:var(--teal);font-size:12px}
+.tool-page details>summary h2{display:inline;font:inherit;letter-spacing:inherit;text-transform:none}
+.tool-page details .detail-body,.tool-page details .disclosure-body{padding:6px 22px 23px}
+.tool-page details .decision-strip{margin:5px 20px 20px;background:var(--panel)}
+.tool-page .decision-strip dt{font:10px var(--mono)}
+.tool-page .decision-strip dd{font:13px/1.65 var(--sans)}
+.tool-page .notes p,.tool-page .notes li{font:14px/1.8 var(--sans);color:var(--ink-2);max-width:95ch;margin-bottom:15px}
+.tool-page .notes h2{font:400 21px/1.3 var(--sans);letter-spacing:-.02em;text-transform:none;margin-bottom:18px}
+.tool-page .notes .ask,.tool-page .ask{font:13px/1.7 var(--sans);background:var(--panel);color:var(--ink-2);border-color:var(--rule);border-left:2px solid var(--amber);border-radius:0 5px 5px 0;padding:16px 20px;max-width:none}
+.tool-page .ask b{font:10px/1.6 var(--mono);color:var(--amber);letter-spacing:.1em}
+.tool-page .tool-actions{gap:10px;margin:22px 0 0}
+.tool-page .tool-actions button,.tool-page .tool-actions a,.tool-page .tool-action{font:12px var(--sans);letter-spacing:0;min-height:42px;padding:11px 15px;border-radius:5px}
+.tool-page .tool-message{font:12px/1.6 var(--sans)}
+.tool-page .foot{font:10px/1.85 var(--mono);color:var(--ink-3);letter-spacing:0;margin:28px 0 0;max-width:110ch}
+.tool-page .foot a,.tool-page .notes a,.tool-page a.xlink{color:var(--teal);text-decoration:underline;text-underline-offset:3px}
+.tool-page a.xlink{white-space:normal;font:12px/1.65 var(--sans);letter-spacing:0}
+.tool-page .nav-bot{margin:35px 0 0;padding:25px 0;border-top:1px solid var(--rule);display:flex;justify-content:space-between;gap:20px;align-items:start;font:14px/1.5 var(--sans);text-transform:none;letter-spacing:0}
+.tool-page .nav-bot a{white-space:normal;max-width:48%;color:var(--ink-2)}
+.tool-page .nav-bot a:hover{color:var(--teal)}
+.tool-page .nav-bot .nav-next{text-align:right;margin-left:auto}
+.tool-page .next-label{display:block;font:9px/1.6 var(--mono);letter-spacing:.1em;color:var(--ink-3);margin-bottom:7px}
+.tool-page .scope-note{font:12px/1.7 var(--sans);background:var(--panel);border-radius:0 5px 5px 0;color:var(--ink-2);max-width:none}
+.tool-page .badge{font:10px/1.4 var(--mono);border-radius:3px}
+.tool-page svg text{font-family:var(--sans)}
+.tool-page svg{max-width:100%}
+.tool-page a:focus-visible,.tool-page button:focus-visible,.tool-page summary:focus-visible,.tool-page input:focus-visible,.tool-page select:focus-visible,.tool-page [tabindex]:focus-visible{outline:2px solid var(--teal);outline-offset:4px}
+.tool-page .experiment-label{font:10px/1.5 var(--mono);letter-spacing:.12em;color:var(--teal);text-transform:uppercase}
+.tool-page .experiment-lead{font:400 clamp(20px,3vw,32px)/1.2 var(--sans);letter-spacing:-.035em;margin:12px 0 24px}
+@media(max-width:760px){.tool-page .tool-intro{padding:32px 0 26px}.tool-page .tool-intro h1{font-size:clamp(38px,8vw,56px);margin:15px 0}.tool-page .tool-intro .dek{font-size:15px}.tool-page .card{padding:20px}.tool-page .tk{padding:19px}.tool-page .nav-bot{font-size:12px}.tool-page .decision-strip{grid-template-columns:1fr}.tool-page .decision-strip>div{border-left:0;border-top:1px solid var(--rule)}.tool-page .decision-strip>div:first-child{border-top:0}.tool-page .site-header nav{font-size:11px}}
+@media(max-width:480px){.tool-page .wrap,.tool-page .site-header{width:90%}.tool-page .site-header{gap:12px}.tool-page .site-header nav{gap:12px}.tool-page .site-header .wordmark{font-size:9px;gap:7px}.tool-page .site-header .brand-icon{font-size:27px}.tool-page .card{padding:17px}.tool-page .seg button,.tool-page .metrics button,.tool-page .btns button{padding:10px 13px;font-size:11px}.tool-page .ticker{grid-template-columns:1fr 1fr}.tool-page .tk{border-left:0;border-bottom:1px solid var(--rule)}.tool-page .tk:nth-child(even){border-left:1px solid var(--rule)}.tool-page .tk:nth-last-child(-n+2){border-bottom:0}.tool-page details>summary{padding:16px;font-size:13px}.tool-page details .detail-body,.tool-page details .disclosure-body{padding:4px 16px 18px}.tool-page .nav-bot{gap:15px}}
+@media print{.experience{--paper:#fff;--panel:#fff;--ink:#15201a;--ink-2:#39473b;--ink-3:#536452;--rule:#bac5b9;--teal:#35620b;--amber:#825619;--oxide:#863324;background:#fff;color:#15201a;color-scheme:light}.site-header,.experience-footer,.hero-art,.scroll-cue{display:none!important}.tool-page .wrap{width:100%;max-width:none}.tool-page .tool-intro{padding-top:0}.tool-page .card,.tool-page .ticker{break-inside:avoid}.tool-page details{border:0!important}.tool-page .foot{font-size:9px}.tool-page .tool-actions,.tool-page .nav-bot{display:none!important}}

@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Inspect the GB200 NVL72 as a 72-GPU NVLink scale-up domain for quote-unit and facility-readiness diligence.">
-<meta property="og:title" content="The NVL72 rack — The Compute Desk">
-<meta property="og:description" content="A staged 3D view of the rack, trays, copper NVLink spine, and GB200 superchip.">
+<meta name="description" content="Take apart a 72-GPU AI rack. Meet the chips, follow the connections, and see how the machine works.">
+<meta property="og:title" content="Meet the machine — The Compute Desk">
+<meta property="og:description" content="Take apart a 72-GPU AI rack. Meet the chips, follow the connections, and see how the machine works.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://alexkyen.github.io/compute-desk/social-card.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:url" content="https://alexkyen.github.io/compute-desk/plate-nvl72.html">
 <link rel="canonical" href="https://alexkyen.github.io/compute-desk/plate-nvl72.html">
-<title>The NVL72 rack — quote-unit and facility diligence</title>
+<title>Meet the machine — The Compute Desk</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -113,24 +113,19 @@ p a.xlink{margin-left:.5em}
 .stepper a.st:hover::after,.stepper a.st:focus-visible::after{opacity:1}
 </style>
 <link rel="stylesheet" href="assets/desk.css">
+<link rel="stylesheet" href="assets/experience.css">
+<link rel="stylesheet" href="assets/tool-experience.css">
+<meta name="theme-color" content="#181a17">
 </head>
-<body>
+<body class="experience rack-page">
 <a class="skip-link" href="#main">Skip to content</a>
-<nav class="nav-top" aria-label="Manual navigation">
-  <div class="nav-in">
-    <a href="index.html">The compute desk</a>
-    <span class="nav-here">04 / 08 — The NVL72 rack</span>
-    <span class="stepper">
-      <a class="st" href="silicon-ladder.html" data-t="The NVIDIA generations" aria-label="Previous: The NVIDIA generations">←</a>
-      <a class="st" href="the-fabric.html" data-t="The network tax" aria-label="Next: The network tax">→</a>
-    </span>
-  </div>
-</nav>
+<header class="site-header">
+  <a class="wordmark" href="index.html" aria-label="The Compute Desk home"><span class="brand-icon" aria-hidden="true">✳</span> THE COMPUTE DESK</a>
+  <nav aria-label="Main navigation"><a href="index.html#explore">All explorations ↗</a></nav>
+</header>
 <main class="wrap" id="main">
-  <p class="eyebrow">Compute desk · companion page</p>
-  <h1>The NVL72 rack</h1>
-  <p class="dek">Inspect the GB200 NVL72 as a 72-GPU NVLink scale-up domain. Use the staged view to check the quote unit, power and cooling envelope, tray count, and boundary between scale-up and scale-out networking.</p>
-  <dl class="decision-strip"><div><dt>Decision supported</dt><dd><strong>Is the offered rack and facility ready for the proposed deployment?</strong></dd></div><div><dt>Primary output</dt><dd>Rack composition, scale-up boundary, and diligence questions</dd></div><div><dt>Evidence boundary</dt><dd>Schematic geometry; confirm vendor and integrator configuration</dd></div></dl>
+  <div class="exhibit-intro"><div><p class="overline">01 / THE HARDWARE · AN INTERACTIVE EXPLORATION</p><h1>Meet the machine.</h1></div>
+  <p class="dek">72 AI chips. One tightly connected rack.<br>Take it apart to see how the pieces work together.</p></div>
 
   <div class="card plate-card">
     <div class="stages" id="tabs" role="tablist" aria-label="Stages of the plate"></div>
@@ -185,16 +180,16 @@ p a.xlink{margin-left:.5em}
         </div>
       </div>
       <aside class="panel" id="panel" role="tabpanel" aria-live="polite">
-        <p class="stage-eyebrow" id="an-eyebrow">Stage I — the rack</p>
-        <h2 id="an-title">One machine, rack-shaped</h2>
-        <p class="an-body" id="an-body">A GB200 NVL72: 72 Blackwell GPUs and 36 Grace CPUs in one high-bandwidth NVLink scale-up domain. Rack-scale offers make power, cooling, integration, and the fabric boundary part of the product. Drag to turn it; step through the stages to take it apart.</p>
+        <p class="stage-eyebrow" id="an-eyebrow">01 / WORKING TOGETHER</p>
+        <h2 id="an-title">72 chips. One team.</h2>
+        <p class="an-body" id="an-body">A GPU is a chip built to do lots of calculations at once. This rack connects 72 of them so they can work on enormous AI tasks together. Choose a chapter to look inside.</p>
         <div class="stats" id="an-stats">
           <div class="stat"><span class="l">Blackwell GPUs</span><span class="v teal">72</span></div>
           <div class="stat"><span class="l">Grace CPUs</span><span class="v teal">36</span></div>
           <div class="stat"><span class="l">NVLink scale-up domain</span><span class="v teal">72 GPUs</span></div>
           <div class="stat"><span class="l">Rack power</span><span class="v amber">~120 kW</span></div>
         </div>
-        <a class="xlink" id="an-link" href="plate-pod.html" hidden>Keep pulling back → Plate II: The pod</a>
+        <a class="xlink" id="an-link" href="plate-pod.html" hidden>Zoom out to a whole server row →</a>
       </aside>
     </div>
     <div class="scrub-row">
@@ -204,22 +199,23 @@ p a.xlink{margin-left:.5em}
     </div>
     <div class="count-row" id="counts" aria-live="off"></div>
   </div>
-  <p class="hint">drag to orbit · scroll or pinch to zoom · hover or tap parts to name them · re-selecting a stage replays its move</p>
+  <div class="hint-row"><p class="hint">Drag to turn · scroll to zoom · choose a chapter to look inside</p><button type="button" id="rack-motion" aria-pressed="false">Pause rotation</button></div>
 
-  <div class="notes">
-    <h2>Quote and facility diligence</h2>
+  <details class="notes">
+    <summary>Buying one? Here’s what to check.</summary><div class="detail-body">
     <p><strong>The scale-up domain ends at the rack.</strong> The NVLink fabric provides each GPU high-bandwidth access across a 72-GPU domain while each GPU retains its own HBM. Traffic leaving that domain moves to the scale-out network, whose media, topology, and performance are procured separately; the network-tax page models that boundary.</p>
     <p><strong>Power is the binding constraint.</strong> Roughly 120 kW in a single rack is why liquid cooling is a requirement rather than an option, and why the binding constraint in procurement migrated from chip allocation to facility qualification. Two suppliers quoting the same GPU can differ entirely in whether their building can actually run this object.</p>
     <p><strong>The rack can be a commercial unit, but it is not the only one.</strong> Providers may sell full racks, nodes, instances, or capacity blocks. Ask which physical assets, failure domains, and acceptance criteria correspond to the quoted unit.</p>
     <div class="ask"><b>Ask the supplier</b>Is the facility NVL72-qualified—power density and liquid loops delivered, not planned—and what physical unit, failure domain, and acceptance test sit behind the quote?</div>
-  </div>
-  <div class="tool-actions"><button type="button" data-copy-link>copy stage link</button></div><p class="tool-message" aria-live="polite"></p>
+  </div></details>
+  <div class="tool-actions"><button type="button" data-copy-link>Share this view</button></div><p class="tool-message" aria-live="polite"></p>
   <p class="foot">schematic geometry · 81 fallback arcs and 378 3D cable instances represent the vendor's approximately 5,000-cable spine · specifications verified July 2026 · <a href="https://www.nvidia.com/en-us/data-center/gb200-nvl72/">NVIDIA GB200 NVL72</a> · <a href="https://docs.nvidia.com/multi-node-nvlink-systems/multi-node-tuning-guide/overview.html">NVIDIA NVLink system guide</a> · <a href="methodology.html">methods</a></p>
   <nav class="nav-bot" aria-label="Manual navigation">
-    <a class="nav-prev" href="silicon-ladder.html">← The NVIDIA generations</a>
-    <a class="nav-next" href="the-fabric.html">The network tax →</a>
+    <a class="nav-prev" href="index.html#explore">← Back to exploring</a>
+    <a class="nav-next" href="plate-pod.html"><span class="next-label">NEXT / THE BIGGER PICTURE</span>One rack is just the beginning →</a>
   </nav>
 </main>
+<footer class="experience-footer"><a class="wordmark" href="index.html">THE COMPUTE DESK <span class="brand-icon" aria-hidden="true">✳</span></a><span>Made for curious people. By Alex Yen.</span><a href="methodology.html">Methods &amp; sources ↗</a></footer>
 
 <script src="assets/desk.js"></script>
 <script src="assets/three-r147.min.js"></script>
@@ -235,18 +231,18 @@ p a.xlink{margin-left:.5em}
 
 /* ---------- stage copy (the deliverable; the model serves it) ---------- */
 var STAGES=[
- {tab:"I — Rack",eyebrow:"Stage I — the rack",title:"One machine, rack-shaped",
-  body:"A GB200 NVL72: 72 Blackwell GPUs and 36 Grace CPUs in one high-bandwidth NVLink scale-up domain. Rack-scale offers make power, cooling, integration, and the fabric boundary part of the quoted product. Providers may still sell nodes, instances, or capacity blocks, so confirm the physical unit behind the commercial term.",
-  stats:[["Blackwell GPUs","72","teal"],["Grace CPUs","36","teal"],["NVLink scale-up domain","72 GPUs","teal"],["Rack power","~120 kW","amber"]]},
- {tab:"II — Trays",eyebrow:"Stage II — the trays",title:"Where the power goes",
-  body:"Eighteen compute trays hold two GB200 superchips each; nine NVSwitch trays occupy the center of the stack. NVIDIA's roughly 120 kW rack figure requires a compatible liquid-cooling and power envelope. The ghosted manifold shows the illustrated cooling path; confirm the integrator-specific design and facility handoff.",
-  stats:[["Compute trays","18","teal"],["NVSwitch trays","9","teal"],["Power draw","~120 kW","amber"],["Cooling","liquid, required","amber"]]},
- {tab:"III — Spine",eyebrow:"Stage III — the spine",title:"How far copper reaches",
-  body:"Behind the midplane: approximately 5,000 direct copper NVLink cables—378 schematic instances are drawn here—carry each GPU's 1.8 TB/s through the switch trays. Inside the domain, GPUs retain their own HBM while the NVLink fabric provides high-bandwidth access. Beyond the scale-up domain, traffic crosses to a separately designed scale-out network.",
-  stats:[["Copper cables","~5,000","amber"],["3D instances shown","378","amber"],["NVLink per GPU","1.8 TB/s","teal"],["Scale-up domain","72 GPUs","teal"]]},
- {tab:"IV — Superchip",eyebrow:"Stage IV — the superchip",title:"The atom of the machine",
-  body:"One compute tray, drawn clear of the rack: two GB200 superchips. Each joins one Grace CPU and its LPDDR5X to two Blackwell GPUs over NVLink-C2C; each GPU retains 192 GB of HBM3e. The neighboring GPUs can reach data over NVLink, but they do not become one physical memory device. Each GPU package contains two dies joined by NV-HBI. Thirty-six superchips fill the rack.",
-  stats:[["Superchips per tray","2","teal"],["HBM3e per GPU","192 GB","amber"],["NVLink per GPU","1.8 TB/s","teal"],["Superchips per rack","36","teal"]]}
+ {tab:"01 — The rack",eyebrow:"01 / WORKING TOGETHER",title:"72 chips. One team.",
+  body:"A GPU is a chip built to do lots of calculations at once. This rack connects 72 of them so they can work on enormous AI tasks together. Think of it as a team, with a very fast way to talk.",
+  stats:[["AI chips (GPUs)","72","teal"],["Supporting processors","36","teal"],["Connected in one rack","72 GPUs","teal"],["Approx. power needed","120 kW","amber"]]},
+ {tab:"02 — The trays",eyebrow:"02 / TAKING IT APART",title:"Big brains. Big heat.",
+  body:"Slide it open: 18 trays hold the computing chips. Nine more connect them. All that work creates heat, so liquid carries it away. The building’s cooling matters as much as the chips.",
+  stats:[["Compute trays","18","teal"],["Connection trays","9","teal"],["Approx. power needed","120 kW","amber"],["Cooling method","Liquid","amber"]]},
+ {tab:"03 — The links",eyebrow:"03 / THE CONVERSATION",title:"No chip works alone.",
+  body:"Thousands of copper cables let the chips exchange data. These fast connections are called NVLink. Go beyond the rack and you need a different network—the next piece of the puzzle.",
+  stats:[["Copper cables","~5,000","amber"],["Cables drawn here","378","amber"],["NVLink per GPU","1.8 TB/s","teal"],["Connected GPUs","72","teal"]]},
+ {tab:"04 — The chip",eyebrow:"04 / THE BUILDING BLOCK",title:"Meet the small team.",
+  body:"One Grace CPU coordinates work for two Blackwell GPUs. Together, they form a GB200 superchip. Each GPU has its own fast memory to keep data close. There are two of these little teams in every compute tray.",
+  stats:[["Superchips per tray","2","teal"],["Memory per GPU","192 GB","amber"],["GPUs per superchip","2","teal"],["Superchips per rack","36","teal"]]}
 ];
 
 /* ---------- panel + tabs (work with or without WebGL) ---------- */
@@ -322,14 +318,15 @@ function webglOK(){
 }
 if(!window.THREE||!webglOK()){
   document.body.classList.add("no3d");
+  document.getElementById("rack-motion").hidden=true;
   return; // fallback figure stays; tabs still swap the same annotation copy
 }
 document.getElementById("fallback-fig").hidden=true;
 
 /* ---------- constants: geometry (m) and site tokens ---------- */
-var TEAL=0x117758,TEALDIM=0xDCEDE4,AMBER=0xD98F12,
-    INK=0x15201A,INK2=0x4A574F,INK3=0x8A968E,RULE=0xDDE2DB,
-    PANEL=0xFDFDFB,PAPER=0xF6F7F3;
+var TEAL=0xe7f48b,TEALDIM=0x788451,AMBER=0xeac989,
+    INK=0x11170e,INK2=0x77816b,INK3=0xa6af98,RULE=0x48513d,
+    PANEL=0x20231e,PAPER=0x181a17;
 
 var W=0.60,H=2.36,D=1.20,          // rack outer
     TW=0.50,TD=0.88,               // tray width/depth
@@ -368,33 +365,35 @@ try{
   renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:false,powerPreference:"high-performance"});
 }catch(e){
   document.body.classList.add("no3d");
+  document.getElementById("rack-motion").hidden=true;
   document.getElementById("fallback-fig").hidden=false;
   return;
 }
 renderer.setClearColor(PANEL,1);
+renderer.outputEncoding=THREE.sRGBEncoding;
 var scene=new THREE.Scene();
 var camera=new THREE.PerspectiveCamera(38,1.5,0.05,40);
-scene.add(new THREE.HemisphereLight(0xffffff,0xE9E6DC,0.92));
-var dl=new THREE.DirectionalLight(0xffffff,0.45);
+scene.add(new THREE.HemisphereLight(0xf3f5e7,0x26311e,1.1));
+var dl=new THREE.DirectionalLight(0xf5ffe3,1.2);
 dl.position.set(2.6,4.2,3.1);
 scene.add(dl);
 
 /* ---------- materials (opacity animated per stage; polygonOffset lets ink edges win) ---------- */
 function lam(color,op){
-  return new THREE.MeshLambertMaterial({color:color,transparent:true,opacity:op===undefined?1:op,
+  return new THREE.MeshStandardMaterial({color:color,metalness:0.45,roughness:0.36,transparent:true,opacity:op===undefined?1:op,
     polygonOffset:true,polygonOffsetFactor:1,polygonOffsetUnits:1});
 }
 function lin(color,op){
   return new THREE.LineBasicMaterial({color:color,transparent:true,opacity:op===undefined?0.85:op});
 }
 var matFrame=lam(INK2),      linFrame=lin(INK,0.9),
-    matShelf=lam(0xE7EAE2),
-    matTrayC=lam(0xF0F2EC),  linTrayC=lin(INK,0.8),
+    matShelf=lam(0x78816e),
+    matTrayC=lam(0xabb49e),  linTrayC=lin(INK,0.8),
     matTrayS=lam(TEALDIM),   linTrayS=lin(TEAL,0.85),
-    matShellH=lam(0xF0F2EC), linShellH=lin(INK,0.8),
+    matShellH=lam(0xabb49e), linShellH=lin(INK,0.8),
     matCable=new THREE.MeshLambertMaterial({color:0xffffff,transparent:true,opacity:0.5}),
     matManif=lam(AMBER,0),
-    matBoard=lam(0xFBFBF7),  linChip=lin(INK,0),
+    matBoard=lam(0x3c4934),  linChip=lin(INK,0),
     matGrace=lam(INK3),      matGPU=lam(TEAL),   matHBM=lam(AMBER),
     linGround=lin(INK3,0.55);
 [matBoard,matGrace,matGPU,matHBM].forEach(function(m){m.opacity=0});
@@ -714,9 +713,9 @@ chipA.position.set(-0.118,0.012,0);
 chipB.position.set(0.118,0.012,0);
 hero.add(chipA);hero.add(chipB);
 /* labels for the new links (sprites face the camera; opacity driven in applyP) */
-var labC2C=label("NVLink-C2C","#4A574F",0.016);labC2C.position.set(0,0.030,0.037);chipB.add(labC2C);
-var labSeam=label("NV-HBI · 10 TB/s","#117758",0.016);labSeam.position.set(FOCX,0.045,-0.095);chipB.add(labSeam);
-var labEgr=label("NVLink-5 · 1.8 TB/s","#D98F12",0.015);labEgr.position.set(FOCX,0.038,-0.20);chipB.add(labEgr);
+var labC2C=label("NVLink-C2C","#b5b9ab",0.016);labC2C.position.set(0,0.030,0.037);chipB.add(labC2C);
+var labSeam=label("NV-HBI · 10 TB/s","#e7f48b",0.016);labSeam.position.set(FOCX,0.045,-0.095);chipB.add(labSeam);
+var labEgr=label("NVLink-5 · 1.8 TB/s","#eac989",0.015);labEgr.position.set(FOCX,0.038,-0.20);chipB.add(labEgr);
 [labC2C,labSeam,labEgr].forEach(function(s){s.material.opacity=0});
 /* camera anchor at the focus package's center, for the GPU-zoom key */
 var focusAnchor=new THREE.Object3D();
@@ -792,8 +791,8 @@ var manifold=new THREE.InstancedMesh(unitCyl,matManif,2+computeY.length*2);
 rack.add(manifold);
 
 /* ---------- dimension callouts (utility/mono; figures already on the site) ---------- */
-var labDimH=label("2.36 m","#4A574F",0.11);labDimH.position.set(-0.64,1.18,0.55);labDimH.material.opacity=0;scene.add(labDimH);
-var labKW=label("~120 kW · liquid-cooled","#D98F12",0.095);labKW.position.set(-0.62,1.62,0.30);labKW.material.opacity=0;scene.add(labKW);
+var labDimH=label("2.36 m","#b5b9ab",0.11);labDimH.position.set(-0.64,1.18,0.55);labDimH.material.opacity=0;scene.add(labDimH);
+var labKW=label("~120 kW · liquid-cooled","#eac989",0.095);labKW.position.set(-0.62,1.62,0.30);labKW.material.opacity=0;scene.add(labKW);
 scene.add(new THREE.LineSegments(lineGeo([segs([
   [-0.46,0,0.55,-0.46,H,0.55],[-0.50,0,0.55,-0.42,0,0.55],[-0.50,H,0.55,-0.42,H,0.55]
 ])]),linDim));
@@ -1206,10 +1205,17 @@ window.addEventListener("resize",resize);
 canvas.addEventListener("webglcontextlost",function(e){
   e.preventDefault();
   document.body.classList.add("no3d");
+  document.getElementById("rack-motion").hidden=true;
   document.getElementById("fallback-fig").hidden=false;
 });
 
 /* ---------- frame loop: render only when something moves ---------- */
+var rotationPaused=reduced();
+var motionButton=document.getElementById("rack-motion");
+function updateMotionButton(){motionButton.textContent=rotationPaused?"Resume rotation":"Pause rotation";motionButton.setAttribute("aria-pressed",String(rotationPaused))}
+updateMotionButton();
+motionButton.addEventListener("click",function(){rotationPaused=!rotationPaused;updateMotionButton()});
+reduceMq.addEventListener("change",function(){rotationPaused=reduced();updateMotionButton()});
 var lastT=performance.now();
 function frame(now){
   requestAnimationFrame(frame);
@@ -1251,7 +1257,7 @@ function frame(now){
     vTheta*=0.90;vPhi*=0.90;
     applyCam();
   }
-  if(committed===0&&!reduced()&&!dragging&&!camTween&&!camBez&&now-lastInteract>4500){
+  if(committed===0&&!rotationPaused&&!reduced()&&!document.hidden&&!dragging&&!camTween&&!camBez&&now-lastInteract>4500){
     cam.theta+=0.00035*dt/16.7; // idle drift, stage I only
     applyCam();
   }

@@ -1,14 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
-  <title id="title">The Compute Desk</title>
-  <desc id="desc">Decision tools for buying and operating GPU capacity.</desc>
-  <rect width="1200" height="630" fill="#F6F7F3"/>
-  <path d="M96 100h1008M96 528h1008" stroke="#DDE2DB"/>
-  <text x="96" y="78" fill="#117758" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="20" letter-spacing="5">THE COMPUTE DESK</text>
-  <text x="96" y="210" fill="#15201A" font-family="Georgia, serif" font-size="62" font-style="italic">Decision tools for buying</text>
-  <text x="96" y="286" fill="#15201A" font-family="Georgia, serif" font-size="62" font-style="italic">and operating GPU capacity</text>
-  <text x="96" y="376" fill="#4A574F" font-family="Georgia, serif" font-size="27">Price benchmarks · commitment sizing · fabric planning · contract exposure</text>
-  <g fill="#66736B" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="18" letter-spacing="2">
-    <text x="96" y="500">ALEX YEN</text>
-    <text x="1104" y="500" text-anchor="end">MODEL VERSION 2026.08</text>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<defs><linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e5e9cf"/><stop offset="1" stop-color="#8f9d7a"/></linearGradient><pattern id="traces" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M0 6H12M6 0V12" stroke="#b7c786" stroke-width=".5" opacity=".4"/></pattern></defs>
+<rect width="1200" height="630" fill="#181a17"/>
+<g stroke="#e7f48b" stroke-width="2"><path d="M70 40v40M50 60h40M56 46l28 28M56 74l28-28"/></g>
+<text x="106" y="66" fill="#f0f0e5" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="bold" letter-spacing="1.5">THE COMPUTE DESK</text><path d="M50 105H1150" stroke="#393d33"/>
+<text x="52" y="206" fill="#b5b9ab" font-family="monospace" font-size="11" letter-spacing="2">A FIELD GUIDE TO THE PHYSICAL SIDE OF AI</text>
+<text x="48" y="293" fill="#f0f0e5" font-family="Arial,Helvetica,sans-serif" font-size="70" letter-spacing="-4">AI isn’t magic.</text>
+<text x="48" y="372" fill="#f0f0e5" font-family="Arial,Helvetica,sans-serif" font-size="70" letter-spacing="-4">It’s a <tspan fill="#e7f48b" font-family="Georgia,serif" font-style="italic">machine.</tspan></text>
+<text x="52" y="425" fill="#b5b9ab" font-family="Arial,Helvetica,sans-serif" font-size="17">Chips, connections, and the choices that matter.</text>
+<rect x="52" y="465" width="220" height="50" rx="25" fill="#e7f48b"/><text x="75" y="496" fill="#20251c" font-family="Arial,Helvetica,sans-serif" font-size="15">Meet the machine</text><path d="M229 497l12-12m-12 0h12v12" stroke="#20251c" stroke-width="1.6" fill="none"/>
+<g transform="translate(888 330) rotate(-25) skewX(12) scale(1 .77)">
+<rect x="-176" y="-174" width="352" height="352" rx="4" fill="#89965c" transform="translate(0 16)"/><rect x="-176" y="-174" width="352" height="352" rx="4" fill="#b2bc7a"/><rect x="-165" y="-164" width="330" height="330" fill="#3b4931"/><rect x="-164" y="-164" width="328" height="328" fill="url(#traces)"/><rect x="-126" y="-126" width="252" height="252" fill="#20281c"/>
+<rect x="-65" y="-87" width="62" height="174" fill="url(#metal)"/><rect x="4" y="-87" width="62" height="174" fill="url(#metal)"/>
+<g fill="#758468" stroke="#b9c595" stroke-width="2"><rect x="-115" y="-111" width="36" height="43"/><rect x="-115" y="-51" width="36" height="43"/><rect x="-115" y="9" width="36" height="43"/><rect x="-115" y="69" width="36" height="43"/><rect x="79" y="-111" width="36" height="43"/><rect x="79" y="-51" width="36" height="43"/><rect x="79" y="9" width="36" height="43"/><rect x="79" y="69" width="36" height="43"/></g></g>
+<text x="710" y="552" fill="#b5b9ab" font-family="monospace" font-size="11" letter-spacing="1">EXPLORE. EXPERIMENT. UNDERSTAND.</text>
 </svg>

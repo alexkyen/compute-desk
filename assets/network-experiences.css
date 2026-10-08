@@ -1,0 +1,73 @@
+/* Network gallery: let a few visible decisions carry the explanation. */
+.fabric-page .tool-intro,.pod-page .tool-intro{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(240px,.8fr);gap:60px;align-items:end}
+.fabric-page .tool-intro h1,.pod-page .tool-intro h1{max-width:800px;margin-bottom:0}
+.fabric-page .tool-intro .dek,.pod-page .tool-intro .dek{max-width:390px;padding-bottom:5px}
+.trees-page .tool-intro h1{max-width:900px}
+.tool-page .network-exhibit{padding:28px 34px;background:radial-gradient(ellipse at 50% 50%,#3c48221a,transparent 70%),var(--panel)}
+.experiment-heading{display:flex;gap:26px;align-items:center;padding-bottom:23px;margin-bottom:25px;border-bottom:1px solid var(--rule)}
+.experiment-heading .overline{color:var(--teal);white-space:nowrap}
+.experiment-heading p{font-size:14px;color:var(--ink-2)}
+.network-exhibit .seggroup{display:flex;justify-content:space-between;margin:0 0 18px;gap:24px}
+.network-exhibit .seg{min-width:0}
+.network-exhibit .seg .btns{gap:7px}
+.network-exhibit .seg .lbl{margin-bottom:10px}
+.diagram-scroll{overflow:auto;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:var(--rule) transparent}
+.fabric-page #topo{width:100%;max-width:1000px;margin:auto;padding:12px 0}
+.trees-page #net{width:100%;max-width:920px;margin:auto}
+.network-exhibit svg line[stroke="#e7f48b"]{filter:drop-shadow(0 0 3px #e7f48b35)}
+.wait-visual{margin:0 auto 20px;padding:24px 0 20px;max-width:900px;border-top:1px solid var(--rule)}
+.wait-header{display:flex;align-items:baseline;justify-content:space-between;gap:20px;font-size:12px;color:var(--ink-2);margin-bottom:16px}
+.wait-header strong{font-weight:400;color:var(--amber);font-size:25px;letter-spacing:-.035em}
+.wait-track{height:36px;display:flex;gap:3px;border-radius:4px;overflow:hidden;background:#141711}
+#workShare{background:var(--teal);transition:width .35s ease}
+#waitShare{background:repeating-linear-gradient(130deg,#c7a168 0 4px,#8b75544d 4px 8px);transition:width .35s ease}
+.wait-legend{display:flex;gap:25px;font-size:11px;color:var(--ink-2);margin-top:11px}
+.wait-legend span{display:flex;align-items:center;gap:7px}
+.wait-legend i{width:7px;height:7px;border-radius:50%;display:inline-block;background:var(--teal)}
+.wait-legend span:last-child i{background:var(--amber)}
+.fabric-page .sizer{margin:0;padding-top:22px}
+.fabric-page .sizer .lbl{font:12px var(--sans);letter-spacing:0;text-transform:none;color:var(--ink-2)}
+.fabric-page .sizer b{font:18px var(--sans)}
+.tool-page .model-caption{font:11px/1.7 var(--sans);color:var(--ink-3);max-width:760px;margin:15px 0 24px}
+.tool-page .advanced-settings{border:1px solid var(--rule);border-radius:5px;margin:22px 0}
+.tool-page .advanced-settings>summary,.tool-page .reading-notes>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none}
+.tool-page .advanced-settings>summary::-webkit-details-marker,.tool-page .reading-notes>summary::-webkit-details-marker{display:none}
+.tool-page .advanced-settings>summary span,.tool-page .reading-notes>summary span{font-size:22px;line-height:1;color:var(--teal);transition:transform .2s}
+.tool-page .advanced-settings[open]>summary span,.tool-page .reading-notes[open]>summary span{transform:rotate(45deg)}
+.tool-page .advanced-settings .model-inputs,.tool-page .advanced-settings .bom{border-top:0;margin-top:0;padding-top:8px;gap:20px}
+.tool-page .advanced-settings .assumptions{font:12px/1.7 var(--sans);margin-top:22px}
+.tool-page .reading-notes .decision-strip{margin:0 0 25px}
+.trees-page .ticker{grid-template-columns:repeat(3,1fr) 1.1fr 1.1fr}
+.trees-page #c3,.trees-page #c4{font-size:clamp(16px,1.8vw,25px);line-height:1.35;letter-spacing:-.025em}
+.trees-page .lg{font:11px var(--sans);justify-content:center;margin:0 0 8px;gap:24px}
+.trees-page .status{font-size:17px;max-width:950px;color:var(--ink);padding:0 0 0 20px;border-left:2px solid var(--teal)}
+.pod-page .plate-card{padding:0;overflow:hidden}
+.pod-page .stages{padding:0;gap:0;display:grid;grid-template-columns:repeat(4,1fr)}
+.pod-page .stages button{border:0;border-right:1px solid var(--rule);border-radius:0;padding:21px 8px;min-height:60px;font:12px var(--sans);letter-spacing:0;white-space:normal}
+.pod-page .stages button:last-child{border-right:0}
+.pod-page .stages button.on,.pod-page .subrow button.on{background:var(--teal);color:#20251c}
+.pod-page .viewport{grid-template-columns:minmax(0,1fr) 320px}
+.pod-page .scene{min-height:540px}
+.pod-page .panel{padding:33px 28px}
+.pod-page .panel::before{display:none}
+.pod-page .panel .stage-eyebrow{font:9px/1.7 var(--mono);color:var(--teal);letter-spacing:.1em;margin-bottom:14px}
+.pod-page .panel h2{font:400 33px/1.1 var(--sans);letter-spacing:-.045em;margin-bottom:21px}
+.pod-page .panel .an-body{font:15px/1.75 var(--sans);color:var(--ink-2)}
+.pod-page .stats{padding-top:25px}
+.pod-page .stat{padding:13px 0;gap:8px}
+.pod-page .stat .l{font:11px/1.5 var(--sans);letter-spacing:0;text-transform:none}
+.pod-page .stat .v{font:12px/1.5 var(--mono)}
+.pod-page .subrow{background:#252920;padding:12px 20px}
+.pod-page .subrow button{font:12px var(--sans);letter-spacing:0;min-height:38px}
+.pod-page .subrow .lbl{font:11px var(--sans);text-transform:none;letter-spacing:0}
+.pod-page .count-row{font:10px/1.75 var(--mono);letter-spacing:0;padding:15px 20px}
+.pod-page .count-row .schematic{font-size:9px}
+.pod-page .scene .lab{background:#181a17ed;color:var(--ink);border-color:var(--rule)}
+.scene-controls{display:flex;justify-content:space-between;gap:20px;align-items:center;margin:15px 0 25px}
+.scene-controls .hint{font:11px/1.7 var(--sans);letter-spacing:0;margin:0}
+.scene-controls button{border:1px solid var(--rule);border-radius:4px;color:var(--ink-2);background:transparent;padding:9px 14px;font-size:12px;flex-shrink:0}
+.pod-page.no3d .scene-controls{display:none}
+.pod-page #fallback-fig .fig-cap{font:12px/1.7 var(--sans)}
+@media(max-width:1100px){.network-exhibit .seggroup{justify-content:start}.fabric-page .tool-intro,.pod-page .tool-intro{gap:30px;grid-template-columns:1.4fr 1fr}.pod-page .viewport{grid-template-columns:minmax(0,1fr) 285px}.pod-page .panel{padding:28px 22px}.trees-page .tk{padding:20px 16px}}
+@media(max-width:760px){.fabric-page .tool-intro,.pod-page .tool-intro{display:block}.fabric-page .tool-intro h1,.pod-page .tool-intro h1{margin-bottom:18px}.fabric-page .tool-intro .dek,.pod-page .tool-intro .dek{max-width:600px}.tool-page .network-exhibit{padding:22px}.experiment-heading{display:block;padding-bottom:17px;margin-bottom:20px}.experiment-heading p{margin-top:9px;font-size:13px}.network-exhibit .seggroup{gap:20px}.fabric-page #topo{min-width:560px}.trees-page #net{min-width:550px}.diagram-scroll{margin:0 -8px}.wait-visual{padding:18px 0 10px;margin-top:8px}.wait-header strong{font-size:22px}.wait-track{height:28px}.trees-page .ticker{grid-template-columns:repeat(3,1fr)}.trees-page .ticker .tk:nth-child(4){border-left:0}.trees-page .ticker .tk:nth-child(n+4){border-top:1px solid var(--rule)}.pod-page .viewport{grid-template-columns:1fr}.pod-page .scene{min-height:390px;height:52svh;max-height:540px}.pod-page .panel{border-left:0;border-top:1px solid var(--rule);border-radius:0;margin:0;padding:27px}.pod-page .panel h2{font-size:32px}.pod-page .stats{display:grid;grid-template-columns:1fr 1fr;gap:0 23px}.pod-page .stat{flex-direction:column;gap:5px;padding:12px 0}.pod-page .stages button{font-size:10px;padding:17px 7px;min-height:54px}.pod-page .plate-card{margin:0;border:1px solid var(--rule);border-radius:5px}.pod-page .subrow{padding:12px 15px}.pod-page .count-row{font-size:9px}.scene-controls{align-items:start}.scene-controls .hint{max-width:220px}}
+@media(max-width:480px){.tool-page .network-exhibit{padding:18px}.network-exhibit .seg{width:100%}.network-exhibit .btns{gap:6px}.trees-page .ticker{grid-template-columns:1fr 1fr}.trees-page .ticker .tk:nth-child(4){border-left:1px solid var(--rule)}.trees-page .ticker .tk:nth-child(5){grid-column:1/-1;border-top:1px solid var(--rule)}.trees-page .ticker .tk:nth-child(3){border-bottom:1px solid var(--rule)}.trees-page .status{font-size:15px}.wait-legend{font-size:10px;gap:16px}.fabric-page .sizer{gap:10px}.fabric-page .sizer .lbl{font-size:11px}.fabric-page .sizer b{font-size:15px;min-width:44px}.pod-page .stages button{font-size:9px}.pod-page .panel{padding:24px}.pod-page .scene{min-height:350px}.pod-page .stat .v{font-size:11px}}

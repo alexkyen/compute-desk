@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Size committed GPU capacity against synthetic or imported hourly demand and compare reserved with elastic cost.">
-<meta property="og:title" content="The Supply Book — GPU commitment sizing">
-<meta property="og:description" content="Estimate the committed GPU layer that minimizes modeled capacity cost.">
+<meta name="description" content="Move the capacity line. Explore the balance between renting GPUs as needed and reserving them ahead of time.">
+<meta property="og:title" content="How much is enough? — The Compute Desk">
+<meta property="og:description" content="Move the capacity line. Explore the balance between renting GPUs as needed and reserving them ahead of time.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://alexkyen.github.io/compute-desk/social-card.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:url" content="https://alexkyen.github.io/compute-desk/gpu-supply-book.html">
 <link rel="canonical" href="https://alexkyen.github.io/compute-desk/gpu-supply-book.html">
-<title>The supply book — GPU commitment sizing</title>
+<title>How much is enough? — The Compute Desk</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -87,91 +87,87 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--teal);outline-o
 .foot a{color:var(--teal);text-decoration:underline;text-underline-offset:2px}
 </style>
 <link rel="stylesheet" href="assets/desk.css">
+<link rel="stylesheet" href="assets/experience.css">
+<link rel="stylesheet" href="assets/tool-experience.css">
+<link rel="stylesheet" href="assets/buying-experiences.css">
+<meta name="theme-color" content="#181a17">
 </head>
-<body>
+<body class="experience tool-page supply-page">
 <a class="skip-link" href="#main">Skip to content</a>
-<nav class="nav-top" aria-label="Manual navigation">
-  <div class="nav-in">
-    <a href="index.html">The compute desk</a>
-    <span class="nav-here">02 / 08 — The supply book</span>
-    <span class="stepper">
-      <a class="st" href="the-atlas-scatter.html" data-t="The sellers" aria-label="Previous: The sellers">←</a>
-      <a class="st" href="silicon-ladder.html" data-t="The NVIDIA generations" aria-label="Next: The NVIDIA generations">→</a>
-    </span>
-  </div>
-</nav>
+<header class="site-header">
+  <a class="wordmark" href="index.html" aria-label="The Compute Desk home"><span class="brand-icon" aria-hidden="true">✳</span> THE COMPUTE DESK</a>
+  <nav aria-label="Main navigation"><a class="nav-explore" href="index.html#explore">Explore</a><a href="index.html#toolbox">The toolbox <span aria-hidden="true">↗</span></a></nav>
+</header>
 <main class="wrap" id="main">
-  <p class="eyebrow">Compute desk</p>
-  <h1>The supply book</h1>
-  <p class="dek">Estimate the committed GPU layer that minimizes modeled capacity cost. Use the synthetic load-duration curve or import observed hourly demand, then compare reserved and elastic coverage.</p>
-  <dl class="decision-strip">
-    <div><dt>Decision supported</dt><dd><strong>How many GPUs should we commit?</strong></dd></div>
-    <div><dt>Primary output</dt><dd>Cost-minimizing commitment and utilization</dd></div>
-    <div><dt>Model boundary</dt><dd>Duration, not chronology; no outages or counterparty risk</dd></div>
-  </dl>
-  <p class="scope-note">Model output, not a demand forecast. Imported observations preserve the demand distribution but discard their time order; apply your own growth, seasonality, and contract-risk judgment. Imported files stay in the browser and are not embedded in share links.</p>
-
-  <div class="ticker" aria-label="Scenario outputs">
-    <div class="tk"><p class="l">Blended cost</p><p class="v" id="c1">—</p></div>
-    <div class="tk"><p class="l">Vs all on-demand</p><p class="v" id="c2">—</p></div>
-    <div class="tk"><p class="l">Committed utilization</p><p class="v" id="c3">—</p></div>
-    <div class="tk"><p class="l">Served elastic</p><p class="v" id="c4">—</p></div>
-  </div>
-  <p class="status" id="st" aria-live="polite"></p>
-
-  <div class="card">
-    <div class="legend">
-      <span><span class="sw" style="background:var(--teal)"></span>committed, utilized</span>
-      <span><span class="sw" style="background:repeating-linear-gradient(45deg,#8FC7AF 0 2px,transparent 2px 5px)"></span>committed, idle</span>
-      <span><span class="sw" style="background:var(--amber)"></span>served on-demand</span>
-      <span><span class="sw" style="background:var(--oxide);height:3px;border-radius:1px"></span>demand curve</span>
+  <section class="tool-intro">
+    <div><p class="overline">06 / THE TRADEOFFS</p><h1>How much<br>is enough?</h1></div>
+    <p class="dek">Rent for the rush. Commit to the everyday.<br>Find the balance between paying more and buying too much.</p>
+  </section>
+  <section class="supply-experiment" aria-label="Try a GPU capacity commitment">
+    <div class="experiment-head"><p class="overline">TRY IT / MOVE THE LINE</p><p>Your workload has busy hours.<br>Your bill has no quiet hours.</p></div>
+    <div class="supply-art">
+      <div class="legend">
+        <span><i class="sw used"></i>Reserved &amp; working</span>
+        <span><i class="sw idle"></i>Reserved &amp; idle</span>
+        <span><i class="sw elastic"></i>Rented as needed</span>
+      </div>
+      <svg id="sim" viewBox="0 0 840 340" role="img" aria-label="Demand from busiest to quietest hours. Move the capacity slider to change how much is reserved."></svg>
+      <div class="krow">
+        <div class="ctl"><label for="ks">How many GPUs will you reserve? <b id="kv">100 GPUs</b></label><input type="range" id="ks" min="0" max="400" step="1" value="100"></div>
+        <button id="snapBtn" type="button">Find the sweet spot ↗</button>
+      </div>
     </div>
-    <svg id="sim" viewBox="0 0 840 340" role="img" aria-label="Load-duration chart with a draggable committed-capacity line dividing utilized, idle, and on-demand regions"></svg>
-    <div class="controls">
+    <div class="ticker supply-results" aria-label="Scenario outputs">
+      <div class="tk"><p class="l">Your cost per GPU-hour</p><p class="v" id="c1">—</p></div>
+      <div class="tk"><p class="l">Compared with renting it all</p><p class="v" id="c2">—</p></div>
+      <div class="tk"><p class="l">Reserved capacity used</p><p class="v" id="c3">—</p></div>
+      <div class="tk"><p class="l">Work served on demand</p><p class="v" id="c4">—</p></div>
+    </div>
+    <p class="status" id="st" aria-live="polite"></p>
+    <p class="experiment-note">An illustrative workload and prices. Drag the slider, or the line itself.</p>
+  </section>
+  <details class="buying-details">
+    <summary><span>Make it your scenario</span><small>Prices, demand &amp; file import</small></summary>
+    <div class="detail-body">    <div class="controls">
       <div class="ctl">
-        <label>Price ratio <b id="dv">3.0× · $2.00/hr</b></label>
+        <label for="ds">Price ratio <b id="dv">3.0× · $2.00/hr</b></label>
         <input type="range" id="ds" min="1.5" max="6" step="0.1" value="3" aria-label="Reserved discount multiple">
       </div>
       <div class="ctl">
-        <label>Peak-to-average demand <b id="vv">4.0×</b></label>
+        <label for="vs">Peak-to-average demand <b id="vv">4.0×</b></label>
         <input type="range" id="vs" min="1.3" max="8" step="0.1" value="4" aria-label="Peak to average demand ratio">
       </div>
-    </div>
-    <div class="krow">
-      <div class="ctl">
-        <label>Committed capacity K <b id="kv">100 GPUs</b></label>
-        <input type="range" id="ks" min="0" max="400" step="1" value="100" aria-label="Committed capacity in GPUs">
-      </div>
-      <button id="snapBtn" type="button">snap to optimal</button>
-    </div>
-    <div class="input-grid">
+    </div>    <div class="input-grid">
       <div class="numctl"><label for="avgInput">Average demand · GPUs</label><input id="avgInput" type="number" min="1" step="1" value="100"></div>
       <div class="numctl"><label for="odInput">Elastic rate · $/GPU-hr</label><input id="odInput" type="number" min="0.01" step="0.01" value="6.00"></div>
       <div class="numctl"><label for="resInput">Committed rate · $/GPU-hr</label><input id="resInput" type="number" min="0.01" step="0.01" value="2.00"></div>
       <div class="filectl"><label for="csvInput">Observed hourly demand · CSV or text</label><input id="csvInput" type="file" accept=".csv,.txt,text/csv,text/plain"><p class="tool-message" id="csvStatus">Synthetic demand · 180 modeled intervals</p></div>
       <div class="tool-actions"><button type="button" id="resetDemand">use synthetic curve</button></div>
     </div>
-    <div class="assumptions" id="assumptionSummary"><strong>Assumptions:</strong> synthetic stationary demand; 100-GPU average; $2.00 committed; $6.00 elastic; hourly billing.</div>
-  </div>
-  <div class="tool-actions"><button type="button" id="shareSupply" data-copy-link>copy scenario link</button><button type="button" id="downloadSupply">download summary</button></div><p class="tool-message" aria-live="polite"></p>
-
-  <div class="notes">
-    <h2>Commitment logic and limits</h2>
-    <p>The committed layer is paid for every hour whether used or not. Demand above it is served at the elastic rate; unused committed capacity is paid idle. In imported mode the page uses the last non-negative numeric field on each nonblank row, so a single-column export and a timestamp-plus-demand CSV both work.</p>
+    <div class="assumptions" id="assumptionSummary"><strong>Assumptions:</strong> synthetic stationary demand; 100-GPU average; $2.00 committed; $6.00 elastic; hourly billing.</div></div>
+  </details>
+  <div class="tool-actions"><button type="button" id="shareSupply" data-copy-link>Copy scenario link</button><button type="button" id="downloadSupply">Download summary</button></div><p class="tool-message" aria-live="polite"></p>
+  <details class="buying-details notes">
+    <summary><span>Why the sweet spot exists</span><small>The model &amp; its limits</small></summary>
+    <div class="detail-body">
+    <p>The committed layer is paid for every hour whether used or not. Demand above it is served at the elastic rate; unused committed capacity is paid idle. Import a single demand column or place demand in the final column after a timestamp. One optional header row and blank lines are allowed. Missing, invalid, or negative demand values stop the import; earlier columns are never substituted. Commitments use whole GPUs, and imported scenarios are optimized against the observed distribution.</p>
     <div class="rule-box" id="ruleBox">commit a GPU ⇔ its expected utilization ≥ committed ÷ elastic price</div>
     <p><strong>The cost curve often has a broad minimum.</strong> Sweep K from zero to the peak and watch modeled cost fall, bottom out, and rise. Sizing error may be less important than duration, delivery, concentration, and counterparty exposure; this tool does not price those risks.</p>
     <p><strong>Volatility lowers the committed layer.</strong> Holding rates constant, a higher peak-to-average ratio places more demand in low-frequency intervals and moves the modeled optimum down.</p>
     <p><strong>A larger committed-rate discount raises the committed layer.</strong> Breakeven utilization equals committed price divided by elastic price, so lower committed pricing makes less frequently used capacity economical in the model.</p>
-    <p><strong>Limitations.</strong> The tool assumes the observed distribution repeats, elastic capacity is always available, rates are flat, and one GPU-hour is interchangeable with another. It omits growth, minimum billing increments, placement, performance, outages, and contract optionality.</p>
-  </div>
+    <p><strong>Limitations.</strong> The tool assumes the observed distribution repeats, elastic capacity is always available, rates are flat, and one GPU-hour is interchangeable with another. It omits growth, minimum billing increments, placement, performance, outages, and contract optionality.</p>  <dl class="decision-strip">
+    <div><dt>Decision supported</dt><dd><strong>How many GPUs should we commit?</strong></dd></div>
+    <div><dt>Primary output</dt><dd>Cost-minimizing commitment and utilization</dd></div>
+    <div><dt>Model boundary</dt><dd>Duration, not chronology; no outages or counterparty risk</dd></div>
+  </dl>  <p class="scope-note">Model output, not a demand forecast. Imported observations preserve the demand distribution but discard their time order; apply your own growth, seasonality, and contract-risk judgment. Imported files stay in the browser and are not embedded in share links.</p></div>
+  </details>
   <p class="foot">model · newsvendor critical ratio · load-duration framing after Modal, “<a href="https://modal.com/blog/how-to-price-serverless" target="_blank" rel="noopener">How to price serverless</a>” (2026) · <a href="methodology.html">methods &amp; limitations</a></p>
-  <nav class="nav-bot" aria-label="Manual navigation">
-    <a class="nav-prev" href="the-atlas-scatter.html">← The sellers</a>
-    <a class="nav-next" href="silicon-ladder.html">The NVIDIA generations →</a>
-  </nav>
+  <nav class="nav-bot" aria-label="Continue exploring"><a class="nav-prev" href="the-two-trees.html"><span class="next-label">PREVIOUS</span>← Two ways to connect</a><a class="nav-next" href="the-atlas-scatter.html"><span class="next-label">UP NEXT / 07</span>What does a GPU cost? →</a></nav>
 </main>
+<footer class="experience-footer"><a class="wordmark" href="index.html">THE COMPUTE DESK <span class="brand-icon" aria-hidden="true">✳</span></a><span>Made for curious people. By Alex Yen.</span><a href="methodology.html">Methods &amp; sources ↗</a></footer>
 
 <script src="assets/desk.js"></script>
+<script src="assets/demand-import.js"></script>
 <script>
 var d=6, r=2, delta=3, rho=4, K=100, AVG=100, N=180, imported=null;
 var qs=ComputeDesk.params();
@@ -179,19 +175,26 @@ if(qs.has("avg"))AVG=Math.max(1,+qs.get("avg")||100);
 if(qs.has("od"))d=Math.max(.01,+qs.get("od")||6);
 if(qs.has("res"))r=Math.max(.01,+qs.get("res")||2);
 if(qs.has("rho"))rho=Math.max(1.3,+qs.get("rho")||4);
-if(qs.has("k"))K=Math.max(0,+qs.get("k")||100);
+if(qs.has("k"))K=Math.max(0,Number(qs.get("k"))||0);
 delta=d/r;
 function peak(){return AVG*rho}
 function D(h){
   if(!imported)return AVG*rho*Math.pow(1-h,rho-1);
-  var at=Math.max(0,Math.min(imported.length-1,h*(imported.length-1))),lo=Math.floor(at),hi=Math.ceil(at),mix=at-lo;
-  return imported[lo]*(1-mix)+imported[hi]*mix;
+  return imported[Math.max(0,Math.min(imported.length-1,Math.floor(h*imported.length)))];
 }
 function hOf(k){
   if(!imported){var p=peak();if(k>=p)return 0;if(k<=0)return 1;return 1-Math.pow(k/p,1/(rho-1))}
   var above=0;for(var z=0;z<imported.length;z++)if(imported[z]>k)above++;return above/imported.length;
 }
-function Kopt(){return D(Math.min(.999,r/d))}
+function capacityMax(){return Math.ceil(imported?imported[0]:peak())}
+function normalizeCapacity(){K=ComputeDeskDemand.clampCommitment(K,capacityMax());var input=document.getElementById('ks');input.max=capacityMax();input.value=K}
+function capacityCost(k){var h=hOf(k);return r*k+d*Math.max(0,AVG-(k*h+AVG*Math.pow(1-h,rho)))}
+function Kopt(){
+  if(imported)return ComputeDeskDemand.bestCommitment(imported,r,d);
+  if(r>=d)return 0;
+  var ideal=D(Math.min(.999,r/d)),lo=Math.floor(ideal),hi=Math.ceil(ideal);
+  return capacityCost(hi)<capacityCost(lo)?hi:lo;
+}
 function syncUrl(){if(imported)return;ComputeDesk.setParams({avg:Math.round(AVG),od:d.toFixed(2),res:r.toFixed(2),rho:rho.toFixed(1),k:Math.round(K)})}
 function render(){
   delta=d/r;
@@ -202,7 +205,7 @@ function render(){
   var cost=r*K+d*OD, blended=cost/AVG;
   var util=K>0?S/K:0, sav=1-cost/(d*AVG);
   var ko=Kopt();
-  var Dmax=p*1.05, X0=56,X1=816,Y0=294,Y1=22;
+  var Dmax=capacityMax()*1.05, X0=56,X1=816,Y0=294,Y1=22;
   function x(h){return X0+h*(X1-X0)}
   function y(v){return Y0-(v/Dmax)*(Y0-Y1)}
   var i,h;
@@ -223,24 +226,25 @@ function render(){
   }
   var cP='M'+x(0).toFixed(1)+' '+y(D(0)).toFixed(1);
   for(i=1;i<=N;i++){h=i/N;cP+='L'+x(h).toFixed(1)+' '+y(D(h)).toFixed(1)}
-  function tick(v){return '<text x="48" y="'+(y(v)+4).toFixed(1)+'" text-anchor="end" font-size="11" font-family="IBM Plex Mono, monospace" fill="#8A968E">'+Math.round(v)+'</text>'}
-  var s='<defs><pattern id="hz" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#8FC7AF" stroke-width="1.6"/></pattern></defs>';
-  s+='<path d="'+uP+'" fill="#117758" fill-opacity="0.42"/>';
+  function tick(v){return '<text x="48" y="'+(y(v)+4).toFixed(1)+'" text-anchor="end" font-size="11" font-family="IBM Plex Mono, monospace" fill="#aab29e">'+Math.round(v)+'</text>'}
+  var s='<defs><pattern id="hz" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#a9b77c" stroke-width="1.6"/></pattern></defs>';
+  s+='<path d="'+uP+'" fill="#c5db76" fill-opacity="0.42"/>';
   if(iP)s+='<path d="'+iP+'" fill="url(#hz)" fill-opacity="0.75"/>';
-  if(oP)s+='<path d="'+oP+'" fill="#D98F12" fill-opacity="0.38"/>';
-  s+='<path d="'+cP+'" fill="none" stroke="#A63B26" stroke-width="2.5" stroke-linecap="round"/>';
-  s+='<line x1="'+X0+'" y1="'+y(ko).toFixed(1)+'" x2="'+X1+'" y2="'+y(ko).toFixed(1)+'" stroke="#15201A" stroke-opacity="0.4" stroke-width="1" stroke-dasharray="4 5"/>';
-  s+='<text x="'+(X1-4)+'" y="'+(y(ko)-7).toFixed(1)+'" text-anchor="end" font-size="11" font-family="IBM Plex Mono, monospace" fill="#4A574F">optimal '+Math.round(ko)+'</text>';
-  s+='<line x1="'+X0+'" y1="'+y(K).toFixed(1)+'" x2="'+X1+'" y2="'+y(K).toFixed(1)+'" stroke="#15201A" stroke-width="1.6"/>';
-  s+='<circle cx="'+((X0+X1)/2)+'" cy="'+y(K).toFixed(1)+'" r="6" fill="#15201A"/>';
-  s+='<text x="'+((X0+X1)/2+12)+'" y="'+(y(K)-9).toFixed(1)+'" font-size="11" font-family="IBM Plex Mono, monospace" fill="#15201A">K = '+Math.round(K)+'</text>';
-  s+='<line x1="'+X0+'" y1="'+Y0+'" x2="'+X1+'" y2="'+Y0+'" stroke="#C7CEC6" stroke-width="1"/>';
-  s+='<line x1="'+X0+'" y1="'+Y1+'" x2="'+X0+'" y2="'+Y0+'" stroke="#C7CEC6" stroke-width="1"/>';
+  if(oP)s+='<path d="'+oP+'" fill="#eac989" fill-opacity="0.38"/>';
+  s+='<path d="'+cP+'" fill="none" stroke="#eab18c" stroke-width="2.5" stroke-linecap="round"/>';
+  s+='<line x1="'+X0+'" y1="'+y(ko).toFixed(1)+'" x2="'+X1+'" y2="'+y(ko).toFixed(1)+'" stroke="#e7f48b" stroke-opacity="0.5" stroke-width="1" stroke-dasharray="4 5"/>';
+  s+='<text x="'+(X1-4)+'" y="'+(y(ko)-7).toFixed(1)+'" text-anchor="end" font-size="11" font-family="IBM Plex Mono, monospace" fill="#b9c3a8">best fit '+Math.round(ko)+'</text>';
+  s+='<line x1="'+X0+'" y1="'+y(K).toFixed(1)+'" x2="'+X1+'" y2="'+y(K).toFixed(1)+'" stroke="#e7f48b" stroke-width="1.6"/>';
+  s+='<circle cx="'+((X0+X1)/2)+'" cy="'+y(K).toFixed(1)+'" r="6" fill="#e7f48b"/>';
+  s+='<text x="'+((X0+X1)/2+12)+'" y="'+(y(K)-9).toFixed(1)+'" font-size="11" font-family="IBM Plex Mono, monospace" fill="#e7f48b">reserved: '+Math.round(K)+'</text>';
+  s+='<line x1="'+X0+'" y1="'+Y0+'" x2="'+X1+'" y2="'+Y0+'" stroke="#536047" stroke-width="1"/>';
+  s+='<line x1="'+X0+'" y1="'+Y1+'" x2="'+X0+'" y2="'+Y0+'" stroke="#536047" stroke-width="1"/>';
   s+=tick(0)+tick(p/2)+tick(p);
-  s+='<text x="'+X0+'" y="316" font-size="11" font-family="IBM Plex Mono, monospace" fill="#8A968E">busiest hours</text>';
-  s+='<text x="'+X1+'" y="316" text-anchor="end" font-size="11" font-family="IBM Plex Mono, monospace" fill="#8A968E">quietest hours</text>';
-  s+='<text x="'+((X0+X1)/2)+'" y="316" text-anchor="middle" font-size="11" font-family="IBM Plex Mono, monospace" fill="#8A968E">share of the year, sorted</text>';
+  s+='<text x="'+X0+'" y="316" font-size="11" font-family="IBM Plex Mono, monospace" fill="#aab29e">busiest hours</text>';
+  s+='<text x="'+X1+'" y="316" text-anchor="end" font-size="11" font-family="IBM Plex Mono, monospace" fill="#aab29e">quietest hours</text>';
+  s+='<text x="'+((X0+X1)/2)+'" y="316" class="chart-mid" text-anchor="middle" font-size="11" font-family="IBM Plex Mono, monospace" fill="#aab29e">hours, sorted by demand</text>';
   document.getElementById('sim').innerHTML=s;
+  var ratioSlider=document.getElementById('ds');ratioSlider.min=Math.min(1.5,delta);ratioSlider.max=Math.max(6,delta);ratioSlider.value=delta;
   document.getElementById('dv').textContent=delta.toFixed(1)+'× · $'+r.toFixed(2)+'/hr';
   document.getElementById('vv').textContent=imported?'from file':rho.toFixed(1)+'×';
   document.getElementById('kv').textContent=Math.round(K)+' GPUs';
@@ -251,9 +255,10 @@ function render(){
   document.getElementById('c3').textContent=Math.round(util*100)+'%';
   document.getElementById('c4').textContent=Math.round(OD/AVG*100)+'%';
   var be=1/delta, m=hK, beT=Math.round(be*100), mT=Math.round(m*100), msg;
-  if(Math.abs(m-be)<0.02){msg='Near optimal — the marginal committed GPU runs '+mT+'% of hours, right at the '+beT+'% breakeven.'}
-  else if(m>be){msg='The marginal committed GPU runs '+mT+'% of hours, above the '+beT+'% breakeven — committing more still pays.'}
-  else{msg='Over-committed — the marginal GPU runs only '+mT+'% of hours against a '+beT+'% breakeven. The top of the book idles at a loss.'}
+  if(r>=d){msg=K===0?'Renting wins here. A commitment costs at least as much, even before idle time.':'Renting is cheaper here. The reserved rate is at least as high as the on-demand rate.'}
+  else if(K===ko){msg='The sweet spot. You’re covering the everyday work without paying for too much idle capacity.'}
+  else if(K<ko){msg='Room to reserve more. In this scenario, a little more commitment lowers your bill.'}
+  else{msg='Too much on reserve. You’re paying for capacity that spends too much time idle.'}
   document.getElementById('st').textContent=msg;
   document.getElementById('ruleBox').innerHTML='commit a GPU ⇔ its expected utilization ≥ committed ÷ elastic price<br>breakeven = $'+r.toFixed(2)+' / $'+d.toFixed(2)+' = '+beT+'% of hours';
   document.getElementById('assumptionSummary').innerHTML='<strong>Assumptions:</strong> '+(imported?imported.length+' imported observations':'synthetic stationary demand')+'; '+AVG.toFixed(1)+'-GPU average; $'+r.toFixed(2)+' committed; $'+d.toFixed(2)+' elastic; hourly billing; elastic supply always available.';
@@ -265,8 +270,7 @@ document.getElementById('vs').addEventListener('input',function(){
   if(imported)return;
   rho=+this.value;
   var ks=document.getElementById('ks');
-  ks.max=Math.round(peak());
-  if(K>peak()){K=Math.round(peak());ks.value=K}
+  normalizeCapacity();
   render();
 });
 document.getElementById('ks').addEventListener('input',function(){K=+this.value;render()});
@@ -275,29 +279,29 @@ document.getElementById('snapBtn').addEventListener('click',function(){
   document.getElementById('ks').value=K;
   render();
 });
-document.getElementById('avgInput').addEventListener('change',function(){if(imported)return;AVG=Math.max(1,+this.value||100);document.getElementById('ks').max=Math.round(peak());render()});
-document.getElementById('odInput').addEventListener('change',function(){d=Math.max(.01,+this.value||6);delta=d/r;document.getElementById('ds').value=Math.max(1.5,Math.min(6,delta));render()});
-document.getElementById('resInput').addEventListener('change',function(){r=Math.max(.01,+this.value||2);delta=d/r;document.getElementById('ds').value=Math.max(1.5,Math.min(6,delta));render()});
+document.getElementById('avgInput').addEventListener('input',function(){if(this.value===''||!this.validity.valid)return;if(imported)return;AVG=Math.max(1,+this.value||100);normalizeCapacity();render()});
+document.getElementById('odInput').addEventListener('input',function(){if(this.value===''||!this.validity.valid)return;d=Math.max(.01,+this.value||6);delta=d/r;document.getElementById('ds').value=Math.max(1.5,Math.min(6,delta));render()});
+document.getElementById('resInput').addEventListener('input',function(){if(this.value===''||!this.validity.valid)return;r=Math.max(.01,+this.value||2);delta=d/r;document.getElementById('ds').value=Math.max(1.5,Math.min(6,delta));render()});
 document.getElementById('csvInput').addEventListener('change',function(){
   var file=this.files[0];if(!file)return;
   var reader=new FileReader();reader.onload=function(){
-    var rows=String(reader.result).split(/\r?\n/),vals=[];
-    rows.forEach(function(row){if(!row.trim())return;var nums=row.split(/[,;\t ]+/).filter(function(v){return v.trim()!==''}).map(Number).filter(function(v){return Number.isFinite(v)&&v>=0});if(nums.length)vals.push(nums[nums.length-1])});
-    if(vals.length<2){document.getElementById('csvStatus').textContent='No usable demand column found';return}
+    var vals;
+    try{vals=ComputeDeskDemand.parse(reader.result)}
+    catch(error){document.getElementById('csvStatus').textContent=error.message;ComputeDesk.announce(error.message);return}
     imported=vals.sort(function(a,b){return b-a});N=Math.min(360,Math.max(60,imported.length));AVG=imported.reduce(function(a,b){return a+b},0)/imported.length;rho=imported[0]/AVG;
     K=Math.round(Kopt());document.getElementById('avgInput').value=AVG.toFixed(1);document.getElementById('avgInput').disabled=true;document.getElementById('vs').disabled=true;document.getElementById('ks').max=Math.ceil(imported[0]);document.getElementById('ks').value=K;
     document.getElementById('csvStatus').textContent=file.name+' · '+imported.length+' observations · '+AVG.toFixed(1)+' average GPUs';var share=document.getElementById('shareSupply');share.disabled=true;share.textContent='file scenario not shareable';render();ComputeDesk.announce('Imported '+imported.length+' demand observations');
   };reader.readAsText(file);
 });
-document.getElementById('resetDemand').addEventListener('click',function(){imported=null;N=180;AVG=Math.max(1,+document.getElementById('avgInput').value||100);rho=Math.max(1.3,+document.getElementById('vs').value||4);document.getElementById('avgInput').disabled=false;document.getElementById('vs').disabled=false;document.getElementById('csvInput').value='';document.getElementById('csvStatus').textContent='Synthetic demand · 180 modeled intervals';var share=document.getElementById('shareSupply');share.disabled=false;share.textContent='copy scenario link';document.getElementById('ks').max=Math.round(peak());K=Math.min(K,peak());ComputeDesk.setParams({mode:null});render()});
-document.getElementById('downloadSupply').addEventListener('click',function(){var lines=['Compute Desk — supply book','Average demand: '+AVG.toFixed(1)+' GPUs','Committed rate: $'+r.toFixed(2)+'/GPU-hour','Elastic rate: $'+d.toFixed(2)+'/GPU-hour','Recommended commitment: '+Math.round(Kopt())+' GPUs','Selected commitment: '+Math.round(K)+' GPUs','Mode: '+(imported?'imported observations':'synthetic curve'),'Scenario: '+location.href];ComputeDesk.download('compute-desk-supply.txt',lines.join('\n'))});
+document.getElementById('resetDemand').addEventListener('click',function(){imported=null;N=180;AVG=Math.max(1,+document.getElementById('avgInput').value||100);rho=Math.max(1.3,+document.getElementById('vs').value||4);document.getElementById('avgInput').disabled=false;document.getElementById('vs').disabled=false;document.getElementById('csvInput').value='';document.getElementById('csvStatus').textContent='Synthetic demand · 180 modeled intervals';var share=document.getElementById('shareSupply');share.disabled=false;share.textContent='copy scenario link';AVG=Math.round(AVG);document.getElementById('avgInput').value=AVG;normalizeCapacity();ComputeDesk.setParams({mode:null});render()});
+document.getElementById('downloadSupply').addEventListener('click',function(){var lines=['Compute Desk — supply book','Average demand: '+AVG.toFixed(1)+' GPUs','Committed rate: $'+r.toFixed(2)+'/GPU-hour','Elastic rate: $'+d.toFixed(2)+'/GPU-hour','Recommended commitment: '+Math.round(Kopt())+' GPUs','Selected commitment: '+Math.round(K)+' GPUs','Mode: '+(imported?'imported observations':'synthetic curve'),'Scenario: '+location.href];if(imported){lines.push('Imported demand observations (GPUs, sorted):');lines.push(imported.join('\n'))}ComputeDesk.download('compute-desk-supply.txt',lines.join('\n'))});
 var sim=document.getElementById('sim'), drag=false;
 function setK(e){
   var rc=sim.getBoundingClientRect();
   var vy=(e.clientY-rc.top)/rc.height*340;
-  var Dmax=peak()*1.05;
+  var Dmax=capacityMax()*1.05;
   var k=(294-vy)/272*Dmax;
-  K=Math.max(0,Math.min(peak(),Math.round(k)));
+  K=ComputeDeskDemand.clampCommitment(k,capacityMax());
   document.getElementById('ks').value=K;
   render();
 }
@@ -305,7 +309,7 @@ sim.addEventListener('pointerdown',function(e){drag=true;sim.setPointerCapture(e
 sim.addEventListener('pointermove',function(e){if(drag)setK(e)});
 sim.addEventListener('pointerup',function(){drag=false});
 sim.addEventListener('pointercancel',function(){drag=false});
-document.getElementById('avgInput').value=AVG;document.getElementById('odInput').value=d.toFixed(2);document.getElementById('resInput').value=r.toFixed(2);document.getElementById('vs').value=rho;document.getElementById('ks').value=K;document.getElementById('ks').max=Math.round(peak());
+document.getElementById('avgInput').value=AVG;document.getElementById('odInput').value=d.toFixed(2);document.getElementById('resInput').value=r.toFixed(2);document.getElementById('vs').value=rho;normalizeCapacity();
 render();
 </script>
 </body>

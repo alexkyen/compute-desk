@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Compare illustrative fat-tree and rail-optimized GPU fabrics by equipment count, optics budget, traffic fit, and failure domain.">
-<meta property="og:title" content="The Two Topologies — GPU fabric planning">
-<meta property="og:description" content="Estimate switches and optical links for fat-tree and rail-optimized planning cases.">
+<meta name="description" content="Same chips, different wiring. Compare two network layouts, follow the messages, and take a switch offline.">
+<meta property="og:title" content="Give your chips a better way to talk — The Compute Desk">
+<meta property="og:description" content="Same chips, different wiring. Compare two network layouts, follow the messages, and take a switch offline.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://alexkyen.github.io/compute-desk/social-card.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:url" content="https://alexkyen.github.io/compute-desk/the-two-trees.html">
 <link rel="canonical" href="https://alexkyen.github.io/compute-desk/the-two-trees.html">
-<title>The two topologies — GPU fabric planning</title>
+<title>Give your chips a better way to talk — The Compute Desk</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -82,46 +82,46 @@ p a.xlink{margin-left:.5em}
 .stepper a.st:hover::after,.stepper a.st:focus-visible::after{opacity:1}
 </style>
 <link rel="stylesheet" href="assets/desk.css">
+<link rel="stylesheet" href="assets/experience.css">
+<link rel="stylesheet" href="assets/tool-experience.css">
+<link rel="stylesheet" href="assets/network-experiences.css">
+<meta name="theme-color" content="#181a17">
 </head>
-<body>
+<body class="experience tool-page trees-page">
 <a class="skip-link" href="#main">Skip to content</a>
-<nav class="nav-top" aria-label="Manual navigation">
-  <div class="nav-in">
-    <a href="index.html">The compute desk</a>
-    <span class="nav-here">06 / 08 — The two topologies</span>
-    <span class="stepper">
-      <a class="st" href="the-fabric.html" data-t="The network tax" aria-label="Previous: The network tax">←</a>
-      <a class="st" href="plate-pod.html" data-t="The pod" aria-label="Next: The pod">→</a>
-    </span>
-  </div>
-</nav>
+<header class="site-header">
+  <a class="wordmark" href="index.html" aria-label="The Compute Desk home"><span class="brand-icon" aria-hidden="true">✳</span> THE COMPUTE DESK</a>
+  <nav aria-label="Main navigation"><a class="nav-explore" href="index.html#explore">Explore</a><a href="index.html#toolbox">The toolbox <span aria-hidden="true">↗</span></a></nav>
+</header>
 <main class="wrap" id="main">
-  <p class="eyebrow">Compute desk</p>
-  <h1>The two topologies</h1>
-  <p class="dek">Compare illustrative fat-tree and rail-optimized fabrics for collective traffic, off-pattern traffic, and a single-switch failure. Adjust the planning inputs to estimate switches, links, and optics budget.</p>
-  <dl class="decision-strip"><div><dt>Decision supported</dt><dd><strong>Which fabric assumptions belong in the quote and design review?</strong></dd></div><div><dt>Primary output</dt><dd>Planning BOM, traffic tradeoff, and failure domain</dd></div><div><dt>Model boundary</dt><dd>Illustrative two-tier designs; vendor port allocation may differ</dd></div></dl>
-  <p class="scope-note warning">Counts are planning estimates under the displayed endpoint, radix, rail, oversubscription, and fabric-plane assumptions—not a vendor design or cabling schedule.</p>
+  <header class="tool-intro"><div><p class="overline">05 / THE CONNECTIONS</p><h1>Give your chips a better way to talk.</h1></div><p class="dek">Same chips. Different wiring. Follow a message, try a different layout, then take a switch offline.</p></header>
 
+
+  <div class="card network-exhibit">
+    <div class="experiment-heading"><span class="overline">FOLLOW THE SIGNAL</span><p>Two ways to connect the same machines. What changes when a switch fails?</p></div>
+    <div class="seggroup">
+      <div class="seg"><p class="lbl">Choose the wiring</p><div class="btns" id="tb"></div></div>
+      <div class="seg"><p class="lbl">Send a message. Break a connection.</p><div class="btns" id="sb"></div></div>
+    </div>
+    <div class="diagram-scroll"><svg id="net" viewBox="0 0 840 430" role="img" aria-label="Cluster wiring diagram: four nodes of four GPUs under either a leaf-spine fat-tree or four rail switches, with traffic paths and failures highlighted per scenario"></svg></div>
+    <div class="lg">
+      <span><span class="sw" style="background:#e7f48b"></span>full rate</span>
+      <span><span class="sw" style="background:#eac989"></span>detour / taxed</span>
+      <span><span class="sw" style="background:#ee9c86"></span>failed</span>
+    </div>
+
+  </div>
   <div class="ticker" aria-label="Planning outputs">
     <div class="tk"><p class="l">Estimated switches</p><p class="v" id="c1">—</p></div>
     <div class="tk"><p class="l">Estimated optical links</p><p class="v" id="c2">—</p></div>
-    <div class="tk"><p class="l">Optics budget</p><p class="v" id="c5">—</p></div>
-    <div class="tk"><p class="l">Any-to-any traffic</p><p class="v" id="c3">—</p></div>
-    <div class="tk"><p class="l">Single-switch exposure</p><p class="v" id="c4">—</p></div>
+    <div class="tk"><p class="l">Estimated optics budget</p><p class="v" id="c5">—</p></div>
+    <div class="tk"><p class="l">Cross-group messages</p><p class="v" id="c3">—</p></div>
+    <div class="tk"><p class="l">One switch can affect</p><p class="v" id="c4">—</p></div>
   </div>
   <p class="status" id="st" aria-live="polite"></p>
 
-  <div class="card">
-    <div class="seggroup">
-      <div class="seg"><p class="lbl">Topology</p><div class="btns" id="tb"></div></div>
-      <div class="seg"><p class="lbl">Scenario</p><div class="btns" id="sb"></div></div>
-    </div>
-    <svg id="net" viewBox="0 0 840 430" role="img" aria-label="Cluster wiring diagram: four nodes of four GPUs under either a leaf-spine fat-tree or four rail switches, with traffic paths and failures highlighted per scenario"></svg>
-    <div class="lg">
-      <span><span class="sw" style="background:#117758"></span>full rate</span>
-      <span><span class="sw" style="background:#D98F12"></span>detour / taxed</span>
-      <span><span class="sw" style="background:#A63B26"></span>failed</span>
-    </div>
+  <p class="model-caption">The diagram shows a small example. Equipment counts use the larger planning case in “Plan a bigger network.”</p>
+  <details class="advanced-settings"><summary>Plan a bigger network <span aria-hidden="true">+</span></summary><div class="detail-body">
     <div class="bom">
       <div><label for="gpuCount">GPU endpoints</label><input id="gpuCount" type="number" min="16" step="8" value="512"></div>
       <div><label for="switchRadix">Switch radix</label><input id="switchRadix" type="number" min="16" step="8" value="64"></div>
@@ -131,10 +131,12 @@ p a.xlink{margin-left:.5em}
       <div><label for="opticCost">Optical link allowance · $</label><input id="opticCost" type="number" min="0" step="100" value="1200"></div>
     </div>
     <div class="assumptions" id="bomAssumptions"></div>
-  </div>
+  </div></details>
   <div class="tool-actions"><button type="button" data-copy-link>copy scenario link</button><button type="button" id="downloadBom">download BOM</button></div><p class="tool-message" aria-live="polite"></p>
 
-  <div class="notes">
+  <details class="notes reading-notes"><summary>The details, if you’re curious <span aria-hidden="true">+</span></summary><div class="detail-body">
+  <dl class="decision-strip"><div><dt>Decision supported</dt><dd><strong>Which fabric assumptions belong in the quote and design review?</strong></dd></div><div><dt>Primary output</dt><dd>Planning BOM, traffic tradeoff, and failure domain</dd></div><div><dt>Model boundary</dt><dd>Illustrative two-tier designs; vendor port allocation may differ</dd></div></dl>
+  <p class="scope-note warning">Counts are planning estimates under the displayed endpoint, radix, rail, oversubscription, and fabric-plane assumptions—not a vendor design or cabling schedule.</p>
     <h2>Topology diligence</h2>
     <p><strong>Training traffic has a shape, and rails can be wired to it.</strong> In the illustrated mapping, collective channels keep corresponding GPU ranks on dedicated rails and use the high-bandwidth NVLink domain for intra-node movement. Actual NCCL algorithms and channel mappings are topology-, message-, and workload-dependent; NCCL can select rings, trees, NVLS, and other algorithms.</p>
     <p><strong>The cost gap is countable only after the design assumptions are explicit.</strong> The calculator uses a simple two-tier Clos planning rule for fat-tree and one switch group per rail for the rail case. It is intended to expose quote assumptions, not replace the supplier's port map.</p>
@@ -143,13 +145,14 @@ p a.xlink{margin-left:.5em}
     <p><strong>Failure modes are shaped by the wiring and its redundancy.</strong> In the single-plane toy case, a fat-tree leaf failure removes its attached endpoints while a rail-switch failure removes one rail across many nodes. Whether jobs stall or reroute depends on redundant planes, routing, scheduler placement, and collective configuration. Both examples are mapped onto one physical row on the pod page — <a class="xlink" href="plate-pod.html">see the failure stripe on the pod page →</a></p>
     <div class="ask"><b>Ask the supplier</b>Full fat-tree or rail-optimized — show me the topology diagram. And when one switch fails, what exactly keeps running: which nodes, which rails, which of my jobs?</div>
     <p>The toy cluster shows one channel and one cross-rank pair so the wiring stays readable. Use the controls for a planning estimate, then ask the supplier for the actual logical topology, physical port map, redundancy behavior, and measured collective results.</p>
-  </div>
+  </div></details>
   <p class="foot">model · two-tier planning estimate · <a href="https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/env.html#nccl-algo">NCCL algorithm selection</a> · <a href="methodology.html">methods &amp; limitations</a> · model version 2026.08</p>
-  <nav class="nav-bot" aria-label="Manual navigation">
-    <a class="nav-prev" href="the-fabric.html">← The network tax</a>
-    <a class="nav-next" href="plate-pod.html">The pod →</a>
+  <nav class="nav-bot" aria-label="Continue exploring">
+    <a class="nav-prev" href="the-fabric.html"><span class="next-label">PREVIOUS EXPLORATION</span>← Why do fast chips wait?</a>
+    <a class="nav-next" href="gpu-supply-book.html"><span class="next-label">KEEP EXPLORING</span>What are you really buying? →</a>
   </nav>
 </main>
+<footer class="experience-footer"><a class="wordmark" href="index.html">THE COMPUTE DESK <span class="brand-icon" aria-hidden="true">✳</span></a><span>Made for curious people. By Alex Yen.</span><a href="methodology.html">Methods &amp; sources ↗</a></footer>
 
 <script src="assets/desk.js"></script>
 <script>
@@ -157,7 +160,7 @@ var topo="fat", scen="coll";
 var gpuCount=512,switchRadix=64,railCount=8,bomOver=1,planes=1,opticCost=1200;
 var q=ComputeDesk.params();if(q.has('topo'))topo=q.get('topo')==='rail'?'rail':'fat';if(q.has('scen'))scen=q.get('scen');if(q.has('gpus'))gpuCount=Math.max(16,+q.get('gpus')||512);if(q.has('radix'))switchRadix=Math.max(16,+q.get('radix')||64);if(q.has('rails'))railCount=Math.max(1,+q.get('rails')||8);if(q.has('over'))bomOver=Math.max(1,+q.get('over')||1);if(q.has('planes'))planes=Math.max(1,+q.get('planes')||1);if(q.has('optic'))opticCost=Math.max(0,+q.get('optic')||1200);
 var NX=[50,240,430,620], NW=170;
-var TEAL="#117758", AMBER="#D98F12", OXIDE="#A63B26", IDLE="#DDE2DB";
+var TEAL="#e7f48b", AMBER="#eac989", OXIDE="#ee9c86", IDLE="#41483b";
 function gx(n,k){return NX[n]+31+k*38}
 function seg(el,items,cur,cb){
   var h="";items.forEach(function(it){h+='<button type="button" aria-pressed="'+(it.id===cur)+'" class="'+(it.id===cur?"on":"")+'">'+it.label+"</button>"});
@@ -166,18 +169,18 @@ function seg(el,items,cur,cb){
   items.forEach(function(it,i){bs[i].addEventListener("click",function(){cb(it.id)})});
 }
 function rebuild(){
-  seg(document.getElementById("tb"),[{id:"fat",label:"fat-tree"},{id:"rail",label:"rail-optimized"}],topo,function(v){topo=v;rebuild()});
-  seg(document.getElementById("sb"),[{id:"coll",label:"collective all-reduce"},{id:"cross",label:"cross-rank pair"},{id:"fail",label:"a switch dies"}],scen,function(v){scen=v;rebuild()});
+  seg(document.getElementById("tb"),[{id:"fat",label:"Branching · fat-tree"},{id:"rail",label:"Parallel · rails"}],topo,function(v){topo=v;rebuild()});
+  seg(document.getElementById("sb"),[{id:"coll",label:"Work together"},{id:"cross",label:"Send across groups"},{id:"fail",label:"Take a switch offline"}],scen,function(v){scen=v;rebuild()});
   render();
 }
 function line(x1,y1,x2,y2,col,w,dash,arrow){
   return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+col+'" stroke-width="'+w+'"'+(dash?' stroke-dasharray="4 3"':'')+(arrow?' marker-end="url(#arrow)"':'')+' stroke-linecap="round"/>';
 }
 function box(x,y,w,h,label,state){
-  var stroke=state==="dead"?OXIDE:state==="hot"?TEAL:"#C7CEC6";
-  var txt=state==="dead"?OXIDE:"#4A574F";
+  var stroke=state==="dead"?OXIDE:state==="hot"?TEAL:"#68735d";
+  var txt=state==="dead"?OXIDE:"#cad0c0";
   var mark=state==="dead"?" ✕":"";
-  return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="8" fill="#FDFDFB" stroke="'+stroke+'" stroke-width="'+(state?"1.4":"0.8")+'"/>'
+  return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="8" fill="#282e24" stroke="'+stroke+'" stroke-width="'+(state?"1.4":"0.8")+'"/>'
     +'<text x="'+(x+w/2)+'" y="'+(y+h/2)+'" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="12" fill="'+txt+'">'+label+mark+'</text>';
 }
 function render(){
@@ -222,24 +225,24 @@ function render(){
   }
   var nodes="";
   for(n=0;n<4;n++){
-    nodes+='<rect x="'+NX[n]+'" y="280" width="'+NW+'" height="104" rx="8" fill="#FDFDFB" stroke="#C7CEC6" stroke-width="0.8"/>';
-    nodes+='<text x="'+(NX[n]+NW/2)+'" y="294" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="11" fill="#8A968E">node '+n+'</text>';
+    nodes+='<rect x="'+NX[n]+'" y="280" width="'+NW+'" height="104" rx="8" fill="#282e24" stroke="#68735d" stroke-width="0.8"/>';
+    nodes+='<text x="'+(NX[n]+NW/2)+'" y="294" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="11" fill="#a0aa94">node '+n+'</text>';
     for(k=0;k<4;k++){
-      var fill="#F6F7F3", stroke="#C7CEC6", tcol="#4A574F", sw=0.8;
-      if(scen==="coll"&&k===1){fill="#DCEDE4";stroke=TEAL;tcol="#085041"}
+      var fill="#242920", stroke="#68735d", tcol="#cad0c0", sw=0.8;
+      if(scen==="coll"&&k===1){fill="#384331";stroke=TEAL;tcol="#e7f48b"}
       if(scen==="cross"){
         var hot=(n===0&&k===1)||(n===3&&k===3);
         var bridge=(topo==="rail"&&n===0&&k===3);
-        if(hot){fill=topo==="fat"?"#DCEDE4":"#F6E9CE";stroke=topo==="fat"?TEAL:AMBER;tcol=topo==="fat"?"#085041":"#633806"}
-        if(bridge){fill="#F6E9CE";stroke=AMBER;tcol="#633806"}
+        if(hot){fill=topo==="fat"?"#384331":"#514633";stroke=topo==="fat"?TEAL:AMBER;tcol=topo==="fat"?"#e7f48b":"#f1d6a3"}
+        if(bridge){fill="#514633";stroke=AMBER;tcol="#f1d6a3"}
       }
       if((railDead&&k===1)||(leafDead&&n<2)){stroke=OXIDE;sw=1.5}
       nodes+='<rect x="'+(gx(n,k)-13)+'" y="304" width="26" height="26" rx="4" fill="'+fill+'" stroke="'+stroke+'" stroke-width="'+sw+'"/>';
       nodes+='<text x="'+gx(n,k)+'" y="317" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="11" fill="'+tcol+'">'+k+'</text>';
     }
     var nvHot=(topo==="rail"&&scen==="cross"&&n===0);
-    nodes+='<rect x="'+(NX[n]+14)+'" y="340" width="'+(NW-28)+'" height="7" rx="3.5" fill="'+(nvHot?"#F6E9CE":"#EDEFE9")+'" stroke="'+(nvHot?AMBER:"#DDE2DB")+'" stroke-width="0.8"/>';
-    nodes+='<text x="'+(NX[n]+NW/2)+'" y="362" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="10" fill="#8A968E">nvlink</text>';
+    nodes+='<rect x="'+(NX[n]+14)+'" y="340" width="'+(NW-28)+'" height="7" rx="3.5" fill="'+(nvHot?"#514633":"#323a2c")+'" stroke="'+(nvHot?AMBER:"#41483b")+'" stroke-width="0.8"/>';
+    nodes+='<text x="'+(NX[n]+NW/2)+'" y="362" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="10" fill="#a0aa94">nvlink</text>';
   }
   if(topo==="rail"&&scen==="cross"){
     wires+=line(gx(0,1),343,gx(0,3)-8,343,AMBER,2,false,true);
@@ -254,18 +257,18 @@ function render(){
   document.getElementById("c2").textContent=links.toLocaleString();
   document.getElementById("c5").textContent='$'+Math.round(links*opticCost/1000).toLocaleString()+'k';
   var c3el=document.getElementById("c3");
-  c3el.textContent=fat?"full rate":"nvlink detour";
+  c3el.textContent=fat?"Direct path":"Internal detour";
   c3el.className="v"+(fat?"":" bad");
   var c4el=document.getElementById("c4");
   c4el.textContent=fat?Math.ceil(downPorts/railCount)+" nodes / leaf":"one rail across nodes";
   c4el.className="v"+(fat?"":" bad");
   var M={
-    "fat coll":"One illustrative collective channel is shown crossing leaf and spine tiers. Delivered performance depends on the actual channel map, link count, and congestion.",
-    "rail coll":"The illustrated rank-1 channel stays on rail 1. This is the traffic pattern the rail case is optimized for; validate it with the proposed NCCL configuration.",
-    "fat cross":"In the illustration, GPU 1 on node 0 reaches GPU 3 on node 3 through leaf, spine, and leaf tiers. Confirm delivered bandwidth under the proposed oversubscription and placement policy.",
-    "rail cross":"In this rail mapping, cross-rank traffic first crosses the NVLink domain inside node 0 to reach the corresponding rail, then travels across that rail. The extra path can consume bandwidth shared with collectives.",
-    "fat fail":"In the single-plane illustration, a leaf failure removes nodes 0 and 1 while nodes 2 and 3 remain attached. Actual isolation and recovery depend on redundant planes and routing.",
-    "rail fail":"In this single-plane illustration, rail 1 fails across every attached node. With redundant planes or rerouting, the result may be degraded bandwidth rather than a stalled job."
+    "fat coll":"A shared update climbs through the branches, crosses the top, then comes back down. This is one simplified communication path.",
+    "rail coll":"Matching chips talk along the same rail. The path is simpler because the wiring matches the work.",
+    "fat cross":"Different chip positions can reach each other through the same branches. The available bandwidth still depends on capacity and traffic.",
+    "rail cross":"This message needs a different rail. It first takes a detour inside the server, sharing that connection with other work.",
+    "fat fail":"One branch goes dark: two of the illustrated servers lose their connection. Redundant paths can change what happens next.",
+    "rail fail":"One rail goes dark across every illustrated server. Backup connections may let the work continue at a lower speed."
   };
   document.getElementById("st").textContent=M[topo+" "+scen];
   document.getElementById('bomAssumptions').innerHTML='<strong>Planning case:</strong> '+gpuCount+' GPUs; '+railCount+' GPUs/NIC rails per node; '+switchRadix+'-port switches; '+bomOver+':1 fat-tree oversubscription; '+planes+' fabric plane'+(planes>1?'s':'')+'; $'+opticCost.toLocaleString()+' per optical link allowance.';

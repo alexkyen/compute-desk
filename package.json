@@ -1,10 +1,10 @@
 {
   "name": "compute-desk",
-  "version": "2026.8.0",
+  "version": "2026.10.0",
   "private": true,
-  "description": "Decision tools for buying and operating GPU capacity.",
+  "description": "An interactive field guide to the physical side of AI.",
   "scripts": {
-    "test": "node scripts/check-site.mjs"
+    "test": "node --test scripts/*.test.mjs && node scripts/check-site.mjs"
   },
   "license": "MIT"
 }

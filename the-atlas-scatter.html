@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Benchmark indicative GPU-hour prices across 12 public sellers, with source grades, dates, and commercial diligence notes.">
-<meta property="og:title" content="The Sellers — GPU price benchmark">
-<meta property="og:description" content="Compare public, reported, and estimated GPU-hour rates across 12 sellers.">
+<meta name="description" content="Explore an archived July 2026 GPU price snapshot. Compare chips, rental types, sources, and sellers. Historical reference, not current offers.">
+<meta property="og:title" content="Same chip. Different price — The Compute Desk">
+<meta property="og:description" content="Explore an archived July 2026 GPU price snapshot. Compare chips, rental types, sources, and sellers. Historical reference, not current offers.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://alexkyen.github.io/compute-desk/social-card.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:url" content="https://alexkyen.github.io/compute-desk/the-atlas-scatter.html">
 <link rel="canonical" href="https://alexkyen.github.io/compute-desk/the-atlas-scatter.html">
-<title>The sellers — GPU price benchmark</title>
+<title>Same chip. Different price — The Compute Desk</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -145,61 +145,50 @@ details p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
 .compare.on{display:block}.compare h2{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;margin-bottom:8px}.compare table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:10.5px;color:var(--ink-2)}.compare th,.compare td{text-align:left;padding:7px;border-top:1px solid var(--rule)}.compare th{color:var(--ink);font-weight:500}.shortlistBtn{font-family:var(--mono);font-size:11px;color:var(--teal);background:transparent;border:1px solid var(--teal);border-radius:5px;padding:7px 10px;cursor:pointer;margin-top:14px}
 </style>
 <link rel="stylesheet" href="assets/desk.css">
+<link rel="stylesheet" href="assets/experience.css">
+<link rel="stylesheet" href="assets/tool-experience.css">
+<link rel="stylesheet" href="assets/market-experiences.css">
+<meta name="theme-color" content="#181a17">
 </head>
-<body data-market-verified="2026-07-22">
+<body class="experience tool-page atlas-page" data-market-verified="2026-07-22" data-market-status="archived">
 <a class="skip-link" href="#main">Skip to content</a>
-<nav class="nav-top" aria-label="Manual navigation">
-  <div class="nav-in">
-    <a href="index.html">The compute desk</a>
-    <span class="nav-here">01 / 08 — The sellers</span>
-    <span class="stepper">
-      <span class="st dis" aria-hidden="true">←</span>
-      <a class="st" href="gpu-supply-book.html" data-t="The supply book" aria-label="Next: The supply book">→</a>
-    </span>
-  </div>
-</nav>
+<header class="site-header">
+  <a class="wordmark" href="index.html" aria-label="The Compute Desk home"><span class="brand-icon" aria-hidden="true">✳</span> THE COMPUTE DESK</a>
+  <nav aria-label="Main navigation"><a href="index.html#explore">All explorations ↗</a></nav>
+</header>
 <main id="main">
 <div class="wrap">
-  <p class="eyebrow">Compute desk · the sellers</p>
-  <h1>The sellers</h1>
-  <p class="dek">Benchmark indicative GPU-hour rates across 12 sellers. Choose an accelerator, purchase channel, and evidence threshold; open a seller for commercial context and inspect every price before using it in negotiation.</p>
-  <dl class="decision-strip"><div><dt>Decision supported</dt><dd><strong>Is a quote in the market range, and which sellers merit diligence?</strong></dd></div><div><dt>Primary output</dt><dd>Normalized $/GPU-hour band and seller shortlist</dd></div><div><dt>Data boundary</dt><dd>Indicative US-market snapshot; not executable availability</dd></div></dl>
-  <p class="scope-note warning">Prices exclude tax, storage, support, egress, and transfer unless a tooltip says otherwise. Region, accelerator form factor, host configuration, fabric, term, and availability can make nominal GPU-hours non-comparable.</p>
+  <div class="tool-intro"><div><p class="overline">07 / THE PRICE TAG</p><h1>Same chip.<br>Different price.</h1></div><p class="dek">Renting an AI chip is a little like booking a flight.<br>The seat matters. So do the strings attached.</p></div>
+  <p class="snapshot-note archive-banner" data-market-notice="archived"><span>July 2026 snapshot</span> Archived reference · verified 22 July 2026. These are historical observations, not current offers.</p>
 </div>
 
 <div class="stage" id="stage">
   <section class="bsec">
-    <div class="controls">
-      <div class="stp" role="group" aria-label="chip selector">
-        <button class="sarr" id="sprev" aria-label="previous chip">‹</button>
-        <span class="scur" id="scur"></span>
-        <button class="sarr" id="snext" aria-label="next chip">›</button>
-        <span class="spos" id="spos"></span>
-      </div>
-      <div class="seg" id="ch"></div>
-      <div class="seg" id="srt"></div>
-      <div class="seg" id="conf"></div>
-    </div>
+    <div class="price-board-top"><div><p class="overline">ONE GPU. ONE HOUR.</p><p class="range-readout" id="range-readout">Explore the range.</p><p class="range-caption" id="range-caption"></p></div><div class="chip-picker"><label class="overline" for="sku-select">PICK YOUR CHIP</label><div class="stp" role="group" aria-label="Chip selector"><button class="sarr" id="sprev" aria-label="Previous chip">←</button><select id="sku-select" aria-label="Choose an accelerator"></select><span class="scur" id="scur" hidden></span><button class="sarr" id="snext" aria-label="Next chip">→</button><span class="spos" id="spos" hidden></span></div></div></div>
+    <div class="controls"><div class="seg" id="ch" role="group" aria-label="Rental type"></div></div>
+    <details class="advanced-filters"><summary>Refine the view <span id="filter-state"></span></summary><div class="filter-groups"><div><p>Sort sellers</p><div class="seg" id="srt" role="group" aria-label="Sort sellers"></div></div><div><p>Evidence</p><div class="seg" id="conf" role="group" aria-label="Evidence filter"></div></div></div></details>
+    <p class="board-status" id="board-status" aria-live="polite"></p>
     <div class="board" id="board" aria-label="Price board: one row per seller, prices for the selected chip on a shared log dollar axis, availability strip across all chips">
       <div class="axis" id="axis"></div>
       <div class="rows" id="rows"></div>
     </div>
-    <div class="legend"><span>● on-demand · ◐ committed · ○ spot · ─ range · tag = price gated</span></div>
-    <div class="legend strip-legend"><span>▪ priced · × gated · blank = not listed</span></div>
-    <p class="bhint">‹ › to switch chips · open a seller for diligence · focus, hover, or tap a mark for its exact value and source</p>
+    <div class="legend"><span>● Pay as you go</span><span>○ Commit ahead</span><span>◌ Can be interrupted</span><span>━ Price range</span></div>
+    <div class="legend strip-legend"><span>Right-hand strip: eight chip types · filled = priced · × = ask for quote · blank = not listed</span></div>
+    <p class="bhint">Open a seller to compare. Hover, focus, or tap a dot for the price and source. Prices use a logarithmic scale.</p>
   </section>
 </div>
 <section class="compare" id="comparePanel" aria-live="polite"><h2>Selected seller comparison</h2><div id="compareTable"></div><div class="tool-actions"><button type="button" id="exportCompare">download comparison</button></div></section>
 
 <div class="wrap">
-  <div class="notes">
-    <h2>Using the benchmark</h2>
+  <details class="notes"><summary>Read the fine print · how to compare fairly</summary><div class="detail-body">
+    <p class="scope-note warning">Prices exclude tax, storage, support, egress, and transfer unless a tooltip says otherwise. Region, accelerator form factor, host configuration, fabric, term, and availability can make nominal GPU-hours non-comparable.</p>
+    <dl class="decision-strip"><div><dt>Use this for</dt><dd>Exploring historical price differences and building a seller shortlist.</dd></div><div><dt>Data boundary</dt><dd>Indicative US-market snapshot. No claim of current price or availability.</dd></div></dl>
     <p><strong>The logarithmic axis preserves price ratios.</strong> A move from $1.50 to $3 occupies the same horizontal distance as a move from $6 to $12. Use the plotted band to identify outliers and negotiation anchors; use the tooltip to recover the exact value, evidence grade, date, and configuration note.</p>
     <p><strong>The availability strip distinguishes published, gated, and absent pricing.</strong> Each cell represents one accelerator: filled means the seller publishes a price, × means an offering is described but pricing is sales-gated, and blank means no entry was found in the reviewed public materials.</p>
     <p><strong>Switch accelerators before ranking sellers.</strong> Relative position can change with product, channel, region, term, and availability. Shortlist within the configuration being negotiated rather than treating one product's price rank as a provider-wide conclusion.</p>
     <p><strong>What the board leaves out.</strong> Published ranges draw as a span from low to high, and the detail behind a gated offering survives in its tooltip. This view is for quote benchmarking, not precision: confirm the region, shape, fabric, term, availability, and ancillary charges with the seller.</p>
     <p><strong>Every price carries an evidence label and date.</strong> Use the linked-sources filter for a more conservative view, and recheck the underlying page before citing a value in a live negotiation.</p>
-  </div>
+  </div></details>
   <details class="srcblock">
     <summary>sources &amp; method</summary>
     <ul id="srclist"></ul>
@@ -207,11 +196,12 @@ details p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
   <div class="tool-actions"><button type="button" data-copy-link>copy board link</button><a href="methodology.html">normalization method</a></div><p class="tool-message" aria-live="polite"></p>
   <p class="foot">market snapshot verified 22 July 2026 · every price carries an evidence grade and date · purchasing-route summaries require seller confirmation</p>
   <nav class="nav-bot" aria-label="Manual navigation">
-    <a class="nav-next" href="gpu-supply-book.html">The supply book →</a>
+    <a class="nav-prev" href="gpu-supply-book.html">← Find the right amount</a><a class="nav-next" href="sla-anatomy.html"><span class="next-label">NEXT EXPLORATION</span>What does “uptime” promise? →</a>
   </nav>
 </div>
 <div id="tip"></div>
 </main>
+<footer class="experience-footer"><a class="wordmark" href="index.html">THE COMPUTE DESK <span class="brand-icon" aria-hidden="true">✳</span></a><span>Made for curious people. By Alex Yen.</span><a href="methodology.html">Methods &amp; sources ↗</a></footer>
 
 <script src="assets/desk.js"></script>
 <script>
@@ -284,7 +274,7 @@ var DOS={
  sfc:{strip:["cluster spot market","market-cleared blocks","fabric depends on node class"],buy:"Buyers choose a posted block by zone, size, and duration. The clearing price is observable, but the underlying operator, host class, fabric, interruption terms, and refund mechanics still require diligence.",ask:"For this block, who operates the hardware, which node class and fabric apply, and what happens if capacity is interrupted or fails acceptance?"},
  vst:{strip:["peer-to-peer marketplace","host-set pricing","fabric not guaranteed"],buy:"Hosts set prices for interruptible and on-demand machines. Treat each listing as a distinct host and reliability profile rather than uniform institutional capacity.",ask:"Can the search be restricted to verified datacenter hosts with uptime history, consistent networking, replacement terms, and the compliance controls this workload requires?"}
 };
-var CH=[{id:"od",l:"on-demand"},{id:"sp",l:"spot / interruptible"},{id:"co",l:"committed / reserved"}];
+var CH=[{id:"od",l:"Pay as you go"},{id:"sp",l:"Can be interrupted"},{id:"co",l:"Commit ahead"}];
 var M={od:{},sp:{},co:{}};
 (function(){
  function put(ch,sku,prov,cell){ M[ch][sku]=M[ch][sku]||{}; M[ch][sku][prov]=cell; }
@@ -398,7 +388,7 @@ var M={od:{},sp:{},co:{}};
 var COLS=["l40s","a100","h100","h200","b200","b300","gb200","gb300"]; // axis order, oldest → newest
 var SKUMAP={};SKUS.forEach(function(s){SKUMAP[s.id]=s});
 var PMAP={};PROV.forEach(function(p,i){PMAP[p.id]=p;p.i=i});
-var GCOL={hyp:"#A63B26",neo:"#117758",mkt:"#D98F12"};
+var GCOL={hyp:"#d7dcbf",neo:"#e7f48b",mkt:"#eac989"};
 var CHNAME={od:"on-demand",co:"committed / reserved",sp:"spot / interruptible"};
 var CHIDS=["od","co","sp"];
 
@@ -418,7 +408,8 @@ var atlasParams=ComputeDesk.params();
 var chSel=atlasParams.get('channel')||"all", selId=null, confSel=atlasParams.get('evidence')||"all";
 var initialSku=atlasParams.get('sku')||'h100',skuI=Math.max(0,COLS.indexOf(initialSku)),sortMode=atlasParams.get('sort')||"price";
 var shortlist=new Set((atlasParams.get('compare')||'').split(',').filter(function(id){return PMAP[id]}));
-function admissible(c){return confSel==='all'||(c.src&&/^S\d+$/.test(c.src))}
+function sourceFor(c){return SOURCES.find(function(s){return s.id===c.src})}
+function admissible(c){var source=sourceFor(c);return confSel==='all'||!!(source&&source.url)}
 function syncUrl(){ComputeDesk.setParams({sku:COLS[skuI],channel:chSel,sort:sortMode,evidence:confSel,compare:Array.from(shortlist).join(',')||null})}
 function activeChans(){return chSel==="all"?["od","co","sp"]:[chSel]}
 function cellFor(ch,sku,prov){return (M[ch][sku]||{})[prov]}
@@ -465,7 +456,7 @@ function orderIds(){
 var boardEl=document.getElementById("board"),rowsEl=document.getElementById("rows");
 var ROWEL={};
 (function buildBoard(){
- var ah='<span class="unit">$ / gpu-hr · log</span>';
+ var ah='<span class="unit">Seller</span>';
  TICKS.forEach(function(v){ah+='<span class="tk" style="left:'+xp(v)+'%">$'+v+'</span>'});
  document.getElementById("axis").innerHTML=ah;
  PROV.forEach(function(p){
@@ -473,7 +464,7 @@ var ROWEL={};
    r.className="brow";r.dataset.p=p.id;
    r.setAttribute("role","button");r.tabIndex=0;
    r.setAttribute("aria-expanded","false");r.setAttribute("aria-pressed","false");
-   r.setAttribute("aria-label",p.name+" — open file");
+   r.setAttribute("aria-label",p.name+" — view seller and compare");
    r.style.setProperty("--bcol",GCOL[p.g]);
    var h='<div class="bname"><span class="bn">'+p.name+'</span><span class="bb">'+p.band+'</span></div><div class="lane">';
    TICKS.forEach(function(v){h+='<span class="lgl" style="left:'+xp(v)+'%"></span>'});
@@ -490,7 +481,10 @@ var ROWEL={};
  });
 })();
 
+document.getElementById('sku-select').innerHTML=SKUS.map(function(s){return '<option value="'+s.id+'">'+s.l+'</option>'}).join('');
+document.getElementById('sku-select').addEventListener('change',function(){step(COLS.indexOf(this.value)-skuI)});
 function updateStepper(){
+ document.getElementById('sku-select').value=COLS[skuI];
  document.getElementById("scur").textContent=SKUMAP[COLS[skuI]].l;
  document.getElementById("spos").textContent=(skuI+1)+" / "+COLS.length;
  var pv=document.getElementById("sprev"),nx=document.getElementById("snext");
@@ -504,19 +498,19 @@ function step(d){
 }
 function seg(){
  var el=document.getElementById("ch"),h="";
- var opts=[{id:"all",l:"all channels"}].concat(CH);
+ var opts=[{id:"all",l:"All rental types"}].concat(CH);
  opts.forEach(function(c){h+='<button type="button" aria-pressed="'+(c.id===chSel)+'" data-c="'+c.id+'" class="'+(c.id===chSel?"on":"")+'">'+c.l+"</button>"});
  el.innerHTML=h;
  el.querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){chSel=this.dataset.c;seg();applyOrder();updateBoard();renderCompare();syncUrl()})});
 }
 function srt(){
  var el=document.getElementById("srt"),h="";
- [{id:"price",l:"sort: price"},{id:"band",l:"group: seller type"}].forEach(function(o){h+='<button type="button" aria-pressed="'+(o.id===sortMode)+'" data-s="'+o.id+'" class="'+(o.id===sortMode?"on":"")+'">'+o.l+"</button>"});
+ [{id:"price",l:"By price"},{id:"band",l:"By seller type"}].forEach(function(o){h+='<button type="button" aria-pressed="'+(o.id===sortMode)+'" data-s="'+o.id+'" class="'+(o.id===sortMode?"on":"")+'">'+o.l+"</button>"});
  el.innerHTML=h;
- el.querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){if(sortMode===this.dataset.s)return;sortMode=this.dataset.s;srt();applyOrder();syncUrl()})});
+ el.querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){if(sortMode===this.dataset.s)return;sortMode=this.dataset.s;srt();applyOrder();updateSummary();syncUrl()})});
 }
 function conf(){
- var el=document.getElementById('conf'),opts=[{id:'all',l:'all evidence'},{id:'linked',l:'linked sources only'}];
+ var el=document.getElementById('conf'),opts=[{id:'all',l:'All observations'},{id:'linked',l:'Linked sources only'}];
  el.innerHTML=opts.map(function(o){return '<button type="button" aria-pressed="'+(o.id===confSel)+'" data-e="'+o.id+'" class="'+(o.id===confSel?'on':'')+'">'+o.l+'</button>'}).join('');
  el.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){confSel=this.dataset.e;conf();applyOrder();updateBoard();renderCompare();syncUrl()})});
 }
@@ -540,7 +534,7 @@ function updateMarks(){
    });
    var gt=row.querySelector("[data-gt]");
    if(ls.gated){gt.hidden=false;gt.textContent=ls.gated[0].v;gt.tabIndex=0;gt.setAttribute('role','button');gt.setAttribute('aria-label',p.name+', '+SKUMAP[COLS[skuI]].l+', price gated')}
-   else{gt.hidden=true;gt.textContent="";gt.tabIndex=-1;gt.removeAttribute('role');gt.removeAttribute('aria-label')}
+   else{gt.hidden=!ls.empty;gt.textContent=ls.empty?(confSel==='linked'?'No linked price':'Not listed'):"";gt.tabIndex=-1;gt.removeAttribute('role');gt.removeAttribute('aria-label')}
  });
 }
 function updateSliders(){ // teal outline over the current SKU's strip cell
@@ -553,7 +547,19 @@ function updateSliders(){ // teal outline over the current SKU's strip cell
  });
 }
 window.addEventListener("resize",updateSliders);
-function updateBoard(){updateMarks();updateSliders()}
+function updateSummary(){
+ var states=PROV.map(function(p){return laneState(p.id)}),marks=[];
+ states.forEach(function(s){marks=marks.concat(s.marks)});
+ var count=states.filter(function(s){return s.marks.length}).length;
+ var range=document.getElementById('range-readout'),caption=document.getElementById('range-caption');
+ if(marks.length){var low=Math.min.apply(null,marks.map(function(m){return m.lo})),high=Math.max.apply(null,marks.map(function(m){return m.hi}));range.textContent='$'+low.toFixed(2)+(high!==low?' — $'+high.toFixed(2):'');caption.textContent='Observed per GPU-hour · '+SKUMAP[COLS[skuI]].l;}
+ else{range.textContent='Ask for a quote.';caption.textContent='No numeric prices in this view.';}
+ document.getElementById('board-status').textContent=count?count+' of '+PROV.length+' sellers have a price in this view. Different terms and configurations can explain the gap.':'No published numeric prices match these filters. Try another chip or rental type; seller details are still available below.';
+ document.getElementById('filter-state').textContent=(confSel==='linked'?'Linked sources only':'')+(sortMode==='band'?(confSel==='linked'?' · ':'')+'Grouped by seller':'');
+}
+function updateBoard(){updateMarks();updateSliders();updateSummary()}
+if(window.ResizeObserver)new ResizeObserver(updateSliders).observe(boardEl);
+document.querySelector('.advanced-filters').addEventListener('toggle',updateSliders);
 function orderNow(){return Array.prototype.map.call(rowsEl.querySelectorAll(".brow"),function(el){return el.dataset.p})}
 function reduced(){return window.matchMedia("(prefers-reduced-motion: reduce)").matches}
 function doFlip(order){ // FLIP: measure, reorder, inverse-transform, release — rows never fade
@@ -654,6 +660,7 @@ rowsEl.addEventListener("keydown",function(ev){
 document.getElementById("sprev").addEventListener("click",function(){step(-1)});
 document.getElementById("snext").addEventListener("click",function(){step(1)});
 document.querySelector(".stp").addEventListener("keydown",function(ev){
+ if(ev.target.tagName==="SELECT")return;
  if(ev.key==="ArrowLeft"){ev.preventDefault();step(-1)}
  else if(ev.key==="ArrowRight"){ev.preventDefault();step(1)}
 });
@@ -666,7 +673,7 @@ function showTip(ev,html){
  var r=tip.getBoundingClientRect();
  if(x+r.width>window.innerWidth-8)x=ev.clientX-r.width-12;
  if(y+r.height>window.innerHeight-8)y=ev.clientY-r.height-12;
- tip.style.left=x+"px";tip.style.top=y+"px";
+ tip.style.left=Math.max(8,x)+"px";tip.style.top=Math.max(8,y)+"px";
 }
 function tipHtmlFor(t){
  var row=t.closest(".brow");
@@ -721,7 +728,7 @@ function singleFile(prov){
  if(d.strip[0]!==p.arch)h+='<span class="badge">'+p.arch+'</span>'; // arch duplicates strip[0] for all twelve today
  d.strip.forEach(function(b,i){h+='<span class="badge'+(i===1?" hot":"")+'">'+b+'</span>'});
  h+='</div>';
- h+='<p class="scope-note warning">Purchasing-route summary for diligence, not a representation by '+p.name+'. Confirm current configuration, capacity, price, and contract terms with the seller.</p>';
+ h+='<p class="scope-note warning">Archived buying context for '+p.name+'. Confirm current prices, availability, and terms with the seller.</p>';
  h+='<span class="xk">how you buy</span><p class="drow">'+d.buy+'</p>';
  h+='<div class="ask"><b>ask them</b>'+d.ask+'</div>';
  if(ref.length)h+='<span class="xk">dossier starting points</span><p class="drow">'+ref.map(function(s){return '<a href="'+s[1]+'" target="_blank" rel="noopener">'+s[0]+'</a>'}).join(' · ')+'</p>';
@@ -748,7 +755,18 @@ function renderCompare(){
  document.getElementById('compareTable').innerHTML=html+'</tbody></table>';
 }
 rowsEl.addEventListener('click',function(ev){var b=ev.target.closest('[data-shortlist]');if(!b)return;var id=b.dataset.shortlist;if(shortlist.has(id))shortlist.delete(id);else shortlist.add(id);renderCompare();syncUrl();b.textContent=shortlist.has(id)?'remove from comparison':'add to comparison';ev.stopPropagation()});
-document.getElementById('exportCompare').addEventListener('click',function(){var rows=['seller,accelerator,channel,price,source'];Array.from(shortlist).forEach(function(id){activeChans().forEach(function(ch){var c=cellFor(ch,COLS[skuI],id);if(c&&c.s==='p'&&admissible(c))rows.push([PMAP[id].name,SKUMAP[COLS[skuI]].l,CHNAME[ch],c.v,c.src||''].map(function(v){return '"'+String(v).replace(/"/g,'""')+'"'}).join(','))})});rows.push('');rows.push('"Scenario","'+location.href.replace(/"/g,'""')+'"');ComputeDesk.download('compute-desk-seller-comparison.csv',rows.join('\n'),'text/csv;charset=utf-8')});
+document.getElementById('exportCompare').addEventListener('click',function(){
+ var rows=['seller,accelerator,channel,price,source,source_url,verified_date,snapshot_status'];
+ Array.from(shortlist).forEach(function(id){activeChans().forEach(function(ch){
+  var c=cellFor(ch,COLS[skuI],id);
+  if(c&&c.s==='p'&&admissible(c)){
+   var source=sourceFor(c);
+   rows.push([PMAP[id].name,SKUMAP[COLS[skuI]].l,CHNAME[ch],c.v,c.src||'',source&&source.url||'',document.body.dataset.marketVerified,'archived; not current offers'].map(function(v){return '"'+String(v).replace(/"/g,'""')+'"'}).join(','));
+  }
+ })});
+ rows.push('');rows.push('"Scenario","'+location.href.replace(/"/g,'""')+'"');
+ ComputeDesk.download('compute-desk-seller-comparison.csv',rows.join('\n'),'text/csv;charset=utf-8');
+});
 seg();srt();conf();updateStepper();updateBoard();applyOrder();syncSel();renderCompare();syncUrl();
 
 /* ===================== additive — phase 3 ===================== */

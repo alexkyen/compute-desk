@@ -3,78 +3,70 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Practical decision tools for GPU pricing, capacity planning, infrastructure diligence, and contract negotiation.">
-<meta property="og:title" content="The Compute Desk — GPU procurement and infrastructure tools">
-<meta property="og:description" content="Benchmark GPU quotes, size committed capacity, test network assumptions, and quantify contract exposure.">
+<meta name="description" content="An interactive field guide to the machines behind AI. Explore the chips, the connections, and the economics of compute.">
+<meta property="og:title" content="The Compute Desk — Meet the machine behind AI">
+<meta property="og:description" content="An interactive field guide to the machines behind AI. Explore the chips, the connections, and the economics of compute.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://alexkyen.github.io/compute-desk/social-card.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:url" content="https://alexkyen.github.io/compute-desk/">
 <link rel="canonical" href="https://alexkyen.github.io/compute-desk/">
-<meta name="theme-color" content="#F6F7F3">
-<title>The Compute Desk — GPU procurement and infrastructure tools</title>
+<meta name="theme-color" content="#181a17">
+<title>The Compute Desk — Meet the machine behind AI</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
-<style>
-:root{--paper:#F6F7F3;--panel:#FDFDFB;--ink:#15201A;--ink-2:#4A574F;--ink-3:#8A968E;
---rule:#DDE2DB;--teal:#117758;--mono:"IBM Plex Mono",ui-monospace,monospace;--serif:"Newsreader",Georgia,serif;}
-*{box-sizing:border-box;margin:0;padding:0}
-html{background:var(--paper)}
-body{font-family:var(--serif);color:var(--ink);line-height:1.6}
-.cover{max-width:920px;margin:0 auto;padding:72px 20px 48px}
-.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
-h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(38px,6vw,58px);
-line-height:1.05;margin:10px 0 14px;letter-spacing:-.01em}
-.dek{font-size:18px;color:var(--ink-2);max-width:62ch}
-.quick{display:flex;flex-wrap:wrap;gap:9px;margin-top:25px}
-.quick a{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--teal);text-decoration:none;border:1px solid var(--teal);border-radius:6px;padding:9px 13px;background:var(--panel)}
-.quick a:hover,.quick a:focus-visible{background:#DCEDE4;outline:2px solid var(--teal);outline-offset:2px}
-.group{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);padding:22px 2px 7px;border-bottom:1px solid var(--rule)}
-.toc{margin-top:44px;border-top:1px solid var(--rule)}
-.toc a{display:flex;gap:18px;align-items:baseline;padding:19px 2px;border-bottom:1px solid var(--rule);
-text-decoration:none;color:var(--ink)}
-.toc a:hover .t,.toc a:focus-visible .t{color:var(--teal)}
-.toc a:hover .n,.toc a:focus-visible .n{color:var(--teal)}
-.toc a:focus-visible{outline:none}
-.toc .n{font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.1em}
-.toc .t{font-family:var(--serif);font-style:italic;font-size:21px}
-.toc .d{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-left:auto;text-align:right}
-.colophon{max-width:920px;margin:0 auto;padding:34px 20px 60px;border-top:1px solid var(--rule);
-font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.03em;line-height:1.9}
-@media(max-width:560px){.toc .d{display:none}}
-</style>
 <link rel="stylesheet" href="assets/desk.css">
+<link rel="stylesheet" href="assets/experience.css">
 </head>
-<body>
+<body class="experience home">
 <a class="skip-link" href="#main">Skip to content</a>
-<main class="cover" id="main">
-  <p class="eyebrow">Compute desk</p>
-  <h1>Decision tools for buying and operating GPU capacity</h1>
-  <p class="dek">Benchmark GPU quotes, size committed capacity, test cluster-network assumptions, and quantify contract exposure. Built for procurement, infrastructure planning, and commercial diligence.</p>
-  <div class="quick" aria-label="Start with a decision">
-    <a href="the-atlas-scatter.html">Benchmark a quote</a>
-    <a href="gpu-supply-book.html">Size a commitment</a>
-    <a href="sla-anatomy.html">Review contract exposure</a>
-  </div>
-  <nav class="toc" aria-label="Contents">
-    <p class="group">Price and procure</p>
-    <a href="the-atlas-scatter.html"><span class="n">01</span><span class="t">The sellers</span><span class="d">benchmark public and reported prices across 12 sellers</span></a>
-    <a href="gpu-supply-book.html"><span class="n">02</span><span class="t">The supply book</span><span class="d">size the committed layer against demand</span></a>
-    <a href="silicon-ladder.html"><span class="n">03</span><span class="t">The NVIDIA generations</span><span class="d">compare procurement-relevant specifications</span></a>
-    <p class="group">Validate the design</p>
-    <a href="plate-nvl72.html"><span class="n">04</span><span class="t">The NVL72 rack</span><span class="d">inspect the quote unit and facility boundary</span></a>
-    <a href="the-fabric.html"><span class="n">05</span><span class="t">The network tax</span><span class="d">estimate the communication penalty in a GPU-hour</span></a>
-    <a href="the-two-trees.html"><span class="n">06</span><span class="t">The two topologies</span><span class="d">compare fabric cost, traffic fit, and failure domains</span></a>
-    <a href="plate-pod.html"><span class="n">07</span><span class="t">The pod</span><span class="d">map the logical fabric to one physical row</span></a>
-    <p class="group">Negotiate the agreement</p>
-    <a href="sla-anatomy.html"><span class="n">08</span><span class="t">The issues list</span><span class="d">prioritize modeled contract exposure and redlines</span></a>
-  </nav>
+<header class="site-header">
+  <a class="wordmark" href="index.html" aria-label="The Compute Desk home"><span class="brand-icon" aria-hidden="true">✳</span> THE COMPUTE DESK</a>
+  <nav aria-label="Main navigation"><a class="nav-explore" href="#explore">Explore</a><a href="#toolbox">The toolbox <span aria-hidden="true">↗</span></a></nav>
+</header>
+<main id="main">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <p class="overline"><span class="live-dot"></span> A FIELD GUIDE TO THE PHYSICAL SIDE OF AI</p>
+      <h1 id="hero-title">AI isn’t magic.<br>It’s a <em>machine.</em></h1>
+      <p class="hero-dek">Behind every answer is a world of chips,<br class="desktop-break"> cables, and very real tradeoffs. Let’s look inside.</p>
+      <a class="pill primary" href="plate-nvl72.html">Meet the machine <span aria-hidden="true">↗</span></a>
+      <p class="entry-note">No engineering degree required.</p>
+    </div>
+    <div class="hero-art" id="hero-art">
+      <div class="art-grid" aria-hidden="true"></div>
+      <div id="chip-scene" role="img" aria-label="Interactive conceptual GPU with two silver computing dies and eight memory blocks. Drag horizontally to turn it.">
+        <svg class="chip-fallback" viewBox="0 0 600 600" aria-hidden="true"><g transform="translate(300 280) rotate(-30) skewX(20)"><rect x="-160" y="-140" width="320" height="280" rx="12" fill="#c8cb78"/><rect x="-140" y="-120" width="280" height="240" fill="#30372c"/><rect x="-70" y="-65" width="65" height="130" fill="#d9dbd3"/><rect x="5" y="-65" width="65" height="130" fill="#b9bdb5"/></g></svg>
+      </div>
+      <div class="object-caption"><span class="crosshair">+</span><span>01 / THE ACCELERATOR<br><small>A small chip. A very big job.</small></span></div>
+      <div class="art-controls"><button class="circle-control" id="motion-toggle" type="button" hidden aria-label="Pause chip rotation" aria-pressed="false">Ⅱ</button><span>DRAG TO EXPLORE</span></div>
+      <span class="art-index" aria-hidden="true">FIG. 001</span>
+    </div>
+    <a class="scroll-cue" href="#explore"><span>FOLLOW YOUR CURIOSITY</span><span aria-hidden="true">↓</span></a>
+  </section>
+  <section class="explore-section" id="explore" aria-labelledby="explore-title">
+    <div class="section-heading"><p class="overline">LESS READING. MORE DISCOVERING.</p><h2 id="explore-title">Pull on a thread.</h2></div>
+    <div class="story-grid">
+      <a class="story story-machine" href="plate-nvl72.html"><div class="story-top"><span>01 / THE HARDWARE</span><span class="story-arrow">↗</span></div><div class="rack-illustration" aria-hidden="true"><div class="mini-rack"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="rack-orbit"></div><span class="diagram-note">72 GPUs.<br>One machine.</span></div><div class="story-copy"><h3>What’s AI made of?</h3><p>Take a rack apart. Meet the pieces.</p><span class="story-link">Go inside <span>→</span></span></div></a>
+      <a class="story story-network" href="the-fabric.html"><div class="story-top"><span>02 / THE CONNECTIONS</span><span class="story-arrow">↗</span></div><div class="network-illustration" aria-hidden="true"><svg viewBox="0 0 400 180"><g stroke="currentColor" fill="none"><path d="M30 90H115L180 30H270L370 90M115 90L180 150H270L370 90M115 90H370"/><path d="M180 30V150M270 30V150" opacity=".35"/></g><g fill="currentColor"><circle cx="30" cy="90" r="6"/><circle cx="115" cy="90" r="6"/><circle cx="180" cy="30" r="6"/><circle cx="180" cy="150" r="6"/><circle cx="270" cy="30" r="6"/><circle cx="270" cy="150" r="6"/><circle cx="370" cy="90" r="6"/></g><circle class="signal" cx="220" cy="90" r="8" fill="#e7f48b"/></svg></div><div class="story-copy"><h3>Why do fast chips wait?</h3><p>Because talking takes time, too.</p><span class="story-link">Follow the connections <span>→</span></span></div></a>
+      <a class="story story-money" href="gpu-supply-book.html"><div class="story-top"><span>03 / THE TRADEOFFS</span><span class="story-arrow">↗</span></div><div class="cost-illustration" aria-hidden="true"><span class="cost-mark">$</span><div class="cost-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div><div class="story-copy"><h3>How much is enough?</h3><p>Too few GPUs, you wait. Too many, you pay.</p><span class="story-link">Find the balance <span>→</span></span></div></a>
+    </div>
+  </section>
+  <section class="toolbox" id="toolbox" aria-labelledby="toolbox-title">
+    <div><p class="overline">WHEN YOU’RE READY TO GO DEEPER</p><h2 id="toolbox-title">Curiosity meets<br>the spreadsheet.</h2><p>Real decisions to make? Open the working tools.</p></div>
+    <div class="toolbox-list">
+      <details><summary>Compare & buy <span>03 tools</span></summary><a href="the-atlas-scatter.html">Compare GPU prices <span>↗</span></a><a href="gpu-supply-book.html">Plan a capacity commitment <span>↗</span></a><a href="sla-anatomy.html">Understand contract exposure <span>↗</span></a><p class="archive-note">Archived July 2026 prices. Use current quotes for purchase decisions.</p></details>
+      <details><summary>Build & connect <span>03 tools</span></summary><a href="the-fabric.html">Explore the network bottleneck <span>↗</span></a><a href="the-two-trees.html">Compare network layouts <span>↗</span></a><a href="plate-pod.html">Walk through a server row <span>↗</span></a></details>
+      <details><summary>Know the hardware <span>02 guides</span></summary><a href="plate-nvl72.html">Inside the NVL72 rack <span>↗</span></a><a href="silicon-ladder.html">Compare chip generations <span>↗</span></a></details>
+    </div>
+  </section>
 </main>
-<footer class="colophon">Designed, written, and implemented by Alex Yen · model version 2026.08 · market data verified July 2026 · <a href="methodology.html">methods &amp; sources</a> · <a href="https://github.com/alexkyen/compute-desk">source code</a></footer>
-<script src="assets/desk.js"></script>
+<footer class="experience-footer"><a class="wordmark" href="index.html">THE COMPUTE DESK <span class="brand-icon" aria-hidden="true">✳</span></a><span>Made for curious people. By Alex Yen.</span><a href="methodology.html">Methods & sources ↗</a></footer>
+<script src="assets/three-r147.min.js"></script>
+<script src="assets/home-scene.js"></script>
 </body>
 </html>

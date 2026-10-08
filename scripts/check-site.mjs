@@ -2,6 +2,7 @@ import {readFile, readdir, access} from "node:fs/promises";
 import {resolve, dirname} from "node:path";
 import {fileURLToPath} from "node:url";
 import vm from "node:vm";
+import {checkMarketEvidence} from "./market-policy.mjs";
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const files=(await readdir(root)).filter(name=>name.endsWith(".html"));
@@ -25,13 +26,23 @@ for(const file of files){
   }
 }
 
-const atlas=await readFile(resolve(root,"the-atlas-scatter.html"),"utf8");
-const match=atlas.match(/data-market-verified="(\d{4}-\d{2}-\d{2})"/);
-if(!match)failures.push("the-atlas-scatter.html: missing market verification date");
-else{
-  const age=(Date.now()-new Date(`${match[1]}T00:00:00Z`).getTime())/86400000;
-  if(age>45)failures.push(`market data is ${Math.floor(age)} days old (limit: 45)`);
+// Check local script syntax as well as page-level inline scripts.
+for(const file of (await readdir(resolve(root,"assets"))).filter(name=>name.endsWith(".js"))){
+  try{new vm.Script(await readFile(resolve(root,"assets",file),"utf8"),{filename:file})}
+  catch(error){failures.push(`${file}: JavaScript syntax error: ${error.message}`)}
 }
+const atlas=await readFile(resolve(root,"the-atlas-scatter.html"),"utf8");
+const verified=atlas.match(/data-market-verified="([^"]+)"/)?.[1];
+const status=atlas.match(/data-market-status="([^"]+)"/)?.[1]||"live";
+const noticeMatch=atlas.match(/<([a-z0-9]+)[^>]*data-market-notice="archived"[^>]*>([\s\S]*?)<\/\1>/i);
+const notice=noticeMatch?.[2].replace(/<[^>]+>/g," ")||"";
+if(noticeMatch){
+  const preceding=atlas.slice(0,noticeMatch.index);
+  const unclosedDetails=(preceding.match(/<details\b/g)||[]).length-(preceding.match(/<\/details>/g)||[]).length;
+  if(unclosedDetails>0||/\bhidden\b|aria-hidden="true"/.test(noticeMatch[0].split(">",1)[0]))failures.push("market archive notice must be visible without opening a disclosure");
+}
+failures.push(...checkMarketEvidence({verified,status,notice}).map(error=>`the-atlas-scatter.html: ${error}`));
 
 if(failures.length){console.error(failures.join("\n"));process.exit(1)}
-console.log(`Checked ${files.length} HTML pages: metadata, landmarks, local links, and market freshness passed.`);
+console.log(`Checked ${files.length} HTML pages: metadata, landmarks, local links, all JavaScript syntax, and market evidence policy passed.`);
+if(status==="archived")console.log(`Price atlas is explicitly archived. Original verification date: ${verified}.`);
