@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Apply different contract promises to the same outage. Explore what counts as downtime and what happens next.">
-<meta property="og:title" content="What happens when things go wrong? — The Compute Desk">
-<meta property="og:description" content="Apply different contract promises to the same outage. Explore what counts as downtime and what happens next.">
+<meta name="description" content="See how outage definitions, GPU-hour denominators, and contract clauses affect illustrative service credits and exposure.">
+<meta property="og:title" content="GPU service agreements — The Compute Desk">
+<meta property="og:description" content="See how outage definitions, GPU-hour denominators, and contract clauses affect illustrative service credits and exposure.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://alexkyen.github.io/compute-desk/social-card.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:url" content="https://alexkyen.github.io/compute-desk/sla-anatomy.html">
 <link rel="canonical" href="https://alexkyen.github.io/compute-desk/sla-anatomy.html">
-<title>What happens when things go wrong? — The Compute Desk</title>
+<title>GPU service agreements — The Compute Desk</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -192,43 +192,47 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
 <link rel="stylesheet" href="assets/experience.css">
 <link rel="stylesheet" href="assets/tool-experience.css">
 <link rel="stylesheet" href="assets/buying-experiences.css">
-<meta name="theme-color" content="#181a17">
+<meta name="theme-color" content="#f5f3ed">
+<link rel="stylesheet" href="assets/editorial.css">
 </head>
 <body class="experience tool-page sla-page">
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header">
   <a class="wordmark" href="index.html" aria-label="The Compute Desk home"><span class="brand-icon" aria-hidden="true">✳</span> THE COMPUTE DESK</a>
-  <nav aria-label="Main navigation"><a class="nav-explore" href="index.html#explore">Explore</a><a href="index.html#toolbox">The toolbox <span aria-hidden="true">↗</span></a></nav>
+  <nav aria-label="Main navigation"><a href="index.html#guide">The guide</a><a href="index.html#models">Working models</a><a href="methodology.html">Methods</a></nav>
 </header>
 <main class="wrap" id="main">
   <section class="tool-intro">
-    <div><p class="overline">08 / THE PROMISE</p><h1>What happens when<br>things go wrong?</h1></div>
-    <p class="dek">Machines fail. Contracts decide what happens next.<br>Change one definition. Watch the same failure tell a different story.</p>
+    <div><p class="overline">08 / CONTRACT ECONOMICS</p><h1>Understanding a GPU service agreement</h1></div>
+    <p class="dek">An uptime percentage becomes useful when you know what it measures, which failures count, and what remedy follows. Apply different terms to the same incident.</p>
   </section>
+  <section class="reading-note contract-reading" aria-labelledby="sla-principle"><div><p class="overline">START WITH THE DENOMINATOR</p><h2 id="sla-principle">A working API can hide unavailable GPUs.</h2></div><div><p>A provider’s control platform may keep responding while individual machines are down. A platform-only definition can report 100% uptime through those failures. A definition based on delivered GPU-hours includes them.</p><p class="reading-secondary">This fictional contract uses illustrative credit tiers. The exercise explains their arithmetic; actual terms and remedies require review of the agreement.</p></div></section>
   <section class="outage-experiment" id="outage-experiment" aria-labelledby="outage-title">
-    <div class="experiment-head"><p class="overline">TRY IT / CHANGE THE PROMISE</p><h2 id="outage-title">Same outage.<br>Different promise.</h2></div>
+    <div class="experiment-head"><div><p class="overline">ILLUSTRATIVE CONTRACT SCENARIO</p><h2 id="outage-title">What counts as unavailable?</h2></div><p id="slaBasis">1,024 GPUs · $2.35/GPU-hour<br>730-hour billing month</p></div>
     <div class="outage-grid">
-      <div class="outage-art" aria-hidden="true">
-        <div class="platform-indicator"><i></i><span id="platform-label">PLATFORM ONLINE</span></div>
-        <div class="machine-lines"></div>
-        <div class="machine-array"><span>01</span><span>02</span><span class="failed">03 <b>×</b></span><span>04</span><span>05</span><span>06</span></div>
-        <p class="art-annotation" id="outage-annotation">One part can fail.<br>The platform can still answer.</p>
-        <p class="art-scale">Conceptual illustration · not a count of failed machines</p>
+      <div class="outage-art measurement-card">
+        <p class="measurement-label">GPU-HOURS IN THE MEASUREMENT WINDOW</p>
+        <p class="measurement-total" id="window-capacity">747,520</p>
+        <p class="measurement-equation" id="window-equation">1,024 GPUs × 730 hours</p>
+        <div class="measurement-row"><span>Unavailable hours counted</span><strong id="measured-hours">0</strong></div>
+        <div class="measurement-track" aria-hidden="true"><i id="measurement-loss"></i></div>
+        <p class="measurement-definition" id="platform-label">Platform-only measurement</p>
+        <p class="art-annotation" id="outage-annotation">Individual GPU failures are excluded from this definition.</p>
       </div>
       <div class="outage-controls">
-        <div class="seg"><p class="lbl">What counts as a failure?</p><div class="btns" id="db"></div></div>
-        <div class="sl main-slider"><label for="ns">Work lost to machine failures <b id="nv">5,000 GPU-h</b></label><input type="range" id="ns" min="0" max="20000" step="250" value="5000"><p class="control-help">One GPU-hour = one GPU unavailable for one hour.</p></div>
-        <div class="outage-mini"><div><span>Measured uptime</span><b class="v" id="c1">—</b></div><div><span>Credit ÷ modeled loss</span><b class="v" id="c4">—</b></div></div>
+        <div class="seg"><p class="lbl">Availability definition</p><div class="btns" id="db"></div></div>
+        <div class="sl main-slider"><label for="ns">Unavailable GPU-hours <b id="nv">5,000 GPU-h</b></label><input type="range" id="ns" min="0" max="20000" step="250" value="5000"><p class="control-help">For example, 500 GPUs down for 10 hours = 5,000 unavailable GPU-hours.</p></div>
+        <div class="outage-mini"><div><span>Measured uptime</span><b class="v" id="c1">—</b></div><div><span>Credit ÷ assumed loss</span><b class="v" id="c4">—</b></div></div>
       </div>
     </div>
     <div class="outage-results" aria-label="Illustrative scenario results">
-      <div class="loss-result"><p class="l">Modeled cost of the failure</p><p class="v" id="c3">—</p><div class="result-track" aria-hidden="true"><i id="loss-bar"></i></div></div>
-      <div class="credit-result"><p class="l">Credit from this promise</p><p class="v" id="c2">—</p><div class="result-track" aria-hidden="true"><i id="credit-bar"></i></div></div>
+      <div class="loss-result"><p class="l">Assumed cost of lost work</p><p class="v" id="c3">—</p><p class="calculation-note" id="loss-working">5,000 GPU-hours × $2.35 × 3</p><div class="result-track" aria-hidden="true"><i id="loss-bar"></i></div></div>
+      <div class="credit-result"><p class="l">Service credit under these terms</p><p class="v" id="c2">—</p><p class="calculation-note" id="credit-working">0% × monthly fees</p><div class="result-track" aria-hidden="true"><i id="credit-bar"></i></div></div>
     </div>
     <p class="status" id="st" aria-live="polite"></p>
-    <p class="experiment-note">Illustrative contract. Credits can exceed modeled loss and may only offset future bills.</p>
+    <p class="experiment-note">The loss multiplier is an assumption, not measured business damage. Credits are calculated from monthly fees, so they can exceed this modeled loss and may only offset future bills.</p>
   </section>
-  <details class="buying-details" id="scenario-settings"><summary><span>Change the scenario</span><small>Outages, promises &amp; deal size</small></summary><div class="detail-body"><div class="scenario-advanced"><div class="seggroup"><div class="seg"><p class="lbl">Uptime promise</p><div class="btns" id="cb"></div></div><div class="seg"><p class="lbl">Measured over</p><div class="btns" id="wb"></div></div></div><p class="allowed" id="al"></p>      <div class="sl"><label for="ps">Platform outage this month <b id="pv">0.0 h</b></label><input type="range" id="ps" min="0" max="24" step="0.5" value="0"></div>      <div class="sl"><label for="fs">Fleet from reference deal <b id="fv">1,024 GPUs</b></label><input type="range" id="fs" min="128" max="4096" step="128" value="1024" disabled aria-describedby="fleetHelp"><span id="fleetHelp" class="sr-only">Controlled by committed capacity in the reference deal below</span></div>      <div class="sl"><label for="msl">Downstream cost per lost GPU-h <b id="mv">3.0× rate</b></label><input type="range" id="msl" min="1" max="10" step="0.5" value="3"></div>    <label class="excl"><input type="checkbox" id="ex"> provider invokes exclusions (maintenance window / force majeure)</label></div>  <section id="refdeal" aria-label="The reference deal">
+  <details class="buying-details" id="scenario-settings"><summary><span>Contract &amp; incident assumptions</span><small>Rates, measurement window &amp; exclusions</small></summary><div class="detail-body"><div class="scenario-advanced"><div class="seggroup"><div class="seg"><p class="lbl">Uptime promise</p><div class="btns" id="cb"></div></div><div class="seg"><p class="lbl">Measured over</p><div class="btns" id="wb"></div></div></div><p class="allowed" id="al"></p>      <div class="sl"><label for="ps">Platform outage this month <b id="pv">0.0 h</b></label><input type="range" id="ps" min="0" max="24" step="0.5" value="0"></div>      <div class="sl"><label for="fs">Fleet from reference deal <b id="fv">1,024 GPUs</b></label><input type="range" id="fs" min="128" max="4096" step="128" value="1024" disabled aria-describedby="fleetHelp"><span id="fleetHelp" class="sr-only">Controlled by committed capacity in the reference deal below</span></div>      <div class="sl"><label for="msl">Downstream cost per lost GPU-h <b id="mv">3.0× rate</b></label><input type="range" id="msl" min="1" max="10" step="0.5" value="3"></div>    <label class="excl"><input type="checkbox" id="ex"> provider invokes exclusions (maintenance window / force majeure)</label></div>  <section id="refdeal" aria-label="The reference deal">
     <div class="dealcard">
       <div class="dgrid">
         <div class="df"><span class="dfl">committed capacity</span><span class="dfv" role="group" aria-label="Committed capacity, GPUs"><button type="button" class="cbtn" id="dcgd" aria-label="fewer GPUs">−</button><b id="dcgv">1,024</b><button type="button" class="cbtn" id="dcgi" aria-label="more GPUs">+</button><span class="dun">× H100</span></span></div>
@@ -244,8 +248,8 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
     </div>
     <p class="dealcap">the reference deal — numerical exposures use these values unless a row is explicitly labeled illustrative</p>
   </section>              <p class="excap">Illustrative model: 730-hour month, the reference deal's live rate and capacity, credits computed as a tier percentage of monthly fees, and node failures spread evenly across the window. Tier schedules are a representative composite. The downstream-cost multiplier is a sensitivity input, not an empirical estimate.</p></div></details>
-  <div class="clause-doorway"><p class="overline">THEN ASK THREE THINGS</p><div class="clause-links"><a href="#ir-def"><span>01</span>What counts?<b>↗</b></a><a href="#ir-ttr"><span>02</span>How fast is it fixed?<b>↗</b></a><a href="#ir-chronic"><span>03</span>Can I walk away?<b>↗</b></a></div></div>
-  <details class="buying-details contract-review" id="contract-review"><summary><span>Read the fine print</span><small>14 clauses · review &amp; export</small></summary><div class="detail-body">
+  <div class="clause-doorway"><p class="overline">THREE TERMS TO EXAMINE</p><div class="clause-links"><a href="#ir-def"><span>01</span>What counts?<b>↗</b></a><a href="#ir-ttr"><span>02</span>How fast is it fixed?<b>↗</b></a><a href="#ir-chronic"><span>03</span>Can I walk away?<b>↗</b></a></div></div>
+  <details class="buying-details contract-review" id="contract-review"><summary><span>Review the contract clauses</span><small>14 clauses · review &amp; export</small></summary><div class="detail-body">
     <p class="review-intro">Open a clause to compare the draft with a proposed change. Mark your priorities, copy redlines, or export your review.</p>
   <p class="scope-note warning"><strong>Illustrative negotiation aid—not legal advice.</strong> The agreement is a fictional composite. Terms vary by provider, jurisdiction, and deal; use counsel for an actual agreement. Dollar figures are scenario exposure, are not probability-adjusted, and should not be added together.</p>  <section id="issues" aria-label="The issues list">
     <div class="boardbar">
@@ -269,12 +273,12 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
               <p><span class="xk">the draft says</span>"commercially reasonable efforts" toward a target date</p>
               <p class="xa"><span class="xk">you ask for</span>0.5% of the prepay per day late; walk with a full refund past 45 days</p>
             </div>
-            <p class="xwhy"><span class="xk">why it matters</span>"commercially reasonable efforts" with no consequence attached is allocation priority, not a firm delivery commitment — a queue position dressed as a date.</p>
+            <p class="xwhy"><span class="xk">why it matters</span>The draft states a target date without an explicit delivery credit or delay-based exit right.</p>
             <div class="xrl">
               <p class="xk">the redline</p>
               <p>Provider shall <del>use commercially reasonable efforts to make</del> <ins>make</ins> the Committed Capacity available by the target date.<ins> If Ready-for-Service is delayed beyond the target date, Provider will credit Customer 0.5% of the Initial Payment per day of delay; if the delay exceeds forty-five (45) days, Customer may terminate this Order Form with a full refund of the Initial Payment.</ins></p>
             </div>
-            <p class="xread"><span class="xk">the read</span><b>r1</b> — turn "efforts" into an obligation with a price on failure. without consequences attached, clause 1 is allocation priority wearing a delivery date.</p>
+            <p class="xread"><span class="xk">effect of the proposed change</span><b>r1</b> — The proposed text ties a missed delivery date to a credit and an eventual exit right. Both the trigger and remedy need to be defined.</p>
             <p class="xmodel"><span class="xk">the model</span>1.5 × monthly — a 45-day slip: committed spend with no service and no remedy</p>
           </div>
         </div>
@@ -292,12 +296,12 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
               <p><span class="xk">the draft says</span>Ready for Service on Provider's own validation</p>
               <p class="xa"><span class="xk">you ask for</span>burn-in + acceptance tests to your spec; billing starts at your sign-off</p>
             </div>
-            <p class="xwhy"><span class="xk">why it matters</span>Provider self-certifies acceptance, and the billing clock starts on its say-so.</p>
+            <p class="xwhy"><span class="xk">why it matters</span>The draft lets the provider determine readiness and start billing using its own validation.</p>
             <div class="xrl">
               <p class="xk">the redline</p>
               <p>Capacity is Ready for Service upon <del>Provider's completion of its standard validation procedures.</del> <ins>completion of burn-in and acceptance testing — sustained multi-day load, interconnect at specified bandwidth, HBM and ECC error rates within specified thresholds — and Customer's written sign-off.</ins></p>
             </div>
-            <p class="xread"><span class="xk">the read</span><b>r2</b> — the billing clock starts when the cluster passes <em>your</em> test, not their checklist. define pass criteria or you've bought whatever ships.</p>
+            <p class="xread"><span class="xk">effect of the proposed change</span><b>r2</b> — The proposed acceptance test connects billing to agreed performance criteria and customer sign-off.</p>
             <p class="xmodel"><span class="xk">the model</span>1 × monthly — first month billed on a cluster that fails your spec</p>
           </div>
         </div>
@@ -315,12 +319,12 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
               <p><span class="xk">the draft says</span>committed volume may not be reduced, ever</p>
               <p class="xa"><span class="xk">you ask for</span>±15% at months 9 and 18, at the Committed Rate</p>
             </div>
-            <p class="xwhy"><span class="xk">why it matters</span>a one-way ratchet — volume goes up at their future price, never down at yours; your year-one demand guess is now a <span class="xmonths">24</span>-month liability.</p>
+            <p class="xwhy"><span class="xk">why it matters</span>The draft fixes committed volume for the term. A later fall in demand does not reduce the payment obligation.</p>
             <div class="xrl">
               <p class="xk">the redline</p>
               <p><del>Committed volume may not be reduced during the Committed Term.</del> <ins>Committed volume may be adjusted upward or downward by up to fifteen percent (15%) at months nine (9) and eighteen (18), at the Committed Rate (true-up / true-down).</ins></p>
             </div>
-            <p class="xread"><span class="xk">the read</span><b>r3</b> — your year-one demand guess stops being a two-year liability. ±15% at two checkpoints is a standard, winnable ask.</p>
+            <p class="xread"><span class="xk">effect of the proposed change</span><b>r3</b> — The proposed checkpoints permit a limited reduction in committed volume. Their timing and size determine how much demand risk remains.</p>
             <p class="xmodel"><span class="xk">the model</span>0.15 × monthly × max(0, months − 9) — demand falls 15% at the first checkpoint; draft makes you pay it anyway for the remaining term</p>
           </div>
         </div>
@@ -338,12 +342,12 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
               <p><span class="xk">the draft says</span>power-cost increases pass through on 30 days' notice, uncapped</p>
               <p class="xa"><span class="xk">you ask for</span>capped at 5% per contract year, documentation auditable</p>
             </div>
-            <p class="xwhy"><span class="xk">why it matters</span>index-linked pricing in disguise — the pass-through floats your "fixed" rate with the provider's power bill.</p>
+            <p class="xwhy"><span class="xk">why it matters</span>The pass-through provision can increase the effective rate even when the quoted base rate is fixed.</p>
             <div class="xrl">
               <p class="xk">the redline</p>
               <p>The Committed Rate is fixed for the Committed Term, except that Provider may pass through documented increases in power and facility input costs on thirty (30) days' notice<ins>, not to exceed five percent (5%) in any contract year, with supporting documentation subject to Customer audit</ins>.</p>
             </div>
-            <p class="xread"><span class="xk">the read</span><b>r4</b> — the pass-through survives, capped and auditable. striking it entirely is a losing fight; bounding it is not.</p>
+            <p class="xread"><span class="xk">effect of the proposed change</span><b>r4</b> — The proposed cap limits annual increases and adds access to supporting documentation. It still allows some price movement.</p>
             <p class="xmodel"><span class="xk">the model</span>0.05 × 12 × monthly — one year of drift at the 5% cap you're asking for, as a floor on uncapped exposure</p>
           </div>
         </div>
@@ -361,12 +365,12 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
               <p><span class="xk">the draft says</span>Initial Payment non-refundable unless you terminate for cause</p>
               <p class="xa"><span class="xk">you ask for</span>refundable pro-rata on any termination</p>
             </div>
-            <p class="xwhy"><span class="xk">why it matters</span>the prepay is your cash working as their collateral, and on most exits it's simply gone.</p>
+            <p class="xwhy"><span class="xk">why it matters</span>Refund rights determine how much prepaid cash can be recovered when the agreement ends.</p>
             <div class="xrl">
               <p class="xk">the redline</p>
               <p>The Initial Payment is <del>non-refundable except upon Customer's termination for cause</del><ins> refundable pro-rata upon any termination of this Order Form</ins>.</p>
             </div>
-            <p class="xread"><span class="xk">the read</span><b>r5</b> — the prepay stops being forfeitable collateral. pro-rata refund on any exit is the floor position.</p>
+            <p class="xread"><span class="xk">effect of the proposed change</span><b>r5</b> — The proposed wording returns unused prepaid amounts on termination. Its effect depends on the refund calculation and the other exit provisions.</p>
             <p class="xmodel"><span class="xk">the model</span>prepay$ — cash forfeited under the draft on any termination that isn't your cause</p>
           </div>
         </div>
@@ -384,13 +388,13 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
               <p><span class="xk">the draft says</span>not in the draft — no MFN anywhere in the paper</p>
               <p class="xa"><span class="xk">you ask for</span>no comparable customer pays less; audit annually</p>
             </div>
-            <p class="xwhy"><span class="xk">why it matters</span>nothing stops a comparable customer paying less next quarter.</p>
+            <p class="xwhy"><span class="xk">why it matters</span>The draft contains no protection against a lower price being offered to a comparable customer.</p>
             <div class="xrl">
               <p class="xk">the redline</p>
               <p class="nothere">[what's not here — this agreement contains no most-favored-nation (MFN) protection.]</p>
               <p><ins>3.4 Provider represents that the effective rate hereunder is no less favorable than that offered to any customer of comparable volume and term, and Customer may audit compliance annually (most-favored-nation).</ins></p>
             </div>
-            <p class="xread"><span class="xk">the read</span><b>r6</b> — MFN with an audit right. expect the most friction here — it attacks bespoke anchor pricing directly, which is exactly why it's worth asking.</p>
+            <p class="xread"><span class="xk">effect of the proposed change</span><b>r6</b> — A comparable-customer clause needs a precise comparison group and a usable audit process. It may be difficult to verify without access to pricing records.</p>
             <p class="xmodel"><span class="xk">the model</span>optionality — deliberately unnumbered</p>
           </div>
         </div>
@@ -408,12 +412,12 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
               <p><span class="xk">the draft says</span>"Available" = the platform API answers</p>
               <p class="xa"><span class="xk">you ask for</span>availability measured per Committed GPU-hour, node-level</p>
             </div>
-            <p class="xwhy"><span class="xk">why it matters</span>platform-level "Available" means the metric only moves when everything is down; the dominant GPU failure mode — chronic, node-level — never registers. toggle the definition in the outage experiment and watch the same month flip between zero credits and six figures.</p>
+            <p class="xwhy"><span class="xk">why it matters</span>A platform-only definition can omit individual machine failures while the provider API remains reachable. The outage example compares the two measurements.</p>
             <div class="xrl">
               <p class="xk">the redline</p>
               <p>4.1 "Monthly Uptime Percentage" means the percentage of minutes in a calendar month during which the Service is Available. The Service is "Available" when <del>Customer is able to access the Provider platform API.</del> <ins>a Committed GPU-hour is delivered by a node that is operational and performing to specification; a GPU-hour is Unavailable if its node is failed, degraded below specified interconnect bandwidth or error thresholds, or withdrawn from service. Monthly Uptime is computed over Committed GPU-hours.</ins></p>
             </div>
-            <p class="xread"><span class="xk">the read</span><b>r7</b> — redefine the unit of failure: from "the platform" to "your GPU-hours." this single edit moves more money than every number in the schedule — it's what makes the outage experiment count machine-level failures.</p>
+            <p class="xread"><span class="xk">effect of the proposed change</span><b>r7</b> — The proposed wording changes the measured unit to delivered GPU-hours. The outage example shows how that choice changes which incidents can trigger credits.</p>
             <p class="xmodel"><span class="xk">the model</span><span id="xdefmodel">(0.10+0.10+0.25+0.10) × monthly — four breach months at the published schedule; platform-level = $0</span></p>
             <p class="excap"><a href="#outage-experiment">Return to the outage experiment ↑</a></p>
           </div>
@@ -432,12 +436,12 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
               <p><span class="xk">the draft says</span>maintenance uncapped; node failures excluded by name</p>
               <p class="xa"><span class="xk">you ask for</span>maintenance ≤8h/month on 7 days' notice; the node exclusion struck</p>
             </div>
-            <p class="xwhy"><span class="xk">why it matters</span>the exclusions swallow the metric — node and component failures are excluded by name; this SLA measures the API's uptime, not your cluster's.</p>
+            <p class="xwhy"><span class="xk">why it matters</span>The draft excludes individual node and component failures even when those failures reduce usable capacity.</p>
             <div class="xrl">
               <p class="xk">the redline</p>
               <p>4.2 Excluded from the calculation: scheduled maintenance<ins>, not to exceed eight (8) hours per month on seven (7) days' notice</ins>; events beyond Provider's reasonable control; <del>failures of individual nodes, GPUs, or components where the platform remains accessible;</del> and suspensions under Clause 6.</p>
             </div>
-            <p class="xread"><span class="xk">the read</span><b>r8</b> — cap what "maintenance" can eat, and delete the exclusion that erased node failures. an exclusions list is where an SLA goes to die.</p>
+            <p class="xread"><span class="xk">effect of the proposed change</span><b>r8</b> — The proposed wording limits scheduled maintenance and removes the named exclusion for individual-node failures.</p>
             <p class="xmodel"><span class="xk">the model</span>(16/730) × monthly × 12 — uncapped maintenance at 24h/mo vs the 8h ask, over a year</p>
           </div>
         </div>
@@ -455,12 +459,12 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
               <p><span class="xk">the draft says</span>not in the draft</p>
               <p class="xa"><span class="xk">you ask for</span>failed nodes replaced within 6 business hours from a 2% hot-spare pool</p>
             </div>
-            <p class="xwhy"><span class="xk">why it matters</span>the draft promises nothing when a node dies — no replacement clock, no reserved spares; your failures queue behind the general fleet.</p>
+            <p class="xwhy"><span class="xk">why it matters</span>The draft does not specify a replacement deadline or a pool of spares reserved for this cluster.</p>
             <div class="xrl">
               <p class="xk">the redline</p>
               <p><ins>4.5 Provider will replace any failed node within six (6) business hours from a hot-spare pool maintained at no less than two percent (2%) of cluster size (time-to-replace).</ins></p>
             </div>
-            <p class="xread"><span class="xk">the read</span><b>r10</b> — a number, not "best effort." TTR plus dedicated spares costs the provider real money to honor — which is exactly why it signals fleet quality better than any count of nines.</p>
+            <p class="xread"><span class="xk">effect of the proposed change</span><b>r10</b> — A replacement deadline and reserved spares address restoration of capacity. Review the clock, coverage hours, and remedy for a missed deadline.</p>
             <p class="xmodel"><span class="xk">the model</span>0.25 × monthly — a quarter-month of capacity protected across the term</p>
           </div>
         </div>
@@ -478,12 +482,12 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
               <p><span class="xk">the draft says</span>not in the draft</p>
               <p class="xa"><span class="xk">you ask for</span>3 breaches in 6 months → terminate, no cure, pro-rata refund</p>
             </div>
-            <p class="xwhy"><span class="xk">why it matters</span>one catastrophic month has a remedy; a string of "minor" ones has none — without a pattern trigger, chronic breach never matures into an exit.</p>
+            <p class="xwhy"><span class="xk">why it matters</span>Credits for individual months do not themselves create an exit right for repeated failures.</p>
             <div class="xrl">
               <p class="xk">the redline</p>
               <p><ins>4.6 If Monthly Uptime breaches the Committed Level in any three (3) months within a rolling six (6) month window (chronic breach), Customer may terminate for cause without cure period, with pro-rata refund of the Initial Payment.</ins></p>
             </div>
-            <p class="xread"><span class="xk">the read</span><b>r11</b> — make a pattern of bad months actionable, and let it bypass clause 6's cure period; pairs with <a class="iref" href="#ir-def">r7</a> so chronic node pain can actually pull the trigger.</p>
+            <p class="xread"><span class="xk">effect of the proposed change</span><b>r11</b> — The proposed repeated-breach trigger adds an exit right for a pattern of failures. It depends on which incidents the <a class="iref" href="#ir-def">availability definition</a> counts.</p>
             <p class="xmodel"><span class="xk">the model</span>optionality — deliberately unnumbered</p>
           </div>
         </div>
@@ -501,12 +505,12 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
               <p><span class="xk">the draft says</span>every breach gets 30 days' notice and cure</p>
               <p class="xa"><span class="xk">you ask for</span>15-day cure for availability; chronic breach skips cure</p>
             </div>
-            <p class="xwhy"><span class="xk">why it matters</span>a 30-day cure period on an availability breach means a month of pain before any remedy matures — and it resets with every breach.</p>
+            <p class="xwhy"><span class="xk">why it matters</span>The time allowed to remedy a breach affects when other contractual remedies become available.</p>
             <div class="xrl">
               <p class="xk">the redline</p>
               <p>Either party may terminate for material breach not cured within thirty (30) days of written notice<ins>, except that chronic breach under Clause 4.6 requires no cure period and availability breaches carry a fifteen (15) day cure</ins>.</p>
             </div>
-            <p class="xread"><span class="xk">the read</span><b>r14</b> — a month of pain before remedies mature was the draft's design. shorten cure for availability, and <a class="iref" href="#ir-chronic">chronic breach</a> skips it entirely.</p>
+            <p class="xread"><span class="xk">effect of the proposed change</span><b>r14</b> — The proposed text shortens the availability cure period and treats <a class="iref" href="#ir-chronic">repeated breaches</a> separately.</p>
             <p class="xmodel"><span class="xk">the model</span>1 × monthly — one month of exposure before any remedy matures</p>
           </div>
         </div>
@@ -524,14 +528,14 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
               <p><span class="xk">the draft says</span>liability capped at 3 months' fees; credits the sole and exclusive remedy</p>
               <p class="xa"><span class="xk">you ask for</span>12-month cap; confidentiality, data protection, gross negligence carved out</p>
             </div>
-            <p class="xwhy"><span class="xk">why it matters</span>three locks on one door — sole remedy, credits-not-cash (worth zero if you're leaving), and a 30-day claims gate with the burden of proof on you.</p>
+            <p class="xwhy"><span class="xk">why it matters</span>The cap, sole-remedy wording, credit restrictions, and claim deadline can each limit recovery.</p>
             <div class="xrl">
               <p class="xk">the redline</p>
               <p class="capsline">PROVIDER'S AGGREGATE LIABILITY UNDER THIS AGREEMENT IS CAPPED AT FEES PAID IN THE <del>THREE (3) MONTHS</del> <ins>TWELVE (12) MONTHS</ins> PRECEDING THE CLAIM, AND SERVICE CREDITS ARE CUSTOMER'S SOLE AND EXCLUSIVE REMEDY FOR ANY FAILURE OF AVAILABILITY.<ins> THE CAP DOES NOT APPLY TO BREACHES OF CONFIDENTIALITY OR DATA PROTECTION, OR TO PROVIDER'S GROSS NEGLIGENCE OR WILLFUL MISCONDUCT.</ins></p>
               <p>4.3 If Monthly Uptime falls below the Committed Level of <select class="lvl" aria-label="Committed Level, percent"><option value="0">99.0</option><option value="1">99.5</option><option value="2" selected>99.9</option></select>%, Customer's sole and exclusive remedy is a Service Credit per the Schedule below, applied against future invoices only<del>, provided Customer submits a written claim with supporting logs within thirty (30) days of the incident</del>.<ins> Credits are calculated automatically from Provider telemetry, which Customer may audit on request.</ins></p>
             </div>
-            <p class="xread"><span class="xk">the read</span><b>r15</b> — this redline does <em>not</em> delete the cap or the sole-remedy language. A buyer may seek a wider cap, specific carve-outs, and the <a class="iref" href="#ir-chronic">chronic-breach exit</a>; the appropriate position depends on leverage and counsel.</p>
-            <p class="xread"><b>r9</b> — flip the burden of proof: automatic credits from auditable telemetry, not a claims process you must win inside thirty days.</p>
+            <p class="xread"><span class="xk">effect of the proposed change</span><b>r15</b> — This redline leaves the liability cap and sole-remedy language in place. Any wider cap, carve-out, or additional exit right requires separate consideration with counsel.</p>
+            <p class="xread"><span class="xk">effect of the proposed change</span><b>r9</b> — Automatic credits based on auditable telemetry reduce the claim-administration burden. The measurement and dispute process still need to be defined.</p>
             <div class="ask trap"><b>the interaction</b>Sole-remedy language and the liability cap can materially limit the practical value of an availability commitment.</div>
             <p class="xmodel"><span class="xk">the model</span>9 × monthly — recoverable delta on a catastrophic claim: 12-month ask minus 3-month draft cap</p>
           </div>
@@ -550,12 +554,12 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
               <p><span class="xk">the draft says</span>you may not assign; they may, to anyone</p>
               <p class="xa"><span class="xk">you ask for</span>mutual consent; exit if they're bought by your competitor</p>
             </div>
-            <p class="xwhy"><span class="xk">why it matters</span>asymmetric paper in a consolidating market — their obligations travel to whoever buys them; yours travel nowhere.</p>
+            <p class="xwhy"><span class="xk">why it matters</span>The draft gives the provider broader assignment rights than the customer.</p>
             <div class="xrl">
               <p class="xk">the redline</p>
               <p><del>Customer may not assign this Agreement without Provider's prior written consent. Provider may assign this Agreement to any affiliate or successor, including in connection with a merger, acquisition, or sale of assets.</del> <ins>Neither party may assign this Agreement without the other's prior written consent, not to be unreasonably withheld. If Provider undergoes a change of control to a competitor of Customer, Customer may terminate on ninety (90) days' notice.</ins></p>
             </div>
-            <p class="xread"><span class="xk">the read</span><b>r16</b> — symmetry, plus an exit if their acquirer is your competitor. in a consolidating market this comment outranks most of the SLA.</p>
+            <p class="xread"><span class="xk">effect of the proposed change</span><b>r16</b> — The proposed text makes assignment consent mutual and adds an exit right for a specified change of control.</p>
             <p class="xmodel"><span class="xk">the model</span>optionality — deliberately unnumbered</p>
           </div>
         </div>
@@ -573,12 +577,12 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
               <p><span class="xk">the draft says</span>supplier shortages and delays are force majeure</p>
               <p class="xa"><span class="xk">you ask for</span>supply-chain delay doesn't excuse Clause 1 delivery</p>
             </div>
-            <p class="xwhy"><span class="xk">why it matters</span>the most likely delivery failure in this market — the GPUs arriving late — is pre-excused as force majeure.</p>
+            <p class="xwhy"><span class="xk">why it matters</span>The draft includes supplier shortages and delays among events that can excuse performance.</p>
             <div class="xrl">
               <p class="xk">the redline</p>
               <p>Neither party is liable for delay caused by events beyond its reasonable control, including acts of government, power or facility failures<del>, and shortages or delays of suppliers or component manufacturers</del>.<ins> Delays in Provider's supply chain do not excuse the delivery obligations of Clause 1.</ins></p>
             </div>
-            <p class="xread"><span class="xk">the read</span><b>r17</b> — the most likely failure in this market — late GPUs — stops being pre-excused. force majeure keeps earthquakes; it loses supply chain.</p>
+            <p class="xread"><span class="xk">effect of the proposed change</span><b>r17</b> — The proposed wording prevents supplier delays from excusing the delivery obligation. Other force-majeure events remain subject to the clause.</p>
             <p class="xmodel"><span class="xk">the model</span>1.5 × monthly — the same slip, pre-excused as force majeure</p>
           </div>
         </div>
@@ -587,7 +591,7 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
   </section>
 
   </div></details>
-  <details class="buying-details notes"><summary><span>What this model can tell you</span><small>Limits &amp; negotiation notes</small></summary><div class="detail-body">  <dl class="decision-strip"><div><dt>Decision supported</dt><dd><strong>Which contract issues deserve negotiation priority?</strong></dd></div><div><dt>Primary output</dt><dd>Scenario exposure, proposed position, and redline</dd></div><div><dt>Model boundary</dt><dd>Composite agreement; exposure is not expected value or additive savings</dd></div></dl>
+  <details class="buying-details notes"><summary><span>Interpretation &amp; limitations</span><small>Limits &amp; negotiation notes</small></summary><div class="detail-body">  <dl class="decision-strip"><div><dt>Decision supported</dt><dd><strong>Which contract issues deserve negotiation priority?</strong></dd></div><div><dt>Primary output</dt><dd>Scenario exposure, proposed position, and redline</dd></div><div><dt>Model boundary</dt><dd>Composite agreement; exposure is not expected value or additive savings</dd></div></dl>
     <p><strong>The definition of "unavailable" determines which incidents count.</strong> Platform- or region-level definitions can exclude node, GPU, memory, and network-component failures while the API remains reachable. Meta's Llama 3 team reported 419 unexpected interruptions during 54 days of training on 16,384 H100s, with hardware failures occurring at the node level; Modal has also described recurring machine-level faults across a multi-cloud GPU pool. Open the <a class="iref" href="#ir-def">definition of "available"</a> row and compare platform-level with instance-level measurement in the outage experiment.</p>
     <div class="ask"><b>Ask the supplier</b>Define "unavailable" for me — does it include a single node down, or degraded interconnect performance, or only full loss of the API? And what was your fleet's node-level annualized failure rate last quarter?</div>
     <p><strong>The measurement window changes the threshold result.</strong> A one-hour outage is approximately 99.86% availability in a 730-hour month, but approximately 99.989% over a year. Specify the window, data source, aggregation level, and claim mechanics rather than relying on the headline percentage alone.</p>
@@ -613,9 +617,9 @@ a.iref:hover,a.iref:focus-visible{outline:none;text-decoration-thickness:2px}
   </details>
   <div class="tool-actions"><button type="button" data-copy-link>copy scenario link</button><button type="button" id="exportIssues">export issues CSV</button><button type="button" data-print>print review</button></div><p class="tool-message" aria-live="polite"></p>
   <p class="foot">illustrative composite · model version 2026.08 · <a href="methodology.html">methods, legal limitation &amp; sources</a></p>
-  <nav class="nav-bot" aria-label="Continue exploring"><a class="nav-prev" href="the-atlas-scatter.html"><span class="next-label">PREVIOUS</span>← What does a GPU cost?</a><a class="nav-next" href="index.html#explore"><span class="next-label">KEEP EXPLORING</span>Follow another thread →</a></nav>
+  <nav class="nav-bot" aria-label="Continue through the guide"><a href="the-atlas-scatter.html"><span class="next-label">Previous</span>← Historical price atlas</a><a class="nav-next" href="index.html#guide"><span class="next-label">Next</span>Return to the guide →</a></nav>
 </main>
-<footer class="experience-footer"><a class="wordmark" href="index.html">THE COMPUTE DESK <span class="brand-icon" aria-hidden="true">✳</span></a><span>Made for curious people. By Alex Yen.</span><a href="methodology.html">Methods &amp; sources ↗</a></footer>
+<footer class="experience-footer"><a class="wordmark" href="index.html">THE COMPUTE DESK</a><span>An independent project by Alex Yen.</span><a href="methodology.html">Methods &amp; sources</a></footer>
 <script src="assets/desk.js"></script>
 <script>
 /* shared credit-schedule constants — single source of truth for Exhibit A, Clause 4.4, and the deal ticket */
@@ -624,7 +628,7 @@ var COMMITS=[
  {label:"99.5%",v:0.995,tiers:[[0.995,10],[0.99,25],[0.95,50]]},
  {label:"99.9%",v:0.999,tiers:[[0.999,10],[0.99,25],[0.95,100]]}
 ];
-var DEFS=[{id:"plat",label:"The whole platform"},{id:"inst",label:"Each GPU"}];
+var DEFS=[{id:"plat",label:"Platform only"},{id:"inst",label:"Individual GPUs"}];
 var WINS=[{id:"mo",label:"monthly",hrs:730},{id:"yr",label:"annual",hrs:8760}];
 var slaParams=ComputeDesk.params();
 var cSel=slaParams.has('sla')?Math.max(0,Math.min(COMMITS.length-1,+slaParams.get('sla')||0)):2,dSel=slaParams.get('def')==='inst'?1:0,wSel=slaParams.get('win')==='yr'?1:0;
@@ -686,7 +690,7 @@ function render(){
   else{c4.textContent=Math.round(ratio*100)+"%";c4.className="v"+(ratio<0.25?" bad":"")}
   var msg;
   if(excl){msg="An exclusion removes this incident. The machines failed, but this promise pays no credit."}
-  else if(dSel===0&&nodeGH>0&&platH===0){msg="The machines lost "+nodeGH.toLocaleString()+" GPU-hours. A platform-only promise counts none of them. Try ‘Each GPU’."}
+  else if(dSel===0&&nodeGH>0&&platH===0){msg="The machines lost "+nodeGH.toLocaleString()+" GPU-hours. A platform-only promise counts none of them. Select ‘Individual GPUs’ to include those hours."}
   else if(tier>0){msg="This definition counts the failure. The credit is "+tier+"% of a monthly bill; the loss depends on the cost you assign to lost work."}
   else if(loss>0){msg="Lost work, no credit. This incident stays within the selected promise’s downtime allowance."}
   else{msg="No lost work in this scenario. Add some machine downtime to see what the promise covers."}
@@ -694,11 +698,17 @@ function render(){
   var scale=Math.max(loss,credit,1);
   document.getElementById("loss-bar").style.width=(loss/scale*100)+"%";
   document.getElementById("credit-bar").style.width=(credit/scale*100)+"%";
-  document.querySelector(".outage-art").classList.toggle("counts-nodes",dSel===1);
-  document.querySelector(".outage-art").classList.toggle("has-failure",nodeGH>0);
-  document.querySelector(".outage-art").classList.toggle("platform-down",platH>0);
-  document.getElementById("platform-label").textContent=platH>0?"PLATFORM OUTAGE: "+platH.toFixed(1)+"H":"PLATFORM ONLINE";
-  document.getElementById("outage-annotation").innerHTML=nodeGH>0?(dSel===1?"Each machine counts.<br>Lost GPU-hours enter the calculation.":"One part can fail.<br>The platform can still answer."):"No machine failures.<br>Turn up the lost-work slider.";
+  var windowCapacity=activeFleet*win.hrs,measuredHours=weightedDown*activeFleet;
+  function detailedMoney(value){return '$'+value.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
+  document.getElementById('window-capacity').textContent=windowCapacity.toLocaleString('en-US');
+  document.getElementById('window-equation').textContent=activeFleet.toLocaleString('en-US')+' GPUs × '+win.hrs.toLocaleString('en-US')+' hours';
+  document.getElementById('measured-hours').textContent=measuredHours.toLocaleString('en-US',{maximumFractionDigits:1});
+  document.getElementById('measurement-loss').style.width=Math.max(0,Math.min(100,weightedDown/win.hrs*100))+'%';
+  document.getElementById('platform-label').textContent=dSel===1?'Individual-GPU measurement':'Platform-only measurement';
+  document.getElementById('outage-annotation').textContent=dSel===1?'Unavailable GPU-hours ÷ total GPU-hours = '+(weightedDown/win.hrs*100).toFixed(3)+'% downtime.':nodeGH.toLocaleString('en-US')+' unavailable GPU-hours from individual machines are excluded from this definition.';
+  document.getElementById('slaBasis').innerHTML=activeFleet.toLocaleString('en-US')+' GPUs · '+detailedMoney(activeRate)+'/GPU-hour<br>'+HM+'-hour billing month';
+  document.getElementById('loss-working').textContent=(platH*activeFleet+nodeGH).toLocaleString('en-US')+' GPU-hours × '+detailedMoney(activeRate)+' × '+mult.toFixed(1)+' assumed multiplier';
+  document.getElementById('credit-working').textContent=tier+'% × '+detailedMoney(spend)+' monthly fees'+(excl?' · incident excluded':'');
   CAL.credit=credit;CAL.loss=loss;
   document.getElementById('fs').value=Math.min(4096,activeFleet);
   ComputeDesk.setParams({sla:cSel,def:DEFS[dSel].id,win:WINS[wSel].id,platform:platH,node:nodeGH,mult:mult,excl:excl?1:null});

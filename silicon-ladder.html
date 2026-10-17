@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Compare AI chips by memory, speed, and power in an interactive visual guide. Hardware reference snapshot from July 2026.">
-<meta property="og:title" content="Not all chips think alike — The Compute Desk">
-<meta property="og:description" content="Compare AI chips by memory, speed, and power in an interactive visual guide. Hardware reference snapshot from July 2026.">
+<meta name="description" content="Compare GPU memory, bandwidth, compute, and power. Worked memory examples and an explicitly dated hardware reference.">
+<meta property="og:title" content="Accelerator specifications — The Compute Desk">
+<meta property="og:description" content="Compare GPU memory, bandwidth, compute, and power. Worked memory examples and an explicitly dated hardware reference.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://alexkyen.github.io/compute-desk/social-card.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:url" content="https://alexkyen.github.io/compute-desk/silicon-ladder.html">
 <link rel="canonical" href="https://alexkyen.github.io/compute-desk/silicon-ladder.html">
-<title>Not all chips think alike — The Compute Desk</title>
+<title>Accelerator specifications — The Compute Desk</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -85,27 +85,32 @@ p a.xlink{margin-left:.5em}
 <link rel="stylesheet" href="assets/experience.css">
 <link rel="stylesheet" href="assets/tool-experience.css">
 <link rel="stylesheet" href="assets/market-experiences.css">
-<meta name="theme-color" content="#181a17">
+<meta name="theme-color" content="#f5f3ed">
+<link rel="stylesheet" href="assets/editorial.css">
 </head>
 <body class="experience tool-page silicon-page" data-market-status="archived" data-market-verified="2026-07-22">
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header">
   <a class="wordmark" href="index.html" aria-label="The Compute Desk home"><span class="brand-icon" aria-hidden="true">✳</span> THE COMPUTE DESK</a>
-  <nav aria-label="Main navigation"><a href="index.html#explore">All explorations ↗</a></nav>
+  <nav aria-label="Main navigation"><a href="index.html#guide">The guide</a><a href="index.html#models">Working models</a><a href="methodology.html">Methods</a></nav>
 </header>
 <main class="wrap" id="main">
-  <div class="tool-intro"><div><p class="overline">03 / THE CHIPS</p><h1>Not all chips<br>think alike.</h1></div><p class="dek">More memory. Faster connections. Bigger appetite.<br>See what changes when a chip grows up.</p></div>
+  <div class="tool-intro"><div><p class="overline">03 / THE CHIPS</p><h1>Comparing GPU<br>specifications</h1></div><p class="dek">Memory determines what fits. Bandwidth determines how quickly data moves. Compare the specification that matters to your workload.</p></div>
   <p class="snapshot-note archive-banner" data-market-notice="archived"><span>July 2026 snapshot</span> Archived reference · verified 22 July 2026. Check current specifications and quotes before buying.</p>
+  <section class="worked-example memory-example" aria-labelledby="memory-example-title">
+    <div><p class="overline">A MEMORY BUDGET</p><h2 id="memory-example-title">A 70-billion-parameter model starts at about 140 GB.</h2><p>At 16-bit precision, each weight uses 2 bytes. That is <strong>70 billion × 2 bytes = 140 GB</strong> for weights alone.</p></div>
+    <figure class="memory-figure"><div class="memory-comparison"><span>H100</span><div class="memory-track"><i style="width:56.74%"></i></div><strong>80 GB</strong></div><div class="memory-comparison"><span>H200</span><div class="memory-track"><i style="width:100%"></i></div><strong>141 GB</strong></div><figcaption>The H200 has 76% more memory. At this precision, 141 GB leaves little room beyond the weights: runtime memory and the conversation cache also need a budget. <a href="https://www.nvidia.com/en-us/data-center/h100/">H100</a> · <a href="https://www.nvidia.com/en-us/data-center/h200/">H200</a></figcaption></figure>
+  </section>
   <div class="card silicon-bench">
-    <div class="bench-heading"><p class="overline">WHAT MATTERS TO YOU?</p><span>Choose a metric. Then choose a chip.</span></div>
+    <div class="bench-heading"><p class="overline">COMPARE THE SPECIFICATIONS</p><span>Select a measure, then an accelerator.</span></div>
     <div class="metrics" id="mx" role="tablist" aria-label="Metric"></div>
     <p class="caption" id="cap"></p>
     <div class="silicon-exhibit">
       <div class="comparison-chart"><p class="chart-label">NVIDIA accelerators <span>vs. H100</span></p><div id="rows" role="tabpanel" aria-label="Chip comparison"></div><p class="chart-footnote">Vendor specifications. Larger is not always better.</p></div>
-      <aside class="chip-insight" aria-live="polite"><p class="overline" id="chip-family"></p><div class="chip-object" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><span id="chip-name"></span></div><p class="chip-value" id="chip-value"></p><p class="chip-meaning" id="chip-meaning"></p></aside>
+      <aside class="chip-insight" aria-live="polite"><p class="overline" id="chip-family"></p><h2 class="selected-chip-name" id="chip-name"></h2><p class="chip-value" id="chip-value"></p><p class="chip-meaning" id="chip-meaning"></p></aside>
     </div>
     <details class="dossier">
-      <summary>Meet this chip · specifications & buying context</summary><div class="detail-body">
+      <summary>Selected accelerator · specifications & buying context</summary><div class="detail-body">
       <div class="dh" id="dh"></div>
       <p id="dp1"></p>
       <p id="dp2"></p>
@@ -123,12 +128,9 @@ p a.xlink{margin-left:.5em}
     <p>† Rubin memory and bandwidth are confirmed vendor specifications as of July 2026. The displayed per-GPU power remains a planning assumption; partner configuration, availability, and realized workload performance require current confirmation.</p>
   </div></details>
   <p class="foot">specifications verified 22 July 2026 · <a href="https://www.nvidia.com/en-us/data-center/h100/">H100</a> · <a href="https://www.nvidia.com/en-us/data-center/h200/">H200</a> · <a href="https://www.nvidia.com/en-us/data-center/technologies/blackwell-architecture/">Blackwell</a> · <a href="https://developer.nvidia.com/blog/inside-nvidia-rubin-gpu-architecture-powering-the-era-of-agentic-ai/">Rubin</a> · <a href="methodology.html">methods</a></p>
-  <nav class="nav-bot" aria-label="Manual navigation">
-    <a class="nav-prev" href="plate-pod.html">← A room full of possibility</a>
-    <a class="nav-next" href="the-fabric.html"><span class="next-label">NEXT EXPLORATION</span>Why do fast chips wait? →</a>
-  </nav>
+  <nav class="nav-bot" aria-label="Continue through the guide"><a href="plate-pod.html"><span class="next-label">Previous</span>← Cluster layout</a><a class="nav-next" href="the-fabric.html"><span class="next-label">Next</span>Communication time →</a></nav>
 </main>
-<footer class="experience-footer"><a class="wordmark" href="index.html">THE COMPUTE DESK <span class="brand-icon" aria-hidden="true">✳</span></a><span>Made for curious people. By Alex Yen.</span><a href="methodology.html">Methods &amp; sources ↗</a></footer>
+<footer class="experience-footer"><a class="wordmark" href="index.html">THE COMPUTE DESK</a><span>An independent project by Alex Yen.</span><a href="methodology.html">Methods &amp; sources</a></footer>
 
 <script src="assets/desk.js"></script>
 <script>
@@ -139,7 +141,7 @@ var GENS=[
   p2:"Its price history is the market's core lesson: available supply, contract structure, and fleet quality matter alongside successor announcements. A quoted H100-hour is incomplete without age, form factor, host, and fabric.",
   ask:"How old is the fleet, what fabric is it wired with, and how does my rate track a reference index as H100 market pricing keeps sliding?"},
  {id:"H200",arch:"Hopper refresh",year:"2024",mem:141,memT:"HBM3e",bw:4.8,comp:4,prec:"FP8",pw:700,nvl:900,nvlG:"NVLink 4",dom:8,est:false,
-  t:"Same engine, twice the tank",
+  t:"More memory within the Hopper generation",
   p1:"The primary upgrade is memory: 141 GB of HBM3e at 4.8 TB/s. A 70B-parameter model's FP16 weights nominally fit on one GPU, though runtime overhead, KV cache, and framework allocation still determine whether the workload fits without sharding.",
   p2:"The lesson for a buyer is that a generation's value can live entirely in HBM. Price-per-FLOP and price-per-GB rank the same chip very differently, so the right ranking depends on which resource your demand actually exhausts first.",
   ask:"Is my demand compute-bound or memory-bound — and is the H200 premium over H100 smaller than the sharding cost it removes?"},
@@ -160,12 +162,12 @@ var GENS=[
   ask:"Where do I sit in the allocation queue, and how will Rubin availability affect renewal pricing, substitution rights, and residual-value assumptions on earlier commitments?"}
 ];
 var METRICS=[
- {k:"mem",label:"Memory",unit:" GB",cap:"The workspace. More memory lets a chip hold a larger model, or more conversations at once.",fmt:function(g){return g.mem+" GB "+g.memT},val:function(g){return g.mem}},
- {k:"bw",label:"Memory speed",unit:" TB/s",cap:"How quickly a chip can read its own memory. A bigger workspace only helps if you can reach what’s in it.",fmt:function(g){return g.bw+" TB/s"+(g.est?" †":"")},val:function(g){return g.bw}},
- {k:"comp",label:"Number crunching",unit:" PFLOPS",cap:"The arithmetic engine. These headline figures use different number formats, so they are not a fair race or a speedup forecast.",fmt:function(g){return g.comp+" PF "+g.prec},val:function(g){return g.comp}},
- {k:"pw",label:"Power",unit:" W",cap:"The electricity bill starts here. More power also means more heat to carry away. These are per-chip planning figures.",fmt:function(g){return (g.pw>=1000?(g.pw/1000).toFixed(1)+" kW":g.pw+" W")+(g.est?" †":"")},val:function(g){return g.pw}},
- {k:"nvl",label:"Chip-to-chip speed",unit:" GB/s",cap:"The conversation speed. Chips working on the same problem need to move information between them.",fmt:function(g){return (g.nvl/1000).toFixed(1)+" TB/s"},val:function(g){return g.nvl}},
- {k:"dom",label:"Team size",unit:" GPUs",cap:"How many chips can work as one tightly connected team in the illustrated system. The exact server or rack matters.",fmt:function(g){return g.dom+" GPUs · "+g.nvlG},val:function(g){return g.dom}}
+ {k:"mem",label:"Memory",unit:" GB",cap:"Memory capacity limits how much model data and runtime state can reside on one GPU.",fmt:function(g){return g.mem+" GB "+g.memT},val:function(g){return g.mem}},
+ {k:"bw",label:"Memory speed",unit:" TB/s",cap:"Memory bandwidth measures how quickly a GPU can read or write data in its own memory.",fmt:function(g){return g.bw+" TB/s"+(g.est?" †":"")},val:function(g){return g.bw}},
+ {k:"comp",label:"Compute throughput",unit:" PFLOPS",cap:"Headline arithmetic throughput. These figures use different precisions and may include sparsity; they are not comparable workload-speed estimates.",fmt:function(g){return g.comp+" PF "+g.prec},val:function(g){return g.comp}},
+ {k:"pw",label:"Power",unit:" W",cap:"Per-GPU power affects cooling and rack density. These planning figures exclude the rest of the server and facility.",fmt:function(g){return (g.pw>=1000?(g.pw/1000).toFixed(1)+" kW":g.pw+" W")+(g.est?" †":"")},val:function(g){return g.pw}},
+ {k:"nvl",label:"Chip-to-chip speed",unit:" GB/s",cap:"NVLink bandwidth describes GPU-to-GPU communication inside the connected system.",fmt:function(g){return (g.nvl/1000).toFixed(1)+" TB/s"},val:function(g){return g.nvl}},
+ {k:"dom",label:"Connected GPUs",unit:" GPUs",cap:"The illustrated NVLink domain is a system specification: confirm the server or rack configuration, not just the GPU model.",fmt:function(g){return g.dom+" GPUs · "+g.nvlG},val:function(g){return g.dom}}
 ];
 var siliconParams=ComputeDesk.params(),mSel=Math.max(0,Math.min(METRICS.length-1,+siliconParams.get('metric')||0)),gSel=Math.max(0,Math.min(GENS.length-1,+siliconParams.get('gpu')||0));
 function buildMetrics(){
@@ -210,7 +212,7 @@ function render(){
   document.getElementById("chip-family").textContent=g.arch+" / "+g.year;
   document.getElementById("chip-name").textContent=g.id;
   document.getElementById("chip-value").textContent=m.fmt(g);
-  var meaning={mem:"Room to hold the work.",bw:"Data read from memory, every second.",comp:"Headline arithmetic capacity. Different precisions; not a speed benchmark.",pw:"Power for one GPU. The rest of the system needs more.",nvl:"Bandwidth for talking to other GPUs.",dom:"GPUs in the illustrated connected team."};
+  var meaning={mem:"Memory capacity per GPU.",bw:"Peak memory bandwidth per GPU.",comp:"Vendor arithmetic specification; different precisions are not workload benchmarks.",pw:"Planning power for one GPU; excludes the rest of the system.",nvl:"GPU-to-GPU NVLink bandwidth.",dom:"GPUs in the illustrated NVLink domain."};
   document.getElementById("chip-meaning").textContent=meaning[m.k];
   document.getElementById("dh").innerHTML='<h2>'+g.t+'</h2>'
     +'<span class="badge">'+g.id+" · "+g.arch+'</span>'

@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Move the capacity line. Explore the balance between renting GPUs as needed and reserving them ahead of time.">
-<meta property="og:title" content="How much is enough? — The Compute Desk">
-<meta property="og:description" content="Move the capacity line. Explore the balance between renting GPUs as needed and reserving them ahead of time.">
+<meta name="description" content="Balance reserved and on-demand GPU capacity. Explore break-even utilization, demand, and the cost of a commitment with a working model.">
+<meta property="og:title" content="Sizing a GPU commitment — The Compute Desk">
+<meta property="og:description" content="Balance reserved and on-demand GPU capacity. Explore break-even utilization, demand, and the cost of a commitment with a working model.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://alexkyen.github.io/compute-desk/social-card.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:url" content="https://alexkyen.github.io/compute-desk/gpu-supply-book.html">
 <link rel="canonical" href="https://alexkyen.github.io/compute-desk/gpu-supply-book.html">
-<title>How much is enough? — The Compute Desk</title>
+<title>Sizing a GPU commitment — The Compute Desk</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -90,21 +90,27 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--teal);outline-o
 <link rel="stylesheet" href="assets/experience.css">
 <link rel="stylesheet" href="assets/tool-experience.css">
 <link rel="stylesheet" href="assets/buying-experiences.css">
-<meta name="theme-color" content="#181a17">
+<meta name="theme-color" content="#f5f3ed">
+<link rel="stylesheet" href="assets/editorial.css">
 </head>
 <body class="experience tool-page supply-page">
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header">
   <a class="wordmark" href="index.html" aria-label="The Compute Desk home"><span class="brand-icon" aria-hidden="true">✳</span> THE COMPUTE DESK</a>
-  <nav aria-label="Main navigation"><a class="nav-explore" href="index.html#explore">Explore</a><a href="index.html#toolbox">The toolbox <span aria-hidden="true">↗</span></a></nav>
+  <nav aria-label="Main navigation"><a href="index.html#guide">The guide</a><a href="index.html#models">Working models</a><a href="methodology.html">Methods</a></nav>
 </header>
 <main class="wrap" id="main">
   <section class="tool-intro">
-    <div><p class="overline">06 / THE TRADEOFFS</p><h1>How much<br>is enough?</h1></div>
-    <p class="dek">Rent for the rush. Commit to the everyday.<br>Find the balance between paying more and buying too much.</p>
+    <div><p class="overline">06 / CAPACITY ECONOMICS</p><h1>Sizing a GPU commitment</h1></div>
+    <p class="dek">Reserved GPUs cost less per hour, but you pay while they sit idle. Compare that fixed bill with renting capacity only when work arrives.</p>
+  </section>
+  <section class="reading-note supply-reading" aria-labelledby="reserve-principle">
+    <div><p class="overline">THE ECONOMIC QUESTION</p><h2 id="reserve-principle">Will you use the discount?</h2><p>At <strong id="example-res-rate">$2.00</strong> per reserved hour and <strong id="example-od-rate">$6.00</strong> on demand, a GPU must be needed more than <strong id="breakeven-use">33.3%</strong> of the time for a commitment to save money. At the threshold, the two bills are equal.</p><p class="reading-secondary">The same rule applies to the next GPU you reserve. Covering the busiest hour of the year can leave it idle through the rest.</p></div>
+    <div class="worked-example utilization-example"><p class="example-label">ONE GPU · A 100-HOUR PERIOD</p><div class="paid-hour-row"><div><span>Reserve it for all 100 hours</span><strong id="hundred-reserved">$200</strong></div><div class="paid-hour-track"><i class="reserved-hours"></i></div></div><div class="paid-hour-row"><div><span>Rent it for 50 busy hours</span><strong id="fifty-rented">$300</strong></div><div class="paid-hour-track"><i class="rented-hours"></i></div></div><p class="example-caption">Bars show paid hours. Prices are illustrative and follow the inputs below.</p></div>
   </section>
   <section class="supply-experiment" aria-label="Try a GPU capacity commitment">
-    <div class="experiment-head"><p class="overline">TRY IT / MOVE THE LINE</p><p>Your workload has busy hours.<br>Your bill has no quiet hours.</p></div>
+    <div class="experiment-head"><div><p class="overline">CAPACITY MODEL</p><h2>Choose how much to reserve</h2></div><p id="supplyBasis">100 GPUs of average demand<br>400 GPUs at the peak</p></div>
+    <div class="rate-row">      <div class="numctl"><label for="resInput">Reserved rate · $/GPU-hour</label><input id="resInput" type="number" min="0.01" step="0.01" value="2.00"></div>      <div class="numctl"><label for="odInput">On-demand rate · $/GPU-hour</label><input id="odInput" type="number" min="0.01" step="0.01" value="6.00"></div><p class="rate-explanation">The reserved rate is paid every hour. The on-demand rate applies only to work above your reservation.</p></div>
     <div class="supply-art">
       <div class="legend">
         <span><i class="sw used"></i>Reserved &amp; working</span>
@@ -114,20 +120,21 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--teal);outline-o
       <svg id="sim" viewBox="0 0 840 340" role="img" aria-label="Demand from busiest to quietest hours. Move the capacity slider to change how much is reserved."></svg>
       <div class="krow">
         <div class="ctl"><label for="ks">How many GPUs will you reserve? <b id="kv">100 GPUs</b></label><input type="range" id="ks" min="0" max="400" step="1" value="100"></div>
-        <button id="snapBtn" type="button">Find the sweet spot ↗</button>
+        <button id="snapBtn" type="button">Use lowest-cost commitment</button>
       </div>
     </div>
     <div class="ticker supply-results" aria-label="Scenario outputs">
-      <div class="tk"><p class="l">Your cost per GPU-hour</p><p class="v" id="c1">—</p></div>
-      <div class="tk"><p class="l">Compared with renting it all</p><p class="v" id="c2">—</p></div>
-      <div class="tk"><p class="l">Reserved capacity used</p><p class="v" id="c3">—</p></div>
+      <div class="tk"><p class="l">Cost per GPU-hour served</p><p class="v" id="c1">—</p></div>
+      <div class="tk"><p class="l">Change from all on demand</p><p class="v" id="c2">—</p></div>
+      <div class="tk"><p class="l">Reserved utilization</p><p class="v" id="c3">—</p></div>
       <div class="tk"><p class="l">Work served on demand</p><p class="v" id="c4">—</p></div>
     </div>
+    <div class="cost-working" aria-label="Average hourly cost calculation"><div><span>Reserved bill</span><strong id="reserved-cost">—</strong></div><b aria-hidden="true">+</b><div><span>On-demand bill</span><strong id="elastic-cost">—</strong></div><b aria-hidden="true">=</b><div><span>Total per modeled hour</span><strong id="total-cost">—</strong></div></div>
     <p class="status" id="st" aria-live="polite"></p>
-    <p class="experiment-note">An illustrative workload and prices. Drag the slider, or the line itself.</p>
+    <p class="experiment-note">Hours are sorted from highest to lowest demand, so this is a distribution, not a calendar. The model assumes on-demand capacity is always available.</p>
   </section>
   <details class="buying-details">
-    <summary><span>Make it your scenario</span><small>Prices, demand &amp; file import</small></summary>
+    <summary><span>Demand assumptions &amp; import</span><small>Workload shape, rates &amp; CSV data</small></summary>
     <div class="detail-body">    <div class="controls">
       <div class="ctl">
         <label for="ds">Price ratio <b id="dv">3.0× · $2.00/hr</b></label>
@@ -139,8 +146,8 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--teal);outline-o
       </div>
     </div>    <div class="input-grid">
       <div class="numctl"><label for="avgInput">Average demand · GPUs</label><input id="avgInput" type="number" min="1" step="1" value="100"></div>
-      <div class="numctl"><label for="odInput">Elastic rate · $/GPU-hr</label><input id="odInput" type="number" min="0.01" step="0.01" value="6.00"></div>
-      <div class="numctl"><label for="resInput">Committed rate · $/GPU-hr</label><input id="resInput" type="number" min="0.01" step="0.01" value="2.00"></div>
+
+
       <div class="filectl"><label for="csvInput">Observed hourly demand · CSV or text</label><input id="csvInput" type="file" accept=".csv,.txt,text/csv,text/plain"><p class="tool-message" id="csvStatus">Synthetic demand · 180 modeled intervals</p></div>
       <div class="tool-actions"><button type="button" id="resetDemand">use synthetic curve</button></div>
     </div>
@@ -148,7 +155,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--teal);outline-o
   </details>
   <div class="tool-actions"><button type="button" id="shareSupply" data-copy-link>Copy scenario link</button><button type="button" id="downloadSupply">Download summary</button></div><p class="tool-message" aria-live="polite"></p>
   <details class="buying-details notes">
-    <summary><span>Why the sweet spot exists</span><small>The model &amp; its limits</small></summary>
+    <summary><span>How the commitment model works</span><small>The model &amp; its limits</small></summary>
     <div class="detail-body">
     <p>The committed layer is paid for every hour whether used or not. Demand above it is served at the elastic rate; unused committed capacity is paid idle. Import a single demand column or place demand in the final column after a timestamp. One optional header row and blank lines are allowed. Missing, invalid, or negative demand values stop the import; earlier columns are never substituted. Commitments use whole GPUs, and imported scenarios are optimized against the observed distribution.</p>
     <div class="rule-box" id="ruleBox">commit a GPU ⇔ its expected utilization ≥ committed ÷ elastic price</div>
@@ -162,9 +169,9 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--teal);outline-o
   </dl>  <p class="scope-note">Model output, not a demand forecast. Imported observations preserve the demand distribution but discard their time order; apply your own growth, seasonality, and contract-risk judgment. Imported files stay in the browser and are not embedded in share links.</p></div>
   </details>
   <p class="foot">model · newsvendor critical ratio · load-duration framing after Modal, “<a href="https://modal.com/blog/how-to-price-serverless" target="_blank" rel="noopener">How to price serverless</a>” (2026) · <a href="methodology.html">methods &amp; limitations</a></p>
-  <nav class="nav-bot" aria-label="Continue exploring"><a class="nav-prev" href="the-two-trees.html"><span class="next-label">PREVIOUS</span>← Two ways to connect</a><a class="nav-next" href="the-atlas-scatter.html"><span class="next-label">UP NEXT / 07</span>What does a GPU cost? →</a></nav>
+  <nav class="nav-bot" aria-label="Continue through the guide"><a href="the-two-trees.html"><span class="next-label">Previous</span>← Network topology</a><a class="nav-next" href="the-atlas-scatter.html"><span class="next-label">Next</span>Historical price atlas →</a></nav>
 </main>
-<footer class="experience-footer"><a class="wordmark" href="index.html">THE COMPUTE DESK <span class="brand-icon" aria-hidden="true">✳</span></a><span>Made for curious people. By Alex Yen.</span><a href="methodology.html">Methods &amp; sources ↗</a></footer>
+<footer class="experience-footer"><a class="wordmark" href="index.html">THE COMPUTE DESK</a><span>An independent project by Alex Yen.</span><a href="methodology.html">Methods &amp; sources</a></footer>
 
 <script src="assets/desk.js"></script>
 <script src="assets/demand-import.js"></script>
@@ -226,23 +233,23 @@ function render(){
   }
   var cP='M'+x(0).toFixed(1)+' '+y(D(0)).toFixed(1);
   for(i=1;i<=N;i++){h=i/N;cP+='L'+x(h).toFixed(1)+' '+y(D(h)).toFixed(1)}
-  function tick(v){return '<text x="48" y="'+(y(v)+4).toFixed(1)+'" text-anchor="end" font-size="11" font-family="IBM Plex Mono, monospace" fill="#aab29e">'+Math.round(v)+'</text>'}
-  var s='<defs><pattern id="hz" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#a9b77c" stroke-width="1.6"/></pattern></defs>';
-  s+='<path d="'+uP+'" fill="#c5db76" fill-opacity="0.42"/>';
+  function tick(v){return '<text x="48" y="'+(y(v)+4).toFixed(1)+'" text-anchor="end" font-size="11" font-family="IBM Plex Mono, monospace" fill="#626b70">'+Math.round(v)+'</text>'}
+  var s='<defs><pattern id="hz" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#879e94" stroke-width="1.6"/></pattern></defs>';
+  s+='<path d="'+uP+'" fill="#547d70" fill-opacity="0.42"/>';
   if(iP)s+='<path d="'+iP+'" fill="url(#hz)" fill-opacity="0.75"/>';
-  if(oP)s+='<path d="'+oP+'" fill="#eac989" fill-opacity="0.38"/>';
-  s+='<path d="'+cP+'" fill="none" stroke="#eab18c" stroke-width="2.5" stroke-linecap="round"/>';
-  s+='<line x1="'+X0+'" y1="'+y(ko).toFixed(1)+'" x2="'+X1+'" y2="'+y(ko).toFixed(1)+'" stroke="#e7f48b" stroke-opacity="0.5" stroke-width="1" stroke-dasharray="4 5"/>';
-  s+='<text x="'+(X1-4)+'" y="'+(y(ko)-7).toFixed(1)+'" text-anchor="end" font-size="11" font-family="IBM Plex Mono, monospace" fill="#b9c3a8">best fit '+Math.round(ko)+'</text>';
-  s+='<line x1="'+X0+'" y1="'+y(K).toFixed(1)+'" x2="'+X1+'" y2="'+y(K).toFixed(1)+'" stroke="#e7f48b" stroke-width="1.6"/>';
-  s+='<circle cx="'+((X0+X1)/2)+'" cy="'+y(K).toFixed(1)+'" r="6" fill="#e7f48b"/>';
-  s+='<text x="'+((X0+X1)/2+12)+'" y="'+(y(K)-9).toFixed(1)+'" font-size="11" font-family="IBM Plex Mono, monospace" fill="#e7f48b">reserved: '+Math.round(K)+'</text>';
-  s+='<line x1="'+X0+'" y1="'+Y0+'" x2="'+X1+'" y2="'+Y0+'" stroke="#536047" stroke-width="1"/>';
-  s+='<line x1="'+X0+'" y1="'+Y1+'" x2="'+X0+'" y2="'+Y0+'" stroke="#536047" stroke-width="1"/>';
+  if(oP)s+='<path d="'+oP+'" fill="#b89470" fill-opacity="0.38"/>';
+  s+='<path d="'+cP+'" fill="none" stroke="#9a573a" stroke-width="2.5" stroke-linecap="round"/>';
+  s+='<line x1="'+X0+'" y1="'+y(ko).toFixed(1)+'" x2="'+X1+'" y2="'+y(ko).toFixed(1)+'" stroke="#35685e" stroke-opacity="0.5" stroke-width="1" stroke-dasharray="4 5"/>';
+  s+='<text x="'+(X1-4)+'" y="'+(y(ko)-7).toFixed(1)+'" text-anchor="end" font-size="11" font-family="IBM Plex Mono, monospace" fill="#626b70">best fit '+Math.round(ko)+'</text>';
+  s+='<line x1="'+X0+'" y1="'+y(K).toFixed(1)+'" x2="'+X1+'" y2="'+y(K).toFixed(1)+'" stroke="#35685e" stroke-width="1.6"/>';
+  s+='<circle cx="'+((X0+X1)/2)+'" cy="'+y(K).toFixed(1)+'" r="6" fill="#35685e"/>';
+  s+='<text x="'+((X0+X1)/2+12)+'" y="'+(y(K)-9).toFixed(1)+'" font-size="11" font-family="IBM Plex Mono, monospace" fill="#35685e">reserved: '+Math.round(K)+'</text>';
+  s+='<line x1="'+X0+'" y1="'+Y0+'" x2="'+X1+'" y2="'+Y0+'" stroke="#bcc6bf" stroke-width="1"/>';
+  s+='<line x1="'+X0+'" y1="'+Y1+'" x2="'+X0+'" y2="'+Y0+'" stroke="#bcc6bf" stroke-width="1"/>';
   s+=tick(0)+tick(p/2)+tick(p);
-  s+='<text x="'+X0+'" y="316" font-size="11" font-family="IBM Plex Mono, monospace" fill="#aab29e">busiest hours</text>';
-  s+='<text x="'+X1+'" y="316" text-anchor="end" font-size="11" font-family="IBM Plex Mono, monospace" fill="#aab29e">quietest hours</text>';
-  s+='<text x="'+((X0+X1)/2)+'" y="316" class="chart-mid" text-anchor="middle" font-size="11" font-family="IBM Plex Mono, monospace" fill="#aab29e">hours, sorted by demand</text>';
+  s+='<text x="'+X0+'" y="316" font-size="11" font-family="IBM Plex Mono, monospace" fill="#626b70">busiest hours</text>';
+  s+='<text x="'+X1+'" y="316" text-anchor="end" font-size="11" font-family="IBM Plex Mono, monospace" fill="#626b70">quietest hours</text>';
+  s+='<text x="'+((X0+X1)/2)+'" y="316" class="chart-mid" text-anchor="middle" font-size="11" font-family="IBM Plex Mono, monospace" fill="#626b70">hours, sorted by demand</text>';
   document.getElementById('sim').innerHTML=s;
   var ratioSlider=document.getElementById('ds');ratioSlider.min=Math.min(1.5,delta);ratioSlider.max=Math.max(6,delta);ratioSlider.value=delta;
   document.getElementById('dv').textContent=delta.toFixed(1)+'× · $'+r.toFixed(2)+'/hr';
@@ -254,11 +261,21 @@ function render(){
   c2El.className='v'+(savPct<0?' bad':'');
   document.getElementById('c3').textContent=Math.round(util*100)+'%';
   document.getElementById('c4').textContent=Math.round(OD/AVG*100)+'%';
+  function usd(value){return '$'+value.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
+  document.getElementById('example-res-rate').textContent=usd(r);
+  document.getElementById('example-od-rate').textContent=usd(d);
+  document.getElementById('breakeven-use').textContent=(r/d*100).toFixed(1)+'%';
+  document.getElementById('hundred-reserved').textContent=usd(r*100);
+  document.getElementById('fifty-rented').textContent=usd(d*50);
+  document.getElementById('reserved-cost').textContent=usd(r*K);
+  document.getElementById('elastic-cost').textContent=usd(d*OD);
+  document.getElementById('total-cost').textContent=usd(cost);
+  document.getElementById('supplyBasis').innerHTML=AVG.toLocaleString('en-US',{maximumFractionDigits:1})+' GPUs of average demand<br>'+p.toLocaleString('en-US',{maximumFractionDigits:1})+' GPUs at the peak'+(imported?' · imported observations':' · illustrative workload');
   var be=1/delta, m=hK, beT=Math.round(be*100), mT=Math.round(m*100), msg;
-  if(r>=d){msg=K===0?'Renting wins here. A commitment costs at least as much, even before idle time.':'Renting is cheaper here. The reserved rate is at least as high as the on-demand rate.'}
-  else if(K===ko){msg='The sweet spot. You’re covering the everyday work without paying for too much idle capacity.'}
-  else if(K<ko){msg='Room to reserve more. In this scenario, a little more commitment lowers your bill.'}
-  else{msg='Too much on reserve. You’re paying for capacity that spends too much time idle.'}
+  if(r>=d){msg=K===0?'No commitment is needed at these prices. The reserved rate is at least as high as the on-demand rate.':'Renting is cheaper here. The reserved rate is at least as high as the on-demand rate.'}
+  else if(K===ko){msg='This is the lowest-cost whole-GPU commitment under the current demand and price assumptions.'}
+  else if(K<ko){msg='Reserving more capacity lowers the modeled bill at these prices. The additional GPUs would be used often enough to justify the commitment.'}
+  else{msg='The modeled bill falls if you reserve less capacity. The highest reserved GPUs are idle too often to earn their discount.'}
   document.getElementById('st').textContent=msg;
   document.getElementById('ruleBox').innerHTML='commit a GPU ⇔ its expected utilization ≥ committed ÷ elastic price<br>breakeven = $'+r.toFixed(2)+' / $'+d.toFixed(2)+' = '+beT+'% of hours';
   document.getElementById('assumptionSummary').innerHTML='<strong>Assumptions:</strong> '+(imported?imported.length+' imported observations':'synthetic stationary demand')+'; '+AVG.toFixed(1)+'-GPU average; $'+r.toFixed(2)+' committed; $'+d.toFixed(2)+' elastic; hourly billing; elastic supply always available.';

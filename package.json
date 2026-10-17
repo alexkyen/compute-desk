@@ -1,8 +1,8 @@
 {
   "name": "compute-desk",
-  "version": "2026.10.0",
+  "version": "2026.10.1",
   "private": true,
-  "description": "An interactive field guide to the physical side of AI.",
+  "description": "A practical guide to AI compute hardware, networks, and economics.",
   "scripts": {
     "test": "node --test scripts/*.test.mjs && node scripts/check-site.mjs"
   },

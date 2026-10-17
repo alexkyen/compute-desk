@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Take apart a 72-GPU AI rack. Meet the chips, follow the connections, and see how the machine works.">
-<meta property="og:title" content="Meet the machine — The Compute Desk">
-<meta property="og:description" content="Take apart a 72-GPU AI rack. Meet the chips, follow the connections, and see how the machine works.">
+<meta name="description" content="Inspect a GB200 NVL72 rack, from compute trays and memory to its internal network. A schematic model with explicit specifications and limits.">
+<meta property="og:title" content="Inside an AI rack — The Compute Desk">
+<meta property="og:description" content="Inspect a GB200 NVL72 rack, from compute trays and memory to its internal network. A schematic model with explicit specifications and limits.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://alexkyen.github.io/compute-desk/social-card.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:url" content="https://alexkyen.github.io/compute-desk/plate-nvl72.html">
 <link rel="canonical" href="https://alexkyen.github.io/compute-desk/plate-nvl72.html">
-<title>Meet the machine — The Compute Desk</title>
+<title>Inside an AI rack — The Compute Desk</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -115,18 +115,20 @@ p a.xlink{margin-left:.5em}
 <link rel="stylesheet" href="assets/desk.css">
 <link rel="stylesheet" href="assets/experience.css">
 <link rel="stylesheet" href="assets/tool-experience.css">
-<meta name="theme-color" content="#181a17">
+<meta name="theme-color" content="#f5f3ed">
+<link rel="stylesheet" href="assets/editorial.css">
 </head>
 <body class="experience rack-page">
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header">
   <a class="wordmark" href="index.html" aria-label="The Compute Desk home"><span class="brand-icon" aria-hidden="true">✳</span> THE COMPUTE DESK</a>
-  <nav aria-label="Main navigation"><a href="index.html#explore">All explorations ↗</a></nav>
+  <nav aria-label="Main navigation"><a href="index.html#guide">The guide</a><a href="index.html#models">Working models</a><a href="methodology.html">Methods</a></nav>
 </header>
 <main class="wrap" id="main">
-  <div class="exhibit-intro"><div><p class="overline">01 / THE HARDWARE · AN INTERACTIVE EXPLORATION</p><h1>Meet the machine.</h1></div>
-  <p class="dek">72 AI chips. One tightly connected rack.<br>Take it apart to see how the pieces work together.</p></div>
+  <div class="exhibit-intro"><div><p class="overline">01 / THE RACK</p><h1>Inside an AI rack.</h1></div>
+  <p class="dek">The GB200 NVL72 connects 72 GPUs within one rack. Its structure makes the relationship between compute, networking, and cooling visible.</p></div>
 
+  <section class="worked-example rack-example" aria-labelledby="rack-example-title"><div><p class="overline">FROM TRAY TO RACK</p><h2 id="rack-example-title">18 trays × 4 GPUs = 72 GPUs.</h2></div><p>Each compute tray holds two GB200 superchips. Each superchip pairs one Grace CPU with two Blackwell GPUs. Nine separate switch trays connect the rack.</p></section>
   <div class="card plate-card">
     <div class="stages" id="tabs" role="tablist" aria-label="Stages of the plate"></div>
     <div class="subrow" id="subrow" hidden></div>
@@ -180,9 +182,9 @@ p a.xlink{margin-left:.5em}
         </div>
       </div>
       <aside class="panel" id="panel" role="tabpanel" aria-live="polite">
-        <p class="stage-eyebrow" id="an-eyebrow">01 / WORKING TOGETHER</p>
-        <h2 id="an-title">72 chips. One team.</h2>
-        <p class="an-body" id="an-body">A GPU is a chip built to do lots of calculations at once. This rack connects 72 of them so they can work on enormous AI tasks together. Choose a chapter to look inside.</p>
+        <p class="stage-eyebrow" id="an-eyebrow">01 / RACK ARCHITECTURE</p>
+        <h2 id="an-title">72 GPUs, one NVLink domain</h2>
+        <p class="an-body" id="an-body">The rack connects 72 GPUs through NVLink. They can exchange data at high bandwidth, while each GPU retains its own memory. Choose a view to inspect the components.</p>
         <div class="stats" id="an-stats">
           <div class="stat"><span class="l">Blackwell GPUs</span><span class="v teal">72</span></div>
           <div class="stat"><span class="l">Grace CPUs</span><span class="v teal">36</span></div>
@@ -202,20 +204,17 @@ p a.xlink{margin-left:.5em}
   <div class="hint-row"><p class="hint">Drag to turn · scroll to zoom · choose a chapter to look inside</p><button type="button" id="rack-motion" aria-pressed="false">Pause rotation</button></div>
 
   <details class="notes">
-    <summary>Buying one? Here’s what to check.</summary><div class="detail-body">
+    <summary>System boundaries & procurement considerations</summary><div class="detail-body">
     <p><strong>The scale-up domain ends at the rack.</strong> The NVLink fabric provides each GPU high-bandwidth access across a 72-GPU domain while each GPU retains its own HBM. Traffic leaving that domain moves to the scale-out network, whose media, topology, and performance are procured separately; the network-tax page models that boundary.</p>
     <p><strong>Power is the binding constraint.</strong> Roughly 120 kW in a single rack is why liquid cooling is a requirement rather than an option, and why the binding constraint in procurement migrated from chip allocation to facility qualification. Two suppliers quoting the same GPU can differ entirely in whether their building can actually run this object.</p>
     <p><strong>The rack can be a commercial unit, but it is not the only one.</strong> Providers may sell full racks, nodes, instances, or capacity blocks. Ask which physical assets, failure domains, and acceptance criteria correspond to the quoted unit.</p>
     <div class="ask"><b>Ask the supplier</b>Is the facility NVL72-qualified—power density and liquid loops delivered, not planned—and what physical unit, failure domain, and acceptance test sit behind the quote?</div>
   </div></details>
   <div class="tool-actions"><button type="button" data-copy-link>Share this view</button></div><p class="tool-message" aria-live="polite"></p>
-  <p class="foot">schematic geometry · 81 fallback arcs and 378 3D cable instances represent the vendor's approximately 5,000-cable spine · specifications verified July 2026 · <a href="https://www.nvidia.com/en-us/data-center/gb200-nvl72/">NVIDIA GB200 NVL72</a> · <a href="https://docs.nvidia.com/multi-node-nvlink-systems/multi-node-tuning-guide/overview.html">NVIDIA NVLink system guide</a> · <a href="methodology.html">methods</a></p>
-  <nav class="nav-bot" aria-label="Manual navigation">
-    <a class="nav-prev" href="index.html#explore">← Back to exploring</a>
-    <a class="nav-next" href="plate-pod.html"><span class="next-label">NEXT / THE BIGGER PICTURE</span>One rack is just the beginning →</a>
-  </nav>
+  <p class="foot">schematic geometry · 81 fallback arcs and 378 3D cable instances represent the vendor's approximately 5,000-cable spine · original hardware reference: July 2026 · memory corrected 16 October 2026: NVIDIA specifies 372 GB per two-GPU GB200 superchip, or 186 GB per GPU · <a href="https://www.nvidia.com/en-us/data-center/gb200-nvl72/">NVIDIA GB200 NVL72</a> · <a href="https://docs.nvidia.com/multi-node-nvlink-systems/multi-node-tuning-guide/overview.html">NVIDIA NVLink system guide</a> · <a href="methodology.html">methods</a></p>
+  <nav class="nav-bot" aria-label="Continue through the guide"><a href="index.html#guide"><span class="next-label">Previous</span>← The guide</a><a class="nav-next" href="plate-pod.html"><span class="next-label">Next</span>Cluster layout →</a></nav>
 </main>
-<footer class="experience-footer"><a class="wordmark" href="index.html">THE COMPUTE DESK <span class="brand-icon" aria-hidden="true">✳</span></a><span>Made for curious people. By Alex Yen.</span><a href="methodology.html">Methods &amp; sources ↗</a></footer>
+<footer class="experience-footer"><a class="wordmark" href="index.html">THE COMPUTE DESK</a><span>An independent project by Alex Yen.</span><a href="methodology.html">Methods &amp; sources</a></footer>
 
 <script src="assets/desk.js"></script>
 <script src="assets/three-r147.min.js"></script>
@@ -224,25 +223,25 @@ p a.xlink{margin-left:.5em}
    Schematic 3D: flat-shaded parametric geometry, ink edges, site tokens.
    Figures: NVIDIA GB200 NVL72 datasheet — 72 Blackwell GPUs, 36 Grace CPUs,
    18 compute trays x 2 GB200 superchips, 9 NVSwitch trays, ~5,000 direct copper
-   NVLink cables, 1.8 TB/s NVLink per GPU, 192 GB HBM3e per GPU, ~120 kW,
+   NVLink cables, 1.8 TB/s NVLink per GPU, 186 GB HBM3e per GPU, ~120 kW,
    liquid cooling required. */
 (function(){
 "use strict";
 
 /* ---------- stage copy (the deliverable; the model serves it) ---------- */
 var STAGES=[
- {tab:"01 — The rack",eyebrow:"01 / WORKING TOGETHER",title:"72 chips. One team.",
-  body:"A GPU is a chip built to do lots of calculations at once. This rack connects 72 of them so they can work on enormous AI tasks together. Think of it as a team, with a very fast way to talk.",
-  stats:[["AI chips (GPUs)","72","teal"],["Supporting processors","36","teal"],["Connected in one rack","72 GPUs","teal"],["Approx. power needed","120 kW","amber"]]},
- {tab:"02 — The trays",eyebrow:"02 / TAKING IT APART",title:"Big brains. Big heat.",
-  body:"Slide it open: 18 trays hold the computing chips. Nine more connect them. All that work creates heat, so liquid carries it away. The building’s cooling matters as much as the chips.",
+ {tab:"01 — The rack",eyebrow:"01 / RACK ARCHITECTURE",title:"72 GPUs, one NVLink domain",
+  body:"The rack connects 72 GPUs through NVLink. They can exchange data at high bandwidth, while each GPU retains its own memory. Traffic leaving the rack uses a separate network.",
+  stats:[["Blackwell GPUs","72","teal"],["Grace CPUs","36","teal"],["Compute trays","18","teal"],["Planning rack power","~120 kW","amber"]]},
+ {tab:"02 — The trays",eyebrow:"02 / COMPUTE & COOLING",title:"18 compute trays; liquid cooling",
+  body:"Eighteen compute trays hold four GPUs each. Nine switch trays connect them. Liquid cooling removes heat from the dense electronics; the facility must support the rack’s power and cooling requirements.",
   stats:[["Compute trays","18","teal"],["Connection trays","9","teal"],["Approx. power needed","120 kW","amber"],["Cooling method","Liquid","amber"]]},
- {tab:"03 — The links",eyebrow:"03 / THE CONVERSATION",title:"No chip works alone.",
-  body:"Thousands of copper cables let the chips exchange data. These fast connections are called NVLink. Go beyond the rack and you need a different network—the next piece of the puzzle.",
+ {tab:"03 — The links",eyebrow:"03 / GPU COMMUNICATION",title:"The connections inside the rack",
+  body:"Copper NVLink connections carry data between the compute and switch trays. Each GPU has 1.8 TB/s of NVLink bandwidth. The schematic simplifies the physical cable count.",
   stats:[["Copper cables","~5,000","amber"],["Cables drawn here","378","amber"],["NVLink per GPU","1.8 TB/s","teal"],["Connected GPUs","72","teal"]]},
- {tab:"04 — The chip",eyebrow:"04 / THE BUILDING BLOCK",title:"Meet the small team.",
-  body:"One Grace CPU coordinates work for two Blackwell GPUs. Together, they form a GB200 superchip. Each GPU has its own fast memory to keep data close. There are two of these little teams in every compute tray.",
-  stats:[["Superchips per tray","2","teal"],["Memory per GPU","192 GB","amber"],["GPUs per superchip","2","teal"],["Superchips per rack","36","teal"]]}
+ {tab:"04 — The chip",eyebrow:"04 / THE SUPERCHIP",title:"One CPU and two GPUs",
+  body:"A GB200 superchip pairs one Grace CPU with two Blackwell GPUs. NVIDIA specifies 372 GB of GPU memory per superchip: 186 GB per GPU. Two superchips sit in each compute tray.",
+  stats:[["Superchips per tray","2","teal"],["Memory per GPU","186 GB","amber"],["GPUs per superchip","2","teal"],["Superchips per rack","36","teal"]]}
 ];
 
 /* ---------- panel + tabs (work with or without WebGL) ---------- */
@@ -1210,7 +1209,7 @@ canvas.addEventListener("webglcontextlost",function(e){
 });
 
 /* ---------- frame loop: render only when something moves ---------- */
-var rotationPaused=reduced();
+var rotationPaused=true;
 var motionButton=document.getElementById("rack-motion");
 function updateMotionButton(){motionButton.textContent=rotationPaused?"Resume rotation":"Pause rotation";motionButton.setAttribute("aria-pressed",String(rotationPaused))}
 updateMotionButton();
@@ -1270,8 +1269,7 @@ if(initialStage){setP(initialStage)}else applyP();
 applyCam();
 buildSubrow();
 updateCounts();
-if(initialStage||reduced())setCam(CAMKEYS[initialStage]);
-else{setCam(CHOREO[0].k0);tweenCamBezier(CHOREO[0].k0,CHOREO[0].k1,CAMKEYS[0],CHOREO[0].dur)}
+setCam(CAMKEYS[initialStage]);
 requestAnimationFrame(frame);
 })();
 </script>

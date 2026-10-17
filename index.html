@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="An interactive field guide to the machines behind AI. Explore the chips, the connections, and the economics of compute.">
-<meta property="og:title" content="The Compute Desk — Meet the machine behind AI">
-<meta property="og:description" content="An interactive field guide to the machines behind AI. Explore the chips, the connections, and the economics of compute.">
+<meta name="description" content="A practical guide to AI compute. Understand the hardware, test network and capacity tradeoffs, and see what changes the cost of useful work.">
+<meta property="og:title" content="The Compute Desk — AI compute, from hardware to economics">
+<meta property="og:description" content="Understand the hardware. Test the tradeoffs. A practical guide with interactive models, worked examples, and explicit assumptions.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://alexkyen.github.io/compute-desk/social-card.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:url" content="https://alexkyen.github.io/compute-desk/">
 <link rel="canonical" href="https://alexkyen.github.io/compute-desk/">
-<meta name="theme-color" content="#181a17">
-<title>The Compute Desk — Meet the machine behind AI</title>
+<meta name="theme-color" content="#f5f3ed">
+<title>The Compute Desk — AI compute, from hardware to economics</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,52 +21,61 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/desk.css">
 <link rel="stylesheet" href="assets/experience.css">
+<link rel="stylesheet" href="assets/editorial.css">
 </head>
 <body class="experience home">
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header">
   <a class="wordmark" href="index.html" aria-label="The Compute Desk home"><span class="brand-icon" aria-hidden="true">✳</span> THE COMPUTE DESK</a>
-  <nav aria-label="Main navigation"><a class="nav-explore" href="#explore">Explore</a><a href="#toolbox">The toolbox <span aria-hidden="true">↗</span></a></nav>
+  <nav aria-label="Main navigation"><a href="#guide">The guide</a><a href="#models">Working models</a><a href="methodology.html">Methods</a></nav>
 </header>
-<main id="main">
-  <section class="hero" aria-labelledby="hero-title">
-    <div class="hero-copy">
-      <p class="overline"><span class="live-dot"></span> A FIELD GUIDE TO THE PHYSICAL SIDE OF AI</p>
-      <h1 id="hero-title">AI isn’t magic.<br>It’s a <em>machine.</em></h1>
-      <p class="hero-dek">Behind every answer is a world of chips,<br class="desktop-break"> cables, and very real tradeoffs. Let’s look inside.</p>
-      <a class="pill primary" href="plate-nvl72.html">Meet the machine <span aria-hidden="true">↗</span></a>
-      <p class="entry-note">No engineering degree required.</p>
-    </div>
-    <div class="hero-art" id="hero-art">
-      <div class="art-grid" aria-hidden="true"></div>
-      <div id="chip-scene" role="img" aria-label="Interactive conceptual GPU with two silver computing dies and eight memory blocks. Drag horizontally to turn it.">
-        <svg class="chip-fallback" viewBox="0 0 600 600" aria-hidden="true"><g transform="translate(300 280) rotate(-30) skewX(20)"><rect x="-160" y="-140" width="320" height="280" rx="12" fill="#c8cb78"/><rect x="-140" y="-120" width="280" height="240" fill="#30372c"/><rect x="-70" y="-65" width="65" height="130" fill="#d9dbd3"/><rect x="5" y="-65" width="65" height="130" fill="#b9bdb5"/></g></svg>
-      </div>
-      <div class="object-caption"><span class="crosshair">+</span><span>01 / THE ACCELERATOR<br><small>A small chip. A very big job.</small></span></div>
-      <div class="art-controls"><button class="circle-control" id="motion-toggle" type="button" hidden aria-label="Pause chip rotation" aria-pressed="false">Ⅱ</button><span>DRAG TO EXPLORE</span></div>
-      <span class="art-index" aria-hidden="true">FIG. 001</span>
-    </div>
-    <a class="scroll-cue" href="#explore"><span>FOLLOW YOUR CURIOSITY</span><span aria-hidden="true">↓</span></a>
+<main id="main" class="home-main">
+  <section class="editorial-intro" aria-labelledby="hero-title">
+    <div><p class="overline">A practical field guide · By Alex Yen</p><h1 id="hero-title">AI compute, from<br>hardware to economics.</h1><p class="intro-dek">A GPU’s hourly price is only the beginning. What fits in memory, how machines connect, and how much capacity you use all shape the cost of getting work done.</p></div>
+    <aside class="contents-note" aria-label="Guide contents"><span class="overline">Four questions</span><a href="#hardware"><span>01</span> What are you renting?</a><a href="#networks"><span>02</span> Where does time go?</a><a href="#economics"><span>03</span> How much should you commit?</a><a href="#contracts"><span>04</span> What does the contract cover?</a></aside>
   </section>
-  <section class="explore-section" id="explore" aria-labelledby="explore-title">
-    <div class="section-heading"><p class="overline">LESS READING. MORE DISCOVERING.</p><h2 id="explore-title">Pull on a thread.</h2></div>
-    <div class="story-grid">
-      <a class="story story-machine" href="plate-nvl72.html"><div class="story-top"><span>01 / THE HARDWARE</span><span class="story-arrow">↗</span></div><div class="rack-illustration" aria-hidden="true"><div class="mini-rack"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="rack-orbit"></div><span class="diagram-note">72 GPUs.<br>One machine.</span></div><div class="story-copy"><h3>What’s AI made of?</h3><p>Take a rack apart. Meet the pieces.</p><span class="story-link">Go inside <span>→</span></span></div></a>
-      <a class="story story-network" href="the-fabric.html"><div class="story-top"><span>02 / THE CONNECTIONS</span><span class="story-arrow">↗</span></div><div class="network-illustration" aria-hidden="true"><svg viewBox="0 0 400 180"><g stroke="currentColor" fill="none"><path d="M30 90H115L180 30H270L370 90M115 90L180 150H270L370 90M115 90H370"/><path d="M180 30V150M270 30V150" opacity=".35"/></g><g fill="currentColor"><circle cx="30" cy="90" r="6"/><circle cx="115" cy="90" r="6"/><circle cx="180" cy="30" r="6"/><circle cx="180" cy="150" r="6"/><circle cx="270" cy="30" r="6"/><circle cx="270" cy="150" r="6"/><circle cx="370" cy="90" r="6"/></g><circle class="signal" cx="220" cy="90" r="8" fill="#e7f48b"/></svg></div><div class="story-copy"><h3>Why do fast chips wait?</h3><p>Because talking takes time, too.</p><span class="story-link">Follow the connections <span>→</span></span></div></a>
-      <a class="story story-money" href="gpu-supply-book.html"><div class="story-top"><span>03 / THE TRADEOFFS</span><span class="story-arrow">↗</span></div><div class="cost-illustration" aria-hidden="true"><span class="cost-mark">$</span><div class="cost-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div><div class="story-copy"><h3>How much is enough?</h3><p>Too few GPUs, you wait. Too many, you pay.</p><span class="story-link">Find the balance <span>→</span></span></div></a>
-    </div>
+
+  <section class="opening-example" aria-labelledby="util-title">
+    <div class="example-copy"><p class="overline">Start with one number / A worked example</p><h2 id="util-title">The same GPU.<br>A different effective cost.</h2><p>Suppose you rent eight GPUs at <strong>$3 per GPU-hour</strong> for 30 days. The bill is <strong>$17,280</strong>. At half utilization, you spread that bill over half as many hours of useful work.</p><p class="example-instruction">Change utilization to see the cost per productive GPU-hour.</p><div class="util-control"><label for="home-utilization">Productive utilization <output id="util-percent" for="home-utilization">50%</output></label><input id="home-utilization" type="range" min="10" max="100" step="5" value="50" aria-describedby="util-definition"><div class="range-endpoints"><span>10%</span><span>100%</span></div></div></div>
+    <figure class="util-figure"><div class="figure-top"><span class="overline">Billed capacity-time</span><span class="figure-unit">8 GPUs × 720 hours</span></div><div class="util-grid" id="util-grid" role="img" aria-label="50 of 100 units of billed capacity-time are productive; 50 are idle."></div><div class="figure-legend"><span><i class="productive-key"></i>Productive</span><span><i class="idle-key"></i>Idle</span><small>One square = 1% of billed time</small></div><div class="util-results" aria-live="polite" aria-atomic="true"><div><span>Price per rented GPU-hour</span><strong>$3.00</strong></div><div><span>Cost per productive GPU-hour</span><strong id="util-cost">$6.00</strong></div></div><figcaption id="util-equation">$17,280 ÷ 2,880 productive GPU-hours = $6.00</figcaption></figure>
+    <p class="figure-footnote" id="util-definition"><span>Illustrative model.</span> Utilization here means the share of rented time doing useful work, at unchanged throughput. Fixed rental cost only; storage, networking, and other charges are excluded. This is not a live quote. <a href="gpu-supply-book.html">Model a capacity commitment →</a></p>
+    <noscript><p class="no-script-note">At 50% utilization: $3 ÷ 0.5 = $6 per productive GPU-hour. Enable JavaScript to change the example.</p></noscript>
   </section>
-  <section class="toolbox" id="toolbox" aria-labelledby="toolbox-title">
-    <div><p class="overline">WHEN YOU’RE READY TO GO DEEPER</p><h2 id="toolbox-title">Curiosity meets<br>the spreadsheet.</h2><p>Real decisions to make? Open the working tools.</p></div>
-    <div class="toolbox-list">
-      <details><summary>Compare & buy <span>03 tools</span></summary><a href="the-atlas-scatter.html">Compare GPU prices <span>↗</span></a><a href="gpu-supply-book.html">Plan a capacity commitment <span>↗</span></a><a href="sla-anatomy.html">Understand contract exposure <span>↗</span></a><p class="archive-note">Archived July 2026 prices. Use current quotes for purchase decisions.</p></details>
-      <details><summary>Build & connect <span>03 tools</span></summary><a href="the-fabric.html">Explore the network bottleneck <span>↗</span></a><a href="the-two-trees.html">Compare network layouts <span>↗</span></a><a href="plate-pod.html">Walk through a server row <span>↗</span></a></details>
-      <details><summary>Know the hardware <span>02 guides</span></summary><a href="plate-nvl72.html">Inside the NVL72 rack <span>↗</span></a><a href="silicon-ladder.html">Compare chip generations <span>↗</span></a></details>
-    </div>
+
+  <span id="explore" aria-hidden="true"></span><div class="guide-heading" id="guide"><p class="overline">The guide</p><p>Understand the constraint. Then test the decision.</p></div>
+  <section class="guide-chapter" id="hardware" aria-labelledby="hardware-title">
+    <div class="chapter-copy"><p class="overline">01 / Hardware</p><h2 id="hardware-title">First, know what<br>you are renting.</h2><p>A GPU does the model’s calculations. Its memory holds the model and the data it is working on. Servers supply power, storage, and connections; racks combine them into larger systems.</p><p>A faster chip helps only if the job fits and the rest of the system can keep it supplied.</p><div class="chapter-links"><a href="plate-nvl72.html">Inside a 72-GPU rack <span>→</span></a><a href="silicon-ladder.html">Compare accelerator specifications <span>→</span></a><a href="plate-pod.html">From one rack to a cluster <span>→</span></a></div></div>
+    <figure class="hardware-figure"><div class="hardware-stage" id="hero-art"><div id="chip-scene" role="img" aria-label="Conceptual accelerator package: two computing dies in the center, with memory packages alongside. Drag horizontally to turn it."><svg class="chip-fallback" viewBox="0 0 600 420" aria-hidden="true"><g transform="translate(300 200) rotate(-25) skewX(15)"><rect x="-160" y="-140" width="320" height="280" rx="4" fill="#9b9d7b"/><rect x="-145" y="-125" width="290" height="250" fill="#33493f"/><rect x="-65" y="-80" width="60" height="160" fill="#d9dbd3"/><rect x="5" y="-80" width="60" height="160" fill="#b9bdb5"/><g fill="#8e9c8f"><rect x="-125" y="-100" width="40" height="40"/><rect x="-125" y="-45" width="40" height="40"/><rect x="-125" y="10" width="40" height="40"/><rect x="-125" y="65" width="40" height="40"/><rect x="85" y="-100" width="40" height="40"/><rect x="85" y="-45" width="40" height="40"/><rect x="85" y="10" width="40" height="40"/><rect x="85" y="65" width="40" height="40"/></g></g></svg></div><span class="hardware-tag">Conceptual accelerator</span><div class="art-controls"><span>Drag to rotate</span><button id="motion-toggle" type="button" hidden aria-label="Start chip rotation" aria-pressed="true">▷</button></div></div><div class="hardware-key"><div><span>Compute</span><p>The central dies perform calculations.</p></div><div><span>Memory</span><p>Nearby packages keep data close.</p></div></div><figcaption>Schematic geometry, not a production layout. Explore the rack model for a specific GB200 NVL72 configuration.</figcaption></figure>
   </section>
+
+  <section class="guide-chapter" id="networks" aria-labelledby="networks-title">
+    <div class="chapter-copy"><p class="overline">02 / Networks</p><h2 id="networks-title">Chips work together.<br>Communication takes time.</h2><p>In distributed training, GPUs calculate part of a result and exchange information before the next step. Some communication can happen alongside computation. The rest adds time to the step.</p><p>That is why a network constraint can leave expensive processors waiting.</p><div class="chapter-links"><a href="the-fabric.html">Model time spent communicating <span>→</span></a><a href="the-two-trees.html">Compare two network layouts <span>→</span></a></div></div>
+    <figure class="time-figure"><div class="figure-top"><span class="overline">An illustrative training step</span><span class="figure-unit">Seconds</span></div><div class="time-scale"><span>0</span><span>10</span><span>13</span></div><div class="time-track" role="img" aria-label="10 seconds of computation followed by 3 seconds of communication that cannot overlap. Total: 13 seconds."><span>Compute<br><b>10 s</b></span><span>Exchange<br><b>3 s</b></span></div><div class="time-equation"><span>10 + 3 = <strong>13 seconds</strong></span><span>23% of the step is waiting</span></div><p>If unhidden communication doubles to 6 seconds, the same calculation takes <strong>16 seconds</strong> per step.</p><figcaption>Illustrative timings, not a hardware benchmark. The network model lets you change bandwidth, message size, and overlap.</figcaption></figure>
+  </section>
+
+  <section class="guide-chapter" id="economics" aria-labelledby="economics-title">
+    <div class="chapter-copy"><p class="overline">03 / Economics</p><h2 id="economics-title">Commit to the work<br>you expect to use.</h2><p>Reserved capacity costs money even when it sits idle. On-demand capacity can cost more per hour but lets you pay only when you need it.</p><p>The useful question is how often each additional GPU will be needed. Stable demand and occasional peaks call for different commitments.</p><div class="chapter-links"><a href="gpu-supply-book.html">Find a capacity commitment <span>→</span></a><a href="the-atlas-scatter.html">Explore the historical price atlas <span>→</span></a></div></div>
+    <figure class="commit-figure"><p class="overline">One additional GPU / Illustrative rates</p><div class="rate-comparison"><div><span>Reserved</span><strong>$2<small>/hour</small></strong><p>Paid every hour</p></div><div><span>On demand</span><strong>$6<small>/hour</small></strong><p>Paid when used</p></div></div><div class="break-even"><span>$2 ÷ $6</span><strong>33⅓%</strong><span>break-even usage</span></div><figcaption>If this extra GPU is needed more than a third of the time, reserving it costs less under these assumptions. Availability, minimum terms, and extra charges are outside this example.</figcaption></figure>
+  </section>
+
+  <section class="guide-chapter" id="contracts" aria-labelledby="contracts-title">
+    <div class="chapter-copy"><p class="overline">04 / Contracts</p><h2 id="contracts-title">A service promise needs<br>a measurement rule.</h2><p>“99.9% uptime” leaves questions open. Is availability measured across the whole fleet or for each GPU? Which failures count? Is the remedy a refund, a credit, or the right to leave?</p><p>The same outage can produce different remedies under different definitions.</p><div class="chapter-links"><a href="sla-anatomy.html">Compare contract exposure <span>→</span></a></div></div>
+    <figure class="contract-figure"><p class="overline">Make the promise testable</p><ol class="contract-steps"><li><span>01</span><div><strong>Define the unit</strong><p>A GPU, a job, or the entire service?</p></div></li><li><span>02</span><div><strong>Count the interruption</strong><p>Which failures and exclusions apply?</p></div></li><li><span>03</span><div><strong>Calculate the remedy</strong><p>What fee does the credit percentage apply to?</p></div></li></ol><figcaption>Use the contract model to compare illustrative clauses. Actual remedies depend on the signed agreement.</figcaption></figure>
+  </section>
+
+  <span id="toolbox" aria-hidden="true"></span><section class="model-directory" id="models" aria-labelledby="models-title"><div class="directory-intro"><p class="overline">The working models</p><h2 id="models-title">Choose a question.</h2><p>Each model includes its assumptions, sources, and limits.</p></div><div class="directory-grid">
+    <a href="plate-nvl72.html"><span>01 / Hardware</span><strong>Rack anatomy</strong><p>Inspect trays, memory, and interconnects.</p><b aria-hidden="true">↗</b></a>
+    <a href="plate-pod.html"><span>02 / Hardware</span><strong>Cluster layout</strong><p>Follow connections between racks.</p><b aria-hidden="true">↗</b></a>
+    <a href="silicon-ladder.html"><span>03 / Hardware</span><strong>Accelerator comparison</strong><p>Compare capacity, bandwidth, and power.</p><b aria-hidden="true">↗</b></a>
+    <a href="the-fabric.html"><span>04 / Networks</span><strong>Communication time</strong><p>Change the network; inspect the wait.</p><b aria-hidden="true">↗</b></a>
+    <a href="the-two-trees.html"><span>05 / Networks</span><strong>Network topology</strong><p>Compare paths, switches, and link counts.</p><b aria-hidden="true">↗</b></a>
+    <a href="gpu-supply-book.html"><span>06 / Economics</span><strong>Capacity planning</strong><p>Balance a commitment against demand.</p><b aria-hidden="true">↗</b></a>
+    <a href="the-atlas-scatter.html"><span>07 / Economics</span><strong>Price atlas</strong><p>Compare the archived July 2026 observations.</p><b aria-hidden="true">↗</b></a>
+    <a href="sla-anatomy.html"><span>08 / Contracts</span><strong>Contract exposure</strong><p>Apply different terms to the same outage.</p><b aria-hidden="true">↗</b></a>
+  </div></section>
+  <aside class="evidence-note"><span class="overline">A note on evidence</span><p>Specifications, historical observations, and modeled examples answer different questions. Prices here are an <strong>archived July 2026 snapshot</strong>; an interactive result is a calculation under stated assumptions. <a href="methodology.html">Read the methods and source policy →</a></p></aside>
 </main>
-<footer class="experience-footer"><a class="wordmark" href="index.html">THE COMPUTE DESK <span class="brand-icon" aria-hidden="true">✳</span></a><span>Made for curious people. By Alex Yen.</span><a href="methodology.html">Methods & sources ↗</a></footer>
-<script src="assets/three-r147.min.js"></script>
-<script src="assets/home-scene.js"></script>
+<footer class="experience-footer"><a class="wordmark" href="index.html">THE COMPUTE DESK</a><span>An independent project by Alex Yen.</span><a href="methodology.html">Methods &amp; sources</a></footer>
+<script src="assets/home-economics.js"></script><script src="assets/three-r147.min.js"></script><script src="assets/home-scene.js?v=20261016"></script>
 </body>
 </html>

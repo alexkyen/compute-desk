@@ -19,7 +19,7 @@
   camera.position.set(4.5, 5.3, 5.8); camera.lookAt(0, 0, 0);
   scene.add(new THREE.HemisphereLight(0xf2f5dc, 0x2d3325, .65));
   const key = new THREE.DirectionalLight(0xffffff, 1.5); key.position.set(-3, 8, 4); key.castShadow=true; key.shadow.mapSize.set(1024,1024); key.shadow.camera.left=-4; key.shadow.camera.right=4; key.shadow.camera.top=4; key.shadow.camera.bottom=-4; key.shadow.normalBias=.015; scene.add(key);
-  const rim = new THREE.DirectionalLight(0xeaffad, .85); rim.position.set(4, 2, -4); scene.add(rim);
+  const rim = new THREE.DirectionalLight(0xd6e0d5, .65); rim.position.set(4, 2, -4); scene.add(rim);
   const fill = new THREE.DirectionalLight(0xc4d0df, .3); fill.position.set(1, 1, 6); scene.add(fill);
   const chip = new THREE.Group(); scene.add(chip); chip.rotation.y = -.25;
   const material = (color, metalness, roughness) => new THREE.MeshStandardMaterial({color, metalness, roughness});
@@ -83,7 +83,7 @@
   renderer.domElement.setAttribute('aria-hidden','true');
   host.appendChild(renderer.domElement);host.querySelector('.chip-fallback').setAttribute('hidden','');
   toggle.hidden=false;host.parentElement.classList.add('is-live');
-  let paused = reduced.matches, visible=true, dragging=false, lastX=0, targetAngle=-.25, dirty=true, raf=0, previous=0;
+  let paused = true, visible=true, dragging=false, lastX=0, targetAngle=-.25, dirty=true, raf=0, previous=0;
   function syncButton(){toggle.textContent=paused?'▷':'Ⅱ';toggle.setAttribute('aria-label',paused?'Resume chip rotation':'Pause chip rotation');toggle.setAttribute('aria-pressed',String(paused));}
   function schedule(){if(!raf&&visible&&!document.hidden)raf=requestAnimationFrame(frame);}
   function frame(now){
