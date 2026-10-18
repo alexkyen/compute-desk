@@ -15,15 +15,14 @@ The Compute Desk connects hardware, networking, capacity decisions, and contract
 | 03 | [Accelerator specifications](silicon-ladder.html) | Compare memory, bandwidth, compute, and power. |
 | 04 | [The cost of moving data](the-fabric.html) | Change the network and see working time versus waiting. |
 | 05 | [Network topology](the-two-trees.html) | Compare two layouts and take a switch offline. |
-| 06 | [Sizing a GPU commitment](gpu-supply-book.html) | Move the capacity line and balance commitment against flexibility. |
-| 07 | [Historical GPU prices](the-atlas-scatter.html) | Explore a dated market snapshot and compare sellers. |
-| 08 | [What the contract covers](contracts.html) | Apply different contract promises to the same outage, then review fourteen clauses on your own deal. |
+| 06 | [What you actually pay](costs.html) | Compare an archived price snapshot across twelve sellers, then size a commitment against your own demand. |
+| 07 | [What the contract covers](contracts.html) | Apply different contract promises to the same outage, then review fourteen clauses on your own deal. |
 
-The homepage follows four sections: what you rent, where the time goes, what you actually pay, and what the contract covers. A list at the bottom links every model. The eight models are being folded into one page per section. `contracts.html` is the first; its old URL, `sla-anatomy.html`, is now a forwarding page (`assets/redirect.js`) that keeps saved scenario parameters and clause links.
+The homepage follows four sections: what you rent, where the time goes, what you actually pay, and what the contract covers. A list at the bottom links every model. The eight models are being folded into one page per section. `costs.html` and `contracts.html` are done; their old URLs (`the-atlas-scatter.html`, `gpu-supply-book.html`, `sla-anatomy.html`) are forwarding pages (`assets/redirect.js`) that keep saved scenario parameters and anchors.
 
 ## Evidence and limits
 
-The price atlas is an **archived July 2026 snapshot**, last verified on **22 July 2026**. Its original dates and source records are preserved. It is historical reference, not current pricing or executable availability. Hardware references retain their July verification labels, except for a targeted 16 October correction on the rack page: GB200 has 186 GB per GPU, derived from NVIDIA’s specification of 372 GB per two-GPU superchip. Standalone B200 specifications are unchanged. Other hardware sources have not been reverified. The atlas defaults to on-demand observations with source links; saved filters still take precedence.
+The price board is an **archived July 2026 snapshot**, last verified on **22 July 2026**. Its original dates and source records are preserved. It is historical reference, not current pricing or executable availability. Hardware references retain their July verification labels, except for a targeted 16 October correction on the rack page: GB200 has 186 GB per GPU, derived from NVIDIA’s specification of 372 GB per two-GPU superchip. Standalone B200 specifications are unchanged. Other hardware sources have not been reverified. The board defaults to on-demand observations with source links; saved filters still take precedence.
 
 Models are interactive planning aids. They do not replace vendor quotes, engineering designs, workload measurements, or legal advice. Imported demand preserves a distribution, not chronology. Network outputs are communication proxies, not application-level performance. Contract exposure values are not additive or probability-adjusted savings.
 
@@ -59,6 +58,8 @@ For interface changes, also verify the affected interaction in a browser, includ
 - `assets/site.css` — the design system: tokens, type scale, page shell, figures, and controls
 - `assets/figures.js` — shared figure kit: isometric drawing, pinned labels, Pause/Play, one animation loop, section rail
 - `assets/home.js` — the homepage's five figures
+- `costs.html`, `assets/costs.css`, `assets/costs.js` — section 03: the archived price board and the commitment model
+- `assets/price-data.js` — the archived July 2026 price observations, moved unchanged from the price atlas
 - `contracts.html`, `assets/contracts.css`, `assets/contracts.js` — section 04: the outage month, credits, your scenario, and the fourteen-clause review
 - `assets/redirect.js` — forwarding for old page URLs, keeping saved parameters
 - `*.html` — the remaining standalone explorations, forwarding pages for retired URLs, and the methods page
@@ -66,8 +67,7 @@ For interface changes, also verify the affected interaction in a browser, includ
 - `assets/experience.css` — brand and rack exhibit
 - `assets/tool-experience.css` — shared exploration controls, disclosures, responsive layout, and print styles
 - `assets/network-experiences.css` — network, topology, and pod layouts
-- `assets/buying-experiences.css` — capacity layout
-- `assets/market-experiences.css` — chip comparison and historical price atlas
+- `assets/market-experiences.css` — chip comparison
 - `assets/methods.css` — evidence guide
 - `assets/demand-import.js` — local-only demand parsing and empirical commitment optimization
 - `assets/desk.css`, `assets/desk.js` — shared accessibility, URL state, copying, printing, and downloads

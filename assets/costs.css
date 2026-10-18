@@ -1,0 +1,113 @@
+/* What you actually pay: the page-specific pieces. Everything else comes from site.css. */
+
+/* The archive notice sits above the board, never inside a disclosure. */
+.archive{margin-bottom:14px;padding:10px 14px;border-left:3px solid var(--money);background:var(--surface);color:var(--ink-2);font-size:var(--fs-small);line-height:1.5}
+.archive strong{color:var(--ink);font-weight:600}
+.controls+.controls{margin-top:-2px}
+
+/* Figure 1: one row per seller, prices on a shared log axis, an availability strip on the right. */
+.board{border:1px solid var(--rule);border-radius:12px;background:var(--surface);overflow:hidden}
+.board-head,.row-head{display:grid;grid-template-columns:170px minmax(0,1fr) 76px 132px;gap:0 18px;align-items:center}
+.board-head{padding:12px 16px 8px;border-bottom:1px solid var(--rule);font-size:var(--fs-small);color:var(--ink-2)}
+.board-head>span:nth-child(3){text-align:right}
+.axis{position:relative;height:18px}
+.axis span{position:absolute;transform:translateX(-50%);font-variant-numeric:tabular-nums;white-space:nowrap}
+.strip-head{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;text-align:center}
+.strip-head b{font-weight:400;writing-mode:vertical-rl;transform:rotate(180deg);height:62px;line-height:1;text-align:left;justify-self:center}
+.strip-head b.on{color:var(--ink);font-weight:600}
+.seller{border-top:1px solid var(--rule);transition:transform .35s ease}
+.seller:first-child{border-top:0}
+.row-head{width:100%;padding:10px 16px;border:0;background:transparent;text-align:left;cursor:pointer;color:inherit}
+.row-head:hover,.seller.open .row-head{background:var(--floor)}
+.row-head:focus-visible{outline-offset:-2px}
+.s-name{font-weight:600;line-height:1.3}
+.s-name small{display:block;font-size:var(--fs-small);font-weight:400;color:var(--ink-2)}
+.s-low{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.seller.empty .s-name,.seller.empty .s-low{color:var(--ink-2);font-weight:500}
+.lane{position:relative;height:26px}
+.lane::before{content:'';position:absolute;left:0;right:0;top:50%;border-top:1px dashed var(--rule)}
+.lane .gl{position:absolute;top:0;bottom:0;border-left:1px solid var(--floor)}
+.lane .lane-note{position:absolute;left:0;top:50%;transform:translateY(-50%);padding:1px 9px;border-radius:999px;background:var(--floor);font-size:var(--fs-small);color:var(--ink-2);white-space:nowrap}
+
+/* Marks: shape, not color, says how the GPU is rented. */
+.mark{position:absolute;top:50%;height:12px;margin-top:-6px;transition:left .5s cubic-bezier(.2,.8,.2,1),width .5s cubic-bezier(.2,.8,.2,1),opacity .3s}
+.mark[hidden]{display:block;opacity:0;pointer-events:none}
+.mark i{position:absolute;top:0;width:12px;height:12px;border-radius:99px}
+.mark i:first-child{left:0}.mark i:last-child{right:0}
+.mark.range::before{content:'';position:absolute;left:6px;right:6px;top:4px;height:4px;border-radius:99px;background:color-mix(in srgb,var(--money) 30%,transparent)}
+.mark.od i{background:var(--money);box-shadow:0 0 0 2px var(--surface)}
+.mark.co i{background:var(--surface);border:2.5px solid var(--money)}
+.mark.sp i{background:var(--surface);border:2px dashed var(--money)}
+.mark:focus-visible{outline:2px solid var(--memory);outline-offset:3px;border-radius:99px}
+.legend .mk{display:inline-block;width:11px;height:11px;border-radius:99px;margin-right:7px;vertical-align:-1px}
+.legend .mk.od{background:var(--money)}
+.legend .mk.co{border:2.5px solid var(--money)}
+.legend .mk.sp{border:2px dashed var(--money)}
+.legend .mk.rng{width:22px;height:4px;vertical-align:2px;background:color-mix(in srgb,var(--money) 30%,transparent)}
+
+/* The availability strip: one cell per accelerator. */
+.strip{display:grid;grid-template-columns:repeat(8,1fr);gap:4px}
+.cell{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border-radius:3px;border:1px solid var(--rule);font-size:var(--fs-small);line-height:1;color:var(--ink-2);justify-self:center}
+.cell.on{background:color-mix(in srgb,var(--money) 32%,#fff);border-color:color-mix(in srgb,var(--money) 45%,#fff)}
+.cell.here{box-shadow:0 0 0 2px var(--surface),0 0 0 3.5px var(--ink)}
+.legend .cell{width:12px;height:12px;margin-right:7px;vertical-align:-1px;display:inline-flex}
+
+/* A seller's file, opened in place under its row. */
+.dossier{display:none;padding:6px 16px 20px calc(16px + 170px + 18px);max-width:980px}
+.seller.open .dossier{display:block}
+.dossier>*+*{margin-top:12px}
+.badges{display:flex;flex-wrap:wrap;gap:6px}
+.badges span{padding:2px 10px;border-radius:999px;background:var(--floor);font-size:var(--fs-small);color:var(--ink-2)}
+.prices{list-style:none;padding:0;margin:0;border-top:1px solid var(--rule)}
+.prices li{display:grid;grid-template-columns:150px 110px 1fr;gap:4px 16px;padding:8px 0;border-bottom:1px solid var(--rule)}
+.prices b{font-weight:600;font-variant-numeric:tabular-nums}
+.prices small{font-size:var(--fs-small);color:var(--ink-2)}
+.prices a{color:var(--ink-2)}
+.dossier p{color:var(--ink-2)}
+.dossier p strong{color:var(--ink);font-weight:600}
+.dossier .ask{padding:10px 14px;border-left:3px solid var(--money);background:var(--floor);color:var(--ink)}
+.dossier .links a{margin-right:14px;color:var(--ink);font-size:var(--fs-small)}
+.dossier .toggle[aria-pressed=true]{background:var(--ink);border-color:var(--ink)}
+
+/* Hover and focus detail for a single mark. */
+.tip{position:fixed;z-index:20;max-width:320px;padding:10px 12px;border:1px solid var(--rule);border-radius:10px;background:var(--surface);box-shadow:0 8px 24px -12px #1d1c1a40;font:400 var(--fs-small)/1.5 var(--sans);color:var(--ink-2);pointer-events:none}
+.tip strong{display:block;color:var(--ink);font-weight:600}
+.readouts .evidence .toggle{margin-top:6px}
+.readouts .evidence .toggle[aria-pressed=true]{background:var(--ink);border-color:var(--ink)}
+
+/* Your comparison */
+.compare{margin-top:20px;padding:18px 20px;border:1px solid var(--rule);border-radius:12px;background:var(--surface)}
+.compare h3{font:600 var(--fs-ui)/1.3 var(--sans);margin-bottom:10px}
+.compare table{width:100%;border-collapse:collapse;margin-bottom:14px}
+.compare th,.compare td{text-align:left;vertical-align:top;padding:8px 12px 8px 0;border-bottom:1px solid var(--rule)}
+.compare thead th{font-size:var(--fs-small);font-weight:500;color:var(--ink-2)}
+.compare tbody th{font-weight:600}
+
+/* Figure 2 */
+.working{margin-top:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.working b{color:var(--ink);font-weight:600}
+.stage .chart{cursor:ns-resize;touch-action:none}
+
+/* Inputs in Your scenario */
+.number{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px}
+.number input{width:96px;min-height:36px;padding:6px 10px;border:1px solid var(--rule);border-radius:8px;background:var(--surface);font:inherit;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
+.number input:disabled{background:var(--floor);color:var(--ink-2)}
+.money-input{display:inline-flex;align-items:center;gap:6px;color:var(--ink-2)}
+label.file{display:flex;flex-direction:column;gap:8px}
+label.file input{font:inherit;color:var(--ink-2);max-width:100%}
+
+@media(max-width:760px){
+  .board-head,.row-head{grid-template-columns:minmax(0,1fr) 64px;grid-template-areas:"name low" "lane lane";gap:4px 12px}
+  .board-head{grid-template-areas:"name low" "axis axis"}
+  .board-head>span:first-child,.row-head .s-name{grid-area:name}
+  .board-head>span:nth-child(3),.row-head .s-low{grid-area:low}
+  .board-head .axis{grid-area:axis}
+  .row-head .lane{grid-area:lane}
+  .strip-head,.row-head .strip{display:none}
+  .dossier{padding-left:16px}
+  .prices li{grid-template-columns:1fr auto}
+  .prices li small{grid-column:1/-1}
+}
+@media print{
+  .controls,.tool-actions,.tool-message,.pager,.tip{display:none!important}
+}
