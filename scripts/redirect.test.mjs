@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import redirect from '../assets/redirect.js';
 
-const base = 'https://alexkyen.github.io/compute-desk/';
+const base = 'https://compute.alexkyen.com/';
 
 test('a saved scenario keeps every parameter and lands on the section anchor', () => {
   assert.equal(

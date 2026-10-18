@@ -4,7 +4,7 @@
 
 The Compute Desk connects hardware, networking, capacity decisions, and contract terms to the cost of useful work. The homepage is one scrolling page in four sections, each with a short explanation and a live figure that runs on its own. Four section pages go further: readers change the assumptions, inspect the calculation, and save or export a scenario.
 
-[Open the site](https://alexkyen.github.io/compute-desk/)
+[Open the site](https://compute.alexkyen.com/)
 
 ## The explorations
 
@@ -69,7 +69,7 @@ For interface changes, also verify the affected interaction in a browser, includ
 - `assets/three-r147.min.js` — pinned local Three.js runtime for the 3D rack
 - `scripts/check-site.mjs` — repository checks, including forwarding pages and type rules
 - `scripts/market-policy.mjs` — live versus archived evidence rules
-- `social-card.svg`, `social-card.png`, `favicon.svg` — share preview and site identity
+- `og-image.png`, `scripts/og-image.html`, `favicon.svg` — the link-preview image, its source (the regenerate command is in the file), and the site icon
 
 The original model calculations stay close to their pages. The shared reading layer makes the assumptions and intermediate arithmetic visible. The site remains static and requires no framework, build pipeline, analytics, or account.
 
