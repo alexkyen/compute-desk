@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="What a GPU-hour actually costs: an archived July 2026 price snapshot across twelve sellers, and how much capacity to reserve against your own demand.">
+<meta name="description" content="What a GPU-hour actually costs: list prices from thirteen sellers and an index of paid rentals, checked 18 October 2026, and how much capacity to reserve against your own demand.">
 <meta property="og:title" content="What you actually pay — The Compute Desk">
-<meta property="og:description" content="An archived July 2026 GPU price snapshot across twelve sellers, and how much capacity to reserve against your own demand.">
+<meta property="og:description" content="GPU list prices from thirteen sellers and an index of paid rentals, checked 18 October 2026, and how much capacity to reserve against your own demand.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://alexkyen.github.io/compute-desk/social-card.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
@@ -19,8 +19,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20261018.5">
-<link rel="stylesheet" href="assets/costs.css?v=20261018.5">
+<link rel="stylesheet" href="assets/site.css?v=20261018.6">
+<link rel="stylesheet" href="assets/costs.css?v=20261018.6">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -46,7 +46,7 @@
   <section class="prose" aria-labelledby="short-title">
     <h2 id="short-title">The short version</h2>
     <ul class="takeaways">
-      <li><a href="#prices">The same GPU sells for very different prices.</a> In the July 2026 snapshot, an H100 rented on demand listed from $1.87 to $11.06 an hour. Seller type and rental type explain most of the gap.</li>
+      <li><a href="#prices">The same GPU sells for very different prices.</a> In mid-October 2026, an H100 rented on demand listed from $1.33 to $12.29 an hour, while renters actually paid $2.78 on average. Seller type and rental type explain most of the gap.</li>
       <li><a href="#commitment">Idle capacity raises the real price.</a> A reserved GPU costs the same whether it is busy or idle, so what matters is the cost of each hour you actually use.</li>
       <li><a href="#commitment">Reserve a GPU only if you will use it often enough.</a> The test is simple: it must be busy for a larger share of hours than the reserved rate divided by the on-demand rate.</li>
     </ul>
@@ -55,12 +55,12 @@
   <!-- 01 -->
   <section class="prose chapter" id="prices" aria-labelledby="prices-title">
     <h2 id="prices-title"><span class="num">01</span>What the market charged</h2>
-    <p>Twelve sellers, eight accelerators, and three ways to rent: pay as you go, commit ahead, or accept that the machine can be taken back. Pick an accelerator and a rental type, then open a seller to see how they sell and what to ask.</p>
+    <p>Thirteen sellers, eight accelerators, and three ways to rent: pay as you go, commit ahead, or accept that the machine can be taken back. A fourteenth row, Ornn’s index, shows what renters actually paid, as a check on the list prices. Pick an accelerator and a rental type, then open a seller to see how they sell and what to ask.</p>
   </section>
 
-  <figure class="fig fig-wide" id="stage" aria-labelledby="fig-board-cap" data-market-verified="2026-07-22" data-market-status="archived">
+  <figure class="fig fig-wide" id="stage" aria-labelledby="fig-board-cap" data-market-verified="2026-10-18" data-market-status="live">
     <div class="fig-head"><span>Figure 1</span>Price per GPU-hour, by seller</div>
-    <p class="archive" data-market-notice="archived"><strong>Archived July 2026 snapshot, verified 22 July 2026.</strong> Historical observations, not current offers. Confirm prices and availability with the seller.</p>
+    <p class="archive"><strong>Prices checked 18 October 2026</strong> on each seller’s own price page or price API. List prices change often, and large buyers negotiate; confirm a price before you rely on it.</p>
     <div class="controls">
       <div class="seg" role="group" aria-label="Accelerator" id="sku-seg"><span class="seg-label">Accelerator</span></div>
     </div>
@@ -77,10 +77,10 @@
       <div><span>Price range in this view</span><strong id="r-range">—</strong></div>
       <div><span>Highest ÷ lowest</span><strong id="r-spread">—</strong></div>
       <div><span>Sellers with a price</span><strong id="r-count">—</strong></div>
-      <div class="evidence"><span>Evidence shown</span><button type="button" class="toggle" id="evidence" aria-pressed="true">Linked sources only</button></div>
+      <div><span>Prices checked</span><strong>18 Oct 2026</strong></div>
     </div>
     <p class="verdict-line" id="board-status" aria-live="polite"></p>
-    <figcaption id="fig-board-cap">Prices use a logarithmic scale, so equal distances are equal ratios: $1.50 to $3 spans the same width as $6 to $12. The strip on the right shows all eight accelerators for each seller. Prices exclude tax, storage, support, and data transfer unless the seller’s note says otherwise.</figcaption>
+    <figcaption id="fig-board-cap">Prices use a logarithmic scale, so equal distances are equal ratios: $1.50 to $3 spans the same width as $6 to $12. A bar is a published range: by configuration, region, or term, or for Vast.ai the cheapest to the median live offer. The strip on the right shows all eight accelerators for each seller. Prices exclude tax, storage, support, and data transfer unless the seller’s note says otherwise.</figcaption>
   </figure>
 
   <section class="fig fig-wide compare" id="comparePanel" aria-labelledby="compare-title" hidden>
@@ -163,7 +163,8 @@
   <section class="prose" aria-labelledby="sources-title">
     <details class="sources" id="sources">
       <summary><h2 id="sources-title">Assumptions, limits, and sources</h2></summary>
-      <p><strong>Prices are an archived snapshot.</strong> Every price carries its original date, a note, and a source label. “Linked sources only” hides estimates and deal-reported figures that have no public page; turn it off for the full picture, and recheck the source before citing a value.</p>
+      <p><strong>Every price is a public price, checked on 18 October 2026.</strong> Each one links to the seller’s own price page or price API, and its note gives the raw instance price. A per-GPU price is the instance price divided by its GPU count. Where a seller sells a GPU without publishing a price, the board says “price on request” rather than estimating one. Recheck the source before citing a value: list prices move, and large buyers negotiate well below them.</p>
+      <p><strong>The index is not an offer.</strong> Ornn’s Compute Price Index is the volume-weighted average of on-demand rental prices actually paid across its contributing providers, settled daily for four GPUs. It shows where trades clear relative to list prices. Reserved and long-term contracts are outside it, and Ornn discloses that its affiliates trade physical compute.</p>
       <p><strong>Switch accelerators before ranking sellers.</strong> A seller’s position changes with product, rental type, region, and term. Shortlist within the configuration you are negotiating rather than drawing a provider-wide conclusion from one price.</p>
       <p><strong>The commitment model is a newsvendor problem.</strong> Reserve a GPU when its expected utilization is at least the reserved rate divided by the on-demand rate. The cost curve often has a broad minimum, so getting the size slightly wrong may matter less than duration, delivery, and counterparty risk, which the model does not price.</p>
       <p><strong>Limits.</strong> The model assumes the demand distribution repeats, on-demand capacity is always available, rates are flat, and GPU-hours are interchangeable. It omits growth, minimum billing increments, placement, performance, and outages. Imported observations keep their distribution but lose their time order.</p>
@@ -185,7 +186,7 @@
 <script src="assets/desk.js"></script>
 <script src="assets/demand-import.js"></script>
 <script src="assets/figures.js?v=20261018.6"></script>
-<script src="assets/price-data.js?v=20261018"></script>
-<script src="assets/costs.js?v=20261018.2"></script>
+<script src="assets/price-data.js?v=20261018.3"></script>
+<script src="assets/costs.js?v=20261018.4"></script>
 </body>
 </html>

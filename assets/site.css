@@ -220,6 +220,7 @@ h2 .num{font:500 var(--fs-ui)/1 var(--sans);color:var(--ink-2);vertical-align:.4
 .pp-lane{position:relative;height:100%}
 .pp-lane::before{content:'';position:absolute;left:0;right:0;top:50%;border-top:1px dashed var(--rule)}
 .pp-dot{position:absolute;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:99px;background:var(--money);box-shadow:0 0 0 2px var(--surface);transition:left 1.1s cubic-bezier(.2,.8,.2,1)}
+.pp-dot.is-index{background:var(--ink)}
 .pp-range{position:absolute;top:50%;height:4px;margin-top:-2px;border-radius:99px;background:color-mix(in srgb,var(--money) 35%,transparent);transition:left 1.1s cubic-bezier(.2,.8,.2,1),width 1.1s cubic-bezier(.2,.8,.2,1)}
 .pp-spread{margin-top:6px;color:var(--ink-2)}
 .pp-spread .pp-val{color:var(--ink);opacity:0;transition:opacity .4s .9s}

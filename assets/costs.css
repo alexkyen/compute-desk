@@ -1,6 +1,6 @@
 /* What you actually pay: the page-specific pieces. Everything else comes from site.css. */
 
-/* The archive notice sits above the board, never inside a disclosure. */
+/* The dated notice sits above the board, never inside a disclosure. */
 .archive{margin-bottom:14px;padding:10px 14px;border-left:3px solid var(--money);background:var(--surface);color:var(--ink-2);font-size:var(--fs-small);line-height:1.5}
 .archive strong{color:var(--ink);font-weight:600}
 .controls+.controls{margin-top:-2px}
@@ -72,8 +72,6 @@
 /* Hover and focus detail for a single mark. */
 .tip{position:fixed;z-index:20;max-width:320px;padding:10px 12px;border:1px solid var(--rule);border-radius:10px;background:var(--surface);box-shadow:0 8px 24px -12px #1d1c1a40;font:400 var(--fs-small)/1.5 var(--sans);color:var(--ink-2);pointer-events:none}
 .tip strong{display:block;color:var(--ink);font-weight:600}
-.readouts .evidence .toggle{margin-top:6px}
-.readouts .evidence .toggle[aria-pressed=true]{background:var(--ink);border-color:var(--ink)}
 
 /* Your comparison */
 .compare{margin-top:20px;padding:18px 20px;border:1px solid var(--rule);border-radius:12px;background:var(--surface)}

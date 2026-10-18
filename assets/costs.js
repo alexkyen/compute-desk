@@ -1,4 +1,4 @@
-/* What you actually pay. Two models on one page: the archived price board (Figure 1) and the
+/* What you actually pay. Two models on one page: the price board (Figure 1) and the
    commitment model (Figure 2). Their calculations, URL parameters, and downloads match the
    original price atlas and capacity planning pages, so old links reopen the same views. */
 (function () {
@@ -14,11 +14,14 @@
   const COLS = ['l40s', 'a100', 'h100', 'h200', 'b200', 'b300', 'gb200', 'gb300']; // oldest to newest
   const SHORT = { l40s: 'L40S / RTX', a100: 'A100', h100: 'H100', h200: 'H200', b200: 'B200', b300: 'B300', gb200: 'GB200 NVL72', gb300: 'GB300 NVL72' };
   const SKUMAP = {}; SKUS.forEach(s => { SKUMAP[s.id] = s; });
+  const checkedOn = new Date(verified + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
   const PMAP = {}; PROV.forEach((p, i) => { PMAP[p.id] = p; p.i = i; });
   const CHIDS = ['od', 'co', 'sp'];
   const CHLABEL = {}; CH.forEach(c => { CHLABEL[c.id] = c.l; });
   const CSV_CHANNEL = { od: 'on-demand', co: 'committed / reserved', sp: 'spot / interruptible' };
-  const BAND = { hyp: 'Hyperscaler', neo: 'Neocloud', mkt: 'Marketplace' };
+  const CH_PHRASE = { od: 'pay-as-you-go', co: 'commit-ahead', sp: 'interruptible' };
+  const BAND = { hyp: 'Hyperscaler', neo: 'Neocloud', mkt: 'Marketplace', idx: 'Price index' };
+  const isSeller = p => p.g !== 'idx'; // the index row is a reference line, not a seller
 
   const parseRange = v => { const m = (v || '').replace(/~/g, '').match(/(\d+(?:\.\d+)?)\s*–\s*(\d+(?:\.\d+)?)/); return m ? { lo: +m[1], hi: +m[2] } : null; };
   // One log scale for every accelerator, so switching keeps the axis still and moves the marks.
@@ -36,12 +39,10 @@
   let skuI = Math.max(0, COLS.indexOf(q.get('sku') || 'h100'));
   let chSel = ['od', 'co', 'sp', 'all'].includes(q.get('channel')) ? q.get('channel') : 'od';
   let sortMode = q.get('sort') === 'band' ? 'band' : 'price';
-  let confSel = q.get('evidence') === 'all' ? 'all' : 'linked';
   const shortlist = new Set((q.get('compare') || '').split(',').filter(id => PMAP[id]));
-  const syncBoard = () => save({ sku: COLS[skuI], channel: chSel, sort: sortMode, evidence: confSel, compare: [...shortlist].join(',') || null });
+  const syncBoard = () => save({ sku: COLS[skuI], channel: chSel, sort: sortMode, evidence: null, compare: [...shortlist].join(',') || null });
 
   const sourceFor = c => SOURCES.find(s => s.id === c.src);
-  const admissible = c => { const s = sourceFor(c); return confSel === 'all' || !!(s && s.url); };
   const activeChans = () => chSel === 'all' ? CHIDS : [chSel];
   const cellFor = (ch, sku, prov) => (M[ch][sku] || {})[prov];
   function laneState(prov) {
@@ -49,8 +50,8 @@
     activeChans().forEach(ch => {
       const c = cellFor(ch, sku, prov);
       if (!c || c.s === 'n') return;
-      if (c.s === 'p' && isFinite(c.n) && admissible(c)) { const r = parseRange(c.v); marks.push({ ch, lo: r ? r.lo : c.n, hi: r ? r.hi : c.n, cell: c }); }
-      else if (c.s === 'q' && admissible(c)) gated.push({ ch, v: c.v || 'quote', t: c.t || 'sold, price gated', src: c.src });
+      if (c.s === 'p' && isFinite(c.n)) { const r = parseRange(c.v); marks.push({ ch, lo: r ? r.lo : c.n, hi: r ? r.hi : c.n, cell: c }); }
+      else if (c.s === 'q') gated.push({ ch, v: c.v || 'quote', t: c.t || 'sold, price gated', src: c.src });
     });
     return { marks, gated: !marks.length && gated.length ? gated : null, empty: !marks.length && !gated.length };
   }
@@ -59,18 +60,19 @@
     CHIDS.forEach(ch => { const c = cellFor(ch, sku, prov); if (c) { if (c.s === 'p') p = true; else if (c.s === 'q') g = true; } });
     return p ? 'p' : g ? 'g' : 'n';
   }
+  const lowOf = c => { const r = parseRange(c.v); return r ? r.lo : c.n; }; // a published range counts from its low end
   function bestVal(prov) { // on demand if priced, else the lowest visible price
     const sku = COLS[skuI], chans = activeChans();
-    if (chans.includes('od')) { const c = cellFor('od', sku, prov); if (c && c.s === 'p' && admissible(c)) return c.n; }
+    if (chans.includes('od')) { const c = cellFor('od', sku, prov); if (c && c.s === 'p') return lowOf(c); }
     let best = null;
-    chans.forEach(ch => { if (ch === 'od') return; const c = cellFor(ch, sku, prov); if (c && c.s === 'p' && admissible(c) && (best === null || c.n < best)) best = c.n; });
+    chans.forEach(ch => { if (ch === 'od') return; const c = cellFor(ch, sku, prov); if (c && c.s === 'p' && (best === null || lowOf(c) < best)) best = lowOf(c); });
     return best;
   }
   function orderIds() {
     const key = id => { const v = bestVal(id); return v === null ? Infinity : v; };
     const ids = PROV.map(p => p.id);
     if (sortMode === 'price') return ids.sort((a, b) => key(a) - key(b) || PMAP[a].i - PMAP[b].i);
-    const G = ['hyp', 'neo', 'mkt'];
+    const G = ['hyp', 'neo', 'mkt', 'idx'];
     return ids.sort((a, b) => G.indexOf(PMAP[a].g) - G.indexOf(PMAP[b].g) || key(a) - key(b) || PMAP[a].i - PMAP[b].i);
   }
 
@@ -109,7 +111,7 @@
   function sourceText(c) {
     const s = c.src ? sourceFor(c) : null;
     if (!s) return '';
-    return s.url ? ` · <a href="${esc(s.url)}" rel="noopener">source ${esc(s.id)}</a>` : ` · ${s.id === 'deal' ? 'deal-reported' : s.id === 'est' ? 'desk estimate' : 'source ' + esc(s.id)}, no public page`;
+    return s.url ? ` · <a href="${esc(s.url)}" rel="noopener">source ${esc(s.id)}</a>` : ` · source ${esc(s.id)}`;
   }
   // A seller's file: every price for this accelerator in words, how they sell, and what to ask.
   function renderDossier(id) {
@@ -117,17 +119,16 @@
     const badges = (d.strip[0] !== p.arch ? [p.arch] : []).concat(d.strip);
     const prices = CHIDS.map(ch => {
       const c = cellFor(ch, sku, id);
-      const value = !c || c.s === 'n' ? 'Not offered' : c.s === 'q' ? 'On request' : '$' + c.v;
-      const hidden = c && c.s !== 'n' && !admissible(c) ? ' · hidden while “linked sources only” is on' : '';
-      return `<li><span>${CHLABEL[ch]}</span><b>${esc(value)}</b><small>${c && c.t ? esc(c.t) : ''}${c ? sourceText(c) : ''}${hidden}</small></li>`;
+      const value = !c || c.s === 'n' ? 'Not listed' : c.s === 'q' ? 'On request' : '$' + c.v;
+      return `<li><span>${CHLABEL[ch]}</span><b>${esc(value)}</b><small>${c && c.t ? esc(c.t) : ''}${c ? sourceText(c) : ''}</small></li>`;
     }).join('');
     const refs = (PROVREF[id] || []).map(([label, url]) => `<a href="${esc(url)}" rel="noopener">${esc(label)}</a>`).join('');
     const on = shortlist.has(id);
     ROW[id].querySelector('.dossier').innerHTML =
       `<div class="badges">${badges.map(b => `<span>${esc(b)}</span>`).join('')}</div>` +
       `<ul class="prices" aria-label="${esc(p.name)} prices for ${esc(SHORT[sku])}">${prices}</ul>` +
-      `<p><strong>How they sell.</strong> ${esc(d.buy)}</p>` +
-      `<p class="ask"><strong>Ask them:</strong> ${esc(d.ask)}</p>` +
+      `<p><strong>${isSeller(p) ? 'How they sell.' : 'How it works.'}</strong> ${esc(d.buy)}</p>` +
+      `<p class="ask"><strong>${isSeller(p) ? 'Ask them:' : 'Ask a seller:'}</strong> ${esc(d.ask)}</p>` +
       (refs ? `<p class="links">${refs}</p>` : '') +
       `<button type="button" class="toggle" data-shortlist="${id}" aria-pressed="${on}">${on ? 'In your comparison' : 'Add to comparison'}</button>`;
   }
@@ -154,11 +155,10 @@
     skuSeg.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.i === skuI)));
     chSeg.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.c === chSel)));
     sortSeg.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.sort === sortMode)));
-    $('evidence').setAttribute('aria-pressed', String(confSel === 'linked'));
     let all = [], count = 0;
     PROV.forEach(p => {
       const row = ROW[p.id], ls = laneState(p.id);
-      all = all.concat(ls.marks); if (ls.marks.length) count++;
+      all = all.concat(ls.marks); if (ls.marks.length && isSeller(p)) count++;
       row.classList.toggle('empty', !ls.marks.length);
       row.querySelectorAll('.mark').forEach(mk => {
         const m = ls.marks.find(x => x.ch === mk.dataset.ch);
@@ -171,7 +171,7 @@
       });
       const note = row.querySelector('.lane-note');
       note.hidden = !!ls.marks.length;
-      note.textContent = ls.gated ? 'Price on request' : confSel === 'linked' ? 'No linked price' : 'Not listed';
+      note.textContent = ls.gated ? 'Price on request' : 'Not listed';
       const best = bestVal(p.id);
       row.querySelector('.s-low').textContent = best === null ? '—' : '$' + best.toFixed(2);
       row.querySelectorAll('.cell').forEach(cell => cell.classList.toggle('here', cell.dataset.sku === sku));
@@ -181,10 +181,10 @@
       $('r-range').textContent = '$' + lo.toFixed(2) + (hi !== lo ? ' – $' + hi.toFixed(2) : '');
       $('r-spread').textContent = (hi / lo).toFixed(1) + '×';
     } else { $('r-range').textContent = 'On request'; $('r-spread').textContent = '—'; }
-    $('r-count').textContent = count + ' of ' + PROV.length;
+    $('r-count').textContent = count + ' of ' + PROV.filter(isSeller).length;
     $('board-status').textContent = count
-      ? (chSel === 'all' ? 'Rental types are mixed in this view. Pick one before comparing sellers.' : `Every price here is ${CHLABEL[chSel].toLowerCase()} for ${SHORT[sku]}. Configurations, regions, and terms can still differ, so open a seller before comparing.`)
-      : 'No published price matches this view. Try another rental type, or show all evidence.';
+      ? (chSel === 'all' ? 'Rental types are mixed in this view. Pick one before comparing sellers.' : `These are ${CH_PHRASE[chSel]} prices for ${SHORT[sku]}. Configurations, regions, and terms can still differ, so open a seller before comparing.`)
+      : 'No published price matches this view. Try another rental type.';
     if (openId) renderDossier(openId);
     reorder();
     renderCompare();
@@ -193,7 +193,6 @@
   skuSeg.addEventListener('click', e => { const b = e.target.closest('button'); if (b) { skuI = +b.dataset.i; renderBoard(); } });
   chSeg.addEventListener('click', e => { const b = e.target.closest('button'); if (b) { chSel = b.dataset.c; renderBoard(); } });
   sortSeg.addEventListener('click', e => { const b = e.target.closest('button'); if (b) { sortMode = b.dataset.sort; renderBoard(); } });
-  $('evidence').addEventListener('click', () => { confSel = confSel === 'linked' ? 'all' : 'linked'; renderBoard(); });
 
   // Hover or focus detail for one mark.
   const tip = $('tip');
@@ -215,9 +214,9 @@
     panel.hidden = !ids.length;
     if (!ids.length) return;
     const sku = COLS[skuI];
-    $('compare-table').innerHTML = `<table><thead><tr><th>Seller</th><th>Accelerator</th><th>Prices in this view</th><th>Evidence</th></tr></thead><tbody>${ids.map(id => {
-      const cells = activeChans().map(ch => { const c = cellFor(ch, sku, id); return c && c.s === 'p' && admissible(c) ? `${CHLABEL[ch]}: $${esc(c.v)}` : null; }).filter(Boolean);
-      return `<tr><th>${esc(PMAP[id].name)}</th><td>${esc(SHORT[sku])}</td><td>${cells.join('<br>') || 'No visible price'}</td><td>${confSel === 'linked' ? 'Linked sources only' : 'All observations'}</td></tr>`;
+    $('compare-table').innerHTML = `<table><thead><tr><th>Seller</th><th>Accelerator</th><th>Prices in this view</th><th>Checked</th></tr></thead><tbody>${ids.map(id => {
+      const cells = activeChans().map(ch => { const c = cellFor(ch, sku, id); return c && c.s === 'p' ? `${CHLABEL[ch]}: $${esc(c.v)}` : null; }).filter(Boolean);
+      return `<tr><th>${esc(PMAP[id].name)}</th><td>${esc(SHORT[sku])}</td><td>${cells.join('<br>') || 'No visible price'}</td><td>${esc(checkedOn)}</td></tr>`;
     }).join('')}</tbody></table>`;
   }
   $('clear-compare').addEventListener('click', () => { shortlist.clear(); if (openId) renderDossier(openId); renderCompare(); syncBoard(); });
@@ -226,7 +225,7 @@
     const rows = ['seller,accelerator,channel,price,source,source_url,verified_date,snapshot_status'];
     [...shortlist].forEach(id => activeChans().forEach(ch => {
       const c = cellFor(ch, COLS[skuI], id);
-      if (c && c.s === 'p' && admissible(c)) { const s = sourceFor(c); rows.push([PMAP[id].name, SKUMAP[COLS[skuI]].l, CSV_CHANNEL[ch], c.v, c.src || '', s && s.url || '', verified, 'archived; not current offers'].map(quote).join(',')); }
+      if (c && c.s === 'p') { const s = sourceFor(c); rows.push([PMAP[id].name, SKUMAP[COLS[skuI]].l, CSV_CHANNEL[ch], c.v, c.src || '', s && s.url || '', verified, 'list price on the checked date; confirm with the seller'].map(quote).join(',')); }
     }));
     rows.push('', quote('Scenario') + ',' + quote(location.href));
     desk.download('compute-desk-seller-comparison.csv', rows.join('\n'), 'text/csv;charset=utf-8');

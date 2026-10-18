@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20261018.5">
+<link rel="stylesheet" href="assets/site.css?v=20261018.6">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -43,17 +43,17 @@
     <p>Everyone quotes the hourly price of a GPU. What you actually pay depends on what sits behind that number: the hardware, the network, how much of it you use, and what the contract promises.</p>
   </section>
 
-  <figure class="fig" id="fig-prices" aria-labelledby="fig-prices-cap" data-market-verified="2026-07-22" data-market-status="archived">
-    <div class="fig-head"><span>Figure 1</span>One H100, ten sellers, on-demand list price per GPU-hour</div>
+  <figure class="fig" id="fig-prices" aria-labelledby="fig-prices-cap" data-market-verified="2026-10-18" data-market-status="live">
+    <div class="fig-head"><span>Figure 1</span>One H100, ten sellers, on-demand price per GPU-hour</div>
     <div class="price-plot" id="price-plot"></div>
-    <figcaption id="fig-prices-cap" data-market-notice="archived">Archived list prices for an H100 SXM rented on demand, <strong>snapshot verified 22 July 2026</strong>. Historical reference, not current offers. Azure and Lambda publish a range; the dot marks its midpoint. <a href="costs.html#prices">Open the price board</a></figcaption>
+    <figcaption id="fig-prices-cap">List prices for an H100 rented on demand, <strong>checked 18 October 2026</strong> on each seller’s own price page. The last row is Ornn’s index of what renters actually paid. Azure and Lambda publish a range, and the dot marks its midpoint; Vast.ai’s bar runs from its cheapest to its median offer. <a href="costs.html#prices">Open the price board</a></figcaption>
   </figure>
 
   <!-- #explore, #guide, and #toolbox are anchors from the previous homepage that other pages and saved links still use. -->
   <section class="prose" id="guide" aria-labelledby="short-title">
     <span id="explore" aria-hidden="true"></span>
     <h2 id="short-title">The short version</h2>
-    <p>The same GPU rented for anywhere from <strong>$1.87 to $11.06 an hour</strong> in July 2026, a nearly six-fold spread (Figure 1). The sticker price is the start. Four things decide what you really pay:</p>
+    <p>The same GPU listed for anywhere from <strong>$1.33 to $12.29 an hour</strong> in mid-October 2026, a more than nine-fold spread (Figure 1). The sticker price is the start. Four things decide what you really pay:</p>
     <ul class="takeaways">
       <li><a href="#hardware">Memory decides what fits.</a> A 70-billion-parameter model needs about 140 GB for its weights alone, more than one H100 holds.</li>
       <li><a href="#networks">The network decides how long you wait.</a> If GPUs spend 3 of every 13 seconds swapping results, almost a quarter of the rented time is waiting.</li>
@@ -157,7 +157,7 @@
   </figure>
 
   <div class="prose">
-    <p class="more"><a href="costs.html#commitment">Size a commitment with your own demand</a><a href="costs.html#prices">Compare archived prices</a></p>
+    <p class="more"><a href="costs.html#commitment">Size a commitment with your own demand</a><a href="costs.html#prices">Compare prices across sellers</a></p>
   </div>
 
   <!-- 04 -->
@@ -201,10 +201,10 @@
     <ol class="model-list">
       <li><a href="hardware.html">What you rent</a><span>Whether a model fits, how five GPUs compare, and a 72-GPU rack to take apart.</span></li>
       <li><a href="network.html">Where the time goes</a><span>The wait in every step, two ways to wire a cluster, and the physical row.</span></li>
-      <li><a href="costs.html">What you actually pay</a><span>Archived prices from twelve sellers, and how much capacity to reserve.</span></li>
+      <li><a href="costs.html">What you actually pay</a><span>Prices from thirteen sellers, checked October 2026, and how much capacity to reserve.</span></li>
       <li><a href="contracts.html">What the contract covers</a><span>The outage, the credit, and fourteen clauses, on your own deal.</span></li>
     </ol>
-    <p class="note">Specifications, archived prices, and modeled examples answer different questions. Every figure here states which one it is. <a href="methodology.html">Read the methods and sources</a></p>
+    <p class="note">Specifications, list prices, and modeled examples answer different questions. Every figure here states which one it is. <a href="methodology.html">Read the methods and sources</a></p>
   </section>
 </main>
 
@@ -213,6 +213,7 @@
   <a href="https://github.com/alexkyen/compute-desk/issues">Send a correction</a>
 </footer>
 <script src="assets/figures.js?v=20261018.6"></script>
-<script src="assets/home.js?v=20261018.4"></script>
+<script src="assets/price-data.js?v=20261018.3"></script>
+<script src="assets/home.js?v=20261018.5"></script>
 </body>
 </html>

@@ -12,14 +12,14 @@ The Compute Desk connects hardware, networking, capacity decisions, and contract
 | --- | --- | --- |
 | 01 | [What you rent](hardware.html) | Check whether a model's weights fit in each GPU's memory, compare five GPUs measure by measure, and take a 72-GPU rack apart in 3D. |
 | 02 | [Where the time goes](network.html) | See the wait in every training step, compare fat-tree and rail layouts, and walk a row of racks, on one set of network settings. |
-| 03 | [What you actually pay](costs.html) | Compare an archived price snapshot across twelve sellers, then size a commitment against your own demand. |
+| 03 | [What you actually pay](costs.html) | Compare list prices from thirteen sellers and an index of paid rentals, then size a commitment against your own demand. |
 | 04 | [What the contract covers](contracts.html) | Apply different contract promises to the same outage, then review fourteen clauses on your own deal. |
 
 The homepage follows four sections: what you rent, where the time goes, what you actually pay, and what the contract covers. A list at the bottom links each section page. The eight original models now live on those four pages; their old URLs (`plate-nvl72.html`, `silicon-ladder.html`, `the-fabric.html`, `the-two-trees.html`, `plate-pod.html`, `the-atlas-scatter.html`, `gpu-supply-book.html`, `sla-anatomy.html`) are forwarding pages (`assets/redirect.js`) that keep saved scenario parameters and anchors. The old `stage` parameter becomes `rack` for the rack model and `row` for the cluster layout.
 
 ## Evidence and limits
 
-The price board is an **archived July 2026 snapshot**, last verified on **22 July 2026**. Its original dates and source records are preserved. It is historical reference, not current pricing or executable availability. Hardware references retain their July verification labels, except for a targeted 16 October correction to the rack model: GB200 has 186 GB per GPU, derived from NVIDIA’s specification of 372 GB per two-GPU superchip. Standalone B200 specifications are unchanged. Other hardware sources have not been reverified. The board defaults to on-demand observations with source links; saved filters still take precedence.
+The price board was checked on **18 October 2026**. Every price links to the seller’s own price page or price API (AWS, Azure, Oracle, and Vast.ai expose machine-readable prices; the rest are read from their public price pages), and its note gives the raw instance price and region. Thirteen sellers cover the eight accelerators; where a seller offers a GPU without publishing a price, the board marks it “price on request” instead of estimating. A fourteenth row is the Ornn Compute Price Index, the average on-demand price actually paid for four GPUs, as a check on list prices. The prices are marked live, so the check fails after 45 days (2 December 2026) until they are rechecked or relabeled as archived. Hardware references retain their July verification labels, except for a targeted 16 October correction to the rack model: GB200 has 186 GB per GPU, derived from NVIDIA’s specification of 372 GB per two-GPU superchip. Standalone B200 specifications are unchanged. Other hardware sources have not been reverified.
 
 Models are interactive planning aids. They do not replace vendor quotes, engineering designs, workload measurements, or legal advice. Imported demand preserves a distribution, not chronology. Network outputs are communication proxies, not application-level performance. Contract exposure values are not additive or probability-adjusted savings.
 
@@ -58,8 +58,8 @@ For interface changes, also verify the affected interaction in a browser, includ
 - `hardware.html`, `assets/hardware.css`, `assets/hardware.js` — section 01: will the model fit, the GPU comparison, and the 3D rack
 - `assets/rack3d.js` — the GB200 NVL72 rack in Three.js, its four chapters, and the take-apart slider
 - `network.html`, `assets/network.css`, `assets/network.js` — section 02: the step model, fat-tree and rail layouts with a parts estimate, and the physical row, on one set of network settings (with rails, a cluster-wide all-reduce stays on its rail and skips the spine)
-- `costs.html`, `assets/costs.css`, `assets/costs.js` — section 03: the archived price board and the commitment model
-- `assets/price-data.js` — the archived July 2026 price observations, moved unchanged from the price atlas
+- `costs.html`, `assets/costs.css`, `assets/costs.js` — section 03: the price board and the commitment model
+- `assets/price-data.js` — the price observations checked 18 October 2026, with a source for every value; the homepage’s Figure 1 reads it too
 - `contracts.html`, `assets/contracts.css`, `assets/contracts.js` — section 04: the outage month, credits, your scenario, and the fourteen-clause review
 - `assets/redirect.js` — forwarding for old page URLs, keeping saved parameters
 - `*.html` — forwarding pages for retired URLs, and the methods page

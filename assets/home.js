@@ -7,30 +7,35 @@
   (function prices() {
     const host = document.getElementById('price-plot');
     if (!host) return;
-    const groups = [
-      ['Hyperscalers', [['Google Cloud', 11.06, null, 'a3-highgpu, us-central1 list price'], ['Oracle', 10.00, null, 'Bare-metal list price'], ['Azure', 9.60, [6.98, 12.29], 'NC H100 NVL $6.98 to ND96isr $12.29'], ['AWS', 6.88, null, 'On-demand, after mid-2025 cuts']]],
-      ['Neoclouds', [['CoreWeave', 6.16, null, 'Published list price'], ['Crusoe', 3.90, null, 'List price, per-minute billing'], ['Nebius', 3.85, null, 'Rate card, June 2026'], ['Lambda', 2.99, [2.49, 3.44], 'By configuration, $2.49 to $3.44'], ['Fluidstack', 2.10, null, 'Aggregator index']]],
-      ['Marketplaces', [['Vast.ai', 1.87, null, 'On-demand tier, set by hosts']]]
-    ];
+    // On-demand H100 prices come from the price board's data (price-data.js), so the two never disagree.
+    const PD = window.PriceData;
+    if (!PD) return;
+    const rangeOf = v => { const m = String(v).match(/(\d+(?:\.\d+)?)\s*–\s*(\d+(?:\.\d+)?)/); return m ? [+m[1], +m[2]] : null; };
+    const rowsFor = g => PD.PROV.filter(p => p.g === g).map(p => {
+      const c = (PD.M.od.h100 || {})[p.id];
+      return c && c.s === 'p' ? [p.name, c.n, rangeOf(c.v), c.t, g === 'idx'] : null;
+    }).filter(Boolean).sort((a, b) => b[1] - a[1]);
+    const groups = [['Hyperscalers', rowsFor('hyp')], ['Neoclouds', rowsFor('neo')], ['Marketplaces', rowsFor('mkt')], ['What renters paid', rowsFor('idx')]].filter(g => g[1].length);
+    const listed = groups.filter(g => g[0] !== 'What renters paid').flatMap(g => g[1]);
     const max = 13;
     const pct = x => (x / max * 100) + '%';
     const moves = [];
     groups.forEach(([name, rows]) => {
       const head = document.createElement('div'); head.className = 'pp-group'; head.textContent = name; host.appendChild(head);
-      rows.forEach(([seller, val, range, note]) => {
+      rows.forEach(([seller, val, range, note, isIndex]) => {
         const row = document.createElement('div'); row.className = 'pp-row'; row.title = `${seller}: $${val.toFixed(2)} per GPU-hour. ${note}.`;
         row.innerHTML = `<span class="pp-name"></span><span class="pp-lane"></span><span class="pp-val">$${val.toFixed(2)}</span>`;
         row.querySelector('.pp-name').textContent = seller;
         const lane = row.querySelector('.pp-lane');
         let bar = null;
         if (range) { bar = document.createElement('i'); bar.className = 'pp-range'; bar.style.left = '0%'; bar.style.width = '0%'; lane.appendChild(bar); }
-        const dot = document.createElement('i'); dot.className = 'pp-dot'; dot.style.left = '0%'; lane.appendChild(dot);
+        const dot = document.createElement('i'); dot.className = isIndex ? 'pp-dot is-index' : 'pp-dot'; dot.style.left = '0%'; lane.appendChild(dot);
         moves.push(() => { dot.style.left = pct(val); if (bar) { bar.style.left = pct(range[0]); bar.style.width = pct(range[1] - range[0]); } });
         host.appendChild(row);
       });
     });
-    // Once the dots land, a bracket stretches from the cheapest to the most expensive seller.
-    const lo = 1.87, hi = 11.06;
+    // Once the dots land, a bracket stretches from the cheapest to the most expensive listed price.
+    const lo = Math.min(...listed.map(r => r[2] ? r[2][0] : r[1])), hi = Math.max(...listed.map(r => r[2] ? r[2][1] : r[1]));
     const spread = document.createElement('div'); spread.className = 'pp-row pp-spread';
     spread.innerHTML = `<span class="pp-name">Spread</span><span class="pp-lane"><i class="pp-bracket"></i></span><span class="pp-val">${(hi / lo).toFixed(1)}×</span>`;
     const bracket = spread.querySelector('.pp-bracket'); bracket.style.left = pct(lo);
