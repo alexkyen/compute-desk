@@ -7,11 +7,12 @@
   --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
 
   /* The whole type scale. Every font size in this file uses one of these;
-     nothing is smaller than --fs-small. */
+     nothing is smaller than --fs-small. Inter sets large for its size, so reading
+     text is 16px: about the apparent size of a 17–18px serif. */
   --fs-display:clamp(36px,4.6vw,54px);
-  --fs-title:clamp(27px,2.8vw,33px);
-  --fs-body:19px;
-  --fs-ui:15px;
+  --fs-title:clamp(23px,2.3vw,26px);
+  --fs-body:16px;
+  --fs-ui:14px;
   --fs-small:13px;
 
   --bg:#ffffff;
@@ -37,7 +38,7 @@
 /* ---------- Base ---------- */
 *{box-sizing:border-box}
 html{background:var(--bg);scroll-padding-top:24px}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 var(--fs-body)/1.6 var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 var(--fs-body)/1.65 var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 h1,h2,h3,p,ul,ol,figure{margin:0}
 a{color:inherit}
 strong{font-weight:600}
@@ -73,19 +74,19 @@ main{padding:0 24px}
 .intro,.prose{max-width:var(--measure);margin:0 auto}
 .intro{padding:72px 0 44px}
 .meta{font:500 var(--fs-small)/1.4 var(--sans);color:var(--ink-2);margin-bottom:18px}
-h1{font:600 var(--fs-display)/1.06 var(--sans);letter-spacing:-.03em;margin-bottom:22px}
+h1{font:600 var(--fs-display)/1.06 var(--sans);letter-spacing:-.03em;margin-bottom:18px}
 .intro>p:not(.meta){color:var(--ink-2)}
-h2{font:600 var(--fs-title)/1.2 var(--sans);letter-spacing:-.02em;margin-bottom:16px}
+h2{font:600 var(--fs-title)/1.2 var(--sans);letter-spacing:-.02em;margin-bottom:12px}
 h2 .num{font:500 var(--fs-ui)/1 var(--sans);color:var(--ink-2);vertical-align:.45em;margin-right:12px;font-variant-numeric:tabular-nums}
 .prose{margin-top:44px}
 .prose p+p{margin-top:16px}
-.chapter{margin-top:110px}
+.chapter{margin-top:88px}
 .prose a{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:color-mix(in srgb,currentColor 35%,transparent)}
 .prose a:hover{text-decoration-color:currentColor}
 
 /* The short version: a few bold claims that link to where they are shown. */
 .takeaways{list-style:none;padding:0;margin-top:20px;border-top:1px solid var(--rule)}
-.takeaways li{padding:16px 0;border-bottom:1px solid var(--rule)}
+.takeaways li{padding:14px 0;border-bottom:1px solid var(--rule)}
 .takeaways a{font-weight:600;text-decoration:none!important;display:block}
 .takeaways a::after{content:' ↓';color:var(--ink-2);font-weight:400}
 .takeaways a:hover{color:var(--memory)}
@@ -97,7 +98,7 @@ h2 .num{font:500 var(--fs-ui)/1 var(--sans);color:var(--ink-2);vertical-align:.4
 .more a:hover{color:var(--memory)}
 
 /* A list of pages or items: a name and one line about it. */
-.models{margin-top:120px}
+.models{margin-top:96px}
 .model-list{list-style:none;padding:0;margin-top:20px;border-top:1px solid var(--rule)}
 .model-list li{display:grid;grid-template-columns:220px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--rule);font:400 var(--fs-ui)/1.5 var(--sans)}
 .model-list a{font-weight:600;text-decoration:none!important}
@@ -299,11 +300,10 @@ h2 .num{font:500 var(--fs-ui)/1 var(--sans);color:var(--ink-2);vertical-align:.4
   .scenario{grid-template-columns:1fr}
   .terms{grid-template-columns:1fr}
   .questions a{white-space:normal}
-  :root{--fs-body:18px}
   main{padding:0 16px}
   .masthead{padding:16px}
   .intro{padding:40px 0 28px}
-  .chapter{margin-top:80px}
+  .chapter{margin-top:68px}
   .stepper .stage{min-height:0}
   .callout{position:static;width:auto;border:0;border-top:1px solid var(--rule);border-radius:0;box-shadow:none;backdrop-filter:none;background:var(--surface)}
   .readouts{grid-template-columns:1fr 1fr}
