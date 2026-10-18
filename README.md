@@ -1,6 +1,6 @@
 # The Compute Desk
 
-**A practical guide to AI compute, from hardware to economics.**
+**A practical guide to buying AI compute.**
 
 The Compute Desk connects hardware, networking, capacity decisions, and contract terms to the cost of useful work. The homepage is one scrolling page in four sections, each with a short explanation and a live figure that runs on its own. Four section pages go further: readers change the assumptions, inspect the calculation, and save or export a scenario.
 
@@ -45,7 +45,7 @@ Tests use only Node.js built-ins. The check covers all HTML pages, metadata, lan
 
 Live market evidence older than 45 days fails the check. Any page that shows prices declares `data-market-verified` and `data-market-status`; an archived dataset must preserve its verification date and show a dated historical-data notice outside collapsed detail panels. The scheduled GitHub Action runs the same checks.
 
-Pages built on `assets/site.css` follow its type rules: two families (Newsreader and Inter) and five sizes, all as `--fs-` tokens, none under 13px. The check rejects any other font size or family in those stylesheets. A forwarding page must reach a real page in one hop, load `assets/redirect.js`, include a `<noscript>` refresh, be `noindex`, and point its canonical URL at its target.
+Pages built on `assets/site.css` follow its type rules: one family (Inter) and five sizes, all as `--fs-` tokens, none under 13px. The check rejects any other font size or family in those stylesheets. A forwarding page must reach a real page in one hop, load `assets/redirect.js`, include a `<noscript>` refresh, be `noindex`, and point its canonical URL at its target.
 
 For interface changes, also verify the affected interaction in a browser, including narrow screens and keyboard input. Check exports and URL-restored scenarios when their controls change. Every live figure has a Pause/Play control and starts paused, on a finished frame, for readers who prefer reduced motion. The 3D rack has a static fallback for browsers without WebGL.
 

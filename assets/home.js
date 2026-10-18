@@ -13,7 +13,8 @@
     const rangeOf = v => { const m = String(v).match(/(\d+(?:\.\d+)?)\s*–\s*(\d+(?:\.\d+)?)/); return m ? [+m[1], +m[2]] : null; };
     const rowsFor = g => PD.PROV.filter(p => p.g === g).map(p => {
       const c = (PD.M.od.h100 || {})[p.id];
-      return c && c.s === 'p' ? [p.name, c.n, rangeOf(c.v), c.t, g === 'idx'] : null;
+      const label = p.name.replace(/^Microsoft /, '').replace(/ \(OCI\)$/, ''); // short labels fit the phone column
+      return c && c.s === 'p' ? [label, c.n, rangeOf(c.v), c.t, g === 'idx'] : null;
     }).filter(Boolean).sort((a, b) => b[1] - a[1]);
     const groups = [['Hyperscalers', rowsFor('hyp')], ['Neoclouds', rowsFor('neo')], ['Marketplaces', rowsFor('mkt')], ['What renters paid', rowsFor('idx')]].filter(g => g[1].length);
     const listed = groups.filter(g => g[0] !== 'What renters paid').flatMap(g => g[1]);
@@ -108,7 +109,7 @@
             gpus.push(box(g, x + 22, y + 12, 19, 26, 46, 6, COL.compute));
             box(g, x + 54, y + 14, 19, 10, 42, 7, COL.memory);
           });
-          for (let i = 0; i < 6; i++) box(g, 412, 12 + i * 31, 16, 22, 26, 10, '#6f6a60');
+          for (let i = 0; i < 6; i++) box(g, 412, 12 + i * 31, 16, 22, 26, 10, '#676d76');
           const particles = [];
           [[120, 55], [120, 145]].forEach(([x, y]) => [235, 335].forEach(tx => particles.push({ from: [x, y, 26], to: [tx, y - 5, 26], color: COL.ink2 })));
           return { dies: gpus, particles, labels: [
@@ -119,7 +120,7 @@
         // Step 3: the rack, with switch trays in the middle.
         function (g) {
           const W = 130, D = 110;
-          box(g, 0, 0, 0, W, D, 8, '#5f5a51');
+          box(g, 0, 0, 0, W, D, 8, '#5a6069');
           let z = 8;
           const switches = [];
           [['power', 3], ['compute', 8], ['switch', 9], ['compute', 10], ['power', 3]].forEach(([kind, n]) => {
@@ -129,7 +130,7 @@
               z += 8;
             }
           });
-          box(g, 0, 0, z, W, D, 5, '#5f5a51');
+          box(g, 0, 0, z, W, D, 5, '#5a6069');
           // Signals sweep across the switch trays.
           const particles = switches.map((sz, i) => ({ from: [8, D, sz + 3.5], to: [W - 8, D, sz + 3.5], color: '#ffffff', phase: i / 9, speed: .55, r: 1.6, ring: false }));
           return { particles, labels: [

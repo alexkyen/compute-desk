@@ -11,7 +11,7 @@
     compute: v('--compute'), memory: v('--memory'), network: v('--network'), money: v('--money'),
     down: v('--down'), idle: v('--idle'), floor: v('--floor'), rule: v('--rule'),
     ink: v('--ink'), ink2: v('--ink-2'), surface: v('--surface'),
-    steel: '#d9d4c8', steelDark: '#b9b3a5', power: '#a9a396'
+    steel: '#d5d9df', steelDark: '#b3b9c2', power: '#a3a9b2'
   };
 
   // ---------- Small helpers ----------

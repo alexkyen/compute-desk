@@ -1,26 +1,25 @@
 /* The Compute Desk design system: one reading column, wide live figures,
-   two typefaces, five text sizes, and one color per idea.
+   one typeface, five text sizes, and one color per idea.
    scripts/check-site.mjs enforces the type rules below. */
 
 /* ---------- Tokens ---------- */
 :root{
-  --serif:'Newsreader',Georgia,'Times New Roman',serif;
   --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
 
   /* The whole type scale. Every font size in this file uses one of these;
      nothing is smaller than --fs-small. */
-  --fs-display:clamp(40px,5.4vw,62px);
+  --fs-display:clamp(36px,4.6vw,54px);
   --fs-title:clamp(27px,2.8vw,33px);
   --fs-body:19px;
   --fs-ui:15px;
   --fs-small:13px;
 
-  --bg:#fcfbf8;
+  --bg:#ffffff;
   --surface:#ffffff;
-  --ink:#1d1c1a;
-  --ink-2:#6a665f;
-  --rule:#e6e2d9;
-  --floor:#f3f1ec;
+  --ink:#16181d;
+  --ink-2:#5f6670;
+  --rule:#e4e6ea;
+  --floor:#f4f5f7;
 
   /* Each color means one thing everywhere on the site. */
   --compute:#1f9d6b;
@@ -28,7 +27,7 @@
   --network:#eb6834;
   --money:#6250d6;
   --down:#c8372d;
-  --idle:#dcd8cf;
+  --idle:#dadde3;
 
   --measure:680px;
   --wide:1000px;
@@ -38,7 +37,7 @@
 /* ---------- Base ---------- */
 *{box-sizing:border-box}
 html{background:var(--bg);scroll-padding-top:24px}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 var(--fs-body)/1.6 var(--serif);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 var(--fs-body)/1.6 var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 h1,h2,h3,p,ul,ol,figure{margin:0}
 a{color:inherit}
 strong{font-weight:600}
@@ -74,9 +73,9 @@ main{padding:0 24px}
 .intro,.prose{max-width:var(--measure);margin:0 auto}
 .intro{padding:72px 0 44px}
 .meta{font:500 var(--fs-small)/1.4 var(--sans);color:var(--ink-2);margin-bottom:18px}
-h1{font:500 var(--fs-display)/1.04 var(--serif);letter-spacing:-.025em;margin-bottom:22px}
+h1{font:600 var(--fs-display)/1.06 var(--sans);letter-spacing:-.03em;margin-bottom:22px}
 .intro>p:not(.meta){color:var(--ink-2)}
-h2{font:500 var(--fs-title)/1.15 var(--serif);letter-spacing:-.015em;margin-bottom:16px}
+h2{font:600 var(--fs-title)/1.2 var(--sans);letter-spacing:-.02em;margin-bottom:16px}
 h2 .num{font:500 var(--fs-ui)/1 var(--sans);color:var(--ink-2);vertical-align:.45em;margin-right:12px;font-variant-numeric:tabular-nums}
 .prose{margin-top:44px}
 .prose p+p{margin-top:16px}
@@ -132,7 +131,7 @@ h2 .num{font:500 var(--fs-ui)/1 var(--sans);color:var(--ink-2);vertical-align:.4
 .readouts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:16px;padding-top:16px;border-top:1px solid var(--rule)}
 .legend+.readouts{margin-top:14px}
 .readouts span{display:block;color:var(--ink-2);font-size:var(--fs-small);line-height:1.4}
-.readouts strong{display:block;font:500 var(--fs-title)/1.2 var(--serif);letter-spacing:-.01em;margin-top:4px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.readouts strong{display:block;font:500 var(--fs-title)/1.2 var(--sans);letter-spacing:-.02em;margin-top:4px;font-variant-numeric:tabular-nums;white-space:nowrap}
 
 /* ---------- Controls: segmented buttons, one toggle, one slider ---------- */
 .controls{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;margin-bottom:12px}
@@ -155,7 +154,7 @@ h2 .num{font:500 var(--fs-ui)/1 var(--sans);color:var(--ink-2);vertical-align:.4
 
 /* ---------- Stepper: a diagram, a callout, and step controls ---------- */
 .stepper .stage{min-height:420px}
-.callout{position:absolute;right:20px;bottom:20px;width:min(340px,calc(100% - 40px));background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(6px);border:1px solid var(--rule);border-radius:10px;padding:16px 18px;box-shadow:0 8px 24px -12px #1d1c1a33}
+.callout{position:absolute;right:20px;bottom:20px;width:min(340px,calc(100% - 40px));background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(6px);border:1px solid var(--rule);border-radius:10px;padding:16px 18px;box-shadow:0 8px 24px -12px #16181d33}
 .callout h3{font:600 var(--fs-ui)/1.3 var(--sans);margin-bottom:6px}
 .callout p{color:var(--ink-2)}
 .callout .stat{margin-top:10px;color:var(--ink);font-size:var(--fs-small);font-weight:500;font-variant-numeric:tabular-nums}
@@ -179,7 +178,7 @@ h2 .num{font:500 var(--fs-ui)/1 var(--sans);color:var(--ink-2);vertical-align:.4
 .pin{position:absolute;width:0;height:0;pointer-events:none;z-index:1;animation:rise .35s ease both}
 .pin[hidden]{display:none}
 .pin i{position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:99px;background:var(--ink);box-shadow:0 0 0 2px var(--surface)}
-.pin span{position:absolute;left:14px;top:-13px;white-space:nowrap;padding:3px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--rule);font:500 var(--fs-small)/1.4 var(--sans);color:var(--ink);box-shadow:0 2px 10px -4px #1d1c1a2e}
+.pin span{position:absolute;left:14px;top:-13px;white-space:nowrap;padding:3px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--rule);font:500 var(--fs-small)/1.4 var(--sans);color:var(--ink);box-shadow:0 2px 10px -4px #16181d2e}
 .pin-left span{left:auto;right:14px}
 .pin-down i{background:var(--down)}
 .pin-down span{background:var(--down);border-color:var(--down);color:#fff}
@@ -205,7 +204,7 @@ h2 .num{font:500 var(--fs-ui)/1 var(--sans);color:var(--ink-2);vertical-align:.4
 .verdict{border:1px solid var(--rule);border-radius:12px;padding:16px 18px;background:var(--surface)}
 .verdict>span{color:var(--ink-2)}
 .verdict>span strong{color:var(--ink);font-weight:500}
-.verdict .big{display:block;font:500 var(--fs-title)/1.2 var(--serif);margin:6px 0 4px;font-variant-numeric:tabular-nums}
+.verdict .big{display:block;font:500 var(--fs-title)/1.2 var(--sans);letter-spacing:-.02em;margin:6px 0 4px;font-variant-numeric:tabular-nums}
 .verdict p{color:var(--ink-2)}
 .verdict.breach{border-color:color-mix(in srgb,var(--down) 45%,var(--rule))}
 .verdict.breach p{color:var(--ink)}
@@ -215,7 +214,7 @@ h2 .num{font:500 var(--fs-ui)/1 var(--sans);color:var(--ink-2);vertical-align:.4
 .pp-group{font-size:var(--fs-small);color:var(--ink-2);font-weight:500;padding:10px 0 2px}
 .pp-group:first-child{padding-top:0}
 .pp-row{display:grid;grid-template-columns:96px 1fr 56px;align-items:center;gap:12px;height:30px}
-.pp-name{white-space:nowrap}
+.pp-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pp-val{text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
 .pp-lane{position:relative;height:100%}
 .pp-lane::before{content:'';position:absolute;left:0;right:0;top:50%;border-top:1px dashed var(--rule)}
@@ -310,7 +309,7 @@ h2 .num{font:500 var(--fs-ui)/1 var(--sans);color:var(--ink-2);vertical-align:.4
   .readouts{grid-template-columns:1fr 1fr}
   .verdicts{grid-template-columns:1fr}
   .model-list li{grid-template-columns:1fr;gap:2px}
-  .pp-row,.pp-axis{grid-template-columns:84px 1fr 52px;gap:8px}
+  .pp-row,.pp-axis{grid-template-columns:100px 1fr 52px;gap:8px}
   .pp-ticks span:nth-child(even),.pp-axis>span:first-child{visibility:hidden}
   .phase{left:10px;top:10px}
   .clock{right:12px;top:10px;width:150px}

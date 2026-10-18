@@ -60,8 +60,8 @@ for(const file of (await readdir(resolve(root,"assets"))).filter(name=>name.ends
   catch(error){failures.push(`${file}: JavaScript syntax error: ${error.message}`)}
 }
 
-// The type system: two families and five sizes, all set in site.css. Every size is a token,
-// and no token is smaller than 13px.
+// The type system: one family (Inter, as --sans) and five sizes, all set in site.css. Every size
+// is a token, and no token is smaller than 13px.
 const SIZES=["--fs-display","--fs-title","--fs-body","--fs-ui","--fs-small"];
 for(const sheet of designSheets){
   const css=(await readFile(resolve(root,sheet),"utf8")).replace(/\/\*[\s\S]*?\*\//g,"");
@@ -72,9 +72,10 @@ for(const sheet of designSheets){
   }
   for(const [declaration,property,value] of css.matchAll(/(?<![-\w])(font-size|font)\s*:\s*([^;}]+)/g)){
     if(value.trim()!=="inherit"&&!/var\(--fs-[a-z-]+\)/.test(value))failures.push(`${sheet}: "${declaration.trim()}" must use a --fs- size token`);
+    if(property==="font"&&value.trim()!=="inherit"&&!/var\(--sans\)\s*$/.test(value.trim()))failures.push(`${sheet}: "${declaration.trim()}" must set its family with var(--sans)`);
   }
   for(const [declaration,value] of css.matchAll(/(?<![-\w])font-family\s*:\s*([^;}]+)/g)){
-    if(!/^var\(--(serif|sans)\)$/.test(value.trim()))failures.push(`${sheet}: "${declaration.trim()}" must use var(--serif) or var(--sans)`);
+    if(!/^var\(--sans\)$/.test(value.trim()))failures.push(`${sheet}: "${declaration.trim()}" must use var(--sans)`);
   }
 }
 

@@ -1,11 +1,11 @@
 {
   "name": "The Compute Desk",
   "short_name": "Compute Desk",
-  "description": "An interactive field guide to the machines, connections, and economics behind AI.",
+  "description": "A practical guide to buying AI compute: what you rent, where the time goes, what you pay, and what the contract covers.",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#fcfbf8",
-  "theme_color": "#fcfbf8",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "icons": [
     {
       "src": "favicon.svg",

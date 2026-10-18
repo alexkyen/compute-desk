@@ -15,7 +15,7 @@
 .bar-track i{display:block;height:100%;width:0;border-radius:5px;transition:width .6s cubic-bezier(.2,.8,.2,1)}
 .loss .bar-track i{background:var(--down)}
 .credit .bar-track i{background:var(--money)}
-.bar-row strong{font:500 var(--fs-title)/1.1 var(--serif);text-align:right;font-variant-numeric:tabular-nums}
+.bar-row strong{font:500 var(--fs-title)/1.1 var(--sans);letter-spacing:-.02em;text-align:right;font-variant-numeric:tabular-nums}
 
 /* The clauses: a list of disclosure rows on a shared grid. */
 .board .legend.kinds{margin-top:0}
@@ -48,7 +48,7 @@
 .c-body{padding:4px 16px 20px calc(16px + 1em);max-width:880px}
 .c-body>*+*{margin-top:12px}
 .c-pos{display:none}
-.redline{padding:14px 16px;border-radius:10px;background:var(--floor);font:400 var(--fs-ui)/1.65 var(--serif)}
+.redline{padding:14px 16px;border-radius:10px;background:var(--floor);font:400 var(--fs-ui)/1.65 var(--sans)}
 .redline p+p{margin-top:10px}
 .redline del{color:var(--down)}
 .redline ins{color:var(--compute);text-decoration:underline;text-underline-offset:3px}

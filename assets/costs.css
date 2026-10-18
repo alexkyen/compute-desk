@@ -70,7 +70,7 @@
 .dossier .toggle[aria-pressed=true]{background:var(--ink);border-color:var(--ink)}
 
 /* Hover and focus detail for a single mark. */
-.tip{position:fixed;z-index:20;max-width:320px;padding:10px 12px;border:1px solid var(--rule);border-radius:10px;background:var(--surface);box-shadow:0 8px 24px -12px #1d1c1a40;font:400 var(--fs-small)/1.5 var(--sans);color:var(--ink-2);pointer-events:none}
+.tip{position:fixed;z-index:20;max-width:320px;padding:10px 12px;border:1px solid var(--rule);border-radius:10px;background:var(--surface);box-shadow:0 8px 24px -12px #16181d40;font:400 var(--fs-small)/1.5 var(--sans);color:var(--ink-2);pointer-events:none}
 .tip strong{display:block;color:var(--ink);font-weight:600}
 
 /* Your comparison */

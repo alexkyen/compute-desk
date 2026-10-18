@@ -107,8 +107,8 @@ document.getElementById("fallback-fig").hidden=true;
 /* Site palette: compute green, memory blue, network orange, warm neutrals on a white stage. */
 var COMPUTE=0x1f9d6b,MEMORY=0x2a78d6,NETWORK=0xeb6834,NETWORK_DIM=0xf4b896,COOL=0x8fa9c4,
     TEAL=COMPUTE,TEALDIM=NETWORK_DIM,AMBER=MEMORY,
-    INK=0x5f5b54,INK2=0x9c968a,INK3=0xb9b3a5,RULE=0xe6e2d9,
-    PANEL=0xffffff,PAPER=0xfcfbf8;
+    INK=0x5a6069,INK2=0x969ca5,INK3=0xb3b9c2,RULE=0xe4e6ea,
+    PANEL=0xffffff,PAPER=0xffffff;
 
 var W=0.60,H=2.36,D=1.20,          // rack outer
     TW=0.50,TD=0.88,               // tray width/depth
@@ -155,7 +155,7 @@ renderer.setClearColor(PANEL,1);
 renderer.outputEncoding=THREE.sRGBEncoding;
 var scene=new THREE.Scene();
 var camera=new THREE.PerspectiveCamera(38,1.5,0.05,40);
-scene.add(new THREE.HemisphereLight(0xffffff,0x8d877b,1.15));
+scene.add(new THREE.HemisphereLight(0xffffff,0x878d96,1.15));
 var dl=new THREE.DirectionalLight(0xffffff,1.0);
 dl.position.set(2.6,4.2,3.1);
 scene.add(dl);
@@ -169,10 +169,10 @@ function lin(color,op){
   return new THREE.LineBasicMaterial({color:color,transparent:true,opacity:op===undefined?0.85:op});
 }
 var matFrame=lam(INK2),      linFrame=lin(INK,0.9),
-    matShelf=lam(0xa9a396),
-    matTrayC=lam(0xd9d4c8),  linTrayC=lin(INK,0.8),
+    matShelf=lam(0xa3a9b2),
+    matTrayC=lam(0xd5d9df),  linTrayC=lin(INK,0.8),
     matTrayS=lam(TEALDIM),   linTrayS=lin(NETWORK,0.85),
-    matShellH=lam(0xd9d4c8), linShellH=lin(INK,0.8),
+    matShellH=lam(0xd5d9df), linShellH=lin(INK,0.8),
     matCable=new THREE.MeshLambertMaterial({color:0xffffff,transparent:true,opacity:0.5}),
     matManif=lam(COOL,0),
     matBoard=lam(0x6f7d70),  linChip=lin(INK,0),
@@ -182,7 +182,7 @@ var matFrame=lam(INK2),      linFrame=lin(INK,0.9),
 /* stage-IV additions: LPDDR/C2C/mezzanine at module level; a focus material set
    (…F) so one B200 package can hold full ink while the GPU zoom ghosts the rest */
 var matLP=lam(0xa9c6ec,0),   matC2C=lam(NETWORK,0),   matMezz=lam(INK2,0),
-    matSub=lam(0xf0eee8,0),  matSubF=lam(0xf0eee8,0),
+    matSub=lam(0xeef0f3,0),  matSubF=lam(0xeef0f3,0),
     matGPUF=lam(TEAL,0),     matHBMF=lam(AMBER,0),
     matSeam=lam(INK2,0),     matEgress=lam(NETWORK,0),
     linChipF=lin(INK,0),     linZoom=lin(INK2,0),
@@ -495,9 +495,9 @@ chipA.position.set(-0.118,0.012,0);
 chipB.position.set(0.118,0.012,0);
 hero.add(chipA);hero.add(chipB);
 /* labels for the new links (sprites face the camera; opacity driven in applyP) */
-var labC2C=label("NVLink-C2C","#6a665f",0.016);labC2C.position.set(0,0.030,0.037);chipB.add(labC2C);
-var labSeam=label("NV-HBI · 10 TB/s","#1d1c1a",0.016);labSeam.position.set(FOCX,0.045,-0.095);chipB.add(labSeam);
-var labEgr=label("NVLink-5 · 1.8 TB/s","#1d1c1a",0.015);labEgr.position.set(FOCX,0.038,-0.20);chipB.add(labEgr);
+var labC2C=label("NVLink-C2C","#5f6670",0.016);labC2C.position.set(0,0.030,0.037);chipB.add(labC2C);
+var labSeam=label("NV-HBI · 10 TB/s","#16181d",0.016);labSeam.position.set(FOCX,0.045,-0.095);chipB.add(labSeam);
+var labEgr=label("NVLink-5 · 1.8 TB/s","#16181d",0.015);labEgr.position.set(FOCX,0.038,-0.20);chipB.add(labEgr);
 [labC2C,labSeam,labEgr].forEach(function(s){s.material.opacity=0});
 /* camera anchor at the focus package's center, for the GPU-zoom key */
 var focusAnchor=new THREE.Object3D();
@@ -573,8 +573,8 @@ var manifold=new THREE.InstancedMesh(unitCyl,matManif,2+computeY.length*2);
 rack.add(manifold);
 
 /* ---------- dimension callouts (utility/mono; figures already on the site) ---------- */
-var labDimH=label("2.36 m","#6a665f",0.11);labDimH.position.set(-0.64,1.18,0.55);labDimH.material.opacity=0;scene.add(labDimH);
-var labKW=label("~120 kW · liquid-cooled","#1d1c1a",0.095);labKW.position.set(-0.62,1.62,0.30);labKW.material.opacity=0;scene.add(labKW);
+var labDimH=label("2.36 m","#5f6670",0.11);labDimH.position.set(-0.64,1.18,0.55);labDimH.material.opacity=0;scene.add(labDimH);
+var labKW=label("~120 kW · liquid-cooled","#16181d",0.095);labKW.position.set(-0.62,1.62,0.30);labKW.material.opacity=0;scene.add(labKW);
 scene.add(new THREE.LineSegments(lineGeo([segs([
   [-0.46,0,0.55,-0.46,H,0.55],[-0.50,0,0.55,-0.42,0,0.55],[-0.50,H,0.55,-0.42,H,0.55]
 ])]),linDim));
@@ -809,7 +809,7 @@ var TIPS={
 };
 var raycaster=new THREE.Raycaster(),mouseNDC=new THREE.Vector2();
 var tipShown=false,tipSticky=false;
-var hlBox=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1,1,1)),lin(0x1d1c1a,0.9));
+var hlBox=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1,1,1)),lin(0x16181d,0.9));
 hlBox.matrixAutoUpdate=false;hlBox.visible=false;hlBox.renderOrder=10;
 scene.add(hlBox);
 var _hm=new THREE.Matrix4(),_hv=new THREE.Vector3();
