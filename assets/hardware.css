@@ -1,0 +1,97 @@
+/* What you rent: the page-specific pieces. Everything else comes from site.css. */
+
+/* Figure 1: each GPU is a bucket of memory; the weights fill them left to right. */
+.fit{padding:14px 20px}
+.fit-row{display:grid;grid-template-columns:96px minmax(0,1fr) 150px;align-items:center;gap:16px;min-height:52px}
+.fit-row+.fit-row{border-top:1px dashed var(--rule)}
+.fit-name{font-weight:600;line-height:1.25}
+.fit-name small,.spec-name small{display:block;font-weight:400;font-size:var(--fs-small);color:var(--ink-2)}
+.fit-lane{position:relative;height:24px}
+.fit-gpu{position:absolute;top:0;bottom:0;border-radius:4px;background:var(--floor);box-shadow:inset 0 0 0 1px var(--rule);overflow:hidden;transition:left .45s cubic-bezier(.2,.8,.2,1),width .45s cubic-bezier(.2,.8,.2,1),opacity .3s}
+.fit-gpu i{display:block;height:100%;width:0;background:var(--memory);transition:width .45s cubic-bezier(.2,.8,.2,1)}
+.fit-gpu.far,.sw.far{outline:1.5px dashed var(--network);outline-offset:-1.5px}
+.fit-count{text-align:right;color:var(--ink-2);font-size:var(--fs-small);font-variant-numeric:tabular-nums;white-space:nowrap}
+.fit-count b{color:var(--ink);font-size:var(--fs-ui);font-weight:600}
+.sw.free{background:var(--floor);box-shadow:inset 0 0 0 1px var(--rule)}
+.sw.far{background:var(--surface)}
+
+/* Figure 2: one bar per GPU for the chosen measure; choosing a row opens its notes. */
+.specs{padding:8px 10px}
+.spec-head,.spec-row{display:grid;grid-template-columns:150px minmax(0,1fr) 150px 64px;align-items:center;gap:16px}
+.spec-head{padding:8px 12px 4px;font-size:var(--fs-small);color:var(--ink-2)}
+.spec-head span:nth-child(n+3){text-align:right}
+.spec-row{width:100%;padding:10px 12px;border:0;border-radius:8px;background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer;transition:background .15s}
+.spec-row:hover{background:var(--floor)}
+.spec-row[aria-pressed=true]{background:var(--floor);box-shadow:inset 3px 0 0 var(--ink)}
+.spec-name{font-weight:600;line-height:1.25}
+.spec-lane{height:12px;border-radius:99px;background:color-mix(in srgb,var(--idle) 40%,transparent);overflow:hidden}
+.spec-lane i{display:block;height:100%;width:0;border-radius:99px;transition:width .7s cubic-bezier(.2,.8,.2,1),background .3s}
+.spec-lane i.memory{background:var(--memory)}
+.spec-lane i.compute{background:var(--compute)}
+.spec-lane i.network{background:var(--network)}
+.spec-lane i.power{background:var(--ink-2)}
+.spec-val{text-align:right;font-weight:500;font-variant-numeric:tabular-nums}
+.spec-mult{text-align:right;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.gpu-file{margin-top:16px;padding:18px 20px;border:1px solid var(--rule);border-radius:12px;background:var(--surface);animation:rise .35s ease both}
+.gpu-file h3{font:600 var(--fs-ui)/1.35 var(--sans)}
+.gpu-file .tags{margin-top:2px;font-size:var(--fs-small);color:var(--ink-2)}
+.gpu-file p{color:var(--ink-2);max-width:var(--measure)}
+.gpu-file p+p{margin-top:10px}
+.gpu-file .ask{color:var(--ink)}
+.onward{display:inline-block;margin-top:12px;font-weight:500;color:var(--ink);text-underline-offset:3px}
+.onward[hidden]{display:none}
+
+/* Figure 3: the 3D rack beside the text for its chapter. */
+#tabs button[aria-selected=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+.rack-stage{display:grid;grid-template-columns:minmax(0,1fr) 300px}
+.scene{position:relative;min-height:560px}
+.scene canvas{position:absolute;inset:0;display:block;width:100%;height:100%;touch-action:pan-y;cursor:grab}
+.scene canvas:active{cursor:grabbing}
+.rack-stage .panel{display:flex;flex-direction:column;padding:22px 22px 20px;border-left:1px solid var(--rule);transition:opacity .13s}
+.rack-stage .panel.swap{opacity:0}
+.panel h3{font:600 var(--fs-ui)/1.35 var(--sans);margin-bottom:8px}
+.panel p{color:var(--ink-2)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--rule)}
+.stat .l{display:block;font-size:var(--fs-small);line-height:1.4;color:var(--ink-2)}
+.stat .v{display:block;margin-top:2px;font:500 var(--fs-title)/1.15 var(--serif);font-variant-numeric:tabular-nums;white-space:nowrap}
+.panel .onward{margin-top:auto;padding-top:16px}
+.lab{position:absolute;z-index:2;display:none;pointer-events:none;padding:5px 12px;border:1px solid var(--rule);border-radius:10px;background:var(--surface);box-shadow:0 2px 10px -4px #1d1c1a2e;font-size:var(--fs-small);line-height:1.45;color:var(--ink-2)}
+#hovlab{max-width:280px}
+#hovlab b{color:var(--ink);font-weight:600}
+#modechip{left:14px;bottom:14px;max-width:calc(100% - 28px);border-radius:999px;background:var(--floor)}
+.scrub{display:flex;align-items:center;gap:12px;margin-top:14px;color:var(--ink-2);font-size:var(--fs-small);white-space:nowrap}
+.scrub input{flex:1;min-width:0;min-height:32px;accent-color:var(--compute);cursor:pointer}
+.counts{margin-top:4px;color:var(--ink-2);font-size:var(--fs-small);line-height:1.8;font-variant-numeric:tabular-nums}
+.counts b{color:var(--ink);font-weight:600}
+.counts .schematic{display:inline-block;margin-left:10px;padding:0 8px;border:1px solid var(--rule);border-radius:999px;line-height:1.6}
+
+/* Without WebGL a still drawing stands in for the model; the chapters still change the text. */
+#fallback-fig{display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);align-items:center;gap:28px;padding:28px;--amber:var(--network);--teal:var(--network);--teal-dim:color-mix(in srgb,var(--network) 16%,#fff);--paper:var(--floor);--panel:var(--surface);--ink-3:var(--ink-2)}
+#fallback-fig[hidden]{display:none}
+#fallback-fig svg{display:block;width:100%;height:auto;max-height:440px}
+.fallback-notes p{color:var(--ink-2)}
+.fallback-notes p+p{margin-top:10px}
+.fallback-notes .sw.tray{background:var(--floor);box-shadow:inset 0 0 0 1px var(--ink-2)}
+.fallback-notes .sw.switch{background:color-mix(in srgb,var(--network) 16%,#fff);box-shadow:inset 0 0 0 1px var(--network)}
+#fallback-fig .fig-cap{font-size:var(--fs-small)}
+.no3d .scene{min-height:0}
+.no3d .scene canvas,.no3d .scrub,.no3d .counts,.no3d #subrow,.no3d .lab,.no3d .if-3d{display:none}
+
+@media(max-width:960px){
+  .rack-stage{grid-template-columns:1fr}
+  .scene{min-height:440px}
+  .rack-stage .panel{border-left:0;border-top:1px solid var(--rule)}
+}
+@media(max-width:760px){
+  .fit{padding:8px 14px}
+  .fit-row{grid-template-columns:1fr auto;gap:6px 12px;padding:10px 0}
+  .fit-lane{grid-column:1/-1}
+  .fit-name small{display:inline;margin-left:8px}
+  .spec-head{display:none}
+  .spec-row{grid-template-columns:1fr auto auto;gap:6px 14px}
+  .spec-lane{grid-column:1/-1;grid-row:2}
+  .scene{min-height:380px}
+  .stat .v{white-space:normal}
+  #fallback-fig{grid-template-columns:1fr;padding:18px}
+  #fallback-fig svg{max-height:300px}
+}
