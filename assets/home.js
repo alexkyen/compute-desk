@@ -518,81 +518,22 @@
     const fig = document.getElementById('fig-sla');
     const svg = document.getElementById('sla-svg');
     if (!fig || !svg) return;
-    const inner = el('g', {}, svg);
-    const N = 32, T = 11, GAP = 2.5;
-    const healthy = light(COL.compute, .35), scar = light(COL.down, .62);
-    const tiles = [];
-    // The platform: a separate box that keeps answering all month.
-    box(inner, -150, 300, 0, 64, 64, 46, COL.steel);
-    const lamp = box(inner, -131, 319, 46, 26, 26, 6, COL.compute);
-    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
-      const x = c * (T + GAP), y = r * (T + GAP);
-      tiles.push(el('polygon', { points: pts([[x, y, 0], [x + T, y, 0], [x + T, y + T, 0], [x, y + T, 0]]), fill: healthy }, inner));
-    }
-    // Servers are 2×4 blocks of eight GPUs.
-    const serverTiles = s => { const bc = s % 16, br = Math.floor(s / 16), out = []; for (let r = 0; r < 4; r++) for (let c = 0; c < 2; c++) out.push((br * 4 + r) * N + bc * 2 + c); return out; };
-    // Incidents total exactly 5,000 GPU-hours: one rack-sized event and thirteen single servers.
-    const incidents = [{ start: 300, dur: 24, servers: [40, 41, 42, 43, 56, 57, 58, 59, 72] }];
-    const singles = [[18, 3], [40, 77], [30, 18], [48, 101], [24, 64], [36, 9], [14, 120], [42, 33], [32, 88], [28, 112], [44, 50], [26, 5], [27, 95]];
-    const starts = [30, 75, 120, 170, 220, 260, 350, 400, 450, 500, 560, 610, 660];
-    singles.forEach(([dur, s], i) => incidents.push({ start: starts[i], dur, servers: [s] }));
-    const LOST = incidents.reduce((a, i) => a + i.dur * i.servers.length * 8, 0); // 5,000
-    const HOURS = 730, FLEET = 1024, CAP = HOURS * FLEET, RATE = 2.35;
-    const credit = .10 * CAP * RATE;
-
-    const labels = [
-      { text: 'Platform: responding', at: [-118, 300, 52], side: 'left' },
-      { text: '1,024 GPUs', at: [N * (T + GAP), 0, 0], side: 'right' }
-    ].map(l => Object.assign({ node: makeLabel(svg, l.text, l.side) }, l));
-    const narrow = matchMedia('(max-width: 760px)');
-    function layout() {
-      svg.setAttribute('viewBox', narrow.matches ? '0 0 600 420' : '0 0 960 400');
-      const xf = fit(inner, narrow.matches ? { x: 30, y: 80, w: 540, h: 300 } : { x: 160, y: 70, w: 640, h: 290 });
-      labels.forEach(l => placeLabel(l.node, svg, xf, l.at));
-    }
-    layout();
-    narrow.addEventListener('change', layout);
-
-    const day = document.getElementById('sla-day'), bar = document.getElementById('sla-progress');
+    // A fixed scenario: 1,024 GPUs at $2.35, 5,000 GPU-hours lost to server failures, platform always up.
+    const FLEET = 1024, CAP = Figures.MONTH * FLEET, RATE = 2.35, credit = .10 * CAP * RATE;
     const vGpu = document.getElementById('v-gpu'), vGpuNote = document.getElementById('v-gpu-note');
     const gpuCard = vGpu.closest('.verdict');
-    let hour = 0, hold = 0;
-    const state = new Map();
-    function render(h) {
-      let lost = 0;
-      const status = new Map();
-      incidents.forEach(inc => {
-        const elapsed = clamp(h - inc.start, 0, inc.dur);
-        lost += elapsed * inc.servers.length * 8;
-        if (h >= inc.start) inc.servers.forEach(s => status.set(s, h < inc.start + inc.dur ? 'down' : status.get(s) === 'down' ? 'down' : 'scar'));
-      });
-      // Servers that already recovered stay tinted, so the month's losses accumulate on screen.
-      for (let s = 0; s < 128; s++) {
-        const now = status.get(s) || 'ok';
-        if (state.get(s) !== now) { state.set(s, now); serverTiles(s).forEach(i => tiles[i].setAttribute('fill', now === 'down' ? COL.down : now === 'scar' ? scar : healthy)); }
-      }
-      const up = 1 - lost / CAP;
-      vGpu.textContent = (Math.floor(up * 10000) / 100).toFixed(2) + '%';
-      const breach = up < .999;
-      gpuCard.classList.toggle('breach', breach);
-      vGpuNote.textContent = breach
-        ? `${fmt(Math.round(lost))} GPU-hours lost. Below 99.9%, so a 10% credit: ${money(credit)}.`
-        : `${fmt(Math.round(lost))} GPU-hours lost so far. Promise still met.`;
-      day.textContent = 'Day ' + Math.min(30, Math.floor(h / 24.33) + 1) + ' of 30';
-      bar.style.width = (h / HOURS * 100) + '%';
-    }
-    lamp.paint(COL.compute);
-    if (reduced) { hour = HOURS; hold = 99; }
-    render(hour);
-    register({
-      node: fig,
-      tick(dt, t) {
-        lamp.top.setAttribute('fill', mix(light(COL.compute, .22), light(COL.compute, .6), .5 + .5 * Math.sin(t * 3)));
-        if (hour >= HOURS) { hold += dt; if (hold > 3.5) { hold = 0; hour = 0; } render(HOURS); return; }
-        hour = Math.min(HOURS, hour + dt * 36);
-        render(hour);
+    Figures.outageMonth({
+      fig, svg,
+      day: document.getElementById('sla-day'), bar: document.getElementById('sla-progress'),
+      scenario: () => ({ nodeHours: 5000, platformHours: 0, fleet: FLEET }),
+      onHour(h, lost) {
+        const up = 1 - lost.node / CAP, breach = up < .999;
+        vGpu.textContent = (Math.floor(up * 10000) / 100).toFixed(2) + '%';
+        gpuCard.classList.toggle('breach', breach);
+        vGpuNote.textContent = breach
+          ? `${fmt(Math.round(lost.node))} GPU-hours lost. Below 99.9%, so a 10% credit: ${money(credit)}.`
+          : `${fmt(Math.round(lost.node))} GPU-hours lost so far. Promise still met.`;
       }
     });
-    if (LOST !== 5000) console.warn('Contract figure: incidents total', LOST, 'GPU-hours');
   })();
 })();

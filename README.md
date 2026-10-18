@@ -17,9 +17,9 @@ The Compute Desk connects hardware, networking, capacity decisions, and contract
 | 05 | [Network topology](the-two-trees.html) | Compare two layouts and take a switch offline. |
 | 06 | [Sizing a GPU commitment](gpu-supply-book.html) | Move the capacity line and balance commitment against flexibility. |
 | 07 | [Historical GPU prices](the-atlas-scatter.html) | Explore a dated market snapshot and compare sellers. |
-| 08 | [GPU service agreements](sla-anatomy.html) | Apply different contract promises to the same outage. |
+| 08 | [What the contract covers](contracts.html) | Apply different contract promises to the same outage, then review fourteen clauses on your own deal. |
 
-The homepage follows four sections: what you rent, where the time goes, what you actually pay, and what the contract covers. A list at the bottom links every model. The eight models are being folded into one page per section; each old URL will become a forwarding page (`assets/redirect.js`) that keeps saved scenario parameters.
+The homepage follows four sections: what you rent, where the time goes, what you actually pay, and what the contract covers. A list at the bottom links every model. The eight models are being folded into one page per section. `contracts.html` is the first; its old URL, `sla-anatomy.html`, is now a forwarding page (`assets/redirect.js`) that keeps saved scenario parameters and clause links.
 
 ## Evidence and limits
 
@@ -59,13 +59,14 @@ For interface changes, also verify the affected interaction in a browser, includ
 - `assets/site.css` — the design system: tokens, type scale, page shell, figures, and controls
 - `assets/figures.js` — shared figure kit: isometric drawing, pinned labels, Pause/Play, one animation loop, section rail
 - `assets/home.js` — the homepage's five figures
+- `contracts.html`, `assets/contracts.css`, `assets/contracts.js` — section 04: the outage month, credits, your scenario, and the fourteen-clause review
 - `assets/redirect.js` — forwarding for old page URLs, keeping saved parameters
-- `*.html` — eight standalone explorations and the methods page
+- `*.html` — the remaining standalone explorations, forwarding pages for retired URLs, and the methods page
 - `assets/editorial.css` — shared reading layer for the explorations (retired once they move to `site.css`)
 - `assets/experience.css` — brand and rack exhibit
 - `assets/tool-experience.css` — shared exploration controls, disclosures, responsive layout, and print styles
 - `assets/network-experiences.css` — network, topology, and pod layouts
-- `assets/buying-experiences.css` — capacity and contract layouts
+- `assets/buying-experiences.css` — capacity layout
 - `assets/market-experiences.css` — chip comparison and historical price atlas
 - `assets/methods.css` — evidence guide
 - `assets/demand-import.js` — local-only demand parsing and empirical commitment optimization

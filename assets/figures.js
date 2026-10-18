@@ -160,6 +160,93 @@
   }
   requestAnimationFrame(frame);
 
+  // ---------- Shared figure: a month of failures across a fleet ----------
+  // 1,024 tiles stand for the fleet; servers (blocks of eight tiles) fail and recover over a
+  // 730-hour month while a separate platform box keeps answering. One fixed failure pattern is
+  // stretched or shrunk so the month's losses come to whatever the page's scenario says.
+  //   o.svg, o.fig           the <svg> and its <figure>
+  //   o.day, o.bar           clock text and progress elements
+  //   o.scenario()           -> { nodeHours, platformHours, fleet }   (read every frame)
+  //   o.onHour(h, lost)      lost = { node, platform } GPU-hours so far; for the page's readouts
+  // Returns the registered figure, plus redraw() for when the scenario changes while paused.
+  const MONTH = 730;
+  function outageMonth(o) {
+    const svg = o.svg, inner = el('g', {}, svg);
+    const N = 32, T = 11, GAP = 2.5;
+    const shade = { ok: light(COL.compute, .35), scar: light(COL.down, .62), down: COL.down, dim: COL.idle };
+    box(inner, -150, 300, 0, 64, 64, 46, COL.steel);
+    const lamp = box(inner, -131, 319, 46, 26, 26, 6, COL.compute);
+    const tiles = [];
+    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
+      const x = c * (T + GAP), y = r * (T + GAP);
+      tiles.push(el('polygon', { points: pts([[x, y, 0], [x + T, y, 0], [x + T, y + T, 0], [x, y + T, 0]]), fill: shade.ok }, inner));
+    }
+    const serverTiles = s => { const bc = s % 16, br = Math.floor(s / 16), out = []; for (let r = 0; r < 4; r++) for (let c = 0; c < 2; c++) out.push((br * 4 + r) * N + bc * 2 + c); return out; };
+    // The pattern: one rack-sized event and thirteen single servers, 5,000 GPU-hours in all.
+    const PATTERN = [{ start: 300, dur: 24, servers: [40, 41, 42, 43, 56, 57, 58, 59, 72] }];
+    [[30, 18, 3], [75, 40, 77], [120, 30, 18], [170, 48, 101], [220, 24, 64], [260, 36, 9], [350, 14, 120], [400, 42, 33], [450, 32, 88], [500, 28, 112], [560, 44, 50], [610, 26, 5], [660, 27, 95]]
+      .forEach(([start, dur, s]) => PATTERN.push({ start, dur, servers: [s] }));
+    const PATTERN_HOURS = 5000, PLATFORM_START = 470;
+
+    const pinPlatform = makeLabel(svg, 'Platform: responding', 'left');
+    const pinFleet = makeLabel(svg, '1,024 GPUs', 'right');
+    const narrow = matchMedia('(max-width: 760px)');
+    function layout() {
+      svg.setAttribute('viewBox', narrow.matches ? '0 0 600 420' : '0 0 960 400');
+      const xf = fit(inner, narrow.matches ? { x: 30, y: 80, w: 540, h: 300 } : { x: 160, y: 70, w: 640, h: 290 });
+      placeLabel(pinPlatform, svg, xf, [-118, 300, 52]);
+      placeLabel(pinFleet, svg, xf, [N * (T + GAP), 0, 0]);
+    }
+    layout();
+    narrow.addEventListener('change', layout);
+
+    let hour = reduced ? MONTH : 0, hold = reduced ? 99 : 0, platformWasDown = null;
+    const painted = new Map();
+    function render(h) {
+      const s = o.scenario();
+      const k = s.nodeHours / PATTERN_HOURS;
+      // Scaled incidents, clipped to the month; the counter is normalized so the month ends on s.nodeHours exactly.
+      let drawn = 0, total = 0;
+      const status = new Map();
+      PATTERN.forEach(inc => {
+        const dur = Math.min(inc.dur * k, MONTH - inc.start), width = inc.servers.length * 8;
+        total += dur * width;
+        drawn += clamp(h - inc.start, 0, dur) * width;
+        if (dur > 0 && h >= inc.start) inc.servers.forEach(sv => status.set(sv, h < inc.start + dur ? 'down' : status.get(sv) === 'down' ? 'down' : 'scar'));
+      });
+      const platformDown = s.platformHours > 0 && h >= PLATFORM_START && h < PLATFORM_START + s.platformHours;
+      for (let sv = 0; sv < 128; sv++) {
+        let now = status.get(sv) || 'ok';
+        if (platformDown && now !== 'down') now = 'dim';
+        if (painted.get(sv) !== now) { painted.set(sv, now); serverTiles(sv).forEach(i => tiles[i].setAttribute('fill', shade[now])); }
+      }
+      if (platformDown !== platformWasDown) {
+        platformWasDown = platformDown;
+        lamp.paint(platformDown ? COL.down : COL.compute);
+        pinPlatform.querySelector('span').textContent = platformDown ? 'Platform: not responding' : 'Platform: responding';
+        pinPlatform.classList.toggle('pin-down', platformDown);
+        placeLabel(pinPlatform);
+      }
+      const fleetText = fmt(s.fleet) + ' GPUs';
+      if (pinFleet.querySelector('span').textContent !== fleetText) { pinFleet.querySelector('span').textContent = fleetText; placeLabel(pinFleet); }
+      o.day.textContent = 'Day ' + Math.min(30, Math.floor(h / 24.33) + 1) + ' of 30';
+      o.bar.style.width = (h / MONTH * 100) + '%';
+      o.onHour(h, { node: total ? drawn / total * s.nodeHours : 0, platform: clamp(h - PLATFORM_START, 0, s.platformHours) * s.fleet });
+    }
+    render(hour);
+    const live = register({
+      node: o.fig,
+      tick(dt, t) {
+        if (!platformWasDown) lamp.top.setAttribute('fill', mix(light(COL.compute, .22), light(COL.compute, .6), .5 + .5 * Math.sin(t * 3)));
+        if (hour >= MONTH) { hold += dt; if (hold > 3.5) { hold = 0; hour = 0; } render(MONTH); return; }
+        hour = Math.min(MONTH, hour + dt * 36);
+        render(hour);
+      }
+    });
+    live.redraw = () => render(hour);
+    return live;
+  }
+
   // ---------- Section rail ----------
   // Appears once the intro scrolls away and marks the section being read.
   (function rail() {
@@ -178,5 +265,5 @@
     update();
   })();
 
-  window.Figures = { NS, COL, reduced, el, mix, light, dark, fmt, money, clamp, lerp, iso, pts, box, fit, makeLabel, placeLabel, register };
+  window.Figures = { NS, COL, reduced, el, mix, light, dark, fmt, money, clamp, lerp, iso, pts, box, fit, makeLabel, placeLabel, register, outageMonth, MONTH };
 })();

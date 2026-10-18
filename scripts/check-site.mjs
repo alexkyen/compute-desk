@@ -45,7 +45,7 @@ for(const [file,html] of pages){
     else if(pages.has(path)&&redirectTarget(pages.get(path)))failures.push(`${file}: links to ${path}, which now forwards to ${redirectTarget(pages.get(path))}; link there directly`);
   }
   // Pages built on the design system: every stylesheet they load follows its type rules.
-  const sheets=[...html.matchAll(/<link rel="stylesheet" href="(assets\/[^"?]+\.css)"/g)].map(match=>match[1]);
+  const sheets=[...html.matchAll(/<link rel="stylesheet" href="(assets\/[^"?]+\.css)(?:\?[^"]*)?"/g)].map(match=>match[1]);
   if(sheets.includes("assets/site.css"))sheets.forEach(sheet=>designSheets.add(sheet));
   const inlineScripts=[...html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/g)];
   for(const [,source] of inlineScripts){

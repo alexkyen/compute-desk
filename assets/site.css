@@ -147,6 +147,12 @@ h2 .num{font:500 var(--fs-ui)/1 var(--sans);color:var(--ink-2);vertical-align:.4
 .slider input{flex:1;accent-color:var(--compute);min-height:32px;cursor:pointer}
 .slider output{font-weight:600;font-variant-numeric:tabular-nums;min-width:3ch;text-align:right}
 
+/* Page actions: copy a scenario link, download, print (wired by desk.js). */
+.tool-actions{display:flex;flex-wrap:wrap;gap:8px}
+.tool-actions button,.tool-actions a{min-height:36px;padding:6px 14px;border:1px solid var(--rule);border-radius:999px;background:var(--surface);color:var(--ink);font:500 var(--fs-ui)/1.4 var(--sans);text-decoration:none;cursor:pointer}
+.tool-actions button:hover,.tool-actions a:hover{border-color:var(--ink-2)}
+.tool-message{min-height:1.5em;font-size:var(--fs-small);color:var(--ink-2)}
+
 /* ---------- Stepper: a diagram, a callout, and step controls ---------- */
 .stepper .stage{min-height:420px}
 .callout{position:absolute;right:20px;bottom:20px;width:min(340px,calc(100% - 40px));background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(6px);border:1px solid var(--rule);border-radius:10px;padding:16px 18px;box-shadow:0 8px 24px -12px #1d1c1a33}
