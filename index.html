@@ -3,79 +3,220 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="A practical guide to AI compute. Understand the hardware, test network and capacity tradeoffs, and see what changes the cost of useful work.">
+<meta name="description" content="A practical guide to AI compute: what you rent, where the time goes, what you actually pay, and what the contract covers.">
 <meta property="og:title" content="The Compute Desk — AI compute, from hardware to economics">
-<meta property="og:description" content="Understand the hardware. Test the tradeoffs. A practical guide with interactive models, worked examples, and explicit assumptions.">
+<meta property="og:description" content="What you rent, where the time goes, what you actually pay, and what the contract covers.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://alexkyen.github.io/compute-desk/social-card.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:url" content="https://alexkyen.github.io/compute-desk/">
 <link rel="canonical" href="https://alexkyen.github.io/compute-desk/">
-<meta name="theme-color" content="#f5f3ed">
+<meta name="theme-color" content="#fcfbf8">
 <title>The Compute Desk — AI compute, from hardware to economics</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/desk.css">
-<link rel="stylesheet" href="assets/experience.css">
-<link rel="stylesheet" href="assets/editorial.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
 </head>
-<body class="experience home">
+<body>
 <a class="skip-link" href="#main">Skip to content</a>
-<header class="site-header">
-  <a class="wordmark" href="index.html" aria-label="The Compute Desk home"><span class="brand-icon" aria-hidden="true">✳</span> THE COMPUTE DESK</a>
-  <nav aria-label="Main navigation"><a href="#guide">The guide</a><a href="#models">Working models</a><a href="methodology.html">Methods</a></nav>
+<header class="masthead">
+  <a class="wordmark" href="index.html"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 11v42M11 32h42M17 17l30 30M17 47l30-30"/></svg>The Compute Desk</a>
+  <a href="methodology.html">Methods &amp; sources</a>
 </header>
-<main id="main" class="home-main">
-  <section class="editorial-intro" aria-labelledby="hero-title">
-    <div><p class="overline">A practical field guide · By Alex Yen</p><h1 id="hero-title">AI compute, from<br>hardware to economics.</h1><p class="intro-dek">A GPU’s hourly price is only the beginning. What fits in memory, how machines connect, and how much capacity you use all shape the cost of getting work done.</p></div>
-    <aside class="contents-note" aria-label="Guide contents"><span class="overline">Four questions</span><a href="#hardware"><span>01</span> What are you renting?</a><a href="#networks"><span>02</span> Where does time go?</a><a href="#economics"><span>03</span> How much should you commit?</a><a href="#contracts"><span>04</span> What does the contract cover?</a></aside>
+
+<nav class="rail" aria-label="Sections">
+  <a href="#hardware"><span>01</span>What you rent</a>
+  <a href="#networks"><span>02</span>Where time goes</a>
+  <a href="#economics"><span>03</span>What you pay</a>
+  <a href="#contracts"><span>04</span>What’s covered</a>
+  <a href="#models"><span>→</span>Full models</a>
+</nav>
+
+<main id="main">
+  <section class="intro" aria-labelledby="title">
+    <p class="meta">A field guide by Alex Yen</p>
+    <h1 id="title">AI compute, from hardware to economics.</h1>
+    <p>Everyone quotes the hourly price of a GPU. What you actually pay depends on what sits behind that number: the hardware, the network, how much of it you use, and what the contract promises.</p>
   </section>
 
-  <section class="opening-example" aria-labelledby="util-title">
-    <div class="example-copy"><p class="overline">Start with one number / A worked example</p><h2 id="util-title">The same GPU.<br>A different effective cost.</h2><p>Suppose you rent eight GPUs at <strong>$3 per GPU-hour</strong> for 30 days. The bill is <strong>$17,280</strong>. At half utilization, you spread that bill over half as many hours of useful work.</p><p class="example-instruction">Change utilization to see the cost per productive GPU-hour.</p><div class="util-control"><label for="home-utilization">Productive utilization <output id="util-percent" for="home-utilization">50%</output></label><input id="home-utilization" type="range" min="10" max="100" step="5" value="50" aria-describedby="util-definition"><div class="range-endpoints"><span>10%</span><span>100%</span></div></div></div>
-    <figure class="util-figure"><div class="figure-top"><span class="overline">Billed capacity-time</span><span class="figure-unit">8 GPUs × 720 hours</span></div><div class="util-grid" id="util-grid" role="img" aria-label="50 of 100 units of billed capacity-time are productive; 50 are idle."></div><div class="figure-legend"><span><i class="productive-key"></i>Productive</span><span><i class="idle-key"></i>Idle</span><small>One square = 1% of billed time</small></div><div class="util-results" aria-live="polite" aria-atomic="true"><div><span>Price per rented GPU-hour</span><strong>$3.00</strong></div><div><span>Cost per productive GPU-hour</span><strong id="util-cost">$6.00</strong></div></div><figcaption id="util-equation">$17,280 ÷ 2,880 productive GPU-hours = $6.00</figcaption></figure>
-    <p class="figure-footnote" id="util-definition"><span>Illustrative model.</span> Utilization here means the share of rented time doing useful work, at unchanged throughput. Fixed rental cost only; storage, networking, and other charges are excluded. This is not a live quote. <a href="gpu-supply-book.html">Model a capacity commitment →</a></p>
-    <noscript><p class="no-script-note">At 50% utilization: $3 ÷ 0.5 = $6 per productive GPU-hour. Enable JavaScript to change the example.</p></noscript>
+  <figure class="fig" id="fig-prices" aria-labelledby="fig-prices-cap" data-market-verified="2026-07-22" data-market-status="archived">
+    <div class="fig-head"><span>Figure 1</span>One H100, ten sellers, on-demand list price per GPU-hour</div>
+    <div class="price-plot" id="price-plot"></div>
+    <figcaption id="fig-prices-cap" data-market-notice="archived">Archived list prices for an H100 SXM rented on demand, <strong>snapshot verified 22 July 2026</strong>. Historical reference, not current offers. Azure and Lambda publish a range; the dot marks its midpoint. <a href="the-atlas-scatter.html">Open the price atlas</a></figcaption>
+  </figure>
+
+  <!-- #explore, #guide, and #toolbox are anchors from the previous homepage that other pages and saved links still use. -->
+  <section class="prose" id="guide" aria-labelledby="short-title">
+    <span id="explore" aria-hidden="true"></span>
+    <h2 id="short-title">The short version</h2>
+    <p>The same GPU rented for anywhere from <strong>$1.87 to $11.06 an hour</strong> in July 2026, a nearly six-fold spread (Figure 1). The sticker price is the start. Four things decide what you really pay:</p>
+    <ul class="takeaways">
+      <li><a href="#hardware">Memory decides what fits.</a> A 70-billion-parameter model needs about 140 GB for its weights alone, more than one H100 holds.</li>
+      <li><a href="#networks">The network decides how long you wait.</a> If GPUs spend 3 of every 13 seconds swapping results, almost a quarter of the rented time is waiting.</li>
+      <li><a href="#economics">Utilization decides the real price.</a> A $3 GPU that works half the time costs $6 per useful hour.</li>
+      <li><a href="#contracts">The contract decides who pays for failures.</a> The same outage can earn a six-figure credit or nothing, depending on what “uptime” measures.</li>
+    </ul>
   </section>
 
-  <span id="explore" aria-hidden="true"></span><div class="guide-heading" id="guide"><p class="overline">The guide</p><p>Understand the constraint. Then test the decision.</p></div>
-  <section class="guide-chapter" id="hardware" aria-labelledby="hardware-title">
-    <div class="chapter-copy"><p class="overline">01 / Hardware</p><h2 id="hardware-title">First, know what<br>you are renting.</h2><p>A GPU does the model’s calculations. Its memory holds the model and the data it is working on. Servers supply power, storage, and connections; racks combine them into larger systems.</p><p>A faster chip helps only if the job fits and the rest of the system can keep it supplied.</p><div class="chapter-links"><a href="plate-nvl72.html">Inside a 72-GPU rack <span>→</span></a><a href="silicon-ladder.html">Compare accelerator specifications <span>→</span></a><a href="plate-pod.html">From one rack to a cluster <span>→</span></a></div></div>
-    <figure class="hardware-figure"><div class="hardware-stage" id="hero-art"><div id="chip-scene" role="img" aria-label="Conceptual accelerator package: two computing dies in the center, with memory packages alongside. Drag horizontally to turn it."><svg class="chip-fallback" viewBox="0 0 600 420" aria-hidden="true"><g transform="translate(300 200) rotate(-25) skewX(15)"><rect x="-160" y="-140" width="320" height="280" rx="4" fill="#9b9d7b"/><rect x="-145" y="-125" width="290" height="250" fill="#33493f"/><rect x="-65" y="-80" width="60" height="160" fill="#d9dbd3"/><rect x="5" y="-80" width="60" height="160" fill="#b9bdb5"/><g fill="#8e9c8f"><rect x="-125" y="-100" width="40" height="40"/><rect x="-125" y="-45" width="40" height="40"/><rect x="-125" y="10" width="40" height="40"/><rect x="-125" y="65" width="40" height="40"/><rect x="85" y="-100" width="40" height="40"/><rect x="85" y="-45" width="40" height="40"/><rect x="85" y="10" width="40" height="40"/><rect x="85" y="65" width="40" height="40"/></g></g></svg></div><span class="hardware-tag">Conceptual accelerator</span><div class="art-controls"><span>Drag to rotate</span><button id="motion-toggle" type="button" hidden aria-label="Start chip rotation" aria-pressed="true">▷</button></div></div><div class="hardware-key"><div><span>Compute</span><p>The central dies perform calculations.</p></div><div><span>Memory</span><p>Nearby packages keep data close.</p></div></div><figcaption>Schematic geometry, not a production layout. Explore the rack model for a specific GB200 NVL72 configuration.</figcaption></figure>
+  <!-- 01 -->
+  <section class="prose chapter" id="hardware" aria-labelledby="hardware-title">
+    <h2 id="hardware-title"><span class="num">01</span>What you rent</h2>
+    <p>A GPU is two things packaged together: chips that do the math, and memory that holds the model while it works. Memory decides what fits. At 16-bit precision every parameter takes 2 bytes, so a 70-billion-parameter model needs about <strong>140 GB</strong> before it does anything at all.</p>
+    <p>Nobody rents one chip in isolation, though. GPUs come in trays, trays fill racks, and racks are wired into clusters. Each step up adds power, cooling, and connections, and each one shows up somewhere in the price.</p>
   </section>
 
-  <section class="guide-chapter" id="networks" aria-labelledby="networks-title">
-    <div class="chapter-copy"><p class="overline">02 / Networks</p><h2 id="networks-title">Chips work together.<br>Communication takes time.</h2><p>In distributed training, GPUs calculate part of a result and exchange information before the next step. Some communication can happen alongside computation. The rest adds time to the step.</p><p>That is why a network constraint can leave expensive processors waiting.</p><div class="chapter-links"><a href="the-fabric.html">Model time spent communicating <span>→</span></a><a href="the-two-trees.html">Compare two network layouts <span>→</span></a></div></div>
-    <figure class="time-figure"><div class="figure-top"><span class="overline">An illustrative training step</span><span class="figure-unit">Seconds</span></div><div class="time-scale"><span>0</span><span>10</span><span>13</span></div><div class="time-track" role="img" aria-label="10 seconds of computation followed by 3 seconds of communication that cannot overlap. Total: 13 seconds."><span>Compute<br><b>10 s</b></span><span>Exchange<br><b>3 s</b></span></div><div class="time-equation"><span>10 + 3 = <strong>13 seconds</strong></span><span>23% of the step is waiting</span></div><p>If unhidden communication doubles to 6 seconds, the same calculation takes <strong>16 seconds</strong> per step.</p><figcaption>Illustrative timings, not a hardware benchmark. The network model lets you change bandwidth, message size, and overlap.</figcaption></figure>
+  <figure class="fig fig-wide stepper" id="fig-stack" data-steps="4" aria-labelledby="fig-stack-cap">
+    <div class="fig-head"><span>Figure 2</span>From one GPU to a cluster</div>
+    <div class="stage">
+      <svg class="iso" id="stack-svg" viewBox="0 0 960 520" role="img" aria-label="An isometric diagram that zooms out from one GPU to a tray, a rack, and a cluster."></svg>
+      <div class="callout" aria-live="off">
+        <div class="callout-step" data-step="0"><h3>The GPU</h3><p>Two compute dies do the arithmetic. Eight stacks of high-bandwidth memory sit millimeters away and feed them data at 8 TB/s. On a B200 they hold 192 GB, enough for a 70B model’s weights with room to spare.</p><p class="stat"><i class="sw memory"></i>192 GB · 8 TB/s · ~1,000 W</p></div>
+        <div class="callout-step" data-step="1" hidden><h3>The tray</h3><p>Four GPUs and two Grace CPUs share one tray. The CPUs handle the work around the model: loading data, scheduling, and talking to the network.</p><p class="stat"><i class="sw compute"></i>4 GPUs · 2 CPUs per tray</p></div>
+        <div class="callout-step" data-step="2" hidden><h3>The rack</h3><p>Eighteen trays make 72 GPUs. Nine switch trays in the middle connect every GPU to every other over NVLink, so the rack can act like one very large GPU. It draws about 120 kW and needs liquid cooling.</p><p class="stat"><i class="sw compute"></i>72 GPUs · <i class="sw network"></i>9 switch trays · ~120 kW</p></div>
+        <div class="callout-step" data-step="3" hidden><h3>The cluster</h3><p>A second, slower network joins racks into a cluster. Inside a rack, GPUs talk over NVLink. Between racks, traffic crosses switches, and that is where big jobs start to wait on each other.</p><p class="stat"><i class="sw network"></i>Racks joined by switches</p></div>
+      </div>
+    </div>
+    <div class="step-nav" role="group" aria-label="Figure 2 steps">
+      <button type="button" class="step-prev" aria-label="Previous step">←</button>
+      <div class="step-dots"></div>
+      <button type="button" class="step-next" aria-label="Next step">→</button>
+    </div>
+    <figcaption id="fig-stack-cap">Schematic, not to scale. GPU figures are NVIDIA B200 specifications; the rack follows the GB200 NVL72 reference design (18 compute trays, 9 NVLink switch trays, 72 GPUs, 13.4 TB of memory). Verified July 2026.</figcaption>
+  </figure>
+
+  <div class="prose">
+    <p class="more"><a href="plate-nvl72.html">Take the rack apart</a><a href="silicon-ladder.html">Compare GPU specifications</a></p>
+  </div>
+
+  <!-- 02 -->
+  <section class="prose chapter" id="networks" aria-labelledby="network-title">
+    <h2 id="network-title"><span class="num">02</span>Where the time goes</h2>
+    <p>Large training jobs split the work across many GPUs. On every step, each GPU computes its share, then all of them exchange results before anyone can move on. Some of that exchange overlaps with computing. The rest is time when expensive chips sit and wait.</p>
+    <p>The network sets how long that wait lasts. Less bandwidth, or one failed switch, stretches every step, and the meter keeps running.</p>
   </section>
 
-  <section class="guide-chapter" id="economics" aria-labelledby="economics-title">
-    <div class="chapter-copy"><p class="overline">03 / Economics</p><h2 id="economics-title">Commit to the work<br>you expect to use.</h2><p>Reserved capacity costs money even when it sits idle. On-demand capacity can cost more per hour but lets you pay only when you need it.</p><p>The useful question is how often each additional GPU will be needed. Stable demand and occasional peaks call for different commitments.</p><div class="chapter-links"><a href="gpu-supply-book.html">Find a capacity commitment <span>→</span></a><a href="the-atlas-scatter.html">Explore the historical price atlas <span>→</span></a></div></div>
-    <figure class="commit-figure"><p class="overline">One additional GPU / Illustrative rates</p><div class="rate-comparison"><div><span>Reserved</span><strong>$2<small>/hour</small></strong><p>Paid every hour</p></div><div><span>On demand</span><strong>$6<small>/hour</small></strong><p>Paid when used</p></div></div><div class="break-even"><span>$2 ÷ $6</span><strong>33⅓%</strong><span>break-even usage</span></div><figcaption>If this extra GPU is needed more than a third of the time, reserving it costs less under these assumptions. Availability, minimum terms, and extra charges are outside this example.</figcaption></figure>
+  <figure class="fig fig-wide quiet-pins" id="fig-net" aria-labelledby="fig-net-cap">
+    <div class="fig-head"><span>Figure 3</span>One training step on 16 GPUs</div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Network bandwidth">
+        <span class="seg-label">Network bandwidth</span>
+        <button type="button" data-bw="1" aria-pressed="true">Full</button>
+        <button type="button" data-bw="2" aria-pressed="false">Half</button>
+        <button type="button" data-bw="4" aria-pressed="false">Quarter</button>
+      </div>
+      <button type="button" class="toggle" id="net-fail" aria-pressed="false">Take a spine switch offline</button>
+    </div>
+    <div class="stage">
+      <svg class="iso" id="net-svg" viewBox="0 0 960 470" role="img" aria-label="Four servers of GPUs connected through two leaf switches and two spine switches. GPUs compute, then exchange results through the switches."></svg>
+      <div class="phase" id="net-phase" aria-hidden="true"><i class="sw compute"></i>Computing</div>
+    </div>
+    <div class="timeline">
+      <div class="track" aria-hidden="true"><i class="t-compute" id="t-compute"></i><i class="t-wait" id="t-wait"></i></div>
+      <div class="readouts" aria-live="polite">
+        <div><span><i class="sw compute"></i>Compute</span><strong id="r-compute">10 s</strong></div>
+        <div><span><i class="sw network"></i>Exchange</span><strong id="r-wait">3 s</strong></div>
+        <div><span>Time spent waiting</span><strong id="r-share">23%</strong></div>
+        <div><span>Real cost of a $3.00 GPU-hour</span><strong id="r-cost">$3.90</strong></div>
+      </div>
+    </div>
+    <figcaption id="fig-net-cap">Illustrative: 10 seconds of compute per step and 3 seconds of exchange that can’t overlap at full bandwidth. Halving bandwidth doubles the exchange time, and losing one of two spine switches halves the bandwidth again. Not a benchmark.</figcaption>
+  </figure>
+
+  <div class="prose">
+    <p class="more"><a href="the-fabric.html">Model communication time</a><a href="the-two-trees.html">Compare network layouts</a><a href="plate-pod.html">Walk a row of racks</a></p>
+  </div>
+
+  <!-- 03 -->
+  <section class="prose chapter" id="economics" aria-labelledby="bill-title">
+    <h2 id="bill-title"><span class="num">03</span>What you actually pay</h2>
+    <p>A rented GPU costs the same whether it is busy or idle. At $3 an hour, a GPU that does useful work half the time really costs <strong>$6 per useful hour</strong>.</p>
+    <p>Reserving capacity lowers the hourly rate, but you pay for every hour. On-demand capacity costs more, but only when you use it. So the question for each extra GPU is whether you will need it often enough. With reserved GPUs at $2 and on-demand at $6, the answer is yes if it is busy more than a third of the time.</p>
   </section>
 
-  <section class="guide-chapter" id="contracts" aria-labelledby="contracts-title">
-    <div class="chapter-copy"><p class="overline">04 / Contracts</p><h2 id="contracts-title">A service promise needs<br>a measurement rule.</h2><p>“99.9% uptime” leaves questions open. Is availability measured across the whole fleet or for each GPU? Which failures count? Is the remedy a refund, a credit, or the right to leave?</p><p>The same outage can produce different remedies under different definitions.</p><div class="chapter-links"><a href="sla-anatomy.html">Compare contract exposure <span>→</span></a></div></div>
-    <figure class="contract-figure"><p class="overline">Make the promise testable</p><ol class="contract-steps"><li><span>01</span><div><strong>Define the unit</strong><p>A GPU, a job, or the entire service?</p></div></li><li><span>02</span><div><strong>Count the interruption</strong><p>Which failures and exclusions apply?</p></div></li><li><span>03</span><div><strong>Calculate the remedy</strong><p>What fee does the credit percentage apply to?</p></div></li></ol><figcaption>Use the contract model to compare illustrative clauses. Actual remedies depend on the signed agreement.</figcaption></figure>
+  <figure class="fig fig-wide" id="fig-bill" aria-labelledby="fig-bill-cap">
+    <div class="fig-head"><span>Figure 4</span>A month of demand, and how much of it to reserve</div>
+    <div class="controls">
+      <label class="slider" for="bill-r"><span class="seg-label">Reserved GPUs</span><input id="bill-r" type="range" min="0" max="400" step="5" value="120"><output id="bill-r-out" for="bill-r">120</output></label>
+      <button type="button" class="toggle" id="bill-best">Jump to the lowest bill</button>
+    </div>
+    <div class="stage">
+      <svg class="chart" id="bill-svg" viewBox="0 0 960 300" role="img" aria-label="Hourly GPU demand over 30 days with a horizontal reservation line. Demand below the line runs on reserved GPUs; demand above it runs on demand."></svg>
+    </div>
+    <div class="legend"><span><i class="sw compute"></i>Reserved, in use</span><span><i class="sw idle"></i>Reserved, idle</span><span><i class="sw money"></i>Bought on demand</span></div>
+    <div class="readouts">
+      <div><span>Reserved hours used</span><strong id="b-util">—</strong></div>
+      <div><span>Monthly bill</span><strong id="b-bill">—</strong></div>
+      <div><span>Cost per GPU-hour used</span><strong id="b-eff">—</strong></div>
+      <div><span>Versus lowest possible bill</span><strong id="b-gap">—</strong></div>
+    </div>
+    <figcaption id="fig-bill-cap">Illustrative month: demand averages about 100 GPUs and peaks near 400. Reserved at $2.00 per GPU-hour, on demand at $6.00. The lowest bill reserves the level that demand exceeds a third of the time. Minimum terms, availability, and other charges are excluded.</figcaption>
+  </figure>
+
+  <div class="prose">
+    <p class="more"><a href="gpu-supply-book.html">Size a commitment with your own demand</a><a href="the-atlas-scatter.html">Explore archived prices</a></p>
+  </div>
+
+  <!-- 04 -->
+  <section class="prose chapter" id="contracts" aria-labelledby="contract-title">
+    <h2 id="contract-title"><span class="num">04</span>What the contract covers</h2>
+    <p>“99.9% uptime” sounds precise. It isn’t until you know what is being measured. If uptime means the provider’s platform is responding, individual GPUs can fail all month without breaking the promise. If it means GPU-hours actually delivered, the same failures add up.</p>
   </section>
 
-  <span id="toolbox" aria-hidden="true"></span><section class="model-directory" id="models" aria-labelledby="models-title"><div class="directory-intro"><p class="overline">The working models</p><h2 id="models-title">Choose a question.</h2><p>Each model includes its assumptions, sources, and limits.</p></div><div class="directory-grid">
-    <a href="plate-nvl72.html"><span>01 / Hardware</span><strong>Rack anatomy</strong><p>Inspect trays, memory, and interconnects.</p><b aria-hidden="true">↗</b></a>
-    <a href="plate-pod.html"><span>02 / Hardware</span><strong>Cluster layout</strong><p>Follow connections between racks.</p><b aria-hidden="true">↗</b></a>
-    <a href="silicon-ladder.html"><span>03 / Hardware</span><strong>Accelerator comparison</strong><p>Compare capacity, bandwidth, and power.</p><b aria-hidden="true">↗</b></a>
-    <a href="the-fabric.html"><span>04 / Networks</span><strong>Communication time</strong><p>Change the network; inspect the wait.</p><b aria-hidden="true">↗</b></a>
-    <a href="the-two-trees.html"><span>05 / Networks</span><strong>Network topology</strong><p>Compare paths, switches, and link counts.</p><b aria-hidden="true">↗</b></a>
-    <a href="gpu-supply-book.html"><span>06 / Economics</span><strong>Capacity planning</strong><p>Balance a commitment against demand.</p><b aria-hidden="true">↗</b></a>
-    <a href="the-atlas-scatter.html"><span>07 / Economics</span><strong>Price atlas</strong><p>Compare the archived July 2026 observations.</p><b aria-hidden="true">↗</b></a>
-    <a href="sla-anatomy.html"><span>08 / Contracts</span><strong>Contract exposure</strong><p>Apply different terms to the same outage.</p><b aria-hidden="true">↗</b></a>
-  </div></section>
-  <aside class="evidence-note"><span class="overline">A note on evidence</span><p>Specifications, historical observations, and modeled examples answer different questions. Prices here are an <strong>archived July 2026 snapshot</strong>; an interactive result is a calculation under stated assumptions. <a href="methodology.html">Read the methods and source policy →</a></p></aside>
+  <figure class="fig fig-wide" id="fig-sla" aria-labelledby="fig-sla-cap">
+    <div class="fig-head"><span>Figure 5</span>One month, 1,024 GPUs, two ways to measure uptime</div>
+    <div class="stage">
+      <svg class="iso" id="sla-svg" viewBox="0 0 960 400" role="img" aria-label="A grid of 1,024 GPUs over one month. Groups of GPUs fail and recover while the provider's platform keeps responding."></svg>
+      <div class="clock" aria-hidden="true"><span id="sla-day">Day 1</span><div class="clock-track"><i id="sla-progress"></i></div></div>
+    </div>
+    <div class="legend"><span><i class="sw compute"></i>Running</span><span><i class="sw down"></i>Down now</span><span><i class="sw scar"></i>Down earlier this month</span></div>
+    <div class="verdicts">
+      <div class="verdict">
+        <span>If uptime means <strong>the platform responds</strong></span>
+        <strong class="big" id="v-plat">100.00%</strong>
+        <p id="v-plat-note">Promise met. No credit.</p>
+      </div>
+      <div class="verdict">
+        <span>If uptime means <strong>GPU-hours delivered</strong></span>
+        <strong class="big" id="v-gpu">100.00%</strong>
+        <p id="v-gpu-note">0 GPU-hours lost so far.</p>
+      </div>
+    </div>
+    <figcaption id="fig-sla-cap">Illustrative: 1,024 GPUs at $2.35 per GPU-hour over a 730-hour month, with 5,000 GPU-hours lost to server failures. A 99.9% promise with a 10% credit below target. Representative terms, not legal advice.</figcaption>
+  </figure>
+
+  <div class="prose">
+    <p>Before signing, ask three questions: what unit is measured, which failures count, and what the credit is a percentage of. Credits usually offset future bills and rarely cover the cost of lost work.</p>
+    <p class="more"><a href="sla-anatomy.html">Compare contract terms</a></p>
+  </div>
+
+  <!-- Models -->
+  <section class="prose models" id="models" aria-labelledby="models-title">
+    <span id="toolbox" aria-hidden="true"></span>
+    <h2 id="models-title">The full models</h2>
+    <p>Each one lets you change the assumptions behind a figure above, shows its sources, and exports a scenario.</p>
+    <ol class="model-list">
+      <li><a href="plate-nvl72.html">Rack anatomy</a><span>Turn a 72-GPU rack and take it apart.</span></li>
+      <li><a href="silicon-ladder.html">GPU specifications</a><span>Compare memory, bandwidth, compute, and power.</span></li>
+      <li><a href="plate-pod.html">Cluster layout</a><span>Follow connections across a row of racks.</span></li>
+      <li><a href="the-fabric.html">Communication time</a><span>Change the network and see time spent waiting.</span></li>
+      <li><a href="the-two-trees.html">Network topology</a><span>Compare two layouts and take a switch offline.</span></li>
+      <li><a href="gpu-supply-book.html">Capacity planning</a><span>Balance a commitment against your demand.</span></li>
+      <li><a href="the-atlas-scatter.html">Price atlas</a><span>The archived July 2026 price snapshot, by seller.</span></li>
+      <li><a href="sla-anatomy.html">Contract exposure</a><span>Apply different terms to the same outage.</span></li>
+    </ol>
+    <p class="note">Specifications, archived prices, and modeled examples answer different questions. Every figure here states which one it is. <a href="methodology.html">Read the methods and sources</a></p>
+  </section>
 </main>
-<footer class="experience-footer"><a class="wordmark" href="index.html">THE COMPUTE DESK</a><span>An independent project by Alex Yen.</span><a href="methodology.html">Methods &amp; sources</a></footer>
-<script src="assets/home-economics.js"></script><script src="assets/three-r147.min.js"></script><script src="assets/home-scene.js?v=20261016"></script>
+
+<footer class="foot">
+  <span>The Compute Desk · an independent project by Alex Yen</span>
+  <a href="https://github.com/alexkyen/compute-desk/issues">Send a correction</a>
+</footer>
+<script src="assets/figures.js"></script>
+<script src="assets/home.js"></script>
 </body>
 </html>

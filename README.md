@@ -2,7 +2,7 @@
 
 **A practical guide to AI compute, from hardware to economics.**
 
-The Compute Desk connects hardware, networking, capacity decisions, and contract terms to the cost of useful work. The homepage develops four questions through concise explanations and worked examples. Eight interactive models let readers change the assumptions, inspect the calculation, and export a scenario.
+The Compute Desk connects hardware, networking, capacity decisions, and contract terms to the cost of useful work. The homepage is one scrolling page in four sections, each with a short explanation and a live figure that runs on its own. Eight interactive models let readers change the assumptions, inspect the calculation, and export a scenario.
 
 [Open the site](https://alexkyen.github.io/compute-desk/)
 
@@ -19,7 +19,7 @@ The Compute Desk connects hardware, networking, capacity decisions, and contract
 | 07 | [Historical GPU prices](the-atlas-scatter.html) | Explore a dated market snapshot and compare sellers. |
 | 08 | [GPU service agreements](sla-anatomy.html) | Apply different contract promises to the same outage. |
 
-The homepage follows four chapters: hardware, networks, economics, and contracts. An always-visible model directory gives direct access to every tool. Existing page URLs and saved scenario parameters remain intact.
+The homepage follows four sections: what you rent, where the time goes, what you actually pay, and what the contract covers. A list at the bottom links every model. The eight models are being folded into one page per section; each old URL will become a forwarding page (`assets/redirect.js`) that keeps saved scenario parameters.
 
 ## Evidence and limits
 
@@ -45,29 +45,33 @@ Then open [localhost:4173](http://localhost:4173/).
 npm test
 ```
 
-Tests use only Node.js built-ins. The check covers all HTML pages, metadata, landmarks, local asset links, inline and external JavaScript syntax, and the market-evidence policy. Focused regression tests cover demand-file validation, commitment optimization against observed demand, consistent saved scenarios, and the live-versus-archived evidence policy.
+Tests use only Node.js built-ins. The check covers all HTML pages, metadata, landmarks, local asset links, inline and external JavaScript syntax, forwarding pages, the type system, and the market-evidence policy. Focused regression tests cover demand-file validation, commitment optimization against observed demand, consistent saved scenarios, forwarding of saved parameters, and the live-versus-archived evidence policy.
 
-Live market evidence older than 45 days fails the check. An archived dataset must preserve its verification date and show a dated historical-data notice outside collapsed detail panels. The scheduled GitHub Action runs the same checks.
+Live market evidence older than 45 days fails the check. Any page that shows prices declares `data-market-verified` and `data-market-status`; an archived dataset must preserve its verification date and show a dated historical-data notice outside collapsed detail panels. The scheduled GitHub Action runs the same checks.
 
-For interface changes, also verify the affected interaction in a browser, including narrow screens and keyboard input. Check exports and URL-restored scenarios when their controls change. Both 3D explorations have static fallbacks; motion controls and reduced-motion support keep the experience usable without continuous animation.
+Pages built on `assets/site.css` follow its type rules: two families (Newsreader and Inter) and five sizes, all as `--fs-` tokens, none under 13px. The check rejects any other font size or family in those stylesheets. A forwarding page must reach a real page in one hop, load `assets/redirect.js`, include a `<noscript>` refresh, be `noindex`, and point its canonical URL at its target.
+
+For interface changes, also verify the affected interaction in a browser, including narrow screens and keyboard input. Check exports and URL-restored scenarios when their controls change. Every live figure has a Pause/Play control and starts paused, on a finished frame, for readers who prefer reduced motion. Both 3D explorations have static fallbacks.
 
 ## Repository map
 
-- `index.html` — four-chapter guide, worked examples, and model directory
-- `assets/editorial.css` — shared editorial design and homepage figures
-- `assets/home-economics.js` — illustrative utilization and unit-cost example
+- `index.html` — the four-section guide with five live figures, and the model list
+- `assets/site.css` — the design system: tokens, type scale, page shell, figures, and controls
+- `assets/figures.js` — shared figure kit: isometric drawing, pinned labels, Pause/Play, one animation loop, section rail
+- `assets/home.js` — the homepage's five figures
+- `assets/redirect.js` — forwarding for old page URLs, keeping saved parameters
 - `*.html` — eight standalone explorations and the methods page
-- `assets/experience.css` — brand, homepage, and rack exhibit
+- `assets/editorial.css` — shared reading layer for the explorations (retired once they move to `site.css`)
+- `assets/experience.css` — brand and rack exhibit
 - `assets/tool-experience.css` — shared exploration controls, disclosures, responsive layout, and print styles
 - `assets/network-experiences.css` — network, topology, and pod layouts
 - `assets/buying-experiences.css` — capacity and contract layouts
 - `assets/market-experiences.css` — chip comparison and historical price atlas
 - `assets/methods.css` — evidence guide
-- `assets/home-scene.js` — conceptual interactive GPU, with local geometry and static fallback
 - `assets/demand-import.js` — local-only demand parsing and empirical commitment optimization
 - `assets/desk.css`, `assets/desk.js` — shared accessibility, URL state, copying, printing, and downloads
 - `assets/three-r147.min.js` — pinned local Three.js runtime
-- `scripts/check-site.mjs` — repository checks
+- `scripts/check-site.mjs` — repository checks, including forwarding pages and type rules
 - `scripts/market-policy.mjs` — live versus archived evidence rules
 - `social-card.svg`, `social-card.png`, `favicon.svg` — share preview and site identity
 

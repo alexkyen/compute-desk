@@ -1,0 +1,257 @@
+/* The Compute Desk design system: one reading column, wide live figures,
+   two typefaces, five text sizes, and one color per idea.
+   scripts/check-site.mjs enforces the type rules below. */
+
+/* ---------- Tokens ---------- */
+:root{
+  --serif:'Newsreader',Georgia,'Times New Roman',serif;
+  --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+
+  /* The whole type scale. Every font size in this file uses one of these;
+     nothing is smaller than --fs-small. */
+  --fs-display:clamp(40px,5.4vw,62px);
+  --fs-title:clamp(27px,2.8vw,33px);
+  --fs-body:19px;
+  --fs-ui:15px;
+  --fs-small:13px;
+
+  --bg:#fcfbf8;
+  --surface:#ffffff;
+  --ink:#1d1c1a;
+  --ink-2:#6a665f;
+  --rule:#e6e2d9;
+  --floor:#f3f1ec;
+
+  /* Each color means one thing everywhere on the site. */
+  --compute:#1f9d6b;
+  --memory:#2a78d6;
+  --network:#eb6834;
+  --money:#6250d6;
+  --down:#c8372d;
+  --idle:#dcd8cf;
+
+  --measure:680px;
+  --wide:1000px;
+  color-scheme:light;
+}
+
+/* ---------- Base ---------- */
+*{box-sizing:border-box}
+html{background:var(--bg);scroll-padding-top:24px}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 var(--fs-body)/1.6 var(--serif);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+h1,h2,h3,p,ul,ol,figure{margin:0}
+a{color:inherit}
+strong{font-weight:600}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--memory);outline-offset:3px}
+.skip-link{position:fixed;left:16px;top:12px;z-index:10;transform:translateY(-200%);padding:8px 12px;border-radius:6px;background:var(--ink);color:#fff;font:500 var(--fs-small) var(--sans);text-decoration:none}
+.skip-link:focus{transform:none}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+
+/* ---------- Masthead, rail, footer ---------- */
+.masthead{max-width:var(--wide);margin:0 auto;padding:22px 24px;display:flex;justify-content:space-between;align-items:center;font:500 var(--fs-ui)/1 var(--sans)}
+.masthead a{text-decoration:none;color:var(--ink-2)}
+.masthead a:hover{color:var(--ink)}
+.masthead .wordmark{color:var(--ink);font-weight:600;display:flex;align-items:center;gap:8px}
+.wordmark svg{width:18px;height:18px;stroke:var(--compute);stroke-width:6;stroke-linecap:square;fill:none}
+
+/* Section rail: only where there is room beside the column. */
+.rail{display:none}
+@media(min-width:1400px){
+  .rail{display:flex;flex-direction:column;gap:2px;position:fixed;left:calc(50% - 690px);width:160px;top:50%;transform:translateY(-50%);font:500 var(--fs-small)/1.3 var(--sans);opacity:0;pointer-events:none;transition:opacity .3s}
+  .rail.is-visible{opacity:1;pointer-events:auto}
+  .rail a{display:flex;gap:10px;padding:6px 10px;border-radius:8px;text-decoration:none;color:var(--ink-2)}
+  .rail a span{font-variant-numeric:tabular-nums;width:18px}
+  .rail a:hover{color:var(--ink)}
+  .rail a[aria-current=true]{color:var(--ink);background:var(--floor)}
+}
+
+.foot{max-width:var(--measure);margin:96px auto 0;padding:24px 24px 48px;border-top:1px solid var(--rule);display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;font:400 var(--fs-small)/1.5 var(--sans);color:var(--ink-2)}
+.foot a{color:var(--ink)}
+
+/* ---------- Reading column ---------- */
+main{padding:0 24px}
+.intro,.prose{max-width:var(--measure);margin:0 auto}
+.intro{padding:72px 0 44px}
+.meta{font:500 var(--fs-small)/1.4 var(--sans);color:var(--ink-2);margin-bottom:18px}
+h1{font:500 var(--fs-display)/1.04 var(--serif);letter-spacing:-.025em;margin-bottom:22px}
+.intro>p:not(.meta){color:var(--ink-2)}
+h2{font:500 var(--fs-title)/1.15 var(--serif);letter-spacing:-.015em;margin-bottom:16px}
+h2 .num{font:500 var(--fs-ui)/1 var(--sans);color:var(--ink-2);vertical-align:.45em;margin-right:12px;font-variant-numeric:tabular-nums}
+.prose{margin-top:44px}
+.prose p+p{margin-top:16px}
+.chapter{margin-top:110px}
+.prose a{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:color-mix(in srgb,currentColor 35%,transparent)}
+.prose a:hover{text-decoration-color:currentColor}
+
+/* The short version: a few bold claims that link to where they are shown. */
+.takeaways{list-style:none;padding:0;margin-top:20px;border-top:1px solid var(--rule)}
+.takeaways li{padding:16px 0;border-bottom:1px solid var(--rule)}
+.takeaways a{font-weight:600;text-decoration:none!important;display:block}
+.takeaways a::after{content:' ↓';color:var(--ink-2);font-weight:400}
+.takeaways a:hover{color:var(--memory)}
+
+/* Onward links after a figure. */
+.more{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:20px;font:500 var(--fs-ui)/1.4 var(--sans)}
+.more a{text-decoration:none!important;color:var(--ink)}
+.more a::after{content:' →';color:var(--ink-2)}
+.more a:hover{color:var(--memory)}
+
+/* A list of pages or items: a name and one line about it. */
+.models{margin-top:120px}
+.model-list{list-style:none;padding:0;margin-top:20px;border-top:1px solid var(--rule)}
+.model-list li{display:grid;grid-template-columns:220px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--rule);font:400 var(--fs-ui)/1.5 var(--sans)}
+.model-list a{font-weight:600;text-decoration:none!important}
+.model-list a::after{content:' →';color:var(--ink-2);font-weight:400}
+.model-list a:hover{color:var(--memory)}
+.model-list span{color:var(--ink-2)}
+.note{margin-top:24px!important;font:400 var(--fs-ui)/1.6 var(--sans);color:var(--ink-2)}
+
+/* ---------- Figures: one shell for every figure ---------- */
+.fig{max-width:var(--measure);margin:36px auto 0;font:400 var(--fs-ui)/1.5 var(--sans)}
+.fig-wide{max-width:var(--wide)}
+.fig-head{display:flex;gap:12px;align-items:center;font-weight:500;margin-bottom:14px;color:var(--ink)}
+.fig-head span{color:var(--ink-2);font-size:var(--fs-small);font-weight:500;white-space:nowrap}
+.fig-head .live{margin-left:auto;display:inline-flex;align-items:center;gap:6px;min-height:30px;padding:4px 12px 4px 10px;border:1px solid var(--rule);border-radius:999px;background:var(--surface);color:var(--ink-2);font:500 var(--fs-small)/1 var(--sans);cursor:pointer;white-space:nowrap}
+.fig-head .live:hover{color:var(--ink);border-color:var(--ink-2)}
+.fig-head .live svg{width:10px;height:10px;fill:currentColor}
+.fig figcaption{margin-top:14px;font-size:var(--fs-small);line-height:1.55;color:var(--ink-2);max-width:var(--measure)}
+.fig figcaption strong{color:var(--ink);font-weight:500}
+.fig figcaption a{color:var(--ink);text-underline-offset:3px}
+.stage{position:relative;background:var(--surface);border:1px solid var(--rule);border-radius:12px;overflow:hidden}
+.stage svg{display:block;width:100%;height:auto}
+
+/* Color swatches: a mark beside text carries identity; text stays ink. */
+.sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:7px;vertical-align:-1px}
+.sw.compute{background:var(--compute)}.sw.memory{background:var(--memory)}.sw.network{background:var(--network)}
+.sw.money{background:var(--money)}.sw.idle{background:var(--idle)}.sw.down{background:var(--down)}
+.sw.scar{background:color-mix(in srgb,var(--down) 38%,#fff)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 20px;margin-top:12px;color:var(--ink-2);font-size:var(--fs-small)}
+
+/* Results under a figure: a small label over a large number. */
+.readouts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:16px;padding-top:16px;border-top:1px solid var(--rule)}
+.legend+.readouts{margin-top:14px}
+.readouts span{display:block;color:var(--ink-2);font-size:var(--fs-small);line-height:1.4}
+.readouts strong{display:block;font:500 var(--fs-title)/1.2 var(--serif);letter-spacing:-.01em;margin-top:4px;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* ---------- Controls: segmented buttons, one toggle, one slider ---------- */
+.controls{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;margin-bottom:12px}
+.seg{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.seg-label{color:var(--ink-2);margin-right:10px}
+.seg button,.toggle{min-height:36px;padding:6px 14px;border:1px solid var(--rule);border-radius:999px;background:var(--surface);cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.seg button:hover,.toggle:hover{border-color:var(--ink-2)}
+.seg button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+.toggle[aria-pressed=true]{background:var(--down);border-color:var(--down);color:#fff}
+.slider{display:flex;align-items:center;gap:12px;flex:1 1 360px;max-width:520px}
+.slider .seg-label{margin:0;white-space:nowrap}
+.slider input{flex:1;accent-color:var(--compute);min-height:32px;cursor:pointer}
+.slider output{font-weight:600;font-variant-numeric:tabular-nums;min-width:3ch;text-align:right}
+
+/* ---------- Stepper: a diagram, a callout, and step controls ---------- */
+.stepper .stage{min-height:420px}
+.callout{position:absolute;right:20px;bottom:20px;width:min(340px,calc(100% - 40px));background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(6px);border:1px solid var(--rule);border-radius:10px;padding:16px 18px;box-shadow:0 8px 24px -12px #1d1c1a33}
+.callout h3{font:600 var(--fs-ui)/1.3 var(--sans);margin-bottom:6px}
+.callout p{color:var(--ink-2)}
+.callout .stat{margin-top:10px;color:var(--ink);font-size:var(--fs-small);font-weight:500;font-variant-numeric:tabular-nums}
+.callout .stat .sw{margin-left:2px}
+.callout-step{animation:rise .35s ease both}
+.step-nav{display:flex;align-items:center;justify-content:center;gap:6px;margin:14px auto 0;padding:4px;width:max-content;border:1px solid var(--rule);border-radius:999px;background:var(--surface)}
+.step-nav button{width:36px;height:36px;border:0;border-radius:999px;background:transparent;cursor:pointer;color:var(--ink-2)}
+.step-nav button:hover{background:var(--floor);color:var(--ink)}
+.step-dots{display:flex;gap:2px}
+.step-dots button{width:28px;position:relative}
+.step-dots button::before{content:'';position:absolute;left:50%;top:50%;width:8px;height:8px;margin:-4px;border-radius:99px;background:var(--idle);transition:width .3s,margin .3s,background .3s}
+.step-dots button[aria-current=true]::before{width:20px;margin-left:-10px;background:var(--ink)}
+
+/* Scenes zoom out as a stepper advances. */
+.iso .scene{opacity:0;transform-box:view-box;transform-origin:35% 50%;transform:scale(1.07);transition:opacity .55s ease,transform .9s cubic-bezier(.2,.8,.2,1)}
+.iso .scene.is-on{opacity:1;transform:none}
+.iso .scene.is-past{transform:scale(.93)}
+
+/* Labels pinned to points in a diagram (positioned by figures.js). */
+.art{position:relative}
+.pin{position:absolute;width:0;height:0;pointer-events:none;z-index:1;animation:rise .35s ease both}
+.pin[hidden]{display:none}
+.pin i{position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:99px;background:var(--ink);box-shadow:0 0 0 2px var(--surface)}
+.pin span{position:absolute;left:14px;top:-13px;white-space:nowrap;padding:3px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--rule);font:500 var(--fs-small)/1.4 var(--sans);color:var(--ink);box-shadow:0 2px 10px -4px #1d1c1a2e}
+.pin-left span{left:auto;right:14px}
+.pin-down i{background:var(--down)}
+.pin-down span{background:var(--down);border-color:var(--down);color:#fff}
+
+/* A status pill in the corner of a live diagram. */
+.phase{position:absolute;left:18px;top:16px;display:flex;align-items:center;padding:5px 12px;border-radius:999px;background:var(--floor);font-weight:500;transition:background .2s}
+
+/* A progress track: colored segments that fill as time passes. */
+.timeline{margin-top:14px}
+.timeline .readouts{border-top:0;padding-top:0}
+.track{position:relative;height:14px;border-radius:99px;background:var(--floor);overflow:hidden;display:flex}
+.track i{display:block;height:100%;width:0}
+.t-compute{background:var(--compute)}
+.t-wait{background:var(--network);margin-left:2px}
+
+/* A clock in the corner of a diagram that plays out over time. */
+.clock{position:absolute;right:18px;top:16px;width:200px;font-weight:500;font-variant-numeric:tabular-nums}
+.clock-track{height:6px;border-radius:99px;background:var(--floor);margin-top:8px;overflow:hidden}
+.clock-track i{display:block;height:100%;width:0;background:var(--ink)}
+
+/* Side-by-side verdicts: the same facts under two definitions. */
+.verdicts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.verdict{border:1px solid var(--rule);border-radius:12px;padding:16px 18px;background:var(--surface)}
+.verdict>span{color:var(--ink-2)}
+.verdict>span strong{color:var(--ink);font-weight:500}
+.verdict .big{display:block;font:500 var(--fs-title)/1.2 var(--serif);margin:6px 0 4px;font-variant-numeric:tabular-nums}
+.verdict p{color:var(--ink-2)}
+.verdict.breach{border-color:color-mix(in srgb,var(--down) 45%,var(--rule))}
+.verdict.breach p{color:var(--ink)}
+
+/* A labelled dot plot: one row per item on a shared axis. */
+.price-plot{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:18px 20px 12px}
+.pp-group{font-size:var(--fs-small);color:var(--ink-2);font-weight:500;padding:10px 0 2px}
+.pp-group:first-child{padding-top:0}
+.pp-row{display:grid;grid-template-columns:96px 1fr 56px;align-items:center;gap:12px;height:30px}
+.pp-name{white-space:nowrap}
+.pp-val{text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
+.pp-lane{position:relative;height:100%}
+.pp-lane::before{content:'';position:absolute;left:0;right:0;top:50%;border-top:1px dashed var(--rule)}
+.pp-dot{position:absolute;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:99px;background:var(--money);box-shadow:0 0 0 2px var(--surface);transition:left 1.1s cubic-bezier(.2,.8,.2,1)}
+.pp-range{position:absolute;top:50%;height:4px;margin-top:-2px;border-radius:99px;background:color-mix(in srgb,var(--money) 35%,transparent);transition:left 1.1s cubic-bezier(.2,.8,.2,1),width 1.1s cubic-bezier(.2,.8,.2,1)}
+.pp-spread{margin-top:6px;color:var(--ink-2)}
+.pp-spread .pp-val{color:var(--ink);opacity:0;transition:opacity .4s .9s}
+.pp-spread.is-on .pp-val{opacity:1}
+.pp-spread .pp-lane::before{display:none}
+.pp-bracket{position:absolute;top:50%;height:10px;margin-top:-8px;width:0;border:1.5px solid var(--ink);border-top:0;border-radius:0 0 3px 3px;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+.pp-axis{display:grid;grid-template-columns:96px 1fr 56px;gap:12px;margin-top:6px;padding-top:8px;border-top:1px solid var(--rule);font-size:var(--fs-small);color:var(--ink-2)}
+.pp-ticks{position:relative;height:18px}
+.pp-ticks span{position:absolute;transform:translateX(-50%);font-variant-numeric:tabular-nums}
+
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ---------- Narrow screens ---------- */
+@media(max-width:760px){
+  :root{--fs-body:18px}
+  main{padding:0 16px}
+  .masthead{padding:16px}
+  .intro{padding:40px 0 28px}
+  .chapter{margin-top:80px}
+  .stepper .stage{min-height:0}
+  .callout{position:static;width:auto;border:0;border-top:1px solid var(--rule);border-radius:0;box-shadow:none;backdrop-filter:none;background:var(--surface)}
+  .readouts{grid-template-columns:1fr 1fr}
+  .verdicts{grid-template-columns:1fr}
+  .model-list li{grid-template-columns:1fr;gap:2px}
+  .pp-row,.pp-axis{grid-template-columns:84px 1fr 52px;gap:8px}
+  .pp-ticks span:nth-child(even),.pp-axis>span:first-child{visibility:hidden}
+  .phase{left:10px;top:10px}
+  .clock{right:12px;top:10px;width:150px}
+  .controls{align-items:flex-start}
+  .seg .seg-label{width:100%;margin-bottom:4px}
+  .slider{flex-basis:100%}
+  /* Dense diagrams drop their pins on phones; the caption and controls carry the labels. */
+  .fig.quiet-pins .pin{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+@media print{
+  .rail,.fig-head .live,.step-nav,.controls{display:none!important}
+  body{background:#fff}
+}
