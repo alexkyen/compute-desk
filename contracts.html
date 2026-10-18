@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="What a GPU service agreement actually covers: how uptime is measured, what a credit is worth, and fourteen clauses to negotiate, applied to your own deal.">
+<meta property="og:title" content="What the contract covers — The Compute Desk">
+<meta property="og:description" content="How uptime is measured, what a credit is worth, and fourteen clauses to negotiate, applied to your own deal.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://alexkyen.github.io/compute-desk/social-card.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:url" content="https://alexkyen.github.io/compute-desk/contracts.html">
+<link rel="canonical" href="https://alexkyen.github.io/compute-desk/contracts.html">
+<meta name="theme-color" content="#fcfbf8">
+<title>What the contract covers — The Compute Desk</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css?v=20261018.6">
+<link rel="stylesheet" href="assets/contracts.css?v=20261018.3">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="masthead">
+  <a class="wordmark" href="index.html"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 11v42M11 32h42M17 17l30 30M17 47l30-30"/></svg>The Compute Desk</a>
+  <a href="methodology.html">Methods &amp; sources</a>
+</header>
+
+<nav class="rail" aria-label="On this page">
+  <a href="#unavailable"><span>01</span>Unavailable</a>
+  <a href="#credits"><span>02</span>Credits</a>
+  <a href="#scenario"><span>·</span>Your scenario</a>
+  <a href="#clauses"><span>03</span>The clauses</a>
+  <a href="#ask"><span>04</span>Ask the supplier</a>
+</nav>
+
+<main id="main">
+  <section class="intro" aria-labelledby="title">
+    <p class="meta"><a href="index.html#contracts">Section 04 of the guide</a></p>
+    <h1 id="title">What the contract covers.</h1>
+    <p>“99.9% uptime” means little until you know what it measures, which failures count, and what you get back. Apply different terms to the same month of failures, then work through the fourteen clauses that decide what the promise is worth.</p>
+  </section>
+
+  <section class="prose" aria-labelledby="short-title">
+    <h2 id="short-title">The short version</h2>
+    <ul class="takeaways">
+      <li><a href="#unavailable">What counts as “unavailable” decides whether you are owed anything.</a> A provider’s API can keep answering while individual GPUs fail. Measured that way, a month that lost thousands of GPU-hours still reads 100%.</li>
+      <li><a href="#credits">A credit is a slice of your bill, not of your loss.</a> It is a percentage of monthly fees, usually offsets future invoices, and is often your only remedy.</li>
+      <li><a href="#clauses">The strongest protections are not credits.</a> Acceptance tests, a replacement deadline, reserved spares, and an exit after repeated breaches do more than any credit tier.</li>
+    </ul>
+  </section>
+
+  <!-- 01 -->
+  <section class="prose chapter" id="unavailable" aria-labelledby="unavailable-title">
+    <h2 id="unavailable-title"><span class="num">01</span>What counts as unavailable</h2>
+    <p>A provider’s control platform can keep responding while individual machines are down. If the contract defines availability by the platform, those failures never count. If it measures delivered GPU-hours, every failed server adds up.</p>
+    <p>Figure 1 plays one month of the fleet in <a href="#scenario">your scenario</a> and measures it both ways.</p>
+  </section>
+
+  <figure class="fig fig-wide" id="outage-experiment" aria-labelledby="fig-month-cap">
+    <div class="fig-head"><span>Figure 1</span>One month of your fleet, measured two ways</div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="How the draft measures uptime" id="def-seg">
+        <span class="seg-label">Your draft measures</span>
+        <button type="button" data-def="plat" aria-pressed="true">Platform responding</button>
+        <button type="button" data-def="inst" aria-pressed="false">GPU-hours delivered</button>
+      </div>
+    </div>
+    <div class="stage">
+      <svg class="iso" id="month-svg" viewBox="0 0 960 400" role="img" aria-label="A grid standing for the fleet over one month. Servers fail and recover while the provider's platform keeps responding."></svg>
+      <div class="clock" aria-hidden="true"><span id="month-day">Day 1</span><div class="clock-track"><i id="month-progress"></i></div><p id="month-lost">0 GPU-hours lost so far</p></div>
+    </div>
+    <div class="legend"><span><i class="sw compute"></i>Running</span><span><i class="sw down"></i>Down now</span><span><i class="sw scar"></i>Down earlier this month</span><span><i class="sw idle"></i>Platform not responding</span></div>
+    <div class="verdicts">
+      <div class="verdict" data-def="plat">
+        <span>If uptime means <strong>the platform responds</strong><em class="yours">Your draft</em></span>
+        <strong class="big" id="v-plat">—</strong>
+        <p id="v-plat-note"></p>
+      </div>
+      <div class="verdict" data-def="inst">
+        <span>If uptime means <strong>GPU-hours delivered</strong><em class="yours">Your draft</em></span>
+        <strong class="big" id="v-inst">—</strong>
+        <p id="v-inst-note"></p>
+      </div>
+    </div>
+    <figcaption id="fig-month-cap">Failures are spread across the month for illustration. The totals, the promise, and its credit schedule come from <a href="#scenario">your scenario</a>. A platform outage counts under both definitions.</figcaption>
+  </figure>
+
+  <!-- 02 -->
+  <section class="prose chapter" id="credits" aria-labelledby="credits-title">
+    <h2 id="credits-title"><span class="num">02</span>What a credit is worth</h2>
+    <p>Even when a failure counts, the remedy is a percentage of the monthly bill, set by a tier schedule. It is usually applied to future invoices rather than paid in cash, and the contract often makes it your only remedy. Compare it with what the lost time cost you.</p>
+  </section>
+
+  <figure class="fig fig-wide" id="fig-credit" aria-labelledby="fig-credit-cap">
+    <div class="fig-head"><span>Figure 2</span>The service credit against the cost of lost work</div>
+    <div class="stage bars">
+      <div class="bar-row loss"><span>Cost of lost work <small id="loss-working"></small></span><div class="bar-track"><i id="loss-bar"></i></div><strong id="loss-val">—</strong></div>
+      <div class="bar-row credit"><span>Service credit under your draft <small id="credit-working"></small></span><div class="bar-track"><i id="credit-bar"></i></div><strong id="credit-val">—</strong></div>
+      <p class="verdict-line" id="status" aria-live="polite"></p>
+    </div>
+    <div class="readouts">
+      <div><span>Measured uptime, your draft</span><strong id="r-uptime">—</strong></div>
+      <div><span>Downtime allowed before any credit</span><strong id="r-allowed">—</strong></div>
+      <div><span>Monthly fees</span><strong id="r-fees">—</strong></div>
+      <div><span>Credit as a share of the loss</span><strong id="r-ratio">—</strong></div>
+    </div>
+    <figcaption id="fig-credit-cap">The cost of lost work is the lost GPU-hours, times the rate, times an assumed multiplier for the work that stalls with them. The multiplier is a sensitivity input, not measured damage. Credits can exceed this modeled loss and may only offset future bills.</figcaption>
+  </figure>
+
+  <!-- Scenario -->
+  <section class="prose chapter" id="scenario" aria-labelledby="scenario-title">
+    <span id="scenario-settings" aria-hidden="true"></span>
+    <h2 id="scenario-title">Your scenario</h2>
+    <p>Every number on this page comes from these settings. They are saved in the page address, so a copied link reopens the same scenario.</p>
+  </section>
+
+  <div class="fig fig-wide scenario" aria-label="Scenario settings">
+    <fieldset class="group">
+      <legend>The promise</legend>
+      <div class="seg" role="group" aria-label="Uptime promise" id="promise-seg">
+        <span class="seg-label">Uptime promise</span>
+        <button type="button" data-sla="0" aria-pressed="false">99.0%</button>
+        <button type="button" data-sla="1" aria-pressed="false">99.5%</button>
+        <button type="button" data-sla="2" aria-pressed="true">99.9%</button>
+      </div>
+      <p class="hint" id="schedule"></p>
+      <div class="seg" role="group" aria-label="Measured over" id="window-seg">
+        <span class="seg-label">Measured over</span>
+        <button type="button" data-win="mo" aria-pressed="true">A month</button>
+        <button type="button" data-win="yr" aria-pressed="false">A year</button>
+      </div>
+      <button type="button" class="toggle" id="excl" aria-pressed="false">The provider invokes an exclusion</button>
+      <p class="hint">Maintenance windows and force majeure can remove an incident from the count entirely.</p>
+    </fieldset>
+    <fieldset class="group">
+      <legend>The month’s failures</legend>
+      <label class="slider" for="node"><span class="seg-label">GPU-hours lost to failed servers</span><input id="node" type="range" min="0" max="20000" step="250" value="5000"><output id="node-out" for="node">5,000</output></label>
+      <p class="hint">For example, 500 GPUs down for 10 hours is 5,000 GPU-hours.</p>
+      <label class="slider" for="platform"><span class="seg-label">Hours the whole platform was down</span><input id="platform" type="range" min="0" max="24" step="0.5" value="0"><output id="platform-out" for="platform">0 h</output></label>
+      <label class="slider" for="mult"><span class="seg-label">Cost of lost work, × the rate</span><input id="mult" type="range" min="1" max="10" step="0.5" value="3"><output id="mult-out" for="mult">3.0×</output></label>
+    </fieldset>
+    <fieldset class="group" id="refdeal">
+      <legend>The deal</legend>
+      <div class="seg" role="group" aria-label="Committed GPUs" id="gpus-seg">
+        <span class="seg-label">Committed H100s</span>
+        <button type="button" data-g="256" aria-pressed="false">256</button>
+        <button type="button" data-g="512" aria-pressed="false">512</button>
+        <button type="button" data-g="1024" aria-pressed="true">1,024</button>
+        <button type="button" data-g="2048" aria-pressed="false">2,048</button>
+        <button type="button" data-g="4096" aria-pressed="false">4,096</button>
+      </div>
+      <div class="seg" role="group" aria-label="Term in months" id="term-seg">
+        <span class="seg-label">Term</span>
+        <button type="button" data-term="12" aria-pressed="false">12 months</button>
+        <button type="button" data-term="24" aria-pressed="true">24 months</button>
+        <button type="button" data-term="36" aria-pressed="false">36 months</button>
+      </div>
+      <label class="slider" for="rate"><span class="seg-label">Rate per GPU-hour</span><input id="rate" type="range" min="1.75" max="3.25" step="0.05" value="2.35"><output id="rate-out" for="rate">$2.35</output></label>
+      <label class="slider" for="pre"><span class="seg-label">Prepaid share of the contract</span><input id="pre" type="range" min="0" max="25" step="5" value="15"><output id="pre-out" for="pre">15%</output></label>
+    </fieldset>
+    <div class="readouts">
+      <div><span>Monthly fees</span><strong id="d-monthly">—</strong></div>
+      <div><span>Total contract value</span><strong id="d-tcv">—</strong></div>
+      <div><span>Prepaid up front</span><strong id="d-prepay">—</strong></div>
+      <div><span>Month in the model</span><strong>730 hours</strong></div>
+    </div>
+    <div class="tool-actions"><button type="button" data-copy-link>Copy scenario link</button><button type="button" id="export-issues">Download the review (CSV)</button><button type="button" data-print>Print the review</button></div>
+    <p class="tool-message" aria-live="polite"></p>
+  </div>
+
+  <!-- 03 -->
+  <section class="prose chapter" id="clauses" aria-labelledby="clauses-title">
+    <span id="contract-review" aria-hidden="true"></span><span id="issues" aria-hidden="true"></span>
+    <h2 id="clauses-title"><span class="num">03</span>The clauses</h2>
+    <p>The availability promise is one clause among many. These fourteen come from a fictional composite agreement patterned on published GPU-cloud terms. Each row shows what the draft says, what to ask for, and what is at stake for the deal in your scenario. Open a row for the redline, then mark where it stands in your review.</p>
+    <p class="caution"><strong>A negotiation aid, not legal advice.</strong> Terms vary by provider, jurisdiction, and deal; use counsel for a real agreement. Dollar figures are scenario exposure: they are not probabilities, and they should not be added together.</p>
+  </section>
+
+  <div class="fig fig-wide board" aria-label="The fourteen clauses">
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Sort the clauses" id="sort-seg">
+        <span class="seg-label">Sort</span>
+        <button type="button" data-sort="stake" aria-pressed="true">By $ at stake</button>
+        <button type="button" data-sort="clause" aria-pressed="false">By clause order</button>
+      </div>
+      <div class="legend kinds"><span><i class="sw money"></i>Modeled from your deal</span><span><i class="sw hatch"></i>Illustrative scenario</span><span>Optionality is left unnumbered</span></div>
+    </div>
+    <div class="board-head" aria-hidden="true"><span>Clause</span><span>The draft says</span><span>You ask for</span><span class="axis" id="axis"></span></div>
+    <div class="clauses" id="clause-list">
+
+      <details class="clause" id="ir-delivery" data-k="delivery" data-ord="1" data-kind="illustrative" name="clauses">
+        <summary><span class="c-name">Delivery damages<small>Delivery · clause 1</small></span><span class="c-draft">“Commercially reasonable efforts” toward a target date</span><span class="c-ask">0.5% of the prepay per day late; walk away with a full refund past 45 days</span><span class="c-stake"><b>—</b><i></i></span></summary>
+        <div class="c-body">
+          <p class="c-pos"><strong>The draft says:</strong> “Commercially reasonable efforts” toward a target date. <strong>You ask for:</strong> 0.5% of the prepay per day late; walk away with a full refund past 45 days.</p>
+          <p><strong>Why it matters.</strong> The draft states a target date without an explicit delivery credit or delay-based exit right.</p>
+          <div class="redline"><p>Provider shall <del>use commercially reasonable efforts to make</del> <ins>make</ins> the Committed Capacity available by the target date.<ins> If Ready-for-Service is delayed beyond the target date, Provider will credit Customer 0.5% of the Initial Payment per day of delay; if the delay exceeds forty-five (45) days, Customer may terminate this Order Form with a full refund of the Initial Payment.</ins></p></div>
+          <p><strong>Effect of the change.</strong> The proposed text ties a missed delivery date to a credit and an eventual exit right. Both the trigger and the remedy need to be defined.</p>
+          <p class="c-model"><strong>How the figure is set.</strong> 1.5 × monthly fees: a 45-day slip, with committed spend and no service or remedy.</p>
+        </div>
+      </details>
+
+      <details class="clause" id="ir-accept" data-k="accept" data-ord="2" data-kind="illustrative" name="clauses">
+        <summary><span class="c-name">Acceptance testing<small>Delivery · clause 1</small></span><span class="c-draft">Ready for service on the provider’s own validation</span><span class="c-ask">Burn-in and acceptance tests to your spec; billing starts at your sign-off</span><span class="c-stake"><b>—</b><i></i></span></summary>
+        <div class="c-body">
+          <p class="c-pos"><strong>The draft says:</strong> Ready for service on the provider’s own validation. <strong>You ask for:</strong> Burn-in and acceptance tests to your spec; billing starts at your sign-off.</p>
+          <p><strong>Why it matters.</strong> The draft lets the provider decide when capacity is ready and start billing on its own validation.</p>
+          <div class="redline"><p>Capacity is Ready for Service upon <del>Provider's completion of its standard validation procedures.</del> <ins>completion of burn-in and acceptance testing — sustained multi-day load, interconnect at specified bandwidth, HBM and ECC error rates within specified thresholds — and Customer's written sign-off.</ins></p></div>
+          <p><strong>Effect of the change.</strong> The proposed acceptance test connects billing to agreed performance criteria and your sign-off.</p>
+          <p class="c-model"><strong>How the figure is set.</strong> 1 × monthly fees: a first month billed on a cluster that fails your spec.</p>
+        </div>
+      </details>
+
+      <details class="clause" id="ir-truedown" data-k="truedown" data-ord="3" data-kind="modeled" name="clauses">
+        <summary><span class="c-name">True-up and true-down<small>Money · clause 2</small></span><span class="c-draft">Committed volume can never be reduced</span><span class="c-ask">±15% at months 9 and 18, at the committed rate</span><span class="c-stake"><b>—</b><i></i></span></summary>
+        <div class="c-body">
+          <p class="c-pos"><strong>The draft says:</strong> Committed volume can never be reduced. <strong>You ask for:</strong> ±15% at months 9 and 18, at the committed rate.</p>
+          <p><strong>Why it matters.</strong> The draft fixes committed volume for the whole term. A later fall in demand does not reduce what you owe.</p>
+          <div class="redline"><p><del>Committed volume may not be reduced during the Committed Term.</del> <ins>Committed volume may be adjusted upward or downward by up to fifteen percent (15%) at months nine (9) and eighteen (18), at the Committed Rate (true-up / true-down).</ins></p></div>
+          <p><strong>Effect of the change.</strong> The checkpoints allow a limited reduction in committed volume. Their timing and size decide how much demand risk remains with you.</p>
+          <p class="c-model"><strong>How the figure is set.</strong> 0.15 × monthly fees × the <span data-months-after-9>15</span> months after month 9: demand falls 15% at the first checkpoint, and the draft makes you pay for it anyway.</p>
+        </div>
+      </details>
+
+      <details class="clause" id="ir-energy" data-k="energy" data-ord="4" data-kind="illustrative" name="clauses">
+        <summary><span class="c-name">Energy pass-through<small>Money · clause 3</small></span><span class="c-draft">Power-cost increases pass through on 30 days’ notice, uncapped</span><span class="c-ask">Capped at 5% per contract year, with auditable documentation</span><span class="c-stake"><b>—</b><i></i></span></summary>
+        <div class="c-body">
+          <p class="c-pos"><strong>The draft says:</strong> Power-cost increases pass through on 30 days’ notice, uncapped. <strong>You ask for:</strong> Capped at 5% per contract year, with auditable documentation.</p>
+          <p><strong>Why it matters.</strong> A pass-through can raise the effective rate even when the quoted base rate is fixed.</p>
+          <div class="redline"><p>The Committed Rate is fixed for the Committed Term, except that Provider may pass through documented increases in power and facility input costs on thirty (30) days' notice<ins>, not to exceed five percent (5%) in any contract year, with supporting documentation subject to Customer audit</ins>.</p></div>
+          <p><strong>Effect of the change.</strong> The cap limits annual increases and gives you access to the supporting documents. It still allows some price movement.</p>
+          <p class="c-model"><strong>How the figure is set.</strong> 0.05 × 12 × monthly fees: one year of increases at the 5% cap you ask for, as a floor on the uncapped exposure.</p>
+        </div>
+      </details>
+
+      <details class="clause" id="ir-prepay" data-k="prepay" data-ord="5" data-kind="modeled" name="clauses">
+        <summary><span class="c-name">Prepay refunds<small>Money · clause 3</small></span><span class="c-draft">The initial payment is non-refundable unless you terminate for cause</span><span class="c-ask">Refundable pro rata on any termination</span><span class="c-stake"><b>—</b><i></i></span></summary>
+        <div class="c-body">
+          <p class="c-pos"><strong>The draft says:</strong> The initial payment is non-refundable unless you terminate for cause. <strong>You ask for:</strong> Refundable pro rata on any termination.</p>
+          <p><strong>Why it matters.</strong> Refund rights decide how much prepaid cash comes back when the agreement ends.</p>
+          <div class="redline"><p>The Initial Payment is <del>non-refundable except upon Customer's termination for cause</del><ins> refundable pro-rata upon any termination of this Order Form</ins>.</p></div>
+          <p><strong>Effect of the change.</strong> Unused prepaid amounts come back on termination. The effect depends on the refund calculation and the other exit terms.</p>
+          <p class="c-model"><strong>How the figure is set.</strong> The prepay itself: cash forfeited under the draft on any termination that is not for your cause.</p>
+        </div>
+      </details>
+
+      <details class="clause" id="ir-mfn" data-k="mfn" data-ord="6" data-kind="optionality" data-chip="Rate protection" name="clauses">
+        <summary><span class="c-name">Most-favored-nation<small>Money · clause 3</small></span><span class="c-draft">Not in the draft</span><span class="c-ask">No comparable customer pays less; audit annually</span><span class="c-stake"><b>Rate protection</b></span></summary>
+        <div class="c-body">
+          <p class="c-pos"><strong>The draft says:</strong> Nothing. <strong>You ask for:</strong> No comparable customer pays less; audit annually.</p>
+          <p><strong>Why it matters.</strong> Nothing in the draft protects you if a comparable customer is offered a lower price.</p>
+          <div class="redline"><p class="missing">Not in the agreement: no most-favored-nation protection.</p><p><ins>3.4 Provider represents that the effective rate hereunder is no less favorable than that offered to any customer of comparable volume and term, and Customer may audit compliance annually (most-favored-nation).</ins></p></div>
+          <p><strong>Effect of the change.</strong> A comparable-customer clause needs a precise comparison group and a usable audit process. It may be hard to verify without access to pricing records.</p>
+          <p class="c-model"><strong>How the figure is set.</strong> Optionality, deliberately left unnumbered.</p>
+        </div>
+      </details>
+
+      <details class="clause" id="ir-def" data-k="def" data-ord="7" data-kind="modeled" name="clauses">
+        <summary><span class="c-name">Definition of “available”<small>Availability · clause 4</small></span><span class="c-draft">“Available” means the platform API answers</span><span class="c-ask">Availability measured per committed GPU-hour, at the node level</span><span class="c-stake"><b>—</b><i></i></span></summary>
+        <div class="c-body">
+          <p class="c-pos"><strong>The draft says:</strong> “Available” means the platform API answers. <strong>You ask for:</strong> Availability measured per committed GPU-hour, at the node level.</p>
+          <p><strong>Why it matters.</strong> A platform-only definition can leave out individual machine failures while the provider’s API stays reachable. <a href="#unavailable">Figure 1</a> compares the two measurements.</p>
+          <div class="redline"><p>4.1 "Monthly Uptime Percentage" means the percentage of minutes in a calendar month during which the Service is Available. The Service is "Available" when <del>Customer is able to access the Provider platform API.</del> <ins>a Committed GPU-hour is delivered by a node that is operational and performing to specification; a GPU-hour is Unavailable if its node is failed, degraded below specified interconnect bandwidth or error thresholds, or withdrawn from service. Monthly Uptime is computed over Committed GPU-hours.</ins></p></div>
+          <p><strong>Effect of the change.</strong> The measured unit becomes delivered GPU-hours, which changes which incidents can trigger a credit.</p>
+          <p class="c-model"><strong>How the figure is set.</strong> <span id="def-model">The credits a bad year would earn when GPU-hours are measured, compared with none when only the platform is.</span></p>
+        </div>
+      </details>
+
+      <details class="clause" id="ir-excl" data-k="excl" data-ord="8" data-kind="modeled" name="clauses">
+        <summary><span class="c-name">Exclusions<small>Availability · clause 4</small></span><span class="c-draft">Maintenance uncapped; node failures excluded by name</span><span class="c-ask">At most 8 hours of maintenance a month on 7 days’ notice; the node exclusion struck</span><span class="c-stake"><b>—</b><i></i></span></summary>
+        <div class="c-body">
+          <p class="c-pos"><strong>The draft says:</strong> Maintenance uncapped; node failures excluded by name. <strong>You ask for:</strong> At most 8 hours of maintenance a month on 7 days’ notice; the node exclusion struck.</p>
+          <p><strong>Why it matters.</strong> The draft excludes individual node and component failures even when they reduce the capacity you can use.</p>
+          <div class="redline"><p>4.2 Excluded from the calculation: scheduled maintenance<ins>, not to exceed eight (8) hours per month on seven (7) days' notice</ins>; events beyond Provider's reasonable control; <del>failures of individual nodes, GPUs, or components where the platform remains accessible;</del> and suspensions under Clause 6.</p></div>
+          <p><strong>Effect of the change.</strong> Scheduled maintenance gets a limit, and the named exclusion for individual-node failures goes away.</p>
+          <p class="c-model"><strong>How the figure is set.</strong> (16 ÷ 730) × monthly fees × 12: uncapped maintenance at 24 hours a month against the 8 you ask for, over a year.</p>
+        </div>
+      </details>
+
+      <details class="clause" id="ir-ttr" data-k="ttr" data-ord="10" data-kind="illustrative" name="clauses">
+        <summary><span class="c-name">Replacement time and hot spares<small>Availability · clause 4</small></span><span class="c-draft">Not in the draft</span><span class="c-ask">Failed nodes replaced within 6 business hours from a 2% hot-spare pool</span><span class="c-stake"><b>—</b><i></i></span></summary>
+        <div class="c-body">
+          <p class="c-pos"><strong>The draft says:</strong> Nothing. <strong>You ask for:</strong> Failed nodes replaced within 6 business hours from a 2% hot-spare pool.</p>
+          <p><strong>Why it matters.</strong> The draft sets no deadline for replacing a failed node and reserves no spares for your cluster.</p>
+          <div class="redline"><p><ins>4.5 Provider will replace any failed node within six (6) business hours from a hot-spare pool maintained at no less than two percent (2%) of cluster size (time-to-replace).</ins></p></div>
+          <p><strong>Effect of the change.</strong> A replacement deadline and reserved spares bring capacity back. Check when the clock starts, which hours it covers, and what happens if the deadline is missed.</p>
+          <p class="c-model"><strong>How the figure is set.</strong> 0.25 × monthly fees: a quarter-month of capacity protected across the term.</p>
+        </div>
+      </details>
+
+      <details class="clause" id="ir-chronic" data-k="chronic" data-ord="11" data-kind="optionality" data-chip="Exit right" name="clauses">
+        <summary><span class="c-name">Exit after repeated breaches<small>Exit · clause 4</small></span><span class="c-draft">Not in the draft</span><span class="c-ask">Three breaches in six months lets you terminate, with no cure period and a pro-rata refund</span><span class="c-stake"><b>Exit right</b></span></summary>
+        <div class="c-body">
+          <p class="c-pos"><strong>The draft says:</strong> Nothing. <strong>You ask for:</strong> Three breaches in six months lets you terminate, with no cure period and a pro-rata refund.</p>
+          <p><strong>Why it matters.</strong> Credits for individual bad months never add up to a way out.</p>
+          <div class="redline"><p><ins>4.6 If Monthly Uptime breaches the Committed Level in any three (3) months within a rolling six (6) month window (chronic breach), Customer may terminate for cause without cure period, with pro-rata refund of the Initial Payment.</ins></p></div>
+          <p><strong>Effect of the change.</strong> A pattern of failures becomes grounds to leave. It depends on which incidents the <a href="#ir-def">definition of “available”</a> counts.</p>
+          <p class="c-model"><strong>How the figure is set.</strong> Optionality, deliberately left unnumbered.</p>
+        </div>
+      </details>
+
+      <details class="clause" id="ir-cure" data-k="cure" data-ord="14" data-kind="illustrative" name="clauses">
+        <summary><span class="c-name">Cure period<small>Exit · clause 6</small></span><span class="c-draft">Every breach gets 30 days’ notice and cure</span><span class="c-ask">A 15-day cure for availability; repeated breaches skip the cure</span><span class="c-stake"><b>—</b><i></i></span></summary>
+        <div class="c-body">
+          <p class="c-pos"><strong>The draft says:</strong> Every breach gets 30 days’ notice and cure. <strong>You ask for:</strong> A 15-day cure for availability; repeated breaches skip the cure.</p>
+          <p><strong>Why it matters.</strong> The time allowed to fix a breach decides when your other remedies become available.</p>
+          <div class="redline"><p>Either party may terminate for material breach not cured within thirty (30) days of written notice<ins>, except that chronic breach under Clause 4.6 requires no cure period and availability breaches carry a fifteen (15) day cure</ins>.</p></div>
+          <p><strong>Effect of the change.</strong> The availability cure period gets shorter, and <a href="#ir-chronic">repeated breaches</a> are treated separately.</p>
+          <p class="c-model"><strong>How the figure is set.</strong> 1 × monthly fees: one month of exposure before any remedy takes effect.</p>
+        </div>
+      </details>
+
+      <details class="clause" id="ir-cap" data-k="cap" data-ord="15" data-kind="illustrative" name="clauses">
+        <summary><span class="c-name">Liability cap and sole remedy<small>Money · clause 6</small></span><span class="c-draft">Liability capped at 3 months’ fees; credits are the sole and exclusive remedy</span><span class="c-ask">A 12-month cap, with confidentiality, data protection, and gross negligence carved out</span><span class="c-stake"><b>—</b><i></i></span></summary>
+        <div class="c-body">
+          <p class="c-pos"><strong>The draft says:</strong> Liability capped at 3 months’ fees; credits are the sole and exclusive remedy. <strong>You ask for:</strong> A 12-month cap, with confidentiality, data protection, and gross negligence carved out.</p>
+          <p><strong>Why it matters.</strong> The cap, the sole-remedy wording, limits on credits, and the claim deadline can each limit what you recover.</p>
+          <div class="redline"><p>PROVIDER'S AGGREGATE LIABILITY UNDER THIS AGREEMENT IS CAPPED AT FEES PAID IN THE <del>THREE (3) MONTHS</del> <ins>TWELVE (12) MONTHS</ins> PRECEDING THE CLAIM, AND SERVICE CREDITS ARE CUSTOMER'S SOLE AND EXCLUSIVE REMEDY FOR ANY FAILURE OF AVAILABILITY.<ins> THE CAP DOES NOT APPLY TO BREACHES OF CONFIDENTIALITY OR DATA PROTECTION, OR TO PROVIDER'S GROSS NEGLIGENCE OR WILLFUL MISCONDUCT.</ins></p><p>4.3 If Monthly Uptime falls below the Committed Level of <select class="lvl" aria-label="Committed level, percent"><option value="0">99.0</option><option value="1">99.5</option><option value="2" selected>99.9</option></select>%, Customer's sole and exclusive remedy is a Service Credit per the Schedule below, applied against future invoices only<del>, provided Customer submits a written claim with supporting logs within thirty (30) days of the incident</del>.<ins> Credits are calculated automatically from Provider telemetry, which Customer may audit on request.</ins></p></div>
+          <p><strong>Effect of the change.</strong> The liability cap and sole-remedy language stay in place; a wider cap, carve-outs, or an added exit need separate review with counsel. Automatic credits from auditable telemetry remove the claim paperwork, though the measurement and dispute process still need to be defined.</p>
+          <p class="interaction"><strong>Read together:</strong> sole-remedy language and the liability cap can sharply limit what any availability promise is worth.</p>
+          <p class="c-model"><strong>How the figure is set.</strong> 9 × monthly fees: on a catastrophic claim, the difference between the 12-month cap you ask for and the draft’s 3-month cap.</p>
+        </div>
+      </details>
+
+      <details class="clause" id="ir-assign" data-k="assign" data-ord="16" data-kind="optionality" data-chip="Exit right" name="clauses">
+        <summary><span class="c-name">Assignment and change of control<small>Exit · clause 7</small></span><span class="c-draft">You may not assign; the provider may, to anyone</span><span class="c-ask">Mutual consent, and an exit if the provider is bought by your competitor</span><span class="c-stake"><b>Exit right</b></span></summary>
+        <div class="c-body">
+          <p class="c-pos"><strong>The draft says:</strong> You may not assign; the provider may, to anyone. <strong>You ask for:</strong> Mutual consent, and an exit if the provider is bought by your competitor.</p>
+          <p><strong>Why it matters.</strong> The draft gives the provider broader assignment rights than you.</p>
+          <div class="redline"><p><del>Customer may not assign this Agreement without Provider's prior written consent. Provider may assign this Agreement to any affiliate or successor, including in connection with a merger, acquisition, or sale of assets.</del> <ins>Neither party may assign this Agreement without the other's prior written consent, not to be unreasonably withheld. If Provider undergoes a change of control to a competitor of Customer, Customer may terminate on ninety (90) days' notice.</ins></p></div>
+          <p><strong>Effect of the change.</strong> Consent to assign becomes mutual, and a change of control to a competitor becomes grounds to leave.</p>
+          <p class="c-model"><strong>How the figure is set.</strong> Optionality, deliberately left unnumbered.</p>
+        </div>
+      </details>
+
+      <details class="clause" id="ir-fm" data-k="fm" data-ord="17" data-kind="illustrative" name="clauses">
+        <summary><span class="c-name">Force majeure carve-out<small>Delivery · clause 8</small></span><span class="c-draft">Supplier shortages and delays count as force majeure</span><span class="c-ask">Supply-chain delays do not excuse delivery under clause 1</span><span class="c-stake"><b>—</b><i></i></span></summary>
+        <div class="c-body">
+          <p class="c-pos"><strong>The draft says:</strong> Supplier shortages and delays count as force majeure. <strong>You ask for:</strong> Supply-chain delays do not excuse delivery under clause 1.</p>
+          <p><strong>Why it matters.</strong> The draft lists supplier shortages and delays among the events that excuse performance.</p>
+          <div class="redline"><p>Neither party is liable for delay caused by events beyond its reasonable control, including acts of government, power or facility failures<del>, and shortages or delays of suppliers or component manufacturers</del>.<ins> Delays in Provider's supply chain do not excuse the delivery obligations of Clause 1.</ins></p></div>
+          <p><strong>Effect of the change.</strong> Supplier delays can no longer excuse the delivery obligation. Other force-majeure events still apply.</p>
+          <p class="c-model"><strong>How the figure is set.</strong> 1.5 × monthly fees: the same slip as delivery damages, excused in advance as force majeure.</p>
+        </div>
+      </details>
+
+    </div>
+  </div>
+
+  <!-- 04 -->
+  <section class="prose chapter" id="ask" aria-labelledby="ask-title">
+    <h2 id="ask-title"><span class="num">04</span>Ask the supplier</h2>
+    <p>Four questions that test the promise before you sign. Each one points to the clause it affects.</p>
+    <ol class="questions">
+      <li><strong>Define “unavailable” for me.</strong> Does it include a single node down, or degraded interconnect performance, or only full loss of the API? What was your fleet’s node-level annualized failure rate last quarter? <a href="#ir-def">Definition of “available”</a> · <a href="#ir-excl">Exclusions</a></li>
+      <li><strong>How is it measured and claimed?</strong> Monthly or annually? Read me the exclusions list. Are credits automatic, or do I file a claim with logs within 30 days? <a href="#ir-excl">Exclusions</a> · <a href="#ir-cap">Liability cap and sole remedy</a></li>
+      <li><strong>What happens when a node fails?</strong> What is your committed time to replace it, do you hold hot spares against my cluster, and can I terminate after repeated breaches? <a href="#ir-ttr">Replacement time</a> · <a href="#ir-chronic">Exit after repeated breaches</a></li>
+      <li><strong>When does billing start?</strong> At your own validation, or when the cluster passes my acceptance tests? <a href="#ir-accept">Acceptance testing</a></li>
+    </ol>
+    <dl class="terms">
+      <div><dt>Time to replace</dt><dd>A contractual maximum on how long a failed node can stay out of service.</dd></div>
+      <div><dt>Hot-spare pool</dt><dd>Standby nodes reserved for your cluster, so a failure is swapped from your own spares instead of waiting on the general fleet.</dd></div>
+      <div><dt>Burn-in and acceptance testing</dt><dd>Stress tests of memory, NVLink, and the network fabric, with pass criteria agreed before billing starts.</dd></div>
+      <div><dt>Chronic breach</dt><dd>An exit trigger keyed to a pattern, such as three breaches in six months, rather than one severe incident.</dd></div>
+    </dl>
+  </section>
+
+  <section class="prose" aria-labelledby="sources-title">
+    <details class="sources" id="sources">
+      <summary><h2 id="sources-title">Assumptions, limits, and sources</h2></summary>
+      <p><strong>The definition of “unavailable” decides which incidents count.</strong> Platform- or region-level definitions can exclude node, GPU, memory, and network-component failures while the API stays reachable. Meta’s Llama 3 team reported 419 unexpected interruptions during 54 days of training on 16,384 H100s, with hardware failures at the node level; Modal has described recurring machine-level faults across a multi-cloud GPU pool.</p>
+      <p><strong>The measurement window changes the result.</strong> A one-hour outage is about 99.86% availability in a 730-hour month, but about 99.989% over a year. Specify the window, the data source, the level of aggregation, and how claims work, not just the headline percentage.</p>
+      <p><strong>Credit recovery depends on what is measured.</strong> A total platform outage may trigger a tier while recurring node failures never register under a platform-only definition. Credits usually reduce future fees rather than being paid in cash, which makes them worth less when the relationship is ending.</p>
+      <p><strong>Operational commitments complement credits.</strong> Replacement deadlines, dedicated spares, burn-in and acceptance testing, telemetry access, and termination rights deal with failures directly. Review them alongside the availability percentage and credit schedule.</p>
+      <p><strong>The model.</strong> A 730-hour month; the deal’s rate and capacity; credits as a tier percentage of monthly fees; failures spread across the month. Tier schedules are a representative composite. Modeled clause figures are computed from the deal with the formula shown in each row; illustrative figures are stated scenarios; optionality is deliberately unnumbered. All parties, figures, and dates in the agreement are fictional.</p>
+      <ul class="source-list">
+        <li>Meta, “The Llama 3 Herd of Models” (2024). <a href="https://arxiv.org/abs/2407.21783" rel="noopener">arxiv.org/abs/2407.21783</a></li>
+        <li>Modal, “Keeping 20,000 GPUs healthy” (January 2026). <a href="https://modal.com/blog/gpu-health" rel="noopener">modal.com/blog/gpu-health</a></li>
+        <li>AWS, “Amazon Compute Service Level Agreement.” <a href="https://aws.amazon.com/compute/sla/" rel="noopener">aws.amazon.com/compute/sla</a></li>
+        <li>CoreWeave, Terms of Service. <a href="https://docs.coreweave.com/docs/policies/terms-of-service" rel="noopener">docs.coreweave.com/docs/policies/terms-of-service</a></li>
+        <li>Lambda, Terms of Service (credits have no cash value and offset future fees only). <a href="https://lambda.ai/legal/terms-of-service" rel="noopener">lambda.ai/legal/terms-of-service</a></li>
+        <li>CoreWeave, Form 10-K for fiscal 2025, filed March 2026: take-or-pay committed contracts and initial-payment structure. <a href="https://www.sec.gov/Archives/edgar/data/1769628/000176962826000104/0001769628-26-000104-index.htm" rel="noopener">sec.gov</a></li>
+        <li>Contract language: an original composite drafted for this guide, patterned on published GPU-cloud SLAs and reported committed-deal structures. No clause reproduces a real agreement.</li>
+      </ul>
+    </details>
+  </section>
+
+  <nav class="prose pager" aria-label="Continue through the guide">
+    <a href="index.html#economics"><small>Previous section</small>03 · What you actually pay</a>
+    <a href="index.html#guide"><small>Back to</small>The guide</a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <span>The Compute Desk · an independent project by Alex Yen</span>
+  <a href="https://github.com/alexkyen/compute-desk/issues">Send a correction</a>
+</footer>
+<script src="assets/desk.js"></script>
+<script src="assets/figures.js?v=20261018.6"></script>
+<script src="assets/contracts.js?v=20261018.2"></script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="What a GPU-hour actually costs: list prices from thirteen sellers and an index of paid rentals, checked 18 October 2026, and how much capacity to reserve against your own demand.">
+<meta property="og:title" content="What you actually pay — The Compute Desk">
+<meta property="og:description" content="GPU list prices from thirteen sellers and an index of paid rentals, checked 18 October 2026, and how much capacity to reserve against your own demand.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://alexkyen.github.io/compute-desk/social-card.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:url" content="https://alexkyen.github.io/compute-desk/costs.html">
+<link rel="canonical" href="https://alexkyen.github.io/compute-desk/costs.html">
+<meta name="theme-color" content="#fcfbf8">
+<title>What you actually pay — The Compute Desk</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css?v=20261018.6">
+<link rel="stylesheet" href="assets/costs.css?v=20261018.6">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="masthead">
+  <a class="wordmark" href="index.html"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 11v42M11 32h42M17 17l30 30M17 47l30-30"/></svg>The Compute Desk</a>
+  <a href="methodology.html">Methods &amp; sources</a>
+</header>
+
+<nav class="rail" aria-label="On this page">
+  <a href="#prices"><span>01</span>Prices</a>
+  <a href="#commitment"><span>02</span>Commitment</a>
+  <a href="#scenario"><span>·</span>Your scenario</a>
+  <a href="#ask"><span>03</span>Ask the seller</a>
+</nav>
+
+<main id="main">
+  <section class="intro" aria-labelledby="title">
+    <p class="meta"><a href="index.html#economics">Section 03 of the guide</a></p>
+    <h1 id="title">What you actually pay.</h1>
+    <p>The hourly price is where the bill starts. What you pay for each useful hour depends on who you buy from, how you buy, and how much of the capacity you actually use.</p>
+  </section>
+
+  <section class="prose" aria-labelledby="short-title">
+    <h2 id="short-title">The short version</h2>
+    <ul class="takeaways">
+      <li><a href="#prices">The same GPU sells for very different prices.</a> In mid-October 2026, an H100 rented on demand listed from $1.33 to $12.29 an hour, while renters actually paid $2.78 on average. Seller type and rental type explain most of the gap.</li>
+      <li><a href="#commitment">Idle capacity raises the real price.</a> A reserved GPU costs the same whether it is busy or idle, so what matters is the cost of each hour you actually use.</li>
+      <li><a href="#commitment">Reserve a GPU only if you will use it often enough.</a> The test is simple: it must be busy for a larger share of hours than the reserved rate divided by the on-demand rate.</li>
+    </ul>
+  </section>
+
+  <!-- 01 -->
+  <section class="prose chapter" id="prices" aria-labelledby="prices-title">
+    <h2 id="prices-title"><span class="num">01</span>What the market charged</h2>
+    <p>Thirteen sellers, eight accelerators, and three ways to rent: pay as you go, commit ahead, or accept that the machine can be taken back. A fourteenth row, Ornn’s index, shows what renters actually paid, as a check on the list prices. Pick an accelerator and a rental type, then open a seller to see how they sell and what to ask.</p>
+  </section>
+
+  <figure class="fig fig-wide" id="stage" aria-labelledby="fig-board-cap" data-market-verified="2026-10-18" data-market-status="live">
+    <div class="fig-head"><span>Figure 1</span>Price per GPU-hour, by seller</div>
+    <p class="archive"><strong>Prices checked 18 October 2026</strong> on each seller’s own price page or price API. List prices change often, and large buyers negotiate; confirm a price before you rely on it.</p>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Accelerator" id="sku-seg"><span class="seg-label">Accelerator</span></div>
+    </div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Rental type" id="channel-seg"><span class="seg-label">Rental type</span></div>
+      <div class="seg" role="group" aria-label="Sort sellers" id="sort-seg"><span class="seg-label">Sort</span><button type="button" data-sort="price">By price</button><button type="button" data-sort="band">By seller type</button></div>
+    </div>
+    <div class="board">
+      <div class="board-head" aria-hidden="true"><span>Seller</span><span class="axis" id="axis"></span><span>Lowest</span><span class="strip-head" id="strip-head"></span></div>
+      <div class="sellers" id="sellers"></div>
+    </div>
+    <div class="legend"><span><i class="mk od"></i>Pay as you go</span><span><i class="mk co"></i>Commit ahead</span><span><i class="mk sp"></i>Can be interrupted</span><span><i class="mk rng"></i>Published range</span><span><i class="cell on"></i>Priced</span><span><i class="cell">×</i>Sold, price on request</span></div>
+    <div class="readouts">
+      <div><span>Price range in this view</span><strong id="r-range">—</strong></div>
+      <div><span>Highest ÷ lowest</span><strong id="r-spread">—</strong></div>
+      <div><span>Sellers with a price</span><strong id="r-count">—</strong></div>
+      <div><span>Prices checked</span><strong>18 Oct 2026</strong></div>
+    </div>
+    <p class="verdict-line" id="board-status" aria-live="polite"></p>
+    <figcaption id="fig-board-cap">Prices use a logarithmic scale, so equal distances are equal ratios: $1.50 to $3 spans the same width as $6 to $12. A bar is a published range: by configuration, region, or term, or for Vast.ai the cheapest to the median live offer. The strip on the right shows all eight accelerators for each seller. Prices exclude tax, storage, support, and data transfer unless the seller’s note says otherwise.</figcaption>
+  </figure>
+
+  <section class="fig fig-wide compare" id="comparePanel" aria-labelledby="compare-title" hidden>
+    <h3 id="compare-title">Your comparison</h3>
+    <div class="compare-table" id="compare-table"></div>
+    <div class="tool-actions"><button type="button" id="export-compare">Download the comparison (CSV)</button><button type="button" id="clear-compare">Clear</button></div>
+    <p class="tool-message" aria-live="polite"></p>
+  </section>
+
+  <!-- 02 -->
+  <section class="prose chapter" id="commitment" aria-labelledby="commitment-title">
+    <h2 id="commitment-title"><span class="num">02</span>What idle capacity costs</h2>
+    <p>Reserved GPUs cost less per hour, but you pay for them every hour. On-demand capacity costs more, but only when work arrives. At <strong data-out="res">$2.00</strong> reserved and <strong data-out="od">$6.00</strong> on demand, a GPU has to be busy more than <strong data-out="breakeven">33.3%</strong> of the time to be worth reserving. Reserve it for 100 hours and you pay <strong data-out="hundred">$200</strong>; rent it for the 50 hours you need and you pay <strong data-out="fifty">$300</strong>.</p>
+    <p>The same test applies to every additional GPU. Figure 2 sorts a period’s hours from busiest to quietest, so you can see how often each reserved GPU would actually work.</p>
+  </section>
+
+  <figure class="fig fig-wide" id="fig-commit" aria-labelledby="fig-commit-cap">
+    <div class="fig-head"><span>Figure 2</span>Hours sorted by demand, and how much of it to reserve</div>
+    <div class="controls">
+      <label class="slider" for="k"><span class="seg-label">Reserved GPUs</span><input id="k" type="range" min="0" max="400" step="1" value="100"><output id="k-out" for="k">100</output></label>
+      <button type="button" class="toggle" id="snap">Use the lowest-cost commitment</button>
+    </div>
+    <div class="stage">
+      <svg class="chart" id="commit-svg" viewBox="0 0 960 320" role="img" aria-label="Demand from the busiest to the quietest hours, with a horizontal line for the reserved GPUs. Drag the line or use the slider to change it."></svg>
+    </div>
+    <div class="legend"><span><i class="sw compute"></i>Reserved, in use</span><span><i class="sw idle"></i>Reserved, idle</span><span><i class="sw money"></i>Rented as needed</span><span id="demand-basis"></span></div>
+    <div class="readouts">
+      <div><span>Cost per GPU-hour served</span><strong id="c-blended">—</strong></div>
+      <div><span>Change from all on demand</span><strong id="c-saving">—</strong></div>
+      <div><span>Reserved hours used</span><strong id="c-util">—</strong></div>
+      <div><span>Work served on demand</span><strong id="c-od">—</strong></div>
+    </div>
+    <p class="working" id="c-working"></p>
+    <p class="verdict-line" id="commit-status" aria-live="polite"></p>
+    <figcaption id="fig-commit-cap">Hours are sorted from highest to lowest demand, so this is a distribution, not a calendar. The model assumes on-demand capacity is always available and that one GPU-hour is as good as another.</figcaption>
+  </figure>
+
+  <!-- Scenario -->
+  <section class="prose chapter" id="scenario" aria-labelledby="scenario-title">
+    <h2 id="scenario-title">Your scenario</h2>
+    <p>Figure 2 runs on these rates and this demand. They are saved in the page address, except an imported file, which stays in your browser.</p>
+  </section>
+
+  <div class="fig fig-wide scenario" aria-label="Scenario settings">
+    <fieldset class="group">
+      <legend>Rates per GPU-hour</legend>
+      <label class="number" for="res"><span class="seg-label">Reserved</span><span class="money-input">$<input id="res" type="number" min="0.01" step="0.01" value="2.00"></span></label>
+      <label class="number" for="od"><span class="seg-label">On demand</span><span class="money-input">$<input id="od" type="number" min="0.01" step="0.01" value="6.00"></span></label>
+      <p class="hint" id="rule"></p>
+    </fieldset>
+    <fieldset class="group">
+      <legend>Demand</legend>
+      <label class="number" for="avg"><span class="seg-label">Average GPUs in use</span><input id="avg" type="number" min="1" step="1" value="100"></label>
+      <label class="slider" for="rho"><span class="seg-label">Peak ÷ average</span><input id="rho" type="range" min="1.3" max="8" step="0.1" value="4"><output id="rho-out" for="rho">4.0×</output></label>
+      <p class="hint">Spikier demand puts more hours at the quiet end, which lowers the best commitment.</p>
+    </fieldset>
+    <fieldset class="group">
+      <legend>Your own demand</legend>
+      <label class="file" for="csv"><span class="seg-label">Hourly demand, CSV or text</span><input id="csv" type="file" accept=".csv,.txt,text/csv,text/plain"></label>
+      <p class="hint" id="csv-status">Using an illustrative curve.</p>
+      <button type="button" class="toggle" id="reset-demand" hidden>Go back to the illustrative curve</button>
+      <p class="hint">One column of GPU counts, or a timestamp followed by a count. The file never leaves your browser and is not saved in links.</p>
+    </fieldset>
+    <div class="tool-actions"><button type="button" id="share" data-copy-link>Copy scenario link</button><button type="button" id="download-summary">Download a summary</button></div>
+    <p class="tool-message" aria-live="polite"></p>
+  </div>
+
+  <!-- 03 -->
+  <section class="prose chapter" id="ask" aria-labelledby="ask-title">
+    <h2 id="ask-title"><span class="num">03</span>Ask the seller</h2>
+    <p>A quoted price is incomplete until these are answered. Each seller’s file in Figure 1 adds the question that matters most for that seller.</p>
+    <ol class="questions">
+      <li><strong>What exactly is this price for?</strong> Region, machine shape, interconnect, term, and start date. Two prices for the same GPU are only comparable when these match.</li>
+      <li><strong>Is the capacity committed, or only quota?</strong> What is energized and orderable today at this rate, and what depends on a future site or delivery date?</li>
+      <li><strong>What sits outside the hourly rate?</strong> Storage, data transfer, support, minimum terms, and prepayment.</li>
+      <li><strong>Can the commitment move with demand?</strong> A check-in to adjust committed volume limits the cost of reserving too much. <a href="contracts.html#ir-truedown">True-up and true-down</a></li>
+    </ol>
+  </section>
+
+  <section class="prose" aria-labelledby="sources-title">
+    <details class="sources" id="sources">
+      <summary><h2 id="sources-title">Assumptions, limits, and sources</h2></summary>
+      <p><strong>Every price is a public price, checked on 18 October 2026.</strong> Each one links to the seller’s own price page or price API, and its note gives the raw instance price. A per-GPU price is the instance price divided by its GPU count. Where a seller sells a GPU without publishing a price, the board says “price on request” rather than estimating one. Recheck the source before citing a value: list prices move, and large buyers negotiate well below them.</p>
+      <p><strong>The index is not an offer.</strong> Ornn’s Compute Price Index is the volume-weighted average of on-demand rental prices actually paid across its contributing providers, settled daily for four GPUs. It shows where trades clear relative to list prices. Reserved and long-term contracts are outside it, and Ornn discloses that its affiliates trade physical compute.</p>
+      <p><strong>Switch accelerators before ranking sellers.</strong> A seller’s position changes with product, rental type, region, and term. Shortlist within the configuration you are negotiating rather than drawing a provider-wide conclusion from one price.</p>
+      <p><strong>The commitment model is a newsvendor problem.</strong> Reserve a GPU when its expected utilization is at least the reserved rate divided by the on-demand rate. The cost curve often has a broad minimum, so getting the size slightly wrong may matter less than duration, delivery, and counterparty risk, which the model does not price.</p>
+      <p><strong>Limits.</strong> The model assumes the demand distribution repeats, on-demand capacity is always available, rates are flat, and GPU-hours are interchangeable. It omits growth, minimum billing increments, placement, performance, and outages. Imported observations keep their distribution but lose their time order.</p>
+      <ul class="source-list" id="source-list"></ul>
+    </details>
+  </section>
+
+  <nav class="prose pager" aria-label="Continue through the guide">
+    <a href="index.html#networks"><small>Previous section</small>02 · Where the time goes</a>
+    <a href="contracts.html"><small>Next section</small>04 · What the contract covers</a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <span>The Compute Desk · an independent project by Alex Yen</span>
+  <a href="https://github.com/alexkyen/compute-desk/issues">Send a correction</a>
+</footer>
+<div class="tip" id="tip" role="tooltip" hidden></div>
+<script src="assets/desk.js"></script>
+<script src="assets/demand-import.js"></script>
+<script src="assets/figures.js?v=20261018.6"></script>
+<script src="assets/price-data.js?v=20261018.3"></script>
+<script src="assets/costs.js?v=20261018.4"></script>
+</body>
+</html>

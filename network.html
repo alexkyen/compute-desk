@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Where training time goes: how the network sets the wait in every step, what a fat-tree or rail layout costs in switches and cables, and what breaks when a switch fails.">
+<meta property="og:title" content="Where the time goes — The Compute Desk">
+<meta property="og:description" content="How the network sets the wait in every training step, what each layout costs, and what breaks when a switch fails.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://alexkyen.github.io/compute-desk/social-card.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:url" content="https://alexkyen.github.io/compute-desk/network.html">
+<link rel="canonical" href="https://alexkyen.github.io/compute-desk/network.html">
+<meta name="theme-color" content="#fcfbf8">
+<title>Where the time goes — The Compute Desk</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css?v=20261018.6">
+<link rel="stylesheet" href="assets/network.css?v=20261018">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="masthead">
+  <a class="wordmark" href="index.html"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 11v42M11 32h42M17 17l30 30M17 47l30-30"/></svg>The Compute Desk</a>
+  <a href="methodology.html">Methods &amp; sources</a>
+</header>
+
+<nav class="rail" aria-label="On this page">
+  <a href="#time"><span>01</span>The wait</a>
+  <a href="#layout"><span>02</span>The layout</a>
+  <a href="#row"><span>03</span>The row</a>
+  <a href="#scenario"><span>·</span>Your scenario</a>
+  <a href="#ask"><span>04</span>Ask the supplier</a>
+</nav>
+
+<main id="main">
+  <section class="intro" aria-labelledby="title">
+    <p class="meta"><a href="index.html#networks">Section 02 of the guide</a></p>
+    <h1 id="title">Where the time goes.</h1>
+    <p>Large jobs spread across many GPUs, and on every step they stop to exchange results. The network decides how long that takes, how much equipment it needs, and what stops working when a switch fails.</p>
+  </section>
+
+  <section class="prose" aria-labelledby="short-title">
+    <h2 id="short-title">The short version</h2>
+    <ul class="takeaways">
+      <li><a href="#time">Where a job runs matters before how fast the network is.</a> Inside one server, GPUs talk over NVLink at hundreds of gigabytes a second. Across the cluster, every message crosses switches at a small fraction of that.</li>
+      <li><a href="#time">Thinner uplinks stretch every step.</a> With half the capacity between leaf and spine switches, a cluster-wide job waits twice as long to exchange results, and each useful hour costs more.</li>
+      <li><a href="#layout">The layout trades flexibility for equipment.</a> Rails need fewer switches for the traffic training expects, but a failed rail switch touches every server, and other messages take a detour.</li>
+    </ul>
+  </section>
+
+  <!-- 01 -->
+  <section class="prose chapter" id="time" aria-labelledby="time-title">
+    <h2 id="time-title"><span class="num">01</span>The wait in every step</h2>
+    <p>In distributed training, every GPU computes its share of an update, then all of them combine their results in a step called <em>all-reduce</em>. Some of that exchange overlaps with computing; the rest adds to every step while the chips wait.</p>
+    <p>How long it takes depends on which connections the job uses. Figure 1 runs one step for a job that fits in one server, one group of servers, or the whole cluster, on the layout chosen in Figure 2.</p>
+  </section>
+
+  <figure class="fig fig-wide" id="fig-time" aria-labelledby="fig-time-cap">
+    <div class="fig-head"><span>Figure 1</span>One training step, on the network in your scenario</div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Where the job runs" id="span-seg">
+        <span class="seg-label">Where the job runs</span>
+        <button type="button" data-span="node">One server · 8 GPUs</button>
+        <button type="button" data-span="leaf">One group · 32</button>
+        <button type="button" data-span="cluster">Whole cluster · 128</button>
+      </div>
+      <div class="seg" role="group" aria-label="Fat-tree uplink capacity" id="over-seg">
+        <span class="seg-label">Fat-tree uplinks</span>
+        <button type="button" data-over="1">Full · 1:1</button>
+        <button type="button" data-over="2">Half · 2:1</button>
+        <button type="button" data-over="4">Quarter · 4:1</button>
+      </div>
+    </div>
+    <div class="stage">
+      <svg class="iso" id="time-svg" viewBox="0 0 960 470" role="img" aria-label="128 GPUs in four groups of four servers. Each group has a leaf switch; two spine switches join the groups. The selected job computes, then exchanges results over the connections it uses."></svg>
+      <div class="phase" id="time-phase" aria-hidden="true"><i class="sw compute"></i>Computing</div>
+    </div>
+    <div class="timeline">
+      <div class="track" aria-hidden="true"><i class="t-compute" id="t-compute"></i><i class="t-wait" id="t-wait"></i></div>
+      <div class="readouts" aria-live="polite">
+        <div><span>Bandwidth per GPU</span><strong id="r-bw">—</strong></div>
+        <div><span>Full exchange time</span><strong id="r-sync">—</strong></div>
+        <div><span>Compute throughput kept</span><strong id="r-kept">—</strong></div>
+        <div><span id="r-cost-label">Real cost of a $2.50 GPU-hour</span><strong id="r-cost">—</strong></div>
+      </div>
+    </div>
+    <p class="working" id="time-working"></p>
+    <p class="verdict-line" id="time-status"></p>
+    <figcaption id="fig-time-cap"><span id="bandwidth-basis"></span> A communication model for one full-gradient ring all-reduce, not a training benchmark. The layout comes from <a href="#layout">Figure 2</a>; the model size, step time, overlap, and price from <a href="#scenario">your scenario</a>.</figcaption>
+  </figure>
+
+  <!-- 02 -->
+  <section class="prose chapter" id="layout" aria-labelledby="layout-title">
+    <h2 id="layout-title"><span class="num">02</span>How the cluster is wired</h2>
+    <p>A <em>fat-tree</em> routes messages through local leaf switches and shared spine switches, so any GPU can reach any other. A <em>rail</em> layout instead wires matching GPU positions across servers to the same switch. Rails need less equipment for the traffic training expects, but messages between different positions take a detour inside a server, and a failed switch takes out one position everywhere.</p>
+    <p>Figure 2 shows both on 16 GPUs so the connections stay readable. The counts below it are for the full cluster in your scenario, and the layout you pick here also sets how Figure 1 routes a cluster-wide job.</p>
+  </section>
+
+  <figure class="fig fig-wide" id="fig-layout" aria-labelledby="fig-layout-cap">
+    <div class="fig-head"><span>Figure 2</span>Two ways to wire the same servers</div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Network layout" id="topo-seg">
+        <span class="seg-label">Layout</span>
+        <button type="button" data-topo="fat">Fat-tree</button>
+        <button type="button" data-topo="rail">Rails</button>
+      </div>
+      <div class="seg" role="group" aria-label="What to show" id="scen-seg">
+        <span class="seg-label">Show</span>
+        <button type="button" data-scen="coll">Working together</button>
+        <button type="button" data-scen="cross">A message across positions</button>
+        <button type="button" data-scen="fail">A switch offline</button>
+      </div>
+    </div>
+    <div class="stage">
+      <svg class="iso" id="layout-svg" viewBox="0 0 960 470" role="img" aria-label="Four servers of four GPUs wired either through leaf and spine switches or through four rail switches, with the selected traffic or failure shown."></svg>
+    </div>
+    <p class="verdict-line" id="layout-status" aria-live="polite"></p>
+    <div class="readouts five" aria-live="polite">
+      <div><span>Switches</span><strong id="b-switches">—</strong></div>
+      <div><span>Optical links</span><strong id="b-links">—</strong></div>
+      <div><span>Optics budget</span><strong id="b-optics">—</strong></div>
+      <div><span>Messages across positions</span><strong id="b-cross">—</strong></div>
+      <div><span>One switch can affect</span><strong id="b-blast">—</strong></div>
+    </div>
+    <p class="working" id="b-compare"></p>
+    <figcaption id="fig-layout-cap">The diagram shows routes and failure scope, not measured bandwidth. The counts are a two-tier planning estimate for <span id="b-basis">your plan</span>; an optical-link allowance covers a complete link, not one cable or transceiver. Get the supplier’s port map before buying.</figcaption>
+  </figure>
+
+  <!-- 03 -->
+  <section class="prose chapter" id="row" aria-labelledby="row-title">
+    <h2 id="row-title"><span class="num">03</span>The physical row</h2>
+    <p>The diagrams above are logical. In a building, leaf switches sit on top of racks, spine switches fill a rack at the end of the row, and the links between them run through a tray overhead. Figure 3 walks one representative row, using the uplink capacity from Figure 1.</p>
+  </section>
+
+  <figure class="fig fig-wide stepper" id="fig-row" aria-labelledby="fig-row-cap">
+    <div class="fig-head"><span>Figure 3</span>Eight racks, one network</div>
+    <div class="stage">
+      <svg class="iso" id="row-svg" viewBox="0 0 960 520" role="img" aria-label="A row of eight compute racks and one network rack, shown in four steps: the room, the connections, the cables at the chosen uplink capacity, and a rail layout."></svg>
+      <div class="callout" aria-live="off">
+        <div class="callout-step" data-step="0"><h3>The room</h3><p>Eight compute racks share a network. Rack 3 is the NVL72 from section 01; the rack at the end holds the shared switches. This is one possible placement, not a standard for every cluster.</p><p class="stat"><i class="sw compute"></i>8 compute racks · <i class="sw network"></i>1 network rack · 2.36 m tall · row ≈ 5.9 m</p></div>
+        <div class="callout-step" data-step="1" hidden><h3>The connections</h3><p>Each of the eight leaf switches connects to each of four spine switches: 8 × 4 = 32 logical links. One logical link can be several physical lanes or cables.</p><p class="stat"><i class="sw network"></i>8 leaf switches · 4 spines · 32 links drawn</p></div>
+        <div class="callout-step" data-step="2" hidden><h3>The cables</h3><p id="row-cables"></p><p class="stat" id="row-cables-stat"></p></div>
+        <div class="callout-step" data-step="3" hidden><h3>The alternative</h3><p>With rails, matching GPU positions connect through eight rail switches instead of eight leaves and four spines. Losing one rail switch affects that position in all eight racks; messages to other positions take a detour.</p><p class="stat"><i class="sw network"></i>12 → 8 switches · <i class="sw down"></i>one rail lost: 8 racks affected</p></div>
+      </div>
+    </div>
+    <div class="step-nav" role="group" aria-label="Figure 3 steps">
+      <button type="button" class="step-prev" aria-label="Previous step">←</button>
+      <div class="step-dots"></div>
+      <button type="button" class="step-next" aria-label="Next step">→</button>
+    </div>
+    <figcaption id="fig-row-cap">A representative row, not a construction drawing. Lines are logical links; one may need several lanes or cable assemblies. Short links can be copper, longer or faster ones need active or optical cables, and the real count comes from the supplier’s port map.</figcaption>
+  </figure>
+
+  <!-- Scenario -->
+  <section class="prose chapter" id="scenario" aria-labelledby="scenario-title">
+    <h2 id="scenario-title">Your scenario</h2>
+    <p>Figures 1 and 2 use these settings, along with the job placement and uplink capacity in Figure 1 and the layout in Figure 2. All of them are saved in the page address.</p>
+  </section>
+
+  <div class="fig fig-wide scenario" aria-label="Scenario settings">
+    <fieldset class="group">
+      <legend>The job</legend>
+      <label class="slider" for="params"><span class="seg-label">Model size</span><input id="params" type="range" min="7" max="405" step="1" value="70"><output id="params-out" for="params">70B</output></label>
+      <label class="number" for="compute"><span class="seg-label">Compute-only step, seconds</span><input id="compute" type="number" min="0.01" step="0.1" value="10"></label>
+      <label class="number" for="overlap"><span class="seg-label">Exchange hidden by computing, %</span><input id="overlap" type="number" min="0" max="100" step="5" value="50"></label>
+      <label class="number" for="sticker"><span class="seg-label">Quoted price per GPU-hour, $</span><input id="sticker" type="number" min="0.01" step="0.01" value="2.50"></label>
+    </fieldset>
+    <fieldset class="group">
+      <legend>The fabric</legend>
+      <div class="seg" role="group" aria-label="Network protocol" id="fabric-seg">
+        <span class="seg-label">Protocol, both at 400 Gb/s</span>
+        <button type="button" data-fabric="ib">InfiniBand</button>
+        <button type="button" data-fabric="roce">RoCE v2</button>
+      </div>
+      <p class="hint">Assumed efficiency: 92% for InfiniBand, 80% for tuned RoCE. These are planning inputs, not a benchmark between protocols.</p>
+      <label class="number" for="measured"><span class="seg-label">Measured all-reduce bandwidth, GB/s</span><input id="measured" type="number" min="0" step="1" value="0"></label>
+      <p class="hint">Leave at 0 to use the estimate. A measured NCCL number for your job size replaces the protocol and uplink estimates.</p>
+    </fieldset>
+    <fieldset class="group">
+      <legend>The plan</legend>
+      <label class="number" for="gpus"><span class="seg-label">GPUs in the cluster</span><input id="gpus" type="number" min="16" step="8" value="512"></label>
+      <label class="number" for="radix"><span class="seg-label">Ports per switch</span><input id="radix" type="number" min="16" step="8" value="64"></label>
+      <label class="number" for="rails"><span class="seg-label">GPUs per server (rails)</span><input id="rails" type="number" min="1" max="16" step="1" value="8"></label>
+      <div class="seg" role="group" aria-label="Network planes" id="planes-seg">
+        <span class="seg-label">Independent network planes</span>
+        <button type="button" data-planes="1">One</button>
+        <button type="button" data-planes="2">Two</button>
+      </div>
+      <label class="number" for="optic"><span class="seg-label">Allowance per optical link, $</span><input id="optic" type="number" min="0" step="100" value="1200"></label>
+    </fieldset>
+    <div class="tool-actions"><button type="button" data-copy-link>Copy scenario link</button><button type="button" id="download-time">Download the step summary</button><button type="button" id="download-bom">Download the parts estimate (CSV)</button></div>
+    <p class="tool-message" aria-live="polite"></p>
+  </div>
+
+  <!-- 04 -->
+  <section class="prose chapter" id="ask" aria-labelledby="ask-title">
+    <h2 id="ask-title"><span class="num">04</span>Ask the supplier</h2>
+    <p>A protocol name and a line rate are where the conversation starts. These questions get to what the network will actually do for your jobs.</p>
+    <ol class="questions">
+      <li><strong>What do you measure, not what is the line rate?</strong> Which fabric and NIC generation, and what NCCL all-reduce bus bandwidth do you see at my job size? <a href="#scenario">Enter it in your scenario</a></li>
+      <li><strong>What is the oversubscription, leaf to spine?</strong> And can your scheduler keep my job inside one leaf group or one rail? <a href="#time">Figure 1</a></li>
+      <li><strong>Fat-tree or rails?</strong> Show me the topology diagram and the physical port map, and tell me exactly which nodes, rails, and jobs stop when one switch fails. <a href="#layout">Figure 2</a></li>
+      <li><strong>If it is rails, is the scheduler rail-aware?</strong> What are your measured all-to-all numbers, not just all-reduce? <a href="#layout">Figure 2</a></li>
+      <li><strong>Walk me down the row.</strong> Which rack holds the spines, how many fibers are in the tray at my ratio, and what kind of cable is each link? <a href="#row">Figure 3</a></li>
+    </ol>
+    <dl class="terms">
+      <div><dt>All-reduce</dt><dd>The step where every GPU combines its part of an update with all the others, so each ends up with the same result.</dd></div>
+      <div><dt>Oversubscription</dt><dd>The ratio of capacity below a leaf switch to capacity above it. At 2:1, traffic leaving the group shares half as much bandwidth.</dd></div>
+      <div><dt>Fat-tree</dt><dd>Leaf switches for each group of servers, joined by shared spine switches, so any GPU can reach any other.</dd></div>
+      <div><dt>Rails</dt><dd>One switch per GPU position, linking that position across every server. Efficient for matched traffic; other traffic detours inside a server.</dd></div>
+    </dl>
+  </section>
+
+  <section class="prose" aria-labelledby="sources-title">
+    <details class="sources" id="sources">
+      <summary><h2 id="sources-title">Assumptions, limits, and sources</h2></summary>
+      <p><strong>The step model.</strong> One FP16 copy of every gradient moves through a ring all-reduce: exchange time = 2 × gradient size × (GPUs − 1) ÷ (GPUs × bandwidth). The part not hidden by computing is added to the compute-only step, and the quoted price is divided by the share of compute throughput kept. It is a sensitivity calculation, not a benchmark; it leaves out sharding, topology-aware algorithms, pipeline bubbles, congestion, storage, and failures.</p>
+      <p><strong>Bandwidth.</strong> 810 GB/s inside one eight-GPU server; 400 Gb/s (50 GB/s) per GPU outside it, times the protocol’s assumed efficiency, divided by the oversubscription ratio when a fat-tree job crosses the spine. With rails, the all-reduce stays on each GPU’s rail, so uplink sharing does not apply. These are scenario assumptions, not a specification for every H100 system; replace them with measured bus bandwidth.</p>
+      <p><strong>Protocol labels do not establish delivered performance.</strong> InfiniBand and RoCE can run the same wire rate and both carry RDMA. What they deliver depends on NIC and switch generation, topology, congestion control, tuning, and job size.</p>
+      <p><strong>The parts estimate.</strong> A two-tier Clos rule for the fat-tree (half of each switch’s ports face down) and one switch group per rail for rails, multiplied by the number of planes. When a rail needs more than one switch group, links between those groups are not counted. It exposes quote assumptions; it does not replace the supplier’s port map.</p>
+      <p><strong>Inference is different.</strong> Single-server serving may not need a training-grade fabric. Large mixture-of-experts models, split prefill and decode, or models sharded across servers can create heavy traffic between servers; size the network from the serving design and its measured communication.</p>
+      <ul class="source-list">
+        <li>NVIDIA, NCCL collective operations. <a href="https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/usage/collectives.html" rel="noopener">docs.nvidia.com/deeplearning/nccl</a></li>
+        <li>NVIDIA, NCCL algorithm selection. <a href="https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/env.html#nccl-algo" rel="noopener">docs.nvidia.com/deeplearning/nccl/…/env.html</a></li>
+        <li>The row in Figure 3 is a representative layout drawn for this guide: eight racks, four spines, one line per logical uplink. It does not size network cards, lanes, cables, cooling, or power.</li>
+      </ul>
+    </details>
+  </section>
+
+  <nav class="prose pager" aria-label="Continue through the guide">
+    <a href="hardware.html"><small>Previous section</small>01 · What you rent</a>
+    <a href="costs.html"><small>Next section</small>03 · What you actually pay</a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <span>The Compute Desk · an independent project by Alex Yen</span>
+  <a href="https://github.com/alexkyen/compute-desk/issues">Send a correction</a>
+</footer>
+<script src="assets/desk.js"></script>
+<script src="assets/figures.js?v=20261018.6"></script>
+<script src="assets/network.js?v=20261018.5"></script>
+</body>
+</html>

@@ -4,8 +4,8 @@
   "description": "An interactive field guide to the machines, connections, and economics behind AI.",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f5f3ed",
-  "theme_color": "#f5f3ed",
+  "background_color": "#fcfbf8",
+  "theme_color": "#fcfbf8",
   "icons": [
     {
       "src": "favicon.svg",

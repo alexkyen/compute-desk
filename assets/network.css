@@ -1,0 +1,11 @@
+/* Where the time goes: the page-specific pieces. Everything else comes from site.css. */
+
+/* Figure 2 reports five planning counts. */
+.readouts.five{grid-template-columns:repeat(5,minmax(0,1fr))}
+.readouts.five strong{white-space:normal}
+
+/* The two figures with many connections drop their pins on phones; the captions carry the labels. */
+@media(max-width:760px){
+  .readouts.five{grid-template-columns:1fr 1fr}
+  #fig-time .pin,#fig-layout .pin{display:none}
+}

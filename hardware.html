@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="What you rent when you rent a GPU: whether your model fits in its memory, how today's GPUs compare, and a 3D look inside a 72-GPU NVL72 rack.">
+<meta property="og:title" content="What you rent — The Compute Desk">
+<meta property="og:description" content="Whether your model fits, how today's GPUs compare, and a 3D look inside a 72-GPU rack.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://alexkyen.github.io/compute-desk/social-card.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:url" content="https://alexkyen.github.io/compute-desk/hardware.html">
+<link rel="canonical" href="https://alexkyen.github.io/compute-desk/hardware.html">
+<meta name="theme-color" content="#fcfbf8">
+<title>What you rent — The Compute Desk</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css?v=20261018.6">
+<link rel="stylesheet" href="assets/hardware.css?v=20261018">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="masthead">
+  <a class="wordmark" href="index.html"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 11v42M11 32h42M17 17l30 30M17 47l30-30"/></svg>The Compute Desk</a>
+  <a href="methodology.html">Methods &amp; sources</a>
+</header>
+
+<nav class="rail" aria-label="On this page">
+  <a href="#fit"><span>01</span>Will it fit?</a>
+  <a href="#gpus"><span>02</span>The GPUs</a>
+  <a href="#rack"><span>03</span>The rack</a>
+  <a href="#ask"><span>04</span>Ask the supplier</a>
+</nav>
+
+<main id="main">
+  <section class="intro" aria-labelledby="title">
+    <p class="meta"><a href="index.html#hardware">Section 01 of the guide</a></p>
+    <h1 id="title">What you rent.</h1>
+    <p>A GPU-hour buys a slice of a much larger machine. Memory decides what fits, the connections decide what can work together, and power and cooling decide where it can run at all.</p>
+  </section>
+
+  <section class="prose" aria-labelledby="short-title">
+    <h2 id="short-title">The short version</h2>
+    <ul class="takeaways">
+      <li><a href="#fit">Memory decides what fits.</a> At 16-bit precision, a 70-billion-parameter model needs about 140 GB for its weights alone: more than an H100’s 80 GB, and barely inside an H200’s 141 GB.</li>
+      <li><a href="#gpus">Newer GPUs win on different measures.</a> Memory, memory speed, compute, power, and how many GPUs connect directly each grew at a different rate, so rank them by what your work runs out of first.</li>
+      <li><a href="#rack">At rack scale, the building becomes part of the product.</a> An NVL72 joins 72 GPUs into one NVLink domain and draws about 120 kW, which needs liquid cooling the facility has to deliver.</li>
+    </ul>
+  </section>
+
+  <!-- 01 -->
+  <section class="prose chapter" id="fit" aria-labelledby="fit-title">
+    <h2 id="fit-title"><span class="num">01</span>Will the model fit?</h2>
+    <p>Every parameter takes up memory: 2 bytes at 16-bit precision, 1 byte at 8-bit, half a byte at 4-bit. Multiply by the model size and you have the floor for its weights. If they do not fit on one GPU, the model has to be split across several, and those GPUs have to talk to each other on every step.</p>
+  </section>
+
+  <figure class="fig fig-wide" id="fig-fit" aria-labelledby="fig-fit-cap">
+    <div class="fig-head"><span>Figure 1</span>Model weights against each GPU’s memory</div>
+    <div class="controls">
+      <label class="slider" for="model"><span class="seg-label">Model size</span><input id="model" type="range" min="0" max="1" step="0.001" value="0.567" aria-valuetext="70 billion parameters"><output id="model-out" for="model">70B</output></label>
+      <div class="seg" role="group" aria-label="Precision" id="bits-seg">
+        <span class="seg-label">Precision</span>
+        <button type="button" data-bits="16">16-bit</button>
+        <button type="button" data-bits="8">8-bit</button>
+        <button type="button" data-bits="4">4-bit</button>
+      </div>
+    </div>
+    <div class="stage fit" id="fit-rows"></div>
+    <div class="legend"><span><i class="sw memory"></i>Model weights</span><span><i class="sw free"></i>Memory left on each GPU</span><span><i class="sw far"></i>Past the 8-GPU NVLink domain, in another server</span></div>
+    <div class="readouts">
+      <div><span>Weights</span><strong id="w-gb">—</strong></div>
+      <div><span>Bytes per parameter</span><strong id="w-bytes">—</strong></div>
+      <div><span>Smallest single GPU</span><strong id="w-fits">—</strong></div>
+      <div><span>H100s for the weights</span><strong id="w-h100">—</strong></div>
+    </div>
+    <p class="verdict-line" id="fit-verdict"></p>
+    <figcaption id="fig-fit-cap">Weights only. Running a model also needs memory for activations, the cache that holds each conversation, and the framework itself, so a model that only just fits will not run. Memory per GPU from NVIDIA specifications, verified July 2026; Rubin’s is NVIDIA’s announced specification for partner systems from the second half of 2026.</figcaption>
+  </figure>
+
+  <!-- 02 -->
+  <section class="prose chapter" id="gpus" aria-labelledby="gpus-title">
+    <h2 id="gpus-title"><span class="num">02</span>How the GPUs compare</h2>
+    <p>Each generation improves some measures far more than others. Pick the one your work runs out of first, then choose a GPU to read what it means for a buyer.</p>
+  </section>
+
+  <figure class="fig fig-wide" id="fig-gpus" aria-labelledby="fig-gpus-cap">
+    <div class="fig-head"><span>Figure 2</span>Five NVIDIA GPUs, measured against the H100</div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Measure" id="metric-seg"><span class="seg-label">Measure</span></div>
+    </div>
+    <div class="stage specs" id="spec-rows"></div>
+    <p class="verdict-line" id="metric-cap"></p>
+    <div class="gpu-file" id="gpu-file" aria-live="polite"></div>
+    <figcaption id="fig-gpus-cap">Vendor specifications, verified 22 July 2026. Compute figures use different precisions (FP8 for Hopper, FP4 for Blackwell and Rubin) and are not workload speeds. † Rubin power is a planning assumption; partner configurations, availability, and real performance need current confirmation. <a href="https://www.nvidia.com/en-us/data-center/h100/" rel="noopener">H100</a> · <a href="https://www.nvidia.com/en-us/data-center/h200/" rel="noopener">H200</a> · <a href="https://www.nvidia.com/en-us/data-center/technologies/blackwell-architecture/" rel="noopener">Blackwell</a> · <a href="https://developer.nvidia.com/blog/inside-nvidia-rubin-gpu-architecture-powering-the-era-of-agentic-ai/" rel="noopener">Rubin</a></figcaption>
+  </figure>
+
+  <!-- 03 -->
+  <section class="prose chapter" id="rack" aria-labelledby="rack-title">
+    <h2 id="rack-title"><span class="num">03</span>Inside the rack</h2>
+    <p>The GB200 NVL72 puts 72 GPUs in one rack: eighteen compute trays of four GPUs each, with nine switch trays in the middle that connect every GPU to every other over NVLink. Turn it, then take it apart one chapter at a time, down to a single chip.</p>
+  </section>
+
+  <figure class="fig fig-wide rack" id="fig-rack" aria-labelledby="fig-rack-cap">
+    <div class="fig-head"><span>Figure 3</span>Inside a GB200 NVL72 rack<button type="button" class="live" id="rack-motion"></button></div>
+    <div class="controls">
+      <div class="seg"><span class="seg-label">Chapter</span><div class="seg" id="tabs" role="tablist" aria-label="Chapters of the rack"></div></div>
+      <div class="seg" id="subrow" hidden></div>
+    </div>
+    <div class="stage rack-stage">
+      <div class="scene" id="scene-wrap">
+        <div class="lab" id="hovlab"></div>
+        <div class="lab" id="modechip"></div>
+        <div id="fallback-fig">
+<svg viewBox="96 56 300 528" role="img" aria-label="A still drawing of the NVL72 rack from the side: arcs of copper NVLink cable at the back link the nine switch trays in the middle to the eighteen compute trays above and below.">
+<rect x="110" y="70" width="140" height="500" rx="3" style="fill:var(--panel);stroke:var(--ink);stroke-width:1.4"/>
+<rect x="118" y="79.5" width="124" height="12.61" rx="1.5" style="fill:none;stroke:var(--rule);stroke-width:.9"/>
+<rect x="118" y="95.11" width="124" height="12.61" rx="1.5" style="fill:none;stroke:var(--rule);stroke-width:.9"/>
+<rect x="118" y="110.73" width="124" height="12.61" rx="1.5" style="fill:var(--paper);stroke:var(--ink-2);stroke-width:.8"/>
+<rect x="118" y="126.34" width="124" height="12.61" rx="1.5" style="fill:var(--paper);stroke:var(--ink-2);stroke-width:.8"/>
+<rect x="118" y="141.95" width="124" height="12.61" rx="1.5" style="fill:var(--paper);stroke:var(--ink-2);stroke-width:.8"/>
+<rect x="118" y="157.56" width="124" height="12.61" rx="1.5" style="fill:var(--paper);stroke:var(--ink-2);stroke-width:.8"/>
+<rect x="118" y="173.18" width="124" height="12.61" rx="1.5" style="fill:var(--paper);stroke:var(--ink-2);stroke-width:.8"/>
+<rect x="118" y="188.79" width="124" height="12.61" rx="1.5" style="fill:var(--paper);stroke:var(--ink-2);stroke-width:.8"/>
+<rect x="118" y="204.4" width="124" height="12.61" rx="1.5" style="fill:var(--paper);stroke:var(--ink-2);stroke-width:.8"/>
+<rect x="118" y="220.02" width="124" height="12.61" rx="1.5" style="fill:var(--paper);stroke:var(--ink-2);stroke-width:.8"/>
+<rect x="118" y="235.63" width="124" height="12.61" rx="1.5" style="fill:var(--paper);stroke:var(--ink-2);stroke-width:.8"/>
+<rect x="118" y="251.24" width="124" height="12.61" rx="1.5" style="fill:var(--teal-dim);stroke:var(--teal);stroke-width:.9"/>
+<rect x="118" y="266.85" width="124" height="12.61" rx="1.5" style="fill:var(--teal-dim);stroke:var(--teal);stroke-width:.9"/>
+<rect x="118" y="282.47" width="124" height="12.61" rx="1.5" style="fill:var(--teal-dim);stroke:var(--teal);stroke-width:.9"/>
+<rect x="118" y="298.08" width="124" height="12.61" rx="1.5" style="fill:var(--teal-dim);stroke:var(--teal);stroke-width:.9"/>
+<rect x="118" y="313.69" width="124" height="12.61" rx="1.5" style="fill:var(--teal-dim);stroke:var(--teal);stroke-width:.9"/>
+<rect x="118" y="329.31" width="124" height="12.61" rx="1.5" style="fill:var(--teal-dim);stroke:var(--teal);stroke-width:.9"/>
+<rect x="118" y="344.92" width="124" height="12.61" rx="1.5" style="fill:var(--teal-dim);stroke:var(--teal);stroke-width:.9"/>
+<rect x="118" y="360.53" width="124" height="12.61" rx="1.5" style="fill:var(--teal-dim);stroke:var(--teal);stroke-width:.9"/>
+<rect x="118" y="376.15" width="124" height="12.61" rx="1.5" style="fill:var(--teal-dim);stroke:var(--teal);stroke-width:.9"/>
+<rect x="118" y="391.76" width="124" height="12.61" rx="1.5" style="fill:var(--paper);stroke:var(--ink-2);stroke-width:.8"/>
+<rect x="118" y="407.37" width="124" height="12.61" rx="1.5" style="fill:var(--paper);stroke:var(--ink-2);stroke-width:.8"/>
+<rect x="118" y="422.98" width="124" height="12.61" rx="1.5" style="fill:var(--paper);stroke:var(--ink-2);stroke-width:.8"/>
+<rect x="118" y="438.6" width="124" height="12.61" rx="1.5" style="fill:var(--paper);stroke:var(--ink-2);stroke-width:.8"/>
+<rect x="118" y="454.21" width="124" height="12.61" rx="1.5" style="fill:var(--paper);stroke:var(--ink-2);stroke-width:.8"/>
+<rect x="118" y="469.82" width="124" height="12.61" rx="1.5" style="fill:var(--paper);stroke:var(--ink-2);stroke-width:.8"/>
+<rect x="118" y="485.44" width="124" height="12.61" rx="1.5" style="fill:var(--paper);stroke:var(--ink-2);stroke-width:.8"/>
+<rect x="118" y="501.05" width="124" height="12.61" rx="1.5" style="fill:var(--paper);stroke:var(--ink-2);stroke-width:.8"/>
+<rect x="118" y="516.66" width="124" height="12.61" rx="1.5" style="fill:var(--paper);stroke:var(--ink-2);stroke-width:.8"/>
+<rect x="118" y="532.27" width="124" height="12.61" rx="1.5" style="fill:none;stroke:var(--rule);stroke-width:.9"/>
+<rect x="118" y="547.89" width="124" height="12.61" rx="1.5" style="fill:none;stroke:var(--rule);stroke-width:.9"/>
+<g><path d="M250 255.35 C338.09 255.35 338.09 115.04 250 115.04" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 259.75 C333.55 259.75 333.55 146.26 250 146.26" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 257.55 C327.02 257.55 327.02 177.49 250 177.49" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 255.35 C320.49 255.35 320.49 208.71 250 208.71" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 259.75 C315.94 259.75 315.94 239.94 250 239.94" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 257.55 C342.24 257.55 342.24 411.68 250 411.68" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 255.35 C355.77 255.35 355.77 442.91 250 442.91" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 259.75 C367.31 259.75 367.31 474.13 250 474.13" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 257.55 C380.84 257.55 380.84 505.36 250 505.36" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 270.96 C349.18 270.96 349.18 117.04 250 117.04" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 275.36 C344.63 275.36 344.63 148.26 250 148.26" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 273.16 C338.1 273.16 338.1 179.49 250 179.49" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 270.96 C314.08 270.96 314.08 210.71 250 210.71" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 275.36 C309.53 275.36 309.53 241.94 250 241.94" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 273.16 C345.16 273.16 345.16 413.68 250 413.68" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 270.96 C358.69 270.96 358.69 444.91 250 444.91" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 275.36 C370.23 275.36 370.23 476.13 250 476.13" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 273.16 C366.26 273.16 366.26 507.36 250 507.36" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 286.58 C360.26 286.58 360.26 119.04 250 119.04" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 290.98 C338.22 290.98 338.22 150.26 250 150.26" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 288.78 C331.69 288.78 331.69 181.49 250 181.49" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 286.58 C325.16 286.58 325.16 212.71 250 212.71" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 290.98 C320.61 290.98 320.61 243.94 250 243.94" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 288.78 C348.07 288.78 348.07 415.68 250 415.68" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 286.58 C344.1 286.58 344.1 446.91 250 446.91" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 290.98 C355.65 290.98 355.65 478.13 250 478.13" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 288.78 C369.17 288.78 369.17 509.36 250 509.36" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 302.19 C355.65 302.19 355.65 115.04 250 115.04" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 306.59 C351.1 306.59 351.1 146.26 250 146.26" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 304.39 C344.57 304.39 344.57 177.49 250 177.49" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 302.19 C338.04 302.19 338.04 208.71 250 208.71" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 306.59 C315.99 306.59 315.99 239.94 250 239.94" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 304.39 C331.69 304.39 331.69 411.68 250 411.68" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 302.19 C345.22 302.19 345.22 442.91 250 442.91" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 306.59 C356.76 306.59 356.76 474.13 250 474.13" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 304.39 C370.29 304.39 370.29 505.36 250 505.36" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 317.8 C366.73 317.8 366.73 117.04 250 117.04" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 322.2 C362.18 322.2 362.18 148.26 250 148.26" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 320 C338.15 320 338.15 179.49 250 179.49" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 317.8 C331.63 317.8 331.63 210.71 250 210.71" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 322.2 C327.08 322.2 327.08 241.94 250 241.94" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 320 C334.6 320 334.6 413.68 250 413.68" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 317.8 C348.13 317.8 348.13 444.91 250 444.91" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 322.2 C342.18 322.2 342.18 476.13 250 476.13" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 320 C355.71 320 355.71 507.36 250 507.36" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 333.42 C360.31 333.42 360.31 119.04 250 119.04" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 337.82 C355.77 337.82 355.77 150.26 250 150.26" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 335.62 C349.24 335.62 349.24 181.49 250 181.49" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 333.42 C342.71 333.42 342.71 212.71 250 212.71" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 337.82 C338.16 337.82 338.16 243.94 250 243.94" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 335.62 C320.02 335.62 320.02 415.68 250 415.68" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 333.42 C333.55 333.42 333.55 446.91 250 446.91" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 337.82 C345.09 337.82 345.09 478.13 250 478.13" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 335.62 C358.62 335.62 358.62 509.36 250 509.36" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 349.03 C373.2 349.03 373.2 115.04 250 115.04" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 353.43 C368.65 353.43 368.65 146.26 250 146.26" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 351.23 C362.12 351.23 362.12 177.49 250 177.49" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 349.03 C338.1 349.03 338.1 208.71 250 208.71" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 353.43 C333.55 353.43 333.55 239.94 250 239.94" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 351.23 C321.13 351.23 321.13 411.68 250 411.68" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 349.03 C334.66 349.03 334.66 442.91 250 442.91" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 353.43 C346.21 353.43 346.21 474.13 250 474.13" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 351.23 C342.24 351.23 342.24 505.36 250 505.36" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 364.64 C384.28 364.64 384.28 117.04 250 117.04" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 369.04 C362.23 369.04 362.23 148.26 250 148.26" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 366.84 C355.7 366.84 355.7 179.49 250 179.49" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 364.64 C349.18 364.64 349.18 210.71 250 210.71" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 369.04 C344.63 369.04 344.63 241.94 250 241.94" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 366.84 C324.05 366.84 324.05 413.68 250 413.68" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 364.64 C320.08 364.64 320.08 444.91 250 444.91" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 369.04 C331.63 369.04 331.63 476.13 250 476.13" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 366.84 C345.16 366.84 345.16 507.36 250 507.36" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 380.26 C377.87 380.26 377.87 119.04 250 119.04" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 384.66 C373.32 384.66 373.32 150.26 250 150.26" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 382.46 C366.79 382.46 366.79 181.49 250 181.49" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 380.26 C360.26 380.26 360.26 212.71 250 212.71" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 384.66 C338.22 384.66 338.22 243.94 250 243.94" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 382.46 C309.47 382.46 309.47 415.68 250 415.68" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 380.26 C323 380.26 323 446.91 250 446.91" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 384.66 C334.54 384.66 334.54 478.13 250 478.13" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/><path d="M250 382.46 C348.07 382.46 348.07 509.36 250 509.36" style="fill:none;stroke:var(--amber);stroke-width:1;opacity:.72"/></g>
+</svg>
+          <div class="fallback-notes">
+            <p><i class="sw tray"></i>18 compute trays, two GB200 superchips in each</p>
+            <p><i class="sw switch"></i>9 NVLink switch trays in the middle</p>
+            <p><i class="sw network"></i>About 5,000 copper NVLink cables at the back (81 drawn), 1.8 TB/s per GPU</p>
+            <p>Copper reaches about one rack; past these cables, traffic crosses to optics. The whole rack draws about 120 kW and is liquid-cooled.</p>
+            <p class="fig-cap">A still drawing; the 3D model needs WebGL. The chapters above still change the text beside it.</p>
+          </div>
+        </div>
+      </div>
+      <aside class="panel" id="panel" role="tabpanel" aria-live="polite">
+        <p class="sr-only" id="an-eyebrow">01 / RACK ARCHITECTURE</p>
+        <h3 id="an-title">72 GPUs, one NVLink domain</h3>
+        <p id="an-body">The rack connects 72 GPUs through NVLink. They can exchange data at high bandwidth, while each GPU retains its own memory. Traffic leaving the rack uses a separate network.</p>
+        <div class="stats" id="an-stats">
+          <div class="stat"><span class="l">Blackwell GPUs</span><span class="v">72</span></div>
+          <div class="stat"><span class="l">Grace CPUs</span><span class="v">36</span></div>
+          <div class="stat"><span class="l">Compute trays</span><span class="v">18</span></div>
+          <div class="stat"><span class="l">Planning rack power</span><span class="v">~120 kW</span></div>
+        </div>
+        <a class="onward" id="an-link" href="network.html#row" hidden>Zoom out to a whole row of racks →</a>
+      </aside>
+    </div>
+    <div class="scrub">
+      <span aria-hidden="true">Whole rack</span>
+      <input type="range" id="scrub" min="0" max="3" step="0.001" value="0" aria-label="Take the rack apart, from the whole rack to one chip">
+      <span aria-hidden="true">One chip</span>
+    </div>
+    <p class="counts" id="counts" aria-live="off"></p>
+    <figcaption id="fig-rack-cap"><span class="if-3d">Drag sideways to turn it, pinch or Ctrl-scroll to zoom, and hover or tap a part to name it. </span>Schematic geometry: 378 drawn cables stand for the roughly 5,000 in the real spine. Composition follows NVIDIA’s GB200 NVL72 reference design (18 compute trays, 9 NVLink switch trays, 72 GPUs, 36 Grace CPUs, about 120 kW). Memory corrected 16 October 2026: 372 GB per two-GPU superchip, so 186 GB per GPU. <a href="https://www.nvidia.com/en-us/data-center/gb200-nvl72/" rel="noopener">NVIDIA GB200 NVL72</a> · <a href="https://docs.nvidia.com/multi-node-nvlink-systems/multi-node-tuning-guide/overview.html" rel="noopener">NVLink system guide</a></figcaption>
+    <div class="tool-actions"><button type="button" data-copy-link>Copy a link to this view</button></div>
+    <p class="tool-message" aria-live="polite"></p>
+  </figure>
+
+  <!-- 04 -->
+  <section class="prose chapter" id="ask" aria-labelledby="ask-title">
+    <h2 id="ask-title"><span class="num">04</span>Ask the supplier</h2>
+    <p>A GPU name on a quote leaves the important questions open. These are the ones the hardware raises.</p>
+    <ol class="questions">
+      <li><strong>Is my work limited by memory or by compute?</strong> And is the newer GPU’s premium smaller than the cost of splitting the model across more of the older ones? <a href="#fit">Figure 1</a></li>
+      <li><strong>How old is the fleet, and how is it wired?</strong> A quoted H100-hour is incomplete without its age, form factor, host, and network. <a href="#gpus">Figure 2</a></li>
+      <li><strong>Is the facility ready for this rack?</strong> Power density and liquid cooling delivered, not planned, and which physical unit, failure domain, and acceptance test sit behind the quote. <a href="#rack">Figure 3</a></li>
+      <li><strong>What happens when the next generation ships?</strong> Refresh, substitution, and early-exit rights on a multi-year term, and where I sit in the queue for new GPUs. <a href="contracts.html#clauses">The clauses</a></li>
+    </ol>
+    <dl class="terms">
+      <div><dt>HBM</dt><dd>High-bandwidth memory: stacks of memory chips beside the GPU that hold the model while it runs.</dd></div>
+      <div><dt>NVLink domain</dt><dd>The set of GPUs joined directly by NVLink: 8 in an HGX server, 72 in an NVL72 rack.</dd></div>
+      <div><dt>Superchip</dt><dd>One Grace CPU and two Blackwell GPUs on one module. Two fill each compute tray.</dd></div>
+      <div><dt>Precision</dt><dd>How many bits hold each number. Fewer bits use less memory and run faster, at some cost in accuracy.</dd></div>
+    </dl>
+  </section>
+
+  <section class="prose" aria-labelledby="sources-title">
+    <details class="sources" id="sources">
+      <summary><h2 id="sources-title">Assumptions, limits, and sources</h2></summary>
+      <p><strong>Specifications are not benchmarks.</strong> Compute figures use different precisions and may include sparsity, so they cannot be turned straight into a speedup or a price premium. Benchmark the model you will run, on the serving or training stack you will use.</p>
+      <p><strong>The NVLink domain ends at the rack.</strong> Inside it, every GPU can reach every other at high bandwidth while keeping its own memory. Traffic that leaves the rack moves to the scale-out network, which is bought and designed separately; <a href="network.html">section 02</a> models that boundary.</p>
+      <p><strong>Power is the binding constraint.</strong> Roughly 120 kW in one rack is why liquid cooling is required, and why the scarce thing shifted from chips to facilities that can run them. Two suppliers quoting the same GPU can differ entirely in whether their building can hold this rack.</p>
+      <p><strong>The rack can be what you buy, but it is not the only unit.</strong> Providers sell racks, servers, instances, or capacity blocks. Ask which physical assets, failure domains, and acceptance tests correspond to the unit in your quote.</p>
+      <p><strong>Roadmaps belong in the contract.</strong> A multi-year term can overlap one or more launches. Write refresh, substitution, and rate-review rights into it rather than treating term length alone as savings.</p>
+      <ul class="source-list">
+        <li>NVIDIA product pages for <a href="https://www.nvidia.com/en-us/data-center/h100/" rel="noopener">H100</a>, <a href="https://www.nvidia.com/en-us/data-center/h200/" rel="noopener">H200</a>, and the <a href="https://www.nvidia.com/en-us/data-center/technologies/blackwell-architecture/" rel="noopener">Blackwell architecture</a>, verified 22 July 2026.</li>
+        <li>NVIDIA, “Inside the NVIDIA Rubin GPU architecture.” <a href="https://developer.nvidia.com/blog/inside-nvidia-rubin-gpu-architecture-powering-the-era-of-agentic-ai/" rel="noopener">developer.nvidia.com</a></li>
+        <li>NVIDIA GB200 NVL72 and the multi-node NVLink tuning guide. <a href="https://www.nvidia.com/en-us/data-center/gb200-nvl72/" rel="noopener">nvidia.com/en-us/data-center/gb200-nvl72</a></li>
+      </ul>
+    </details>
+  </section>
+
+  <nav class="prose pager" aria-label="Continue through the guide">
+    <a href="index.html#guide"><small>Back to</small>The guide</a>
+    <a href="network.html"><small>Next section</small>02 · Where the time goes</a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <span>The Compute Desk · an independent project by Alex Yen</span>
+  <a href="https://github.com/alexkyen/compute-desk/issues">Send a correction</a>
+</footer>
+<script src="assets/desk.js"></script>
+<script src="assets/figures.js?v=20261018.6"></script>
+<script src="assets/hardware.js?v=20261018"></script>
+<script src="assets/three-r147.min.js"></script>
+<script src="assets/rack3d.js?v=20261018"></script>
+</body>
+</html>
