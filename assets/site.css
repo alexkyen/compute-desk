@@ -231,6 +231,15 @@ h2 .num{font:500 var(--fs-ui)/1 var(--sans);color:var(--ink-2);vertical-align:.4
 .pp-ticks span{position:absolute;transform:translateX(-50%);font-variant-numeric:tabular-nums}
 
 /* ---------- Section pages: the pieces every section page repeats ---------- */
+/* The arithmetic behind a figure's readouts, in one line. */
+.working{margin-top:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.working b{color:var(--ink);font-weight:600}
+
+/* A labelled number input in a scenario group. */
+.number{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px}
+.number input{width:96px;min-height:36px;padding:6px 10px;border:1px solid var(--rule);border-radius:8px;background:var(--surface);font:inherit;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
+.number input:disabled{background:var(--floor);color:var(--ink-2)}
+
 /* A one-sentence reading of a figure's current state. */
 .verdict-line{margin-top:12px;padding-top:14px;border-top:1px solid var(--rule);color:var(--ink)}
 

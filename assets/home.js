@@ -51,195 +51,123 @@
     const fig = document.getElementById('fig-stack');
     const svg = document.getElementById('stack-svg');
     if (!fig || !svg) return;
-    const steps = [...fig.querySelectorAll('.callout-step')];
-    const scenes = [];
-    const particles = [];
-
-    function scene(build) {
-      const outer = el('g', { class: 'scene' }, svg);
-      const inner = el('g', {}, outer);
-      const fx = el('g', {}, inner);
-      const api = build(inner, fx) || {};
-      scenes.push(Object.assign({ outer, inner, fx, labels: [] }, api));
-      return scenes[scenes.length - 1];
-    }
-
-    // Step 1: one GPU package, memory filling with model weights.
     const hbmLayers = [];
-    scene(function (g, fx) {
-      box(g, 0, 0, 0, 260, 260, 10, COL.steel);
-      box(g, 30, 30, 10, 200, 200, 5, COL.steelDark);
-      // Draw back-to-front: far memory column, the dies, then the near column.
-      const column = x => [50, 88, 126, 164].forEach(y => {
-        for (let i = 0; i < 8; i++) hbmLayers.push({ i, layer: box(g, x, y, 15 + i * 3.4, 26, 30, 3.4, light(COL.memory, .72)) });
-      });
-      column(40);
-      const dies = [box(g, 92, 55, 15, 34, 150, 12, COL.compute), box(g, 134, 55, 15, 34, 150, 12, COL.compute)];
-      column(194);
-      // Data flows from memory into the dies.
-      [50, 88, 126, 164].forEach(y => {
-        particles.push({ scene: 0, from: [66, y + 15, 30], to: [92, y + 15, 30], color: COL.memory, phase: Math.random() });
-        particles.push({ scene: 0, from: [194, y + 15, 30], to: [168, y + 15, 30], color: COL.memory, phase: Math.random() });
-      });
-      return { dies, label: [
-        { text: 'Compute dies', at: [130, 130, 27], side: 'right' },
-        { text: 'Memory (HBM)', at: [53, 50, 42], side: 'left' },
-        { text: 'Model weights: 0 GB', at: [207, 190, 42], side: 'right', id: 'weights' }
-      ] };
-    });
+    const empty = light(COL.memory, .72);
 
-    // Step 2: a compute tray with four GPUs and two CPUs.
-    scene(function (g, fx) {
-      box(g, 0, 0, 0, 440, 200, 16, COL.steel);
-      [[70, 30], [70, 120]].forEach(([x, y]) => { box(g, x, y, 16, 50, 50, 3, COL.steelDark); box(g, x + 10, y + 10, 19, 30, 30, 5, COL.power); });
-      const gpus = [];
-      [[200, 25], [200, 110], [300, 25], [300, 110]].forEach(([x, y]) => {
-        box(g, x, y, 16, 70, 70, 3, COL.steelDark);
-        box(g, x + 6, y + 14, 19, 10, 42, 7, COL.memory);
-        gpus.push(box(g, x + 22, y + 12, 19, 26, 46, 6, COL.compute));
-        box(g, x + 54, y + 14, 19, 10, 42, 7, COL.memory);
-      });
-      for (let i = 0; i < 6; i++) box(g, 412, 12 + i * 31, 16, 22, 26, 10, '#6f6a60');
-      [[120, 55], [120, 145]].forEach(([x, y]) => [235, 335].forEach(tx => particles.push({ scene: 1, from: [x, y, 26], to: [tx, y - 5, 26], color: COL.ink2, phase: Math.random() })));
-      return { dies: gpus, label: [
-        { text: 'Grace CPUs', at: [95, 55, 26], side: 'left' },
-        { text: 'Four GPUs', at: [335, 145, 26], side: 'right' }
-      ] };
-    });
-
-    // Step 3: the rack, with switch trays in the middle.
-    scene(function (g, fx) {
-      const W = 130, D = 110;
-      box(g, 0, 0, 0, W, D, 8, '#5f5a51');
-      let z = 8;
-      const order = [['power', 3], ['compute', 8], ['switch', 9], ['compute', 10], ['power', 3]];
-      const switches = [], computes = [];
-      order.forEach(([kind, n]) => {
-        for (let i = 0; i < n; i++) {
-          const color = kind === 'power' ? COL.power : kind === 'switch' ? COL.network : COL.compute;
-          const b = box(g, 0, 0, z, W, D, 7, color);
-          if (kind === 'switch') switches.push(z); else if (kind === 'compute') computes.push(b);
-          z += 8;
-        }
-      });
-      box(g, 0, 0, z, W, D, 5, '#5f5a51');
-      // Signals sweep across the switch trays.
-      switches.forEach((sz, i) => particles.push({ scene: 2, from: [8, D, sz + 3.5], to: [W - 8, D, sz + 3.5], color: '#ffffff', phase: i / 9, speed: .55 }));
-      return { label: [
-        { text: 'NVLink switch trays', at: [W, D / 2, 8 + 11 * 8 + 36], side: 'right' },
-        { text: 'Compute trays', at: [W, D / 2, 8 + 20 * 8 + 40], side: 'right' },
-        { text: 'Power shelves', at: [0, D, 20], side: 'left' }
-      ] };
-    });
-
-    // Step 4: a row of racks joined to spine switches overhead.
-    scene(function (g, fx) {
-      // The row runs along the screen's horizontal (x = u, y = -u); spines stand one row behind.
-      const R = 50, H = 150;
-      const racks = [0, 1, 2, 3, 4, 5].map(i => [i * 78, -i * 78]);
-      const spines = [1.4, 3.6].map(u => [u * 78 - 120, -u * 78 - 120]);
-      spines.forEach(([x, y]) => box(g, x, y, 0, R, R, H, COL.network));
-      // Overhead cables run above everything, so draw them before the racks only where they sit behind.
-      const cables = el('g', { fill: 'none', stroke: COL.network, 'stroke-width': 1.4, 'stroke-opacity': .55, 'vector-effect': 'non-scaling-stroke' }, g);
-      racks.forEach(([x, y]) => {
-        box(g, x, y, 0, R, R, 64, COL.compute);
-        box(g, x, y, 64, R, R, 20, COL.network);
-        box(g, x, y, 84, R, R, 64, COL.compute);
-      });
-      g.appendChild(cables);
-      racks.forEach(([x, y]) => spines.forEach(([sx, sy]) => {
-        const path = [[x + R / 2, y + R / 2, 148], [x + R / 2, y + R / 2, 205], [sx + R / 2, sy + R / 2, 205], [sx + R / 2, sy + R / 2, H]];
-        el('polyline', { points: pts(path), 'vector-effect': 'non-scaling-stroke' }, cables);
-        particles.push({ scene: 3, path, color: COL.network, phase: Math.random(), speed: .35 });
-      }));
-      return { label: [
-        { text: 'Spine switches', at: [spines[1][0] + R, spines[1][1] + R / 2, 110], side: 'right' },
-        { text: 'Racks of GPUs', at: [racks[5][0] + R, racks[5][1] + R / 2, 40], side: 'right' }
-      ] };
-    });
-
-    // Particles live in a top layer per scene so they draw over the boxes.
-    particles.forEach(p => {
-      const s = scenes[p.scene];
-      const start = iso(...(p.path ? p.path[0] : p.from));
-      p.node = el('circle', { cx: start[0], cy: start[1], opacity: 0, r: p.scene === 2 ? 1.6 : 3, fill: p.color, stroke: p.scene === 2 ? 'none' : COL.surface, 'stroke-width': 1, 'vector-effect': 'non-scaling-stroke' }, s.fx);
-    });
-    scenes.forEach(s => s.inner.appendChild(s.fx));
-
-    // Labels.
-    scenes.forEach(s => (s.label || []).forEach(l => { const n = makeLabel(svg, l.text, l.side); n.hidden = true; s.labels.push(Object.assign({ node: n }, l)); }));
-
-    const narrow = matchMedia('(max-width: 760px)');
-    function layout() {
-      svg.setAttribute('viewBox', narrow.matches ? '0 0 600 440' : '0 0 960 520');
-      const target = narrow.matches ? { x: 50, y: 44, w: 500, h: 352 } : { x: 60, y: 60, w: 520, h: 400 };
-      scenes.forEach(s => { s.xf = fit(s.inner, target); s.labels.forEach(l => placeLabel(l.node, svg, s.xf, l.at)); });
-    }
-    layout();
-    narrow.addEventListener('change', layout);
-
-    // Stepper state.
-    const dotsHost = fig.querySelector('.step-dots');
-    const dots = steps.map((_, i) => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', 'Step ' + (i + 1) + ': ' + steps[i].querySelector('h3').textContent); dotsHost.appendChild(b); return b; });
-    const callout = fig.querySelector('.callout');
-    let step = 0, advancing = true, clock = 0, sceneTime = 0, live = null;
-    const DWELL = 7.5;
-
-    function show(i, user) {
-      step = (i + steps.length) % steps.length;
-      sceneTime = 0; clock = 0;
-      steps.forEach((s, k) => { s.hidden = k !== step; });
-      dots.forEach((d, k) => d.setAttribute('aria-current', k === step ? 'true' : 'false'));
-      scenes.forEach((s, k) => { s.outer.classList.toggle('is-on', k === step); s.outer.classList.toggle('is-past', k < step); s.labels.forEach(l => { l.node.hidden = k !== step; if (k === step) placeLabel(l.node); }); });
-      // While paused, memory shows as loaded; while playing, it fills again.
-      if (step === 0) paintWeights(live && !live.paused ? 0 : 10);
-      if (user) { callout.setAttribute('aria-live', 'polite'); }
-    }
-    const take = i => { advancing = false; show(i, true); };
-    fig.querySelector('.step-prev').addEventListener('click', () => take(step - 1));
-    fig.querySelector('.step-next').addEventListener('click', () => take(step + 1));
-    dots.forEach((d, i) => d.addEventListener('click', () => take(i)));
-
-    const weightsLabel = scenes[0].labels.find(l => l.id === 'weights');
-    function paintWeights(t) {
-      // Fill the eight layers of each stack to 140 of 192 GB, then hold.
-      const target = 140 / 192 * 8;
-      const filled = Math.min(target, t * 1.6);
-      const empty = light(COL.memory, .72);
+    // Fill the eight layers of each memory stack to 140 of 192 GB, then hold.
+    function paintWeights(scene, t) {
+      const target = 140 / 192 * 8, filled = Math.min(target, t * 1.6);
       hbmLayers.forEach(h => h.layer.paint(h.i >= filled ? empty : mix(empty, COL.memory, Math.min(1, filled - h.i))));
       const gb = Math.round(Math.min(140, filled / target * 140));
       const text = gb >= 140 ? 'Weights: 140 of 192 GB' : 'Weights: ' + gb + ' GB';
-      const span = weightsLabel.node.querySelector('span');
-      if (span.textContent !== text) { span.textContent = text; placeLabel(weightsLabel.node); }
+      const label = scene.labels.find(l => l.id === 'weights'), span = label.node.querySelector('span');
+      if (span.textContent !== text) { span.textContent = text; placeLabel(label.node); }
     }
 
-    live = register({
-      node: fig,
-      onPause(p) { if (!p) advancing = true; },
-      tick(dt, t) {
-        sceneTime += dt;
-        if (advancing) { clock += dt; if (clock > DWELL) show(step + 1); }
-        if (step === 0) paintWeights(sceneTime);
+    Figures.stepper({
+      fig, svg,
+      wide: { viewBox: '0 0 960 520', rect: { x: 60, y: 60, w: 520, h: 400 } },
+      narrow: { viewBox: '0 0 600 440', rect: { x: 50, y: 44, w: 500, h: 352 } },
+      scenes: [
+        // Step 1: one GPU package, memory filling with model weights.
+        function (g) {
+          box(g, 0, 0, 0, 260, 260, 10, COL.steel);
+          box(g, 30, 30, 10, 200, 200, 5, COL.steelDark);
+          // Draw back-to-front: far memory column, the dies, then the near column.
+          const column = x => [50, 88, 126, 164].forEach(y => {
+            for (let i = 0; i < 8; i++) hbmLayers.push({ i, layer: box(g, x, y, 15 + i * 3.4, 26, 30, 3.4, empty) });
+          });
+          column(40);
+          const dies = [box(g, 92, 55, 15, 34, 150, 12, COL.compute), box(g, 134, 55, 15, 34, 150, 12, COL.compute)];
+          column(194);
+          // Data flows from memory into the dies.
+          const particles = [];
+          [50, 88, 126, 164].forEach(y => {
+            particles.push({ from: [66, y + 15, 30], to: [92, y + 15, 30], color: COL.memory });
+            particles.push({ from: [194, y + 15, 30], to: [168, y + 15, 30], color: COL.memory });
+          });
+          return { dies, weights: true, particles, labels: [
+            { text: 'Compute dies', at: [130, 130, 27], side: 'right' },
+            { text: 'Memory (HBM)', at: [53, 50, 42], side: 'left' },
+            { text: 'Model weights: 0 GB', at: [207, 190, 42], side: 'right', id: 'weights' }
+          ] };
+        },
+        // Step 2: a compute tray with four GPUs and two CPUs.
+        function (g) {
+          box(g, 0, 0, 0, 440, 200, 16, COL.steel);
+          [[70, 30], [70, 120]].forEach(([x, y]) => { box(g, x, y, 16, 50, 50, 3, COL.steelDark); box(g, x + 10, y + 10, 19, 30, 30, 5, COL.power); });
+          const gpus = [];
+          [[200, 25], [200, 110], [300, 25], [300, 110]].forEach(([x, y]) => {
+            box(g, x, y, 16, 70, 70, 3, COL.steelDark);
+            box(g, x + 6, y + 14, 19, 10, 42, 7, COL.memory);
+            gpus.push(box(g, x + 22, y + 12, 19, 26, 46, 6, COL.compute));
+            box(g, x + 54, y + 14, 19, 10, 42, 7, COL.memory);
+          });
+          for (let i = 0; i < 6; i++) box(g, 412, 12 + i * 31, 16, 22, 26, 10, '#6f6a60');
+          const particles = [];
+          [[120, 55], [120, 145]].forEach(([x, y]) => [235, 335].forEach(tx => particles.push({ from: [x, y, 26], to: [tx, y - 5, 26], color: COL.ink2 })));
+          return { dies: gpus, particles, labels: [
+            { text: 'Grace CPUs', at: [95, 55, 26], side: 'left' },
+            { text: 'Four GPUs', at: [335, 145, 26], side: 'right' }
+          ] };
+        },
+        // Step 3: the rack, with switch trays in the middle.
+        function (g) {
+          const W = 130, D = 110;
+          box(g, 0, 0, 0, W, D, 8, '#5f5a51');
+          let z = 8;
+          const switches = [];
+          [['power', 3], ['compute', 8], ['switch', 9], ['compute', 10], ['power', 3]].forEach(([kind, n]) => {
+            for (let i = 0; i < n; i++) {
+              box(g, 0, 0, z, W, D, 7, kind === 'power' ? COL.power : kind === 'switch' ? COL.network : COL.compute);
+              if (kind === 'switch') switches.push(z);
+              z += 8;
+            }
+          });
+          box(g, 0, 0, z, W, D, 5, '#5f5a51');
+          // Signals sweep across the switch trays.
+          const particles = switches.map((sz, i) => ({ from: [8, D, sz + 3.5], to: [W - 8, D, sz + 3.5], color: '#ffffff', phase: i / 9, speed: .55, r: 1.6, ring: false }));
+          return { particles, labels: [
+            { text: 'NVLink switch trays', at: [W, D / 2, 8 + 11 * 8 + 36], side: 'right' },
+            { text: 'Compute trays', at: [W, D / 2, 8 + 20 * 8 + 40], side: 'right' },
+            { text: 'Power shelves', at: [0, D, 20], side: 'left' }
+          ] };
+        },
+        // Step 4: a row of racks joined to spine switches overhead.
+        function (g) {
+          // The row runs along the screen's horizontal (x = u, y = -u); spines stand one row behind.
+          const R = 50, H = 150;
+          const racks = [0, 1, 2, 3, 4, 5].map(i => [i * 78, -i * 78]);
+          const spines = [1.4, 3.6].map(u => [u * 78 - 120, -u * 78 - 120]);
+          spines.forEach(([x, y]) => box(g, x, y, 0, R, R, H, COL.network));
+          const cables = el('g', { fill: 'none', stroke: COL.network, 'stroke-width': 1.4, 'stroke-opacity': .55, 'vector-effect': 'non-scaling-stroke' }, g);
+          racks.forEach(([x, y]) => {
+            box(g, x, y, 0, R, R, 64, COL.compute);
+            box(g, x, y, 64, R, R, 20, COL.network);
+            box(g, x, y, 84, R, R, 64, COL.compute);
+          });
+          g.appendChild(cables); // overhead cables run above the racks
+          const particles = [];
+          racks.forEach(([x, y]) => spines.forEach(([sx, sy]) => {
+            const path = [[x + R / 2, y + R / 2, 148], [x + R / 2, y + R / 2, 205], [sx + R / 2, sy + R / 2, 205], [sx + R / 2, sy + R / 2, H]];
+            el('polyline', { points: pts(path), 'vector-effect': 'non-scaling-stroke' }, cables);
+            particles.push({ path, color: COL.network, speed: .35 });
+          }));
+          return { particles, labels: [
+            { text: 'Spine switches', at: [spines[1][0] + R, spines[1][1] + R / 2, 110], side: 'right' },
+            { text: 'Racks of GPUs', at: [racks[5][0] + R, racks[5][1] + R / 2, 40], side: 'right' }
+          ] };
+        }
+      ],
+      // While paused, memory shows as loaded; while playing, it fills again.
+      onShow(scene, i, paused) { if (scene.weights) paintWeights(scene, paused ? 10 : 0); },
+      onTick(scene, dt, t, sceneTime) {
+        if (scene.weights) paintWeights(scene, sceneTime);
         // Dies pulse while working.
         const pulse = .5 + .5 * Math.sin(t * 5);
-        (scenes[step].dies || []).forEach(d => d.top.setAttribute('fill', mix(light(COL.compute, .22), light(COL.compute, .55), pulse)));
-        particles.forEach(p => {
-          if (p.scene !== step) { p.node.setAttribute('opacity', 0); return; }
-          p.phase = (p.phase + dt * (p.speed || .8)) % 1;
-          let pos;
-          if (p.path) {
-            const seg = p.path.length - 1, f = p.phase * seg, k = Math.min(seg - 1, Math.floor(f)), u = f - k;
-            const a = p.path[k], b = p.path[k + 1];
-            pos = iso(lerp(a[0], b[0], u), lerp(a[1], b[1], u), lerp(a[2], b[2], u));
-          } else {
-            pos = iso(lerp(p.from[0], p.to[0], p.phase), lerp(p.from[1], p.to[1], p.phase), lerp(p.from[2], p.to[2], p.phase));
-          }
-          p.node.setAttribute('cx', pos[0].toFixed(1)); p.node.setAttribute('cy', pos[1].toFixed(1));
-          p.node.setAttribute('opacity', Math.sin(p.phase * Math.PI).toFixed(2));
-        });
+        (scene.dies || []).forEach(d => d.top.setAttribute('fill', mix(light(COL.compute, .22), light(COL.compute, .55), pulse)));
       }
     });
-    show(0);
   })();
 
   // ---------- Figure 3: a training step, live ----------

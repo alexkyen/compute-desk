@@ -160,6 +160,94 @@
   }
   requestAnimationFrame(frame);
 
+  // A point along a polyline of world points, u from 0 to 1, in screen coordinates.
+  function along(path, u) {
+    const seg = path.length - 1, f = clamp(u, 0, 1) * seg, k = Math.min(seg - 1, Math.floor(f)), w = f - k;
+    const a = path[k], b = path[k + 1];
+    return iso(lerp(a[0], b[0], w), lerp(a[1], b[1], w), lerp(a[2], b[2], w));
+  }
+
+  // ---------- Shared figure: a stepped diagram ----------
+  // Scenes zoom out one after another. Each step has a callout (.callout-step in the figure),
+  // pinned labels, and particles that move along paths while its scene is showing.
+  //   o.fig, o.svg            the <figure> (with .callout-step, .step-dots, .step-prev, .step-next) and its <svg>
+  //   o.scenes                [build(g) -> { labels: [{ text, at, side, id }], particles: [{ from, to } or { path },
+  //                            color, speed, r, ring, off }], ...anything the hooks need }]  (set off to hide one)
+  //   o.wide, o.narrow        { viewBox, rect } framing for each layout
+  //   o.start                 first step; o.advance: false starts with auto-advance off
+  //   o.onShow(scene, i, paused, user)   o.onTick(scene, dt, t, sceneTime)
+  // Returns { show(i), live }. Navigating by hand stops auto-advance; Play turns it back on.
+  function stepper(o) {
+    const { fig, svg } = o;
+    const steps = [...fig.querySelectorAll('.callout-step')], callout = fig.querySelector('.callout');
+    const scenes = o.scenes.map(build => {
+      const outer = el('g', { class: 'scene' }, svg), inner = el('g', {}, outer);
+      const api = build(inner) || {};
+      const fx = el('g', {}, inner); // particles draw over the boxes
+      const particles = (api.particles || []).map(p => {
+        const start = iso(...(p.path ? p.path[0] : p.from));
+        return Object.assign({ phase: Math.random(), node: el('circle', { cx: start[0], cy: start[1], opacity: 0, r: p.r || 3, fill: p.color, stroke: p.ring === false ? 'none' : COL.surface, 'stroke-width': 1, 'vector-effect': 'non-scaling-stroke' }, fx) }, p);
+      });
+      const labels = (api.labels || []).map(l => { const node = makeLabel(svg, l.text, l.side); node.hidden = true; return Object.assign({ node }, l); });
+      return Object.assign({}, api, { outer, inner, particles, labels });
+    });
+    const narrow = matchMedia('(max-width: 760px)');
+    function layout() {
+      const frame = narrow.matches ? o.narrow : o.wide;
+      svg.setAttribute('viewBox', frame.viewBox);
+      scenes.forEach(s => { s.xf = fit(s.inner, frame.rect); s.labels.forEach(l => placeLabel(l.node, svg, s.xf, l.at)); });
+    }
+    layout();
+    narrow.addEventListener('change', layout);
+
+    const dots = steps.map((s, i) => {
+      const b = document.createElement('button'); b.type = 'button';
+      b.setAttribute('aria-label', 'Step ' + (i + 1) + ': ' + s.querySelector('h3').textContent);
+      fig.querySelector('.step-dots').appendChild(b);
+      return b;
+    });
+    let step = 0, advancing = o.advance !== false, clock = 0, sceneTime = 0, live = null;
+    const DWELL = o.dwell || 7.5;
+    function show(i, user) {
+      step = (i + steps.length) % steps.length;
+      sceneTime = 0; clock = 0;
+      steps.forEach((s, k) => { s.hidden = k !== step; });
+      dots.forEach((d, k) => d.setAttribute('aria-current', String(k === step)));
+      scenes.forEach((s, k) => {
+        s.outer.classList.toggle('is-on', k === step); s.outer.classList.toggle('is-past', k < step);
+        s.labels.forEach(l => { l.node.hidden = k !== step; if (k === step) placeLabel(l.node); });
+      });
+      if (o.onShow) o.onShow(scenes[step], step, !live || live.paused, !!user);
+      if (user) callout.setAttribute('aria-live', 'polite');
+    }
+    const take = i => { advancing = false; show(i, true); };
+    fig.querySelector('.step-prev').addEventListener('click', () => take(step - 1));
+    fig.querySelector('.step-next').addEventListener('click', () => take(step + 1));
+    dots.forEach((d, i) => d.addEventListener('click', () => take(i)));
+
+    let armed = false; // register() sets the initial pause state; only a later Play turns advancing on
+    live = register({
+      node: fig,
+      onPause(p) { if (armed && !p) advancing = true; },
+      tick(dt, t) {
+        sceneTime += dt;
+        if (advancing) { clock += dt; if (clock > DWELL) show(step + 1); }
+        const scene = scenes[step];
+        if (o.onTick) o.onTick(scene, dt, t, sceneTime);
+        scenes.forEach((s, k) => s.particles.forEach(p => {
+          if (k !== step || p.off) { p.node.setAttribute('opacity', 0); return; }
+          p.phase = (p.phase + dt * (p.speed || .8)) % 1;
+          const pos = along(p.path || [p.from, p.to], p.phase);
+          p.node.setAttribute('cx', pos[0].toFixed(1)); p.node.setAttribute('cy', pos[1].toFixed(1));
+          p.node.setAttribute('opacity', Math.sin(p.phase * Math.PI).toFixed(2));
+        }));
+      }
+    });
+    armed = true;
+    show(o.start || 0);
+    return { show: i => show(i, true), live, scenes, get step() { return step; } };
+  }
+
   // ---------- Shared figure: a month of failures across a fleet ----------
   // 1,024 tiles stand for the fleet; servers (blocks of eight tiles) fail and recover over a
   // 730-hour month while a separate platform box keeps answering. One fixed failure pattern is
@@ -265,5 +353,5 @@
     update();
   })();
 
-  window.Figures = { NS, COL, reduced, el, mix, light, dark, fmt, money, clamp, lerp, iso, pts, box, fit, makeLabel, placeLabel, register, outageMonth, MONTH };
+  window.Figures = { NS, COL, reduced, el, mix, light, dark, fmt, money, clamp, lerp, iso, pts, box, fit, along, makeLabel, placeLabel, register, stepper, outageMonth, MONTH };
 })();

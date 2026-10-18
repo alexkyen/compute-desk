@@ -11,14 +11,12 @@ The Compute Desk connects hardware, networking, capacity decisions, and contract
 | | Start with a question | Try it |
 | --- | --- | --- |
 | 01 | [Inside an AI rack](plate-nvl72.html) | Turn a 72-GPU rack and take it apart in four chapters. |
-| 02 | [From racks to a cluster](plate-pod.html) | Pull back to a row, trace connections, and inspect failures. |
-| 03 | [Accelerator specifications](silicon-ladder.html) | Compare memory, bandwidth, compute, and power. |
-| 04 | [The cost of moving data](the-fabric.html) | Change the network and see working time versus waiting. |
-| 05 | [Network topology](the-two-trees.html) | Compare two layouts and take a switch offline. |
-| 06 | [What you actually pay](costs.html) | Compare an archived price snapshot across twelve sellers, then size a commitment against your own demand. |
-| 07 | [What the contract covers](contracts.html) | Apply different contract promises to the same outage, then review fourteen clauses on your own deal. |
+| 02 | [Accelerator specifications](silicon-ladder.html) | Compare memory, bandwidth, compute, and power. |
+| 03 | [Where the time goes](network.html) | See the wait in every training step, compare fat-tree and rail layouts, and walk a row of racks, on one set of network settings. |
+| 04 | [What you actually pay](costs.html) | Compare an archived price snapshot across twelve sellers, then size a commitment against your own demand. |
+| 05 | [What the contract covers](contracts.html) | Apply different contract promises to the same outage, then review fourteen clauses on your own deal. |
 
-The homepage follows four sections: what you rent, where the time goes, what you actually pay, and what the contract covers. A list at the bottom links every model. The eight models are being folded into one page per section. `costs.html` and `contracts.html` are done; their old URLs (`the-atlas-scatter.html`, `gpu-supply-book.html`, `sla-anatomy.html`) are forwarding pages (`assets/redirect.js`) that keep saved scenario parameters and anchors.
+The homepage follows four sections: what you rent, where the time goes, what you actually pay, and what the contract covers. A list at the bottom links every model. The eight models are being folded into one page per section. `network.html`, `costs.html`, and `contracts.html` are done; their old URLs (`the-fabric.html`, `the-two-trees.html`, `plate-pod.html`, `the-atlas-scatter.html`, `gpu-supply-book.html`, `sla-anatomy.html`) are forwarding pages (`assets/redirect.js`) that keep saved scenario parameters and anchors. The old cluster-layout `stage` parameter becomes `row`.
 
 ## Evidence and limits
 
@@ -50,14 +48,15 @@ Live market evidence older than 45 days fails the check. Any page that shows pri
 
 Pages built on `assets/site.css` follow its type rules: two families (Newsreader and Inter) and five sizes, all as `--fs-` tokens, none under 13px. The check rejects any other font size or family in those stylesheets. A forwarding page must reach a real page in one hop, load `assets/redirect.js`, include a `<noscript>` refresh, be `noindex`, and point its canonical URL at its target.
 
-For interface changes, also verify the affected interaction in a browser, including narrow screens and keyboard input. Check exports and URL-restored scenarios when their controls change. Every live figure has a Pause/Play control and starts paused, on a finished frame, for readers who prefer reduced motion. Both 3D explorations have static fallbacks.
+For interface changes, also verify the affected interaction in a browser, including narrow screens and keyboard input. Check exports and URL-restored scenarios when their controls change. Every live figure has a Pause/Play control and starts paused, on a finished frame, for readers who prefer reduced motion. The rack exhibit's 3D model has a static fallback.
 
 ## Repository map
 
 - `index.html` — the four-section guide with five live figures, and the model list
 - `assets/site.css` — the design system: tokens, type scale, page shell, figures, and controls
-- `assets/figures.js` — shared figure kit: isometric drawing, pinned labels, Pause/Play, one animation loop, section rail
+- `assets/figures.js` — shared figure kit: isometric drawing, pinned labels, Pause/Play, one animation loop, the stepped diagram, the fleet-month figure, section rail
 - `assets/home.js` — the homepage's five figures
+- `network.html`, `assets/network.css`, `assets/network.js` — section 02: the step model, fat-tree and rail layouts with a parts estimate, and the physical row, on one set of network settings (with rails, a cluster-wide all-reduce stays on its rail and skips the spine)
 - `costs.html`, `assets/costs.css`, `assets/costs.js` — section 03: the archived price board and the commitment model
 - `assets/price-data.js` — the archived July 2026 price observations, moved unchanged from the price atlas
 - `contracts.html`, `assets/contracts.css`, `assets/contracts.js` — section 04: the outage month, credits, your scenario, and the fourteen-clause review
@@ -66,12 +65,11 @@ For interface changes, also verify the affected interaction in a browser, includ
 - `assets/editorial.css` — shared reading layer for the explorations (retired once they move to `site.css`)
 - `assets/experience.css` — brand and rack exhibit
 - `assets/tool-experience.css` — shared exploration controls, disclosures, responsive layout, and print styles
-- `assets/network-experiences.css` — network, topology, and pod layouts
 - `assets/market-experiences.css` — chip comparison
 - `assets/methods.css` — evidence guide
 - `assets/demand-import.js` — local-only demand parsing and empirical commitment optimization
 - `assets/desk.css`, `assets/desk.js` — shared accessibility, URL state, copying, printing, and downloads
-- `assets/three-r147.min.js` — pinned local Three.js runtime
+- `assets/three-r147.min.js` — pinned local Three.js runtime for the rack exhibit
 - `scripts/check-site.mjs` — repository checks, including forwarding pages and type rules
 - `scripts/market-policy.mjs` — live versus archived evidence rules
 - `social-card.svg`, `social-card.png`, `favicon.svg` — share preview and site identity
